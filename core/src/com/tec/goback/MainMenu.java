@@ -1,21 +1,42 @@
 package com.tec.goback;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
  * Created by gerry on 2/16/17.
  */
 public class MainMenu implements Screen {
 
-    //Clase de la aplicación
+    //Main app class
     private final App app;
 
-    //Tamaños de la pantalla
+    //Screen sizes
     public static final float WIDTH = 1200;
     public static final float HEIGHT = 800;
     public static final float HALFW = 600;
     public static final float HALFH = 400;
 
+    //Camera
+    private OrthographicCamera camera;
+    
+    
+    //View
+    private Viewport view;
+
+    //Textures
+    private Texture background; //Background that changes with progress
+    private Texture buttons; //Buttons PNG on top of the background
+
+
+    private SpriteBatch batch;
+
+    //Scenes
+    private Stage menuScene;
 
 
 
@@ -25,7 +46,16 @@ public class MainMenu implements Screen {
 
     @Override
     public void show() {
+        cameraInit();
+        objectInit();
+        spriteInit();
+    }
 
+    private void objectInit() {
+    }
+
+    private void cameraInit() {
+        
     }
 
     @Override
