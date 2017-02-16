@@ -7,7 +7,18 @@ import com.badlogic.gdx.Screen;
  */
 public class MainMenu implements Screen {
 
+    //Clase de la aplicación
     private final App app;
+
+    //Tamaños de la pantalla
+    public static final float WIDTH = 1200;
+    public static final float HEIGHT = 800;
+    public static final float HALFW = 600;
+    public static final float HALFH = 400;
+
+
+
+
     public MainMenu(App app) {
         this.app = app;
     }
