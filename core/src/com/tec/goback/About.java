@@ -79,7 +79,8 @@ public class About implements Screen {
         //Back button
         TextureRegionDrawable backBtnTrd = new TextureRegionDrawable(new TextureRegion(backButton));
         ImageButton backImgBtn = new ImageButton(backBtnTrd);
-        backImgBtn.setPosition(HALFW, HALFH);
+
+        backImgBtn.setPosition(10, 10);
         aboutScreenStage.addActor(backImgBtn);
 
         backImgBtn.addListener(new ClickListener(){
