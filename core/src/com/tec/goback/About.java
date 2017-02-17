@@ -1,6 +1,8 @@
 package com.tec.goback;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -24,10 +26,10 @@ public class About implements Screen {
 
 
     //Screen sizes
-    public static final float WIDTH = 1200;
-    public static final float HEIGHT = 800;
-    public static final float HALFW = 600;
-    public static final float HALFH = 400;
+    public static final float WIDTH = 1280;
+    public static final float HEIGHT = 720;
+    public static final float HALFW = WIDTH/2;
+    public static final float HALFH = HEIGHT/2;
 
     //Camera
     private OrthographicCamera camera;
@@ -75,18 +77,15 @@ public class About implements Screen {
         aboutScreenStage.addActor(castImg);
 
         //Back button
-        Image backImg = new Image(backButton);
-        aboutScreenStage.addActor(backImg);
-
         TextureRegionDrawable backBtnTrd = new TextureRegionDrawable(new TextureRegion(backButton));
         ImageButton backImgBtn = new ImageButton(backBtnTrd);
-        backImgBtn.setPosition(WIDTH/2-backImgBtn.getWidth()/2, 3*HEIGHT/4-backImgBtn.getHeight()/2);
+        backImgBtn.setPosition(HALFW, HALFH);
         aboutScreenStage.addActor(backImgBtn);
 
         backImgBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //Gdx.app.log("clicked", "LOL"); imprime pura mamada
+                Gdx.app.log("clicked", "LOL");// imprime pura mamada
                 app.setScreen(new MainMenu(app));
             }
         });
@@ -102,7 +101,12 @@ public class About implements Screen {
 
     @Override
     public void render(float delta) {
-
+        cls();
+        aboutScreenStage.draw();
+    }
+    private void cls() {
+        Gdx.gl.glClearColor(0,0,0,1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
     @Override
