@@ -25,6 +25,9 @@ public class Pause implements Screen {
     //Main app class
     private final App app;
 
+    //Caller screen to goBack to
+    private Screen prev;
+
     //Screen sizes
     public static final float WIDTH = 1280;
     public static final float HEIGHT = 720;
@@ -55,12 +58,13 @@ public class Pause implements Screen {
     private SpriteBatch batch;
 
     //Stage
-    private Stage mainMenuStage;
+    private Stage pauseMenu;
 
 
     //Constructor recieves main App class (implements Game)
-    public Pause(App app) {
+    public Pause(App app, Screen prev) {
         this.app = app;
+        this.prev = prev;
     }
 
     //Call other methods because readability
@@ -90,33 +94,32 @@ public class Pause implements Screen {
         fxBton= new Texture("Interfaces/SOUND/SOUNDSound.png");
     }
 
-    private void objectInit() { //MAYBE PROBABLY (NOT) WORKING
-
+    private void objectInit() {
         batch = new SpriteBatch();
-        mainMenuStage = new Stage(view, batch);
+        pauseMenu = new Stage(view, batch);
 
         //background hace Image
         Image backgroundImg = new Image(background);
         backgroundImg.setPosition(HALFW-backgroundImg.getWidth()/2, HALFH-backgroundImg.getHeight()/2);
-        mainMenuStage.addActor(backgroundImg);
+        pauseMenu.addActor(backgroundImg);
 
         //top
-        Image topImg=new Image(top);
+        Image topImg = new Image(top);
         topImg.setPosition(HALFW-backgroundImg.getWidth()/2, HALFH-backgroundImg.getHeight()/2);
-        mainMenuStage.addActor(topImg);
+        pauseMenu.addActor(topImg);
 
 
         //bottom
         //1280x720
         Image bottomImg=new Image(bottom);
         bottomImg.setPosition(HALFW-backgroundImg.getWidth()/2, HALFH-backgroundImg.getHeight()/2);
-        mainMenuStage.addActor(bottomImg);
+        pauseMenu.addActor(bottomImg);
 
 
         //map
-        Image mapImg=new Image(map);
+        Image mapImg = new Image(map);
         mapImg.setPosition(HALFW-backgroundImg.getWidth()/2, HALFH-backgroundImg.getHeight()/2+220);
-        mainMenuStage.addActor(mapImg);
+        pauseMenu.addActor(mapImg);
 
 
         //quitBton
@@ -124,7 +127,7 @@ public class Pause implements Screen {
         ImageButton quitBtonImg = new ImageButton(quitBtonTrd);
 
         quitBtonImg.setPosition(HALFW-quitBtonImg.getWidth()/2-470, HEIGHT-quitBtonImg.getHeight()/2-640);
-        mainMenuStage.addActor(quitBtonImg);
+        pauseMenu.addActor(quitBtonImg);
 
         quitBtonImg.addListener(new ClickListener(){
             @Override
@@ -139,12 +142,12 @@ public class Pause implements Screen {
         ImageButton backBtonImg = new ImageButton(backBtonTrd);
 
         backBtonImg.setPosition(HALFW-backBtonImg.getWidth()/2+500, HEIGHT-backBtonImg.getHeight()/2-640);
-        mainMenuStage.addActor(backBtonImg);
+        pauseMenu.addActor(backBtonImg);
 
-        quitBtonImg.addListener(new ClickListener(){
+        backBtonImg.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new SoundSettings(app));
+                app.setScreen(prev);
             }
         });
 
@@ -153,7 +156,7 @@ public class Pause implements Screen {
         ImageButton musicBtonImg = new ImageButton(musicBtonTrd);
 
         musicBtonImg.setPosition(HALFW-musicBtonImg.getWidth()/2+313, HEIGHT-musicBtonImg.getHeight()/2-280);
-        mainMenuStage.addActor(musicBtonImg);
+        pauseMenu.addActor(musicBtonImg);
 
         musicBtonImg.addListener(new ClickListener(){
             @Override
@@ -168,7 +171,7 @@ public class Pause implements Screen {
         ImageButton fxBtonImg = new ImageButton(fxBtonTrd);
 
         fxBtonImg.setPosition(HALFW-fxBtonImg.getWidth()/2+300, HEIGHT-fxBtonImg.getHeight()/2-420);
-        mainMenuStage.addActor(fxBtonImg);
+        pauseMenu.addActor(fxBtonImg);
 
         fxBtonImg.addListener(new ClickListener(){
             @Override
@@ -179,7 +182,7 @@ public class Pause implements Screen {
         });
 
         //pass the Stage
-        Gdx.input.setInputProcessor(mainMenuStage);
+        Gdx.input.setInputProcessor(pauseMenu);
 
 
 
@@ -190,7 +193,7 @@ public class Pause implements Screen {
     @Override
     public void render(float delta) {
         cls();
-        mainMenuStage.draw();
+        pauseMenu.draw();
     }
     private void cls() {
         Gdx.gl.glClearColor(0,0,0,1);

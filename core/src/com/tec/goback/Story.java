@@ -86,10 +86,11 @@ public class Story implements Screen {
         pauseImgBtn.setPosition(WIDTH-pauseImgBtn.getWidth()-10, HEIGHT-pauseImgBtn.getHeight()-10);
         aboutScreenStage.addActor(pauseImgBtn);
 
+        final Screen toRet = this;
         pauseImgBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new Pause(app));
+                app.setScreen(new Pause(app, toRet));
             }
         });
 

@@ -87,10 +87,11 @@ public class Arcade implements Screen {
         plasticEarthImg.setPosition((WIDTH-plasticEarthImg.getWidth()/2)-92, 18);
         arcadeStage.addActor(plasticEarthImg);
 
+        final Screen toRet = this;
         plasticEarthImg.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new Pause(app));
+                app.setScreen(new Pause(app, toRet));
             }
         });
 
