@@ -82,7 +82,7 @@ public class Pause implements Screen {
         background = new Texture("HARBOR/GoBackHARBOR0.png");
         bottom = new Texture("Interfaces/PAUSE/PAUSEBottomDisplay.png");
         map = new Texture("Interfaces/PAUSE/PAUSEMapList.png");
-        quitBton = new Texture("Interfaces/PAUSE/PAUSEBQuit.png");
+        quitBton = new Texture("Interfaces/PAUSE/PAUSEQuit.png");
         top = new Texture("Interfaces/PAUSE/PAUSETopDisplay.png");
         backBton = new Texture("Interfaces/PAUSE/PAUSEback.png");
     }
