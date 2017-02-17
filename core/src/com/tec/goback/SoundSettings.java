@@ -24,10 +24,10 @@ public class SoundSettings implements Screen{
 
     private final App app;
 
-    public static final float WIDTH = 1200;
-    public static final float HEIGHT = 800;
-    public static final float HALFW = 600;
-    public static final float HALFH = 400;
+    public static final float WIDTH = 1280;
+    public static final float HEIGHT = 720;
+    public static final float HALFW = WIDTH/2;
+    public static final float HALFH = HEIGHT/2;
 
 
     private Viewport view;
@@ -88,13 +88,14 @@ public class SoundSettings implements Screen{
 
         // background
         Image backImg = new Image(background);
+        backImg.setPosition(WIDTH/2-backImg.getWidth()/2, HEIGHT/2-backImg.getHeight()/2);
         soundSettingsStage.addActor(backImg);
 
         // buttons
 
         TextureRegionDrawable backBtnPlay = new TextureRegionDrawable(new TextureRegion(backButton));
         ImageButton backBtnImg = new ImageButton(backBtnPlay);
-        backBtnImg.setPosition(WIDTH/2, HEIGHT/2);
+        backBtnImg.setPosition(WIDTH/20, 11*HEIGHT/15);
         soundSettingsStage.addActor(backBtnImg);
 
         backBtnImg.addListener(new ClickListener(){
@@ -113,7 +114,7 @@ public class SoundSettings implements Screen{
 
         TextureRegionDrawable muteMusicOnPlay = new TextureRegionDrawable(new TextureRegion(muteMusicOnButton));
         ImageButton muteMusicOnImg = new ImageButton(muteMusicOnPlay);
-        muteMusicOnImg.setPosition(WIDTH/2, HEIGHT/2);
+        muteMusicOnImg.setPosition(4*WIDTH/7, 8*HEIGHT/15);
         soundSettingsStage.addActor(muteMusicOnImg);
 
         /*TextureRegionDrawable muteFxOffPlay = new TextureRegionDrawable(new TextureRegion(muteFXOffButton));
@@ -121,7 +122,7 @@ public class SoundSettings implements Screen{
         muteFxOffImg.setPosition(WIDTH/2, HEIGHT/2);
         soundSettingsStage.addActor(muteFxOffImg);*/
 
-        TextureRegionDrawable muteFxOnPlay = new TextureRegionDrawable(new TextureRegion(muteFXOnButton));
+        /*TextureRegionDrawable muteFxOnPlay = new TextureRegionDrawable(new TextureRegion(muteFXOnButton));
         ImageButton muteFxOnImg = new ImageButton(muteFxOnPlay);
         muteFxOnImg.setPosition(WIDTH/2, HEIGHT/2);
         soundSettingsStage.addActor(muteFxOnImg);
@@ -129,7 +130,7 @@ public class SoundSettings implements Screen{
         TextureRegionDrawable soundDecorationPlay = new TextureRegionDrawable(new TextureRegion(soundDecoration));
         ImageButton soundDecorationImg = new ImageButton(soundDecorationPlay);
         soundDecorationImg.setPosition(WIDTH/2, HEIGHT/2);
-        soundSettingsStage.addActor(soundDecorationImg);
+        soundSettingsStage.addActor(soundDecorationImg);*/
 
         Gdx.input.setInputProcessor(soundSettingsStage);
         Gdx.input.setCatchBackKey(false);
