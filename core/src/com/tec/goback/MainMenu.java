@@ -116,7 +116,7 @@ public class MainMenu implements Screen {
         TextureRegionDrawable arcadeBtnTrd = new TextureRegionDrawable(new TextureRegion(arcadeBtn));
         ImageButton arcadeBtnImg = new ImageButton(arcadeBtnTrd);
 
-        arcadeBtnImg.setPosition((HALFW-arcadeBtnImg.getWidth()/2)+190, HALFH-arcadeBtnImg.getHeight()/2-100);
+        arcadeBtnImg.setPosition((HALFW-arcadeBtnImg.getWidth()/2)+190, HALFH-arcadeBtnImg.getHeight()/2-80);
         mainMenuStage.addActor(arcadeBtnImg);
 
         arcadeBtnImg.addListener(new ClickListener(){
@@ -146,7 +146,7 @@ public class MainMenu implements Screen {
         TextureRegionDrawable storyBtnTrd = new TextureRegionDrawable(new TextureRegion(storyBtn));
         ImageButton storyBtnImg = new ImageButton(storyBtnTrd);
 
-        storyBtnImg.setPosition(HALFW-storyBtnImg.getWidth()/2+190+280, HALFH-arcadeBtnImg.getHeight()/2-95);
+        storyBtnImg.setPosition(HALFW-storyBtnImg.getWidth()/2+190+280, HALFH-arcadeBtnImg.getHeight()/2-75);
         mainMenuStage.addActor(storyBtnImg);
 
         storyBtnImg.addListener(new ClickListener(){
@@ -159,13 +159,14 @@ public class MainMenu implements Screen {
 
         //title
         Image titleImg = new Image(title);
-        titleImg.setPosition(2, (HALFH-titleImg.getHeight()/2)+60);
+        titleImg.setPosition(2, (HALFH-titleImg.getHeight()/2)+80);
         mainMenuStage.addActor(titleImg);
 
         //pass the Stage
         Gdx.input.setInputProcessor(mainMenuStage);
 
-
+        //let go of android device back key
+        Gdx.input.setCatchBackKey(false);
 
     }
 
