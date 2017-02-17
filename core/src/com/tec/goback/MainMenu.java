@@ -139,7 +139,7 @@ public class MainMenu implements Screen {
         sonidoBtnImg.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //app.setScreen(new About(app));
+                app.setScreen(new SoundSettings(app));
             }
         });
 
