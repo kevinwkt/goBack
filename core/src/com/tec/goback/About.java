@@ -74,7 +74,9 @@ public class About implements Screen {
 
         //Cast  overlay image
         Image castImg = new Image(castOverlay);
+        castImg.setPosition(HALFW, HALFH);
         aboutScreenStage.addActor(castImg);
+
 
         //Back button
         TextureRegionDrawable backBtnTrd = new TextureRegionDrawable(new TextureRegion(backButton));
@@ -86,7 +88,7 @@ public class About implements Screen {
         backImgBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new MainMenu(app));
+                app.setScreen(new Pause(app));
             }
         });
     }
