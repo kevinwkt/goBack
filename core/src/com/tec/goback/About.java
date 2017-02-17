@@ -59,7 +59,7 @@ public class About implements Screen {
     }
 
     private void textureInit() {
-        background = new Texture("HARBOR/GoBackHarbor0.png");
+        background = new Texture("HARBOR/GoBackHARBOR0.png");
         castOverlay = new Texture("Interfaces/ABOUT/ABOUTCast.png");
         backButton = new Texture("Interfaces/ABOUT/ABOUTBack.png");
     }
@@ -85,7 +85,6 @@ public class About implements Screen {
         backImgBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.log("clicked", "LOL");// imprime pura mamada
                 app.setScreen(new MainMenu(app));
             }
         });
