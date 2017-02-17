@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
@@ -35,8 +37,8 @@ public class MainMenu implements Screen {
 
     private SpriteBatch batch;
 
-    //Scenes
-    private Stage menuScene;
+    //Stage
+    private Stage mainMenuStage;
 
 
 
@@ -47,16 +49,31 @@ public class MainMenu implements Screen {
     @Override
     public void show() {
         cameraInit();
+        textureInit();
         objectInit();
-        spriteInit();
-    }
-
-    private void objectInit() {
     }
 
     private void cameraInit() {
-        
+        camera = new OrthographicCamera(WIDTH, HEIGHT);
+        camera.position.set(HALFW, HALFH, 0);
+        camera.update();
+        view = new StretchViewport(WIDTH, HEIGHT);
     }
+
+    private void textureInit() {
+        background = new Texture(".png");
+        buttons = new Texture(".png");
+    }
+
+    private void objectInit() {
+        batch = new SpriteBatch();
+        mainMenuStage = new Stage(view, batch);
+        Image bg = new Image(background);
+        Image bt = new Image(buttons);
+
+    }
+
+
 
     @Override
     public void render(float delta) {
