@@ -27,8 +27,8 @@ public class MainMenu implements Screen {
     //Screen sizes
     public static final float WIDTH = 1280;
     public static final float HEIGHT = 720;
-    public static final float HALFW = 600;
-    public static final float HALFH = 400;
+    public static final float HALFW = WIDTH/2;
+    public static final float HALFH = HEIGHT/2;
 
     //Camera
     private OrthographicCamera camera;
