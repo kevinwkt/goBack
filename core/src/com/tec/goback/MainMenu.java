@@ -31,8 +31,16 @@ public class MainMenu implements Screen {
     private Viewport view;
 
     //Textures
-    private Texture background; //Background that changes with progress
-    private Texture buttons; //Buttons PNG on top of the background
+
+    private Texture background;
+    private Texture aboutBtn; 
+    private Texture arcadeBtn;
+    private Texture sonidoBtn;
+    private Texture storyBtn;
+    private Texture title;
+
+
+
 
 
     private SpriteBatch batch;
@@ -61,15 +69,131 @@ public class MainMenu implements Screen {
     }
 
     private void textureInit() {
-        background = new Texture("/Interfaces/MENU.png");
-        buttons = new Texture(".png");
+        background = new Texture("Interfaces/HARBOR/GoBackHARBOR0.png");
+        aboutBtn = new Texture("Interfaces/MENU/ABOUT.png"); 
+        arcadeBtn = new Texture("Interfaces/MENU/ARCADE.png");
+        sonidoBtn = new Texture("Interfaces/MENU/SONIDO");
+        storyBtn = new Texture("Interfaces/MENU/STORY");
+        title = new Texture("Interfaces/MENU/TITLE");
     }
 
     private void objectInit() {
         batch = new SpriteBatch();
         mainMenuStage = new Stage(view, batch);
-        Image bg = new Image(background);
-        Image bt = new Image(buttons);
+        
+        //background
+        Image wp = new Image(background);
+        menuScene.addActor(wp);
+        TextureRegionDrawable trdPlayBtn = new TextureRegionDrawable(new TextureRegion(platBtn));
+        ImageButton imgPlayBtn = new ImageButton(trdPlayBtn);
+        imgPlayBtn.setPosition(WIDTH/2-imgPlayBtn.getWidth()/2, 3*HEIGHT/4-imgPlayBtn.getHeight()/2);
+        menuScene.addActor(imgPlayBtn);
+
+        imgPlayBtn.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                //Gdx.app.log("clicked", "LOL"); imprime pura mamada
+                menuLOL.setScreen(new About(menuLOL));
+            }
+        });
+
+       
+
+        //aboutBtn
+        Image wp = new Image(aboutBtn);
+        menuScene.addActor(wp);
+        TextureRegionDrawable trdPlayBtn = new TextureRegionDrawable(new TextureRegion(platBtn));
+        ImageButton imgPlayBtn = new ImageButton(trdPlayBtn);
+        imgPlayBtn.setPosition(WIDTH/2-imgPlayBtn.getWidth()/2, 3*HEIGHT/4-imgPlayBtn.getHeight()/2);
+        menuScene.addActor(imgPlayBtn);
+
+        imgPlayBtn.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                //Gdx.app.log("clicked", "LOL"); imprime pura mamada
+                menuLOL.setScreen(new About(menuLOL));
+            }
+        });
+
+       
+
+
+        //aboutBtn
+        Image wp = new Image(aboutBtn);
+        menuScene.addActor(wp);
+        TextureRegionDrawable trdPlayBtn = new TextureRegionDrawable(new TextureRegion(platBtn));
+        ImageButton imgPlayBtn = new ImageButton(trdPlayBtn);
+        imgPlayBtn.setPosition(WIDTH/2-imgPlayBtn.getWidth()/2, 3*HEIGHT/4-imgPlayBtn.getHeight()/2);
+        menuScene.addActor(imgPlayBtn);
+
+        imgPlayBtn.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                //Gdx.app.log("clicked", "LOL"); imprime pura mamada
+                menuLOL.setScreen(new About(menuLOL));
+            }
+        });
+
+       
+
+
+        //sonidoBtn
+        Image wp = new Image(sonidoBtn);
+        menuScene.addActor(wp);
+        TextureRegionDrawable trdPlayBtn = new TextureRegionDrawable(new TextureRegion(platBtn));
+        ImageButton imgPlayBtn = new ImageButton(trdPlayBtn);
+        imgPlayBtn.setPosition(WIDTH/2-imgPlayBtn.getWidth()/2, 3*HEIGHT/4-imgPlayBtn.getHeight()/2);
+        menuScene.addActor(imgPlayBtn);
+
+        imgPlayBtn.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                //Gdx.app.log("clicked", "LOL"); imprime pura mamada
+                menuLOL.setScreen(new About(menuLOL));
+            }
+        });
+
+    
+
+
+        //storyBtn
+        Image wp = new Image(storyBtn);
+        menuScene.addActor(wp);
+        TextureRegionDrawable trdPlayBtn = new TextureRegionDrawable(new TextureRegion(platBtn));
+        ImageButton imgPlayBtn = new ImageButton(trdPlayBtn);
+        imgPlayBtn.setPosition(WIDTH/2-imgPlayBtn.getWidth()/2, 3*HEIGHT/4-imgPlayBtn.getHeight()/2);
+        menuScene.addActor(imgPlayBtn);
+
+        imgPlayBtn.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                //Gdx.app.log("clicked", "LOL"); imprime pura mamada
+                menuLOL.setScreen(new About(menuLOL));
+            }
+        });
+
+       
+
+
+        //title
+        Image wp = new Image(title);
+        menuScene.addActor(wp);
+        TextureRegionDrawable trdPlayBtn = new TextureRegionDrawable(new TextureRegion(platBtn));
+        ImageButton imgPlayBtn = new ImageButton(trdPlayBtn);
+        imgPlayBtn.setPosition(WIDTH/2-imgPlayBtn.getWidth()/2, 3*HEIGHT/4-imgPlayBtn.getHeight()/2);
+        menuScene.addActor(imgPlayBtn);
+
+        imgPlayBtn.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                //Gdx.app.log("clicked", "LOL"); imprime pura mamada
+                menuLOL.setScreen(new About(menuLOL));
+            }
+        });
+
+        Gdx.input.setInputProcessor(menuScene);
+
+
 
     }
 
