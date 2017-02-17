@@ -93,6 +93,7 @@ public class MainMenu implements Screen {
         
         //background hace Image
         Image backgroundImg = new Image(background);
+        backgroundImg.setPosition(HALFW-backgroundImg.getWidth()/2, HALFH-backgroundImg.getHeight()/2);
         mainMenuStage.addActor(backgroundImg);
         
 
