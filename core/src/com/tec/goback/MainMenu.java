@@ -27,33 +27,34 @@ public class MainMenu implements Screen {
     private OrthographicCamera camera;
     
     
-    //View
+    //Viewport
     private Viewport view;
 
     //Textures
+    private Texture background; //Background
 
-    private Texture background;
-    private Texture aboutBtn; 
-    private Texture arcadeBtn;
-    private Texture sonidoBtn;
-    private Texture storyBtn;
-    private Texture title;
-
-
+    private Texture aboutBtn; //Buttin
+    private Texture arcadeBtn; //Buttin
+    private Texture sonidoBtn; //Buttin
+    private Texture storyBtn; //Buttin
+    private Texture title; //Buttin
 
 
 
+
+    //SpriteBatch
     private SpriteBatch batch;
 
     //Stage
     private Stage mainMenuStage;
 
 
-
+    //Constructor recieves main App class (implements Game)
     public MainMenu(App app) {
         this.app = app;
     }
 
+    //Call other methods because readability
     @Override
     public void show() {
         cameraInit();
@@ -69,6 +70,7 @@ public class MainMenu implements Screen {
     }
 
     private void textureInit() {
+
         background = new Texture("Interfaces/HARBOR/GoBackHARBOR0.png");
         aboutBtn = new Texture("Interfaces/MENU/ABOUT.png"); 
         arcadeBtn = new Texture("Interfaces/MENU/ARCADE.png");
@@ -77,33 +79,19 @@ public class MainMenu implements Screen {
         title = new Texture("Interfaces/MENU/TITLE");
     }
 
-    private void objectInit() {
+    private void objectInit() { //NOT WORKING
         batch = new SpriteBatch();
         mainMenuStage = new Stage(view, batch);
         
-        //background
-        Image wp = new Image(background);
-        menuScene.addActor(wp);
-        TextureRegionDrawable trdPlayBtn = new TextureRegionDrawable(new TextureRegion(platBtn));
-        ImageButton imgPlayBtn = new ImageButton(trdPlayBtn);
-        imgPlayBtn.setPosition(WIDTH/2-imgPlayBtn.getWidth()/2, 3*HEIGHT/4-imgPlayBtn.getHeight()/2);
-        menuScene.addActor(imgPlayBtn);
+        //background hace Image
+        Image backgroundImg = new Image(background);
+        menuScene.addActor(backgroundImg);
+        
 
-        imgPlayBtn.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                //Gdx.app.log("clicked", "LOL"); imprime pura mamada
-                menuLOL.setScreen(new About(menuLOL));
-            }
-        });
+        //aboutBtn hace ImageButton
+        TextureRegionDrawable aboutBtnTrd = new TextureRegionDrawable(new TextureRegion(aboutBtn));
+        ImageButton imgPlayBtn = new ImageButton(aboutBtnTrd);
 
-       
-
-        //aboutBtn
-        Image wp = new Image(aboutBtn);
-        menuScene.addActor(wp);
-        TextureRegionDrawable trdPlayBtn = new TextureRegionDrawable(new TextureRegion(platBtn));
-        ImageButton imgPlayBtn = new ImageButton(trdPlayBtn);
         imgPlayBtn.setPosition(WIDTH/2-imgPlayBtn.getWidth()/2, 3*HEIGHT/4-imgPlayBtn.getHeight()/2);
         menuScene.addActor(imgPlayBtn);
 
@@ -118,10 +106,8 @@ public class MainMenu implements Screen {
        
 
 
-        //aboutBtn
-        Image wp = new Image(aboutBtn);
-        menuScene.addActor(wp);
-        TextureRegionDrawable trdPlayBtn = new TextureRegionDrawable(new TextureRegion(platBtn));
+        //arcadeBtn
+        TextureRegionDrawable trdPlayBtn = new TextureRegionDrawable(new TextureRegion(arcadeBtn));
         ImageButton imgPlayBtn = new ImageButton(trdPlayBtn);
         imgPlayBtn.setPosition(WIDTH/2-imgPlayBtn.getWidth()/2, 3*HEIGHT/4-imgPlayBtn.getHeight()/2);
         menuScene.addActor(imgPlayBtn);
@@ -138,9 +124,7 @@ public class MainMenu implements Screen {
 
 
         //sonidoBtn
-        Image wp = new Image(sonidoBtn);
-        menuScene.addActor(wp);
-        TextureRegionDrawable trdPlayBtn = new TextureRegionDrawable(new TextureRegion(platBtn));
+        TextureRegionDrawable trdPlayBtn = new TextureRegionDrawable(new TextureRegion(sonidoBtn));
         ImageButton imgPlayBtn = new ImageButton(trdPlayBtn);
         imgPlayBtn.setPosition(WIDTH/2-imgPlayBtn.getWidth()/2, 3*HEIGHT/4-imgPlayBtn.getHeight()/2);
         menuScene.addActor(imgPlayBtn);
@@ -157,9 +141,7 @@ public class MainMenu implements Screen {
 
 
         //storyBtn
-        Image wp = new Image(storyBtn);
-        menuScene.addActor(wp);
-        TextureRegionDrawable trdPlayBtn = new TextureRegionDrawable(new TextureRegion(platBtn));
+        TextureRegionDrawable trdPlayBtn = new TextureRegionDrawable(new TextureRegion(storyBtn));
         ImageButton imgPlayBtn = new ImageButton(trdPlayBtn);
         imgPlayBtn.setPosition(WIDTH/2-imgPlayBtn.getWidth()/2, 3*HEIGHT/4-imgPlayBtn.getHeight()/2);
         menuScene.addActor(imgPlayBtn);
@@ -176,22 +158,12 @@ public class MainMenu implements Screen {
 
 
         //title
-        Image wp = new Image(title);
-        menuScene.addActor(wp);
-        TextureRegionDrawable trdPlayBtn = new TextureRegionDrawable(new TextureRegion(platBtn));
-        ImageButton imgPlayBtn = new ImageButton(trdPlayBtn);
-        imgPlayBtn.setPosition(WIDTH/2-imgPlayBtn.getWidth()/2, 3*HEIGHT/4-imgPlayBtn.getHeight()/2);
-        menuScene.addActor(imgPlayBtn);
+        Image titleImg = new Image(title);
+        titleImg.setPosition();
+        menuScene.addActor(titleImg);
 
-        imgPlayBtn.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                //Gdx.app.log("clicked", "LOL"); imprime pura mamada
-                menuLOL.setScreen(new About(menuLOL));
-            }
-        });
-
-        Gdx.input.setInputProcessor(menuScene);
+        //Recibe el Stage
+        Gdx.input.setInputProcessor(mainMenuStage);
 
 
 
