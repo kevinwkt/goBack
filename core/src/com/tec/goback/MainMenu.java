@@ -17,7 +17,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
- * Created by gerry on 2/16/17.
+ * Created by gerry on 2/18/17.
  */
 public class MainMenu implements Screen {
 
