@@ -72,7 +72,7 @@ public class SoundSettings implements Screen{
     }
 
     private void textureInit() {
-        background = new Texture("Interfaces/SOUND/port0.jpg");
+        background = new Texture("/HARBOR/GoBackHARBOR0.png");
         backButton = new Texture("Interfaces/SOUND/SOUNDBack.png");
         muteMusicOffButton = new Texture("Interfaces/SOUND/SOUNDMusic.png");
         muteMusicOnButton = new Texture("Interfaces/SOUND/SOUNDMusicON.png");
