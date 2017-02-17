@@ -59,7 +59,7 @@ public class About implements Screen {
     private void textureInit() {
         background = new Texture("HARBOR/GoBackHarbor0.png");
         castOverlay = new Texture("Interfaces/ABOUT/ABOUTCast.png");
-        backButton = new Texture("Interfaces/ABOUT/ABOUTback.png");
+        backButton = new Texture("Interfaces/ABOUT/ABOUTBack.png");
     }
 
     private void objectInit() {
