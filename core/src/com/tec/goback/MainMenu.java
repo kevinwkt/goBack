@@ -33,11 +33,11 @@ public class MainMenu implements Screen {
     //Textures
     private Texture background; //Background
 
-    private Texture aboutBtn; //Buttin
-    private Texture arcadeBtn; //Buttin
-    private Texture sonidoBtn; //Buttin
-    private Texture storyBtn; //Buttin
-    private Texture title; //Buttin
+    private Texture aboutBtn; //Button
+    private Texture arcadeBtn; //Button
+    private Texture sonidoBtn; //Button
+    private Texture storyBtn; //Button
+    private Texture title; //Button
 
 
 
@@ -81,7 +81,7 @@ public class MainMenu implements Screen {
 
     private void objectInit() { //MAYBE PROBABLY (NOT) WORKING
         
-        batch = new SpriteBatch();
+        versionbatch = new SpriteBatch();
         mainMenuStage = new Stage(view, batch);
         
         //background hace Image
