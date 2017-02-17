@@ -77,7 +77,7 @@ public class MainMenu implements Screen {
 
     private void textureInit() {
 
-        background = new Texture("Interfaces/HARBOR/GoBackHARBOR0.png");
+        background = new Texture("HARBOR/GoBackHARBOR0.png");
         aboutBtn = new Texture("Interfaces/MENU/ABOUT.png"); 
         arcadeBtn = new Texture("Interfaces/MENU/ARCADE.png");
         sonidoBtn = new Texture("Interfaces/MENU/SONIDO");
