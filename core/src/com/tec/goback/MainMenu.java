@@ -33,35 +33,30 @@ public class MainMenu implements Screen {
     //Camera
     private OrthographicCamera camera;
     
-    
     //Viewport
     private Viewport view;
 
     //Textures
-    private Texture background; //Background
+    private Texture background; //Image
+    private Texture title; //Image
 
     private Texture aboutBtn; //Button
     private Texture arcadeBtn; //Button
-    private Texture sonidoBtn; //Button
+    private Texture soundBtn; //Button
     private Texture storyBtn; //Button
-    private Texture title; //Button
-
-
-
-
+    
     //SpriteBatch
     private SpriteBatch batch;
 
     //Stage
     private Stage mainMenuStage;
 
-
     //Constructor recieves main App class (implements Game)
     public MainMenu(App app) {
         this.app = app;
     }
 
-    //Call other methods because readability
+    //Call other methods because FIS
     @Override
     public void show() {
         cameraInit();
@@ -81,13 +76,12 @@ public class MainMenu implements Screen {
         background = new Texture("HARBOR/GoBackHARBOR0.png");
         aboutBtn = new Texture("Interfaces/MENU/ABOUT.png"); 
         arcadeBtn = new Texture("Interfaces/MENU/ARCADE.png");
-        sonidoBtn = new Texture("Interfaces/MENU/SONIDO.png");
+        soundBtn = new Texture("Interfaces/MENU/sound.png");
         storyBtn = new Texture("Interfaces/MENU/STORY.png");
         title = new Texture("Interfaces/MENU/TITLE.png");
     }
 
-    private void objectInit() { //MAYBE PROBABLY (NOT) WORKING
-        
+    private void objectInit() { //MAYBE PROBABLY WORKING   
         batch = new SpriteBatch();
         mainMenuStage = new Stage(view, batch);
         
@@ -96,6 +90,10 @@ public class MainMenu implements Screen {
         backgroundImg.setPosition(HALFW-backgroundImg.getWidth()/2, HALFH-backgroundImg.getHeight()/2);
         mainMenuStage.addActor(backgroundImg);
         
+        //title
+        Image titleImg = new Image(title);
+        titleImg.setPosition(2, (HALFH-titleImg.getHeight()/2)+80);
+        mainMenuStage.addActor(titleImg);
 
         //aboutBtn hace ImageButton
         TextureRegionDrawable aboutBtnTrd = new TextureRegionDrawable(new TextureRegion(aboutBtn));
@@ -111,6 +109,33 @@ public class MainMenu implements Screen {
             }
         });
 
+        //soundBtn
+        TextureRegionDrawable soundBtnTrd = new TextureRegionDrawable(new TextureRegion(soundBtn));
+        ImageButton soundBtnImg = new ImageButton(soundBtnTrd);
+
+        soundBtnImg.setPosition(10, 10);
+        mainMenuStage.addActor(soundBtnImg);
+
+        soundBtnImg.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                app.setScreen(new SoundSettings(app));
+            }
+        });
+
+        //storyBtn
+        TextureRegionDrawable storyBtnTrd = new TextureRegionDrawable(new TextureRegion(storyBtn));
+        ImageButton storyBtnImg = new ImageButton(storyBtnTrd);
+
+        storyBtnImg.setPosition(HALFW-storyBtnImg.getWidth()/2+190+280, HALFH-storyBtnImg.getHeight()/2-75);
+        mainMenuStage.addActor(storyBtnImg);
+
+        storyBtnImg.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                //app.setScreen(new About(app));
+            }
+        });
 
         //arcadeBtn
         TextureRegionDrawable arcadeBtnTrd = new TextureRegionDrawable(new TextureRegion(arcadeBtn));
@@ -126,48 +151,11 @@ public class MainMenu implements Screen {
             }
         });
 
-
-        //sonidoBtn
-        TextureRegionDrawable sonidoBtnTrd = new TextureRegionDrawable(new TextureRegion(sonidoBtn));
-        ImageButton sonidoBtnImg = new ImageButton(sonidoBtnTrd);
-
-        sonidoBtnImg.setPosition(10, 10);
-        mainMenuStage.addActor(sonidoBtnImg);
-
-        sonidoBtnImg.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new SoundSettings(app));
-            }
-        });
-
-
-        //storyBtn
-        TextureRegionDrawable storyBtnTrd = new TextureRegionDrawable(new TextureRegion(storyBtn));
-        ImageButton storyBtnImg = new ImageButton(storyBtnTrd);
-
-        storyBtnImg.setPosition(HALFW-storyBtnImg.getWidth()/2+190+280, HALFH-arcadeBtnImg.getHeight()/2-75);
-        mainMenuStage.addActor(storyBtnImg);
-
-        storyBtnImg.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                //app.setScreen(new About(app));
-            }
-        });
-
-
-        //title
-        Image titleImg = new Image(title);
-        titleImg.setPosition(2, (HALFH-titleImg.getHeight()/2)+80);
-        mainMenuStage.addActor(titleImg);
-
         //pass the Stage
         Gdx.input.setInputProcessor(mainMenuStage);
 
         //let go of android device back key
         Gdx.input.setCatchBackKey(false);
-
     }
 
 
