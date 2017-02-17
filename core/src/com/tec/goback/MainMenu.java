@@ -142,19 +142,19 @@ public class MainMenu implements Screen {
         });
 
 
-        // //storyBtn
-        // TextureRegionDrawable storyBtnTrd = new TextureRegionDrawable(new TextureRegion(storyBtn));
-        // ImageButton storyBtnImg = new ImageButton(storyBtnTrd);
+        //storyBtn
+        TextureRegionDrawable storyBtnTrd = new TextureRegionDrawable(new TextureRegion(storyBtn));
+        ImageButton storyBtnImg = new ImageButton(storyBtnTrd);
 
-        // storyBtnImg.setPosition(HALFW-storyBtnImg.getWidth()/2, 3*HEIGHT/4-storyBtnImg.getHeight()/2);
-        // mainMenuStage.addActor(storyBtnImg);
+        storyBtnImg.setPosition(HALFW-storyBtnImg.getWidth()/2+190+280, HALFH-arcadeBtnImg.getHeight()/2-95);
+        mainMenuStage.addActor(storyBtnImg);
 
-        // storyBtnImg.addListener(new ClickListener(){
-        //     @Override
-        //     public void clicked(InputEvent event, float x, float y) {
-        //         //app.setScreen(new About(app));
-        //     }
-        // });
+        storyBtnImg.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                //app.setScreen(new About(app));
+            }
+        });
 
 
         //title
