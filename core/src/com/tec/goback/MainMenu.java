@@ -72,11 +72,10 @@ public class MainMenu implements Screen {
     }
 
     private void textureInit() {
-
         background = new Texture("HARBOR/GoBackHARBOR0.png");
         aboutBtn = new Texture("Interfaces/MENU/ABOUT.png"); 
         arcadeBtn = new Texture("Interfaces/MENU/ARCADE.png");
-        soundBtn = new Texture("Interfaces/MENU/sound.png");
+        soundBtn = new Texture("Interfaces/MENU/SOUND.png");
         storyBtn = new Texture("Interfaces/MENU/STORY.png");
         title = new Texture("Interfaces/MENU/TITLE.png");
     }
@@ -133,7 +132,7 @@ public class MainMenu implements Screen {
         storyBtnImg.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //app.setScreen(new About(app));
+                //app.setScreen(new Story(app));
             }
         });
 
@@ -147,7 +146,7 @@ public class MainMenu implements Screen {
         arcadeBtnImg.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //app.setScreen(new About(app));
+                app.setScreen(new Arcade(app));
             }
         });
 
