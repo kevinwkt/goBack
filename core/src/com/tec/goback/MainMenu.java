@@ -17,7 +17,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
- * Created by gerry on 2/16/17.
+ * Created by gerry on 2/18/17.
  */
 public class MainMenu implements Screen {
 
@@ -25,10 +25,10 @@ public class MainMenu implements Screen {
     private final App app;
 
     //Screen sizes
-    public static final float WIDTH = 1200;
-    public static final float HEIGHT = 800;
-    public static final float HALFW = 600;
-    public static final float HALFH = 400;
+    public static final float WIDTH = 1280;
+    public static final float HEIGHT = 720;
+    public static final float HALFW = WIDTH/2;
+    public static final float HALFH = HEIGHT/2;
 
     //Camera
     private OrthographicCamera camera;
@@ -93,6 +93,7 @@ public class MainMenu implements Screen {
         
         //background hace Image
         Image backgroundImg = new Image(background);
+        backgroundImg.setPosition(HALFW-backgroundImg.getWidth()/2, HALFH-backgroundImg.getHeight()/2);
         mainMenuStage.addActor(backgroundImg);
         
 
@@ -169,7 +170,7 @@ public class MainMenu implements Screen {
         titleImg.setPosition(HALFW-storyBtnImg.getWidth()/2, 3*HEIGHT/4-storyBtnImg.getHeight()/2);
         mainMenuStage.addActor(titleImg);
 
-        //Recibe el Stage
+        //pass the Stage
         Gdx.input.setInputProcessor(mainMenuStage);
 
 
