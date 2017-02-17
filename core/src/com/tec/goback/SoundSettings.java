@@ -105,17 +105,23 @@ public class SoundSettings implements Screen{
             }
         });
 
-
-
-        /*TextureRegionDrawable muteMusicOffPlay = new TextureRegionDrawable(new TextureRegion(muteMusicOffButton));
+        TextureRegionDrawable muteMusicOffPlay = new TextureRegionDrawable(new TextureRegion(muteMusicOffButton));
         ImageButton muteMusicOffImg = new ImageButton(muteMusicOffPlay);
         muteMusicOffImg.setPosition(WIDTH/2, HEIGHT/2);
-        soundSettingsStage.addActor(muteMusicOffImg);*/
 
         TextureRegionDrawable muteMusicOnPlay = new TextureRegionDrawable(new TextureRegion(muteMusicOnButton));
         ImageButton muteMusicOnImg = new ImageButton(muteMusicOnPlay);
         muteMusicOnImg.setPosition(4*WIDTH/7, 8*HEIGHT/15);
         soundSettingsStage.addActor(muteMusicOnImg);
+
+        muteMusicOnImg.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                //soundSettingsStage.addActor(muteMusicOffImg);
+                Gdx.app.log("clicked","Cambiar Mute");
+
+            }
+        });
 
         /*TextureRegionDrawable muteFxOffPlay = new TextureRegionDrawable(new TextureRegion(muteFXOffButton));
         ImageButton muteFxOffImg = new ImageButton(muteFxOffPlay);
@@ -129,7 +135,7 @@ public class SoundSettings implements Screen{
 
         TextureRegionDrawable soundDecorationPlay = new TextureRegionDrawable(new TextureRegion(soundDecoration));
         ImageButton soundDecorationImg = new ImageButton(soundDecorationPlay);
-        soundDecorationImg.setPosition(WIDTH/10, HEIGHT/2);
+        soundDecorationImg.setPosition(WIDTH/20, HEIGHT/2-soundDecorationImg.getHeight()/2);
         soundSettingsStage.addActor(soundDecorationImg);
 
         Gdx.input.setInputProcessor(soundSettingsStage);
