@@ -41,12 +41,13 @@ public class Pause implements Screen {
     //Textures
     private Texture background; //Background
 
-    private Texture bottom; //Button
-    private Texture map; //Button
+    private Texture bottom; //Image
+    private Texture map; //Image
     private Texture quitBton; //Button
-    private Texture top; //Button
+    private Texture top; //Image
     private Texture backBton; //Button
-
+    private Texture musicBton;
+    private Texture fxBton;
 
 
 
@@ -85,6 +86,8 @@ public class Pause implements Screen {
         quitBton = new Texture("Interfaces/PAUSE/PAUSEQuit.png");
         top = new Texture("Interfaces/PAUSE/PAUSETopDisplay.png");
         backBton = new Texture("Interfaces/PAUSE/PAUSEback.png");
+        musicBton= new Texture("Interfaces/SOUND/SOUNDMusic.png");
+        fxBton= new Texture("Interfaces/SOUND/SOUNDSound.png");
     }
 
     private void objectInit() { //MAYBE PROBABLY (NOT) WORKING
@@ -97,8 +100,14 @@ public class Pause implements Screen {
         backgroundImg.setPosition(HALFW-backgroundImg.getWidth()/2, HALFH-backgroundImg.getHeight()/2);
         mainMenuStage.addActor(backgroundImg);
 
+        //top
+        Image topImg=new Image(top);
+        topImg.setPosition(HALFW-backgroundImg.getWidth()/2, HALFH-backgroundImg.getHeight()/2);
+        mainMenuStage.addActor(topImg);
+
 
         //bottom
+        //1280x720
         Image bottomImg=new Image(bottom);
         bottomImg.setPosition(HALFW-backgroundImg.getWidth()/2, HALFH-backgroundImg.getHeight()/2);
         mainMenuStage.addActor(bottomImg);
@@ -106,7 +115,7 @@ public class Pause implements Screen {
 
         //map
         Image mapImg=new Image(map);
-        mapImg.setPosition(HALFW-backgroundImg.getWidth()/2, HALFH-backgroundImg.getHeight()/2);
+        mapImg.setPosition(HALFW-backgroundImg.getWidth()/2, HALFH-backgroundImg.getHeight()/2+220);
         mainMenuStage.addActor(mapImg);
 
 
@@ -114,7 +123,7 @@ public class Pause implements Screen {
         TextureRegionDrawable quitBtonTrd = new TextureRegionDrawable(new TextureRegion(quitBton));
         ImageButton quitBtonImg = new ImageButton(quitBtonTrd);
 
-        quitBtonImg.setPosition(HALFW-quitBtonImg.getWidth()/2, 3*HEIGHT/4-quitBtonImg.getHeight()/2);
+        quitBtonImg.setPosition(HALFW-quitBtonImg.getWidth()/2-470, HEIGHT-quitBtonImg.getHeight()/2-640);
         mainMenuStage.addActor(quitBtonImg);
 
         quitBtonImg.addListener(new ClickListener(){
@@ -125,25 +134,47 @@ public class Pause implements Screen {
         });
 
 
-
-
-        //top
-        Image topImg=new Image(top);
-        topImg.setPosition(HALFW-backgroundImg.getWidth()/2, HALFH-backgroundImg.getHeight()/2);
-        mainMenuStage.addActor(topImg);
-
-
         //title
         TextureRegionDrawable backBtonTrd = new TextureRegionDrawable(new TextureRegion(backBton));
         ImageButton backBtonImg = new ImageButton(backBtonTrd);
 
-        backBtonImg.setPosition(HALFW-backBtonImg.getWidth()/2, 3*HEIGHT/4-backBtonImg.getHeight()/2);
+        backBtonImg.setPosition(HALFW-backBtonImg.getWidth()/2+500, HEIGHT-backBtonImg.getHeight()/2-640);
         mainMenuStage.addActor(backBtonImg);
 
         quitBtonImg.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 app.setScreen(new SoundSettings(app));
+            }
+        });
+
+        //music
+        TextureRegionDrawable musicBtonTrd = new TextureRegionDrawable(new TextureRegion(musicBton));
+        ImageButton musicBtonImg = new ImageButton(musicBtonTrd);
+
+        musicBtonImg.setPosition(HALFW-musicBtonImg.getWidth()/2+313, HEIGHT-musicBtonImg.getHeight()/2-280);
+        mainMenuStage.addActor(musicBtonImg);
+
+        musicBtonImg.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                //CHANGE PHOTO
+                //CHANGE MUSIC SETTINGS
+            }
+        });
+
+        //fx
+        TextureRegionDrawable fxBtonTrd = new TextureRegionDrawable(new TextureRegion(fxBton));
+        ImageButton fxBtonImg = new ImageButton(fxBtonTrd);
+
+        fxBtonImg.setPosition(HALFW-fxBtonImg.getWidth()/2+300, HEIGHT-fxBtonImg.getHeight()/2-420);
+        mainMenuStage.addActor(fxBtonImg);
+
+        fxBtonImg.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                //CHANGE PHOTO
+                //CHANGE FX SETTINGS
             }
         });
 
