@@ -122,15 +122,15 @@ public class SoundSettings implements Screen{
         muteFxOffImg.setPosition(WIDTH/2, HEIGHT/2);
         soundSettingsStage.addActor(muteFxOffImg);*/
 
-        /*TextureRegionDrawable muteFxOnPlay = new TextureRegionDrawable(new TextureRegion(muteFXOnButton));
+        TextureRegionDrawable muteFxOnPlay = new TextureRegionDrawable(new TextureRegion(muteFXOnButton));
         ImageButton muteFxOnImg = new ImageButton(muteFxOnPlay);
-        muteFxOnImg.setPosition(WIDTH/2, HEIGHT/2);
+        muteFxOnImg.setPosition(4*WIDTH/7, 4*HEIGHT/15);
         soundSettingsStage.addActor(muteFxOnImg);
 
         TextureRegionDrawable soundDecorationPlay = new TextureRegionDrawable(new TextureRegion(soundDecoration));
         ImageButton soundDecorationImg = new ImageButton(soundDecorationPlay);
-        soundDecorationImg.setPosition(WIDTH/2, HEIGHT/2);
-        soundSettingsStage.addActor(soundDecorationImg);*/
+        soundDecorationImg.setPosition(WIDTH/10, HEIGHT/2);
+        soundSettingsStage.addActor(soundDecorationImg);
 
         Gdx.input.setInputProcessor(soundSettingsStage);
         Gdx.input.setCatchBackKey(false);
