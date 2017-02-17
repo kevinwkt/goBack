@@ -61,7 +61,7 @@ public class MainMenu implements Screen {
     }
 
     private void textureInit() {
-        background = new Texture(".png");
+        background = new Texture("/Interfaces/MENU.png");
         buttons = new Texture(".png");
     }
 
