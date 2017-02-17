@@ -26,8 +26,8 @@ public class About implements Screen {
 
 
     //Screen sizes
-    public static final float WIDTH = 1280;
-    public static final float HEIGHT = 720;
+    public static final float WIDTH = 1200;
+    public static final float HEIGHT = 800;
     public static final float HALFW = WIDTH/2;
     public static final float HALFH = HEIGHT/2;
 
@@ -111,6 +111,7 @@ public class About implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        view.update(width,height);
 
     }
 
