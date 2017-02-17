@@ -1,6 +1,7 @@
 package com.tec.goback;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -92,6 +93,10 @@ public class SoundSettings implements Screen{
         soundSettingsStage.addActor(backImg);
 
         // buttons
+        TextureRegionDrawable soundDecorationPlay = new TextureRegionDrawable(new TextureRegion(soundDecoration));
+        ImageButton soundDecorationImg = new ImageButton(soundDecorationPlay);
+        soundDecorationImg.setPosition(WIDTH/20, HEIGHT/2-soundDecorationImg.getHeight()/2);
+        soundSettingsStage.addActor(soundDecorationImg);
 
         TextureRegionDrawable backBtnPlay = new TextureRegionDrawable(new TextureRegion(backButton));
         ImageButton backBtnImg = new ImageButton(backBtnPlay);
@@ -105,9 +110,11 @@ public class SoundSettings implements Screen{
             }
         });
 
-        TextureRegionDrawable muteMusicOffPlay = new TextureRegionDrawable(new TextureRegion(muteMusicOffButton));
+        /*TextureRegionDrawable muteMusicOffPlay = new TextureRegionDrawable(new TextureRegion(muteMusicOffButton));
         ImageButton muteMusicOffImg = new ImageButton(muteMusicOffPlay);
         muteMusicOffImg.setPosition(WIDTH/2, HEIGHT/2);
+        soundSettingsStage.addActor(muteMusicOffImg);
+        */
 
         TextureRegionDrawable muteMusicOnPlay = new TextureRegionDrawable(new TextureRegion(muteMusicOnButton));
         ImageButton muteMusicOnImg = new ImageButton(muteMusicOnPlay);
@@ -117,7 +124,6 @@ public class SoundSettings implements Screen{
         muteMusicOnImg.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //soundSettingsStage.addActor(muteMusicOffImg);
                 Gdx.app.log("clicked","Cambiar Mute");
 
             }
@@ -133,13 +139,8 @@ public class SoundSettings implements Screen{
         muteFxOnImg.setPosition(4*WIDTH/7, 4*HEIGHT/15);
         soundSettingsStage.addActor(muteFxOnImg);
 
-        TextureRegionDrawable soundDecorationPlay = new TextureRegionDrawable(new TextureRegion(soundDecoration));
-        ImageButton soundDecorationImg = new ImageButton(soundDecorationPlay);
-        soundDecorationImg.setPosition(WIDTH/20, HEIGHT/2-soundDecorationImg.getHeight()/2);
-        soundSettingsStage.addActor(soundDecorationImg);
-
         Gdx.input.setInputProcessor(soundSettingsStage);
-        Gdx.input.setCatchBackKey(false);
+        Gdx.input.setCatchBackKey(true);
 
     }
 
@@ -152,11 +153,14 @@ public class SoundSettings implements Screen{
     private void cls() {
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        if(Gdx.input.isKeyPressed(Input.Keys.BACK)){
+            app.setScreen(new MainMenu(app));
+        }
     }
 
     @Override
     public void resize(int width, int height) {
-
+        view.update(width, height);
     }
 
     @Override
