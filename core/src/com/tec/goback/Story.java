@@ -20,7 +20,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * Created by sergiohernandezjr on 16/02/17.
  */
 
-public class About implements Screen {
+public class Story implements Screen {
     //Main app class
     private final App app;
 
@@ -39,15 +39,15 @@ public class About implements Screen {
 
     //Textures
     private Texture background;//Background that changes with progress
-    private Texture castOverlay;
-    private Texture backButton;//Image that holds creators photos and back button
+    private Texture sophie;
+    private Texture pauseButton;//Image that holds creators photos and back button
 
     private SpriteBatch batch;
 
     //Stage
     private Stage aboutScreenStage;
 
-    public About (App app) {
+    public Story (App app) {
         this.app = app;
     }
 
@@ -60,8 +60,8 @@ public class About implements Screen {
 
     private void textureInit() {
         background = new Texture("HARBOR/GoBackHARBOR0.png");
-        castOverlay = new Texture("Interfaces/ABOUT/ABOUTCast.png");
-        backButton = new Texture("Interfaces/ABOUT/ABOUTBack.png");
+        sophie = new Texture("Interfaces/GAMEPLAY/CONSTANT/SOPHIEWALK/SOPHIEWalk00.png");
+        pauseButton = new Texture("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTPause.png");
     }
 
     private void objectInit() {
@@ -73,23 +73,23 @@ public class About implements Screen {
         bgImg.setPosition(HALFW-bgImg.getWidth()/2, HALFH-bgImg.getHeight()/2);
         aboutScreenStage.addActor(bgImg);
 
-        //Cast  overlay image
-        Image castImg = new Image(castOverlay);
-        castImg.setPosition(HALFW-castImg.getWidth()/2, HALFH-castImg.getHeight()/2);
-        aboutScreenStage.addActor(castImg);
+        //Sophie
+        Image sophieImg = new Image(sophie);
+        sophieImg.setPosition(900,226);
+        aboutScreenStage.addActor(sophieImg);
 
 
-        //Back button
-        TextureRegionDrawable backBtnTrd = new TextureRegionDrawable(new TextureRegion(backButton));
-        ImageButton backImgBtn = new ImageButton(backBtnTrd);
+        //Pause button
+        TextureRegionDrawable pauseBtnTrd = new TextureRegionDrawable(new TextureRegion(pauseButton));
+        ImageButton pauseImgBtn = new ImageButton(pauseBtnTrd);
 
-        backImgBtn.setPosition(10, 10);
-        aboutScreenStage.addActor(backImgBtn);
+        pauseImgBtn.setPosition(WIDTH-pauseImgBtn.getWidth()-10, HEIGHT-pauseImgBtn.getHeight()-10);
+        aboutScreenStage.addActor(pauseImgBtn);
 
-        backImgBtn.addListener(new ClickListener(){
+        pauseImgBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new MainMenu(app));
+                app.setScreen(new Pause(app));
             }
         });
 
