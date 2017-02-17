@@ -81,7 +81,7 @@ public class MainMenu implements Screen {
 
     private void objectInit() { //MAYBE PROBABLY (NOT) WORKING
         
-        versionbatch = new SpriteBatch();
+        batch = new SpriteBatch();
         mainMenuStage = new Stage(view, batch);
         
         //background hace Image
