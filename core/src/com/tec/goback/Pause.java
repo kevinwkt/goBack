@@ -129,12 +129,12 @@ public class Pause implements Screen {
         quitBtonImg.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new SoundSettings(app));
+                app.setScreen(new MainMenu(app));
             }
         });
 
 
-        //title
+        //back
         TextureRegionDrawable backBtonTrd = new TextureRegionDrawable(new TextureRegion(backBton));
         ImageButton backBtonImg = new ImageButton(backBtonTrd);
 
