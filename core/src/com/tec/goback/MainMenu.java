@@ -25,8 +25,8 @@ public class MainMenu implements Screen {
     private final App app;
 
     //Screen sizes
-    public static final float WIDTH = 1200;
-    public static final float HEIGHT = 800;
+    public static final float WIDTH = 1280;
+    public static final float HEIGHT = 720;
     public static final float HALFW = 600;
     public static final float HALFH = 400;
 
@@ -170,7 +170,7 @@ public class MainMenu implements Screen {
         titleImg.setPosition(HALFW-storyBtnImg.getWidth()/2, 3*HEIGHT/4-storyBtnImg.getHeight()/2);
         mainMenuStage.addActor(titleImg);
 
-        //Recibe el Stage
+        //pass the Stage
         Gdx.input.setInputProcessor(mainMenuStage);
 
 
