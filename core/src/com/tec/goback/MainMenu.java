@@ -97,77 +97,69 @@ public class MainMenu implements Screen {
         mainMenuStage.addActor(backgroundImg);
         
 
-        //aboutBtn hace ImageButton
-        TextureRegionDrawable aboutBtnTrd = new TextureRegionDrawable(new TextureRegion(aboutBtn));
-        ImageButton aboutBtnImg = new ImageButton(aboutBtnTrd);
+        // //aboutBtn hace ImageButton
+        // TextureRegionDrawable aboutBtnTrd = new TextureRegionDrawable(new TextureRegion(aboutBtn));
+        // ImageButton aboutBtnImg = new ImageButton(aboutBtnTrd);
 
-        aboutBtnImg.setPosition(HALFW-aboutBtnImg.getWidth()/2, 3*HEIGHT/4-aboutBtnImg.getHeight()/2);
-        mainMenuStage.addActor(aboutBtnImg);
+        // aboutBtnImg.setPosition(HALFW-aboutBtnImg.getWidth()/2, 3*HEIGHT/4-aboutBtnImg.getHeight()/2);
+        // mainMenuStage.addActor(aboutBtnImg);
 
-        aboutBtnImg.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                //app.setScreen(new About(app));
-            }
-        });
-
-       
+        // aboutBtnImg.addListener(new ClickListener(){
+        //     @Override
+        //     public void clicked(InputEvent event, float x, float y) {
+        //         //app.setScreen(new About(app));
+        //     }
+        // });
 
 
-        //arcadeBtn
-        TextureRegionDrawable arcadeBtnTrd = new TextureRegionDrawable(new TextureRegion(arcadeBtn));
-        ImageButton arcadeBtnImg = new ImageButton(arcadeBtnTrd);
+        // //arcadeBtn
+        // TextureRegionDrawable arcadeBtnTrd = new TextureRegionDrawable(new TextureRegion(arcadeBtn));
+        // ImageButton arcadeBtnImg = new ImageButton(arcadeBtnTrd);
 
-        arcadeBtnImg.setPosition(HALFW-arcadeBtnImg.getWidth()/2, 3*HEIGHT/4-arcadeBtnImg.getHeight()/2);
-        mainMenuStage.addActor(arcadeBtnImg);
+        // arcadeBtnImg.setPosition(HALFW-arcadeBtnImg.getWidth()/2, 3*HEIGHT/4-arcadeBtnImg.getHeight()/2);
+        // mainMenuStage.addActor(arcadeBtnImg);
 
-        arcadeBtnImg.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                //app.setScreen(new About(app));
-            }
-        });
-
-       
+        // arcadeBtnImg.addListener(new ClickListener(){
+        //     @Override
+        //     public void clicked(InputEvent event, float x, float y) {
+        //         //app.setScreen(new About(app));
+        //     }
+        // });
 
 
-        //sonidoBtn
-        TextureRegionDrawable sonidoBtnTrd = new TextureRegionDrawable(new TextureRegion(sonidoBtn));
-        ImageButton sonidoBtnImg = new ImageButton(sonidoBtnTrd);
+        // //sonidoBtn
+        // TextureRegionDrawable sonidoBtnTrd = new TextureRegionDrawable(new TextureRegion(sonidoBtn));
+        // ImageButton sonidoBtnImg = new ImageButton(sonidoBtnTrd);
 
-        sonidoBtnImg.setPosition(HALFW-sonidoBtnImg.getWidth()/2, 3*HEIGHT/4-sonidoBtnImg.getHeight()/2);
-        mainMenuStage.addActor(sonidoBtnImg);
+        // sonidoBtnImg.setPosition(HALFW-sonidoBtnImg.getWidth()/2, 3*HEIGHT/4-sonidoBtnImg.getHeight()/2);
+        // mainMenuStage.addActor(sonidoBtnImg);
 
-        sonidoBtnImg.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new SoundSettings(app));
-            }
-        });
-
-    
+        // sonidoBtnImg.addListener(new ClickListener(){
+        //     @Override
+        //     public void clicked(InputEvent event, float x, float y) {
+        //         app.setScreen(new SoundSettings(app));
+        //     }
+        // });
 
 
-        //storyBtn
-        TextureRegionDrawable storyBtnTrd = new TextureRegionDrawable(new TextureRegion(storyBtn));
-        ImageButton storyBtnImg = new ImageButton(storyBtnTrd);
+        // //storyBtn
+        // TextureRegionDrawable storyBtnTrd = new TextureRegionDrawable(new TextureRegion(storyBtn));
+        // ImageButton storyBtnImg = new ImageButton(storyBtnTrd);
 
-        storyBtnImg.setPosition(HALFW-storyBtnImg.getWidth()/2, 3*HEIGHT/4-storyBtnImg.getHeight()/2);
-        mainMenuStage.addActor(storyBtnImg);
+        // storyBtnImg.setPosition(HALFW-storyBtnImg.getWidth()/2, 3*HEIGHT/4-storyBtnImg.getHeight()/2);
+        // mainMenuStage.addActor(storyBtnImg);
 
-        storyBtnImg.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                //app.setScreen(new About(app));
-            }
-        });
+        // storyBtnImg.addListener(new ClickListener(){
+        //     @Override
+        //     public void clicked(InputEvent event, float x, float y) {
+        //         //app.setScreen(new About(app));
+        //     }
+        // });
 
-       
-
-
+        
         //title
         Image titleImg = new Image(title);
-        titleImg.setPosition(HALFW-storyBtnImg.getWidth()/2, 3*HEIGHT/4-storyBtnImg.getHeight()/2);
+        titleImg.setPosition(300, (HALFH-titleImg.getHeight()/2)+50);
         mainMenuStage.addActor(titleImg);
 
         //pass the Stage
