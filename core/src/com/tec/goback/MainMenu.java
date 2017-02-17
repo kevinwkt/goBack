@@ -2,6 +2,7 @@ package com.tec.goback;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -80,9 +81,9 @@ public class MainMenu implements Screen {
         background = new Texture("HARBOR/GoBackHARBOR0.png");
         aboutBtn = new Texture("Interfaces/MENU/ABOUT.png"); 
         arcadeBtn = new Texture("Interfaces/MENU/ARCADE.png");
-        sonidoBtn = new Texture("Interfaces/MENU/SONIDO");
-        storyBtn = new Texture("Interfaces/MENU/STORY");
-        title = new Texture("Interfaces/MENU/TITLE");
+        sonidoBtn = new Texture("Interfaces/MENU/SONIDO.png");
+        storyBtn = new Texture("Interfaces/MENU/STORY.png");
+        title = new Texture("Interfaces/MENU/TITLE.png");
     }
 
     private void objectInit() { //MAYBE PROBABLY (NOT) WORKING
@@ -179,7 +180,12 @@ public class MainMenu implements Screen {
 
     @Override
     public void render(float delta) {
-
+        cls();
+        mainMenuStage.draw();
+    }
+    private void cls() {
+        Gdx.gl.glClearColor(0,0,0,1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
     @Override
