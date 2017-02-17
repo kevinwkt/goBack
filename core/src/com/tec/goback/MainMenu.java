@@ -1,11 +1,17 @@
 package com.tec.goback;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -81,7 +87,7 @@ public class MainMenu implements Screen {
 
     private void objectInit() { //MAYBE PROBABLY (NOT) WORKING
         
-        versionbatch = new SpriteBatch();
+        batch = new SpriteBatch();
         mainMenuStage = new Stage(view, batch);
         
         //background hace Image
@@ -99,7 +105,7 @@ public class MainMenu implements Screen {
         aboutBtnImg.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new About(app));
+                //app.setScreen(new About(app));
             }
         });
 
@@ -107,8 +113,8 @@ public class MainMenu implements Screen {
 
 
         //arcadeBtn
-        TextureRegionDrawable trdPlayBtn = new TextureRegionDrawable(new TextureRegion(arcadeBtn));
-        ImageButton arcadeBtnImg = new ImageButton(trdPlayBtn);
+        TextureRegionDrawable arcadeBtnTrd = new TextureRegionDrawable(new TextureRegion(arcadeBtn));
+        ImageButton arcadeBtnImg = new ImageButton(arcadeBtnTrd);
 
         arcadeBtnImg.setPosition(HALFW-arcadeBtnImg.getWidth()/2, 3*HEIGHT/4-arcadeBtnImg.getHeight()/2);
         mainMenuStage.addActor(arcadeBtnImg);
@@ -116,7 +122,7 @@ public class MainMenu implements Screen {
         arcadeBtnImg.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new About(app));
+                //app.setScreen(new About(app));
             }
         });
 
@@ -124,8 +130,8 @@ public class MainMenu implements Screen {
 
 
         //sonidoBtn
-        TextureRegionDrawable trdPlayBtn = new TextureRegionDrawable(new TextureRegion(sonidoBtn));
-        ImageButton sonidoBtnImg = new ImageButton(trdPlayBtn);
+        TextureRegionDrawable sonidoBtnTrd = new TextureRegionDrawable(new TextureRegion(sonidoBtn));
+        ImageButton sonidoBtnImg = new ImageButton(sonidoBtnTrd);
 
         sonidoBtnImg.setPosition(HALFW-sonidoBtnImg.getWidth()/2, 3*HEIGHT/4-sonidoBtnImg.getHeight()/2);
         mainMenuStage.addActor(sonidoBtnImg);
@@ -133,7 +139,7 @@ public class MainMenu implements Screen {
         sonidoBtnImg.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new About(app));
+                app.setScreen(new SoundSettings(app));
             }
         });
 
@@ -141,8 +147,8 @@ public class MainMenu implements Screen {
 
 
         //storyBtn
-        TextureRegionDrawable trdPlayBtn = new TextureRegionDrawable(new TextureRegion(storyBtn));
-        ImageButton storyBtnImg = new ImageButton(trdPlayBtn);
+        TextureRegionDrawable storyBtnTrd = new TextureRegionDrawable(new TextureRegion(storyBtn));
+        ImageButton storyBtnImg = new ImageButton(storyBtnTrd);
 
         storyBtnImg.setPosition(HALFW-storyBtnImg.getWidth()/2, 3*HEIGHT/4-storyBtnImg.getHeight()/2);
         mainMenuStage.addActor(storyBtnImg);
@@ -150,7 +156,7 @@ public class MainMenu implements Screen {
         storyBtnImg.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new About(app));
+                //app.setScreen(new About(app));
             }
         });
 
