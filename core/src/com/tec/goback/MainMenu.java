@@ -112,19 +112,19 @@ public class MainMenu implements Screen {
         });
 
 
-        // //arcadeBtn
-        // TextureRegionDrawable arcadeBtnTrd = new TextureRegionDrawable(new TextureRegion(arcadeBtn));
-        // ImageButton arcadeBtnImg = new ImageButton(arcadeBtnTrd);
+        //arcadeBtn
+        TextureRegionDrawable arcadeBtnTrd = new TextureRegionDrawable(new TextureRegion(arcadeBtn));
+        ImageButton arcadeBtnImg = new ImageButton(arcadeBtnTrd);
 
-        // arcadeBtnImg.setPosition(HALFW-arcadeBtnImg.getWidth()/2, 3*HEIGHT/4-arcadeBtnImg.getHeight()/2);
-        // mainMenuStage.addActor(arcadeBtnImg);
+        arcadeBtnImg.setPosition((HALFW-arcadeBtnImg.getWidth()/2)+190, HALFH-arcadeBtnImg.getHeight()/2-100);
+        mainMenuStage.addActor(arcadeBtnImg);
 
-        // arcadeBtnImg.addListener(new ClickListener(){
-        //     @Override
-        //     public void clicked(InputEvent event, float x, float y) {
-        //         //app.setScreen(new About(app));
-        //     }
-        // });
+        arcadeBtnImg.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                //app.setScreen(new About(app));
+            }
+        });
 
 
         //sonidoBtn
