@@ -2,6 +2,7 @@ package com.tec.goback;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -30,16 +31,18 @@ public class SoundSettings implements Screen{
     public static final float HALFW = WIDTH/2;
     public static final float HALFH = HEIGHT/2;
 
+    // preferencias
+
+    Preferences prefes = Gdx.app.getPreferences("My Preferences");
+
 
     private Viewport view;
 
     // textures
     private Texture background;
     private Texture backButton;
-    private Texture muteMusicOffButton;
-    private Texture muteMusicOnButton;
-    private Texture muteFXOnButton;
-    private Texture muteFXOffButton;
+    private Texture musicButton ;
+    private Texture fxButton;
     private Texture soundDecoration;
 
 
@@ -50,6 +53,10 @@ public class SoundSettings implements Screen{
 
     private Stage soundSettingsStage;
 
+    // button
+    private ImageButton musicImg;
+    TextureRegionDrawable musicPlay;
+
     public SoundSettings(App app) {
         this.app = app;
     }
@@ -58,12 +65,17 @@ public class SoundSettings implements Screen{
     @Override
     public void show() {
         cameraInit();
-        textureInit();
+
+        generalTextureInit();
+        musicTextureInit();
+        fxTextureInit();
         objectInit();
 
 
 
+
     }
+
 
     private void cameraInit() {
         camera = new OrthographicCamera(WIDTH,HEIGHT);
@@ -73,14 +85,27 @@ public class SoundSettings implements Screen{
         view = new StretchViewport(WIDTH,HEIGHT);
     }
 
-    private void textureInit() {
+    private void generalTextureInit() {
         background = new Texture("HARBOR/GoBackHARBOR0.png");
         backButton = new Texture("Interfaces/SOUND/SOUNDBack.png");
-        muteMusicOffButton = new Texture("Interfaces/SOUND/SOUNDMusic.png");
-        muteMusicOnButton = new Texture("Interfaces/SOUND/SOUNDMusicON.png");
-        muteFXOnButton = new Texture("Interfaces/SOUND/SOUNDSoundON.png");
-        muteFXOffButton = new Texture("Interfaces/SOUND/SOUNDSound.png");
         soundDecoration = new Texture("Interfaces/SOUND/SOUNDDecoration.png");
+    }
+
+    private void musicTextureInit() {
+        if(prefes.getBoolean("soundOn")){
+            musicButton = new Texture("Interfaces/SOUND/SOUNDMusicON.png");
+        }else{
+            musicButton = new Texture("Interfaces/SOUND/SOUNDMusic.png");
+        }
+    }
+
+    private void fxTextureInit() {
+        if(prefes.getBoolean("fxOn")){
+            fxButton = new Texture("Interfaces/SOUND/SOUNDSoundON.png");
+        }else{
+            fxButton = new Texture("Interfaces/SOUND/SOUNDSound.png");
+        }
+
     }
 
     private void objectInit() {
@@ -100,7 +125,7 @@ public class SoundSettings implements Screen{
 
         TextureRegionDrawable backBtnPlay = new TextureRegionDrawable(new TextureRegion(backButton));
         ImageButton backBtnImg = new ImageButton(backBtnPlay);
-        backBtnImg.setPosition(WIDTH/20, 11*HEIGHT/15);
+        backBtnImg.setPosition(10, 10);
         soundSettingsStage.addActor(backBtnImg);
 
         backBtnImg.addListener(new ClickListener(){
@@ -110,39 +135,63 @@ public class SoundSettings implements Screen{
             }
         });
 
-        /*TextureRegionDrawable muteMusicOffPlay = new TextureRegionDrawable(new TextureRegion(muteMusicOffButton));
-        ImageButton muteMusicOffImg = new ImageButton(muteMusicOffPlay);
-        muteMusicOffImg.setPosition(WIDTH/2, HEIGHT/2);
-        soundSettingsStage.addActor(muteMusicOffImg);
-        */
 
-        TextureRegionDrawable muteMusicOnPlay = new TextureRegionDrawable(new TextureRegion(muteMusicOnButton));
-        ImageButton muteMusicOnImg = new ImageButton(muteMusicOnPlay);
-        muteMusicOnImg.setPosition(4*WIDTH/7, 8*HEIGHT/15);
-        soundSettingsStage.addActor(muteMusicOnImg);
+        musicPlay = new TextureRegionDrawable(new TextureRegion(musicButton));
+        musicImg = new ImageButton(musicPlay );
+        musicImg .setPosition(4*WIDTH/7, 8*HEIGHT/15);
+        soundSettingsStage.addActor(musicImg);
 
-        muteMusicOnImg.addListener(new ClickListener(){
+        musicImg.addListener(new ClickListener(){
+
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.log("clicked","Cambiar Mute");
+                if(prefes.getBoolean("soundOn")){
+                    prefes.putBoolean("soundOn",false);
+
+                }else{
+                    prefes.putBoolean("soundOn",true);
+
+                }
+                prefes.flush();
+                musicTextureInit();
+                objectInit();
+
 
             }
         });
 
-        /*TextureRegionDrawable muteFxOffPlay = new TextureRegionDrawable(new TextureRegion(muteFXOffButton));
-        ImageButton muteFxOffImg = new ImageButton(muteFxOffPlay);
-        muteFxOffImg.setPosition(WIDTH/2, HEIGHT/2);
-        soundSettingsStage.addActor(muteFxOffImg);*/
 
-        TextureRegionDrawable muteFxOnPlay = new TextureRegionDrawable(new TextureRegion(muteFXOnButton));
-        ImageButton muteFxOnImg = new ImageButton(muteFxOnPlay);
-        muteFxOnImg.setPosition(4*WIDTH/7, 4*HEIGHT/15);
-        soundSettingsStage.addActor(muteFxOnImg);
+
+        TextureRegionDrawable fxPlay = new TextureRegionDrawable(new TextureRegion(fxButton));
+        ImageButton fxImg = new ImageButton(fxPlay);
+        fxImg.setPosition(4*WIDTH/7, 4*HEIGHT/15);
+        soundSettingsStage.addActor(fxImg);
+
+        fxImg.addListener(new ClickListener(){
+
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if(prefes.getBoolean("fxOn")){
+                    prefes.putBoolean("fxOn",false);
+
+                }else{
+                    prefes.putBoolean("fxOn",true);
+
+                }
+                prefes.flush();
+                fxTextureInit();
+                objectInit();
+
+
+            }
+        });
 
         Gdx.input.setInputProcessor(soundSettingsStage);
         Gdx.input.setCatchBackKey(true);
 
     }
+
+
 
     @Override
     public void render(float delta) {
