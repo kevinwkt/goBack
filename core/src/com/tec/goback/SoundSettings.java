@@ -53,9 +53,12 @@ public class SoundSettings implements Screen{
 
     private Stage soundSettingsStage;
 
-    // button
+    // buttons
     private ImageButton musicImg;
-    TextureRegionDrawable musicPlay;
+    private TextureRegionDrawable musicPlay;
+    private ImageButton fxImg;
+    private TextureRegionDrawable fxPlay;
+
 
     public SoundSettings(App app) {
         this.app = app;
@@ -67,8 +70,6 @@ public class SoundSettings implements Screen{
         cameraInit();
 
         generalTextureInit();
-        musicTextureInit();
-        fxTextureInit();
         objectInit();
 
 
@@ -89,22 +90,75 @@ public class SoundSettings implements Screen{
         background = new Texture("HARBOR/GoBackHARBOR0.png");
         backButton = new Texture("Interfaces/SOUND/SOUNDBack.png");
         soundDecoration = new Texture("Interfaces/SOUND/SOUNDDecoration.png");
-    }
-
-    private void musicTextureInit() {
         if(prefes.getBoolean("soundOn")){
             musicButton = new Texture("Interfaces/SOUND/SOUNDMusicON.png");
         }else{
             musicButton = new Texture("Interfaces/SOUND/SOUNDMusic.png");
         }
-    }
-
-    private void fxTextureInit() {
         if(prefes.getBoolean("fxOn")){
             fxButton = new Texture("Interfaces/SOUND/SOUNDSoundON.png");
         }else{
             fxButton = new Texture("Interfaces/SOUND/SOUNDSound.png");
         }
+
+    }
+
+    private void changeSoundTexture() {
+        musicImg.remove();
+        if(prefes.getBoolean("soundOn")){
+            musicButton = new Texture("Interfaces/SOUND/SOUNDMusicON.png");
+        }else{
+            musicButton = new Texture("Interfaces/SOUND/SOUNDMusic.png");
+        }
+        musicPlay = new TextureRegionDrawable(new TextureRegion(musicButton));
+        musicImg = new ImageButton(musicPlay );
+        musicImg.setPosition(4*WIDTH/7, 8*HEIGHT/15);
+        soundSettingsStage.addActor(musicImg);
+
+        musicImg.addListener(new ClickListener(){
+
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if(prefes.getBoolean("soundOn")){
+                    prefes.putBoolean("soundOn",false);
+
+                }else{
+                    prefes.putBoolean("soundOn",true);
+                }
+                prefes.flush();
+                changeSoundTexture();
+            }
+        });
+    }
+
+    private void changeFxTexture() {
+        fxImg.remove();
+        if(prefes.getBoolean("fxOn")){
+            fxButton = new Texture("Interfaces/SOUND/SOUNDSoundON.png");
+        }else{
+            fxButton = new Texture("Interfaces/SOUND/SOUNDSound.png");
+        }
+
+        fxPlay = new TextureRegionDrawable(new TextureRegion(fxButton));
+        fxImg = new ImageButton(fxPlay);
+        fxImg.setPosition(4*WIDTH/7, 4*HEIGHT/15);
+        soundSettingsStage.addActor(fxImg);
+
+        fxImg.addListener(new ClickListener(){
+
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if(prefes.getBoolean("fxOn")){
+                    prefes.putBoolean("fxOn",false);
+
+                }else{
+                    prefes.putBoolean("fxOn",true);
+
+                }
+                prefes.flush();
+                changeFxTexture();
+            }
+        });
 
     }
 
@@ -150,20 +204,16 @@ public class SoundSettings implements Screen{
 
                 }else{
                     prefes.putBoolean("soundOn",true);
-
                 }
                 prefes.flush();
-                musicTextureInit();
-                objectInit();
-
-
+                changeSoundTexture();
             }
         });
 
 
 
-        TextureRegionDrawable fxPlay = new TextureRegionDrawable(new TextureRegion(fxButton));
-        ImageButton fxImg = new ImageButton(fxPlay);
+        fxPlay = new TextureRegionDrawable(new TextureRegion(fxButton));
+        fxImg = new ImageButton(fxPlay);
         fxImg.setPosition(4*WIDTH/7, 4*HEIGHT/15);
         soundSettingsStage.addActor(fxImg);
 
@@ -173,16 +223,11 @@ public class SoundSettings implements Screen{
             public void clicked(InputEvent event, float x, float y) {
                 if(prefes.getBoolean("fxOn")){
                     prefes.putBoolean("fxOn",false);
-
                 }else{
                     prefes.putBoolean("fxOn",true);
-
                 }
                 prefes.flush();
-                fxTextureInit();
-                objectInit();
-
-
+                changeFxTexture();
             }
         });
 
