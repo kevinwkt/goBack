@@ -20,7 +20,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * Created by kevin on 2/16/2017.
  */
 
-public class Pause implements Screen {
+public class Pause implements Screen{
 
     //Main app class
     private final App app;
