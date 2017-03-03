@@ -19,7 +19,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
- * Created by pablo on 16/02/17.
+ * Created b1y pablo on 16/02/17.
  */
 
 public class SoundSettings implements Screen{
