@@ -132,7 +132,7 @@ public class MainMenu implements Screen {
         storyBtnImg.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new Story(app));
+                app.setScreen(new Frame(app));
             }
         });
 

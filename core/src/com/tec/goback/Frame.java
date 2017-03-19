@@ -20,7 +20,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * Created by sergiohernandezjr on 16/02/17.
  */
 
-public class Story implements Screen {
+public class Frame implements Screen {
     //Main app class
     private final App app;
 
@@ -38,16 +38,14 @@ public class Story implements Screen {
     private Viewport view;
 
     //Textures
-    private Texture background;//Background that changes with progress
-    private Texture sophie;
     private Texture pauseButton;//Image that holds creators photos and back button
 
     private SpriteBatch batch;
 
     //Stage
-    private Stage aboutScreenStage;
+    private Stage frameStage;
 
-    public Story (App app) {
+    public Frame(App app) {
         this.app = app;
     }
 
@@ -58,33 +56,33 @@ public class Story implements Screen {
         objectInit();
     }
 
+    private void cameraInit() {
+        camera = new OrthographicCamera(WIDTH, HEIGHT);
+        camera.position.set(HALFW, HALFH, 0);
+        camera.update();
+
+        view = new StretchViewport(WIDTH, HEIGHT);
+    }
+
     private void textureInit() {
-        background = new Texture("HARBOR/GoBackHARBOR0.png");
-        sophie = new Texture("Interfaces/GAMEPLAY/CONSTANT/SOPHIEWALK/SOPHIEWalk00.png");
         pauseButton = new Texture("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTPause.png");
+        backgroundCharactersInit();
+    }
+
+    private void backgroundCharactersInit() {
+        //Override this method always
     }
 
     private void objectInit() {
         batch = new SpriteBatch();
-        aboutScreenStage = new Stage(view, batch);
-
-        //Background
-        Image bgImg = new Image(background);
-        bgImg.setPosition(HALFW-bgImg.getWidth()/2, HALFH-bgImg.getHeight()/2);
-        aboutScreenStage.addActor(bgImg);
-
-        //Sophie
-        Image sophieImg = new Image(sophie);
-        sophieImg.setPosition(900,226);
-        aboutScreenStage.addActor(sophieImg);
-
+        frameStage = new Stage(view, batch);
 
         //Pause button
         TextureRegionDrawable pauseBtnTrd = new TextureRegionDrawable(new TextureRegion(pauseButton));
         ImageButton pauseImgBtn = new ImageButton(pauseBtnTrd);
 
         pauseImgBtn.setPosition(WIDTH-pauseImgBtn.getWidth()-10, HEIGHT-pauseImgBtn.getHeight()-10);
-        aboutScreenStage.addActor(pauseImgBtn);
+        frameStage.addActor(pauseImgBtn);
 
         final Screen toRet = this;
         pauseImgBtn.addListener(new ClickListener(){
@@ -95,25 +93,18 @@ public class Story implements Screen {
         });
 
         //pass the Stage
-        Gdx.input.setInputProcessor(aboutScreenStage);
+        Gdx.input.setInputProcessor(frameStage);
 
         //let go of android device back key
         Gdx.input.setCatchBackKey(false);
-
     }
 
-    private void cameraInit() {
-        camera = new OrthographicCamera(WIDTH, HEIGHT);
-        camera.position.set(HALFW, HALFH, 0);
-        camera.update();
 
-        view = new StretchViewport(WIDTH, HEIGHT);
-    }
 
     @Override
     public void render(float delta) {
         cls();
-        aboutScreenStage.draw();
+        frameStage.draw();
     }
     private void cls() {
         Gdx.gl.glClearColor(0,0,0,1);
