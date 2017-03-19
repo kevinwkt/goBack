@@ -1,6 +1,7 @@
 package com.tec.goback;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -43,7 +44,6 @@ public class Pause implements Screen{
 
     //Textures
     private Texture background; //Background
-
     private Texture bottom; //Image
     private Texture map; //Image
     private Texture quitBton; //Button
@@ -52,6 +52,8 @@ public class Pause implements Screen{
     private Texture musicBton;
     private Texture fxBton;
 
+    Preferences prefes = Gdx.app.getPreferences("My Preferences");
+
 
 
     //SpriteBatch
@@ -59,6 +61,12 @@ public class Pause implements Screen{
 
     //Stage
     private Stage pauseMenu;
+
+    // buttons
+    private ImageButton musicImg;
+    private TextureRegionDrawable musicPlay;
+    private ImageButton fxImg;
+    private TextureRegionDrawable fxPlay;
 
 
     //Constructor recieves main App class (implements Game)
@@ -90,8 +98,76 @@ public class Pause implements Screen{
         quitBton = new Texture("Interfaces/PAUSE/PAUSEQuit.png");
         top = new Texture("Interfaces/PAUSE/PAUSETopDisplay.png");
         backBton = new Texture("Interfaces/PAUSE/PAUSEback.png");
-        musicBton= new Texture("Interfaces/SOUND/SOUNDMusic.png");
-        fxBton= new Texture("Interfaces/SOUND/SOUNDSound.png");
+
+        if(prefes.getBoolean("soundOn")){
+            musicBton = new Texture("Interfaces/SOUND/SOUNDMusicON.png");
+        }else{
+                musicBton = new Texture("Interfaces/SOUND/SOUNDMusic.png");
+        }
+        if(prefes.getBoolean("fxOn")){
+            fxBton = new Texture("Interfaces/SOUND/SOUNDSoundON.png");
+        }else{
+            fxBton = new Texture("Interfaces/SOUND/SOUNDSound.png");
+        }
+    }
+
+    public void changeSoundTexture(){
+        musicImg.remove();
+        if(prefes.getBoolean("soundOn")){
+            musicBton = new Texture("Interfaces/SOUND/SOUNDMusicON.png");
+        }else{
+            musicBton = new Texture("Interfaces/SOUND/SOUNDMusic.png");
+        }
+        musicPlay = new TextureRegionDrawable(new TextureRegion(musicBton));
+        musicImg = new ImageButton(musicPlay );
+        musicImg.setPosition(4*WIDTH/7, 8*HEIGHT/15);
+        pauseMenu.addActor(musicImg);
+
+        musicImg.addListener(new ClickListener(){
+
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if(prefes.getBoolean("soundOn")){
+                    prefes.putBoolean("soundOn",false);
+
+                }else{
+                    prefes.putBoolean("soundOn",true);
+                }
+                prefes.flush();
+                changeSoundTexture();
+            }
+        });
+    }
+
+    private void changeFxTexture() {
+        fxImg.remove();
+        if(prefes.getBoolean("fxOn")){
+            fxBton = new Texture("Interfaces/SOUND/SOUNDSoundON.png");
+        }else{
+            fxBton = new Texture("Interfaces/SOUND/SOUNDSound.png");
+        }
+
+        fxPlay = new TextureRegionDrawable(new TextureRegion(fxBton));
+        fxImg = new ImageButton(fxPlay);
+        fxImg.setPosition(4*WIDTH/7, 4*HEIGHT/15);
+        pauseMenu.addActor(fxImg);
+
+        fxImg.addListener(new ClickListener(){
+
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if(prefes.getBoolean("fxOn")){
+                    prefes.putBoolean("fxOn",false);
+
+                }else{
+                    prefes.putBoolean("fxOn",true);
+
+                }
+                prefes.flush();
+                changeFxTexture();
+            }
+        });
+
     }
 
     private void objectInit() {
@@ -152,32 +228,44 @@ public class Pause implements Screen{
         });
 
         //music
-        TextureRegionDrawable musicBtonTrd = new TextureRegionDrawable(new TextureRegion(musicBton));
-        ImageButton musicBtonImg = new ImageButton(musicBtonTrd);
 
-        musicBtonImg.setPosition(HALFW-musicBtonImg.getWidth()/2+313, HEIGHT-musicBtonImg.getHeight()/2-280);
-        pauseMenu.addActor(musicBtonImg);
+        musicPlay = new TextureRegionDrawable(new TextureRegion(musicBton));
+        musicImg = new ImageButton(musicPlay );
+        musicImg .setPosition(4*WIDTH/7, 8*HEIGHT/15);
+        pauseMenu.addActor(musicImg);
 
-        musicBtonImg.addListener(new ClickListener(){
+        musicImg.addListener(new ClickListener(){
+
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //CHANGE PHOTO
-                //CHANGE MUSIC SETTINGS
+                if(prefes.getBoolean("soundOn")){
+                    prefes.putBoolean("soundOn",false);
+
+                }else{
+                    prefes.putBoolean("soundOn",true);
+                }
+                prefes.flush();
+                changeSoundTexture();
             }
         });
 
         //fx
-        TextureRegionDrawable fxBtonTrd = new TextureRegionDrawable(new TextureRegion(fxBton));
-        ImageButton fxBtonImg = new ImageButton(fxBtonTrd);
+        fxPlay = new TextureRegionDrawable(new TextureRegion(fxBton));
+        fxImg = new ImageButton(fxPlay);
+        fxImg.setPosition(4*WIDTH/7, 4*HEIGHT/15);
+        pauseMenu.addActor(fxImg);
 
-        fxBtonImg.setPosition(HALFW-fxBtonImg.getWidth()/2+300, HEIGHT-fxBtonImg.getHeight()/2-420);
-        pauseMenu.addActor(fxBtonImg);
+        fxImg.addListener(new ClickListener(){
 
-        fxBtonImg.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //CHANGE PHOTO
-                //CHANGE FX SETTINGS
+                if(prefes.getBoolean("fxOn")){
+                    prefes.putBoolean("fxOn",false);
+                }else{
+                    prefes.putBoolean("fxOn",true);
+                }
+                prefes.flush();
+                changeFxTexture();
             }
         });
 
