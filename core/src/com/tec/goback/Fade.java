@@ -29,16 +29,14 @@ public class Fade implements Screen {
 
     private AssetManager manager;  // AssetManager
     private LoaderState loaderState; //game state
-    private LoaderState prev;
 
     private OrthographicCamera camera;
     private Viewport view;
     private SpriteBatch batch;
 
-    public Fade(App app, LoaderState loaderState, LoaderState prev) {
+    public Fade(App app, LoaderState loaderState) {
         this.app = app;
         this.loaderState = loaderState;
-        this.prev = prev;
     }
 
     @Override
@@ -87,18 +85,6 @@ public class Fade implements Screen {
                     manager.load("Interfaces/MENU/STORY.png", Texture.class);
                     manager.load("Interfaces/MENU/TITLE.png", Texture.class);
                     break;
-                case PAUSE:
-                    manager.load("HARBOR/GoBackHARBOR0.png", Texture.class);
-                    manager.load("Interfaces/PAUSE/PAUSEBottomDisplay.png", Texture.class);
-                    manager.load("Interfaces/PAUSE/PAUSEMapList.png", Texture.class);
-                    manager.load("Interfaces/PAUSE/PAUSEQuit.png", Texture.class);
-                    manager.load("Interfaces/PAUSE/PAUSETopDisplay.png", Texture.class);
-
-                    manager.load("Interfaces/SOUND/SOUNDMusicON.png", Texture.class);
-                    manager.load("Interfaces/SOUND/SOUNDMusic.png", Texture.class);
-                    manager.load("Interfaces/SOUND/SOUNDSoundON.png", Texture.class);
-                    manager.load("Interfaces/SOUND/SOUNDSound.png", Texture.class);
-                    break;
                 case SOUNDSETTINGS:
                     manager.load("Interfaces/SOUND/SOUNDMusicON.png", Texture.class);
                     manager.load("Interfaces/SOUND/SOUNDMusic.png", Texture.class);
@@ -109,7 +95,9 @@ public class Fade implements Screen {
                     manager.load("Interfaces/SOUND/SOUNDDecoration.png", Texture.class);
                     break;
                 case LEVEL0:
-
+                    manager.load("INTRO/INTROBackground.png", Texture.class);
+                    manager.load("INTRO/INTROBoat.png", Texture.class);
+                    manager.load("INTRO/INTROOar.png", Texture.class);
                     break;
                 case LEVEL1:
 
@@ -143,9 +131,6 @@ public class Fade implements Screen {
                     break;
                 case MAINMENU:
                     app.setScreen(new MainMenu(app));
-                    break;
-                case PAUSE:
-                    app.setScreen(new Pause(app, prev));
                     break;
                 case SOUNDSETTINGS:
                     app.setScreen(new SoundSettings(app));

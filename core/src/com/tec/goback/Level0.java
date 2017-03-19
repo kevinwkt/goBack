@@ -24,6 +24,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 public class Level0 implements Screen{
 
     private final App app;
+    private AssetManager aManager;
 
     public static final float WIDTH = 1280;
     public static final float HEIGHT = 720;
@@ -59,6 +60,7 @@ public class Level0 implements Screen{
 
     public Level0(App app){
         this.app = app;
+        this.aManager = app;
     }
 
     @Override
@@ -66,7 +68,6 @@ public class Level0 implements Screen{
         cameraInit();
         texturesInit();
         objectInit();
-
     }
 
     private void cameraInit() {
@@ -78,9 +79,9 @@ public class Level0 implements Screen{
     }
 
     private void texturesInit() {
-        background = new Texture("INTRO/INTROBackground.png");
-        boat = new Texture("INTRO/INTROBoat.png");
-        oar = new Texture("INTRO/INTROOar.png");
+        background = aManager.get("INTRO/INTROBackground.png");
+        boat = aManager.get("INTRO/INTROBoat.png");
+        oar = aManager.get("INTRO/INTROOar.png");
     }
 
     private void objectInit() {
@@ -170,7 +171,9 @@ public class Level0 implements Screen{
 
     @Override
     public void dispose() {
-
+        aManager.unload("INTRO/INTROBackground.png");
+        aManager.unload("INTRO/INTROBoat.png");
+        aManager.unload("INTRO/INTROOar.png");
     }
 
 }

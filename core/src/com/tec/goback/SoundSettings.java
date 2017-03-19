@@ -270,12 +270,12 @@ public class SoundSettings implements Screen{
 
     @Override
     public void dispose() {
-        aManager.unload("Interfaces/SOUND/SOUNDMusicON.png", Texture.class);
-        aManager.unload("Interfaces/SOUND/SOUNDMusic.png", Texture.class);
-        aManager.unload("Interfaces/SOUND/SOUNDSoundON.png", Texture.class);
-        aManager.unload("Interfaces/SOUND/SOUNDSound.png", Texture.class);
-        aManager.unload("HARBOR/GoBackHARBOR0.png", Texture.class);
-        aManager.unload("Interfaces/SOUND/SOUNDBack.png", Texture.class);
-        aManager.unload("Interfaces/SOUND/SOUNDDecoration.png", Texture.class);
+        aManager.unload("Interfaces/SOUND/SOUNDMusicON.png");
+        aManager.unload("Interfaces/SOUND/SOUNDMusic.png");
+        aManager.unload("Interfaces/SOUND/SOUNDSoundON.png");
+        aManager.unload("Interfaces/SOUND/SOUNDSound.png");
+        aManager.unload("HARBOR/GoBackHARBOR0.png");
+        aManager.unload("Interfaces/SOUND/SOUNDBack.png");
+        aManager.unload("Interfaces/SOUND/SOUNDDecoration.png");
     }
 }
