@@ -1,31 +1,18 @@
-package com.tec.goback;
+package mx.rmr.App201711;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.TimeUtils;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
-
-import java.sql.Time;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 
 /**
- * Created by gerry on 2/17/17.
+ * SplashScreen
  */
 
-public class SplashScreen implements Screen {
-    //Main app class
-    private final App app;
+class SplashScreen extends Screen
+{
+
+    private final App app; //Main app class
 
     //Screen sizes
     public static final float WIDTH = 1280;
@@ -33,84 +20,69 @@ public class SplashScreen implements Screen {
     public static final float HALFW = WIDTH/2;
     public static final float HALFH = HEIGHT/2;
 
-    //Camera
     private OrthographicCamera camera;
-
-    //Viewport
-    private Viewport view;
-
-    //Textures
-    private Texture splash;
-
-    //SpriteBatch
     private SpriteBatch batch;
 
-    //Stage
-    private Stage splashStage;
+    private float upTime = 1.2f;
 
-    //Time 
-    private long time;
+    // Logo del tec
+    private Texture textureLogo;
+    private Sprite spriteLogo;
 
-    //Constructor recieves main App class (implements Game)
+    // Constructor, guarda la referencia al app
     public SplashScreen(App app) {
-        this.app = app;
+        this.app = App;
     }
 
-    //Call other methods because FIS
     @Override
     public void show() {
-        time = TimeUtils.millis();
         cameraInit();
         textureInit();
-        objectInit();
+       
+        logoScale();
     }
 
     private void cameraInit() {
         camera = new OrthographicCamera(WIDTH, HEIGHT);
         camera.position.set(HALFW, HALFH, 0);
         camera.update();
-        view = new StretchViewport(WIDTH, HEIGHT);
     }
 
     private void textureInit() {
-        splash = new Texture("Interfaces/splash.png");
+        textureLogo = new Texture("Interfaces/splash.png");
+        spriteLogo = new Sprite(textureLogo);
+        spriteLogo.setPosition(WIDTH/2-spriteLogo.getWidth()/2, HEIGHT/2-spriteLogo.getHeight()/2);
     }
 
-    private void objectInit() { //MAYBE PROBABLY WORKING
-        batch = new SpriteBatch();
-        splashStage = new Stage(view, batch);
-
-        //splash hace Image
-        Image splashImg = new Image(splash);
-        splashImg.setPosition(HALFW-splashImg.getWidth()/2, HALFH-splashImg.getHeight()/2);
-        splashStage.addActor(splashImg);
-
-
-        //pass the Stage
-        Gdx.input.setInputProcessor(splashStage);
-
-        //let go of android device back key
-        Gdx.input.setCatchBackKey(false);
+    private void logoScale() {
+        float cameraScale = WIDTH / HEIGHT;
+        float screenScale = 1.0f*Gdx.graphics.getWidth() / Gdx.graphics.getHeight();
+        float scale = cameraScale / screenScale;
+        spriteLogo.setScale(scale, 1);
     }
-
 
 
     @Override
     public void render(float delta) {
-        splashStage.draw();
-        if((time - TimeUtils.millis() > 2000)){
-            app.setScreen(new MainMenu(app));
+        cls();
+        batch.setProjectionMatrix(camara.combined);
+        batch.begin();
+        spriteLogo.draw(batch);
+        batch.end();
+
+        upTime -= delta;
+        if (upTime<=0) {
+            app.setScreen(new Fade(app, Pantallas.MAINMENU));
         }
     }
-
     private void cls() {
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
     @Override
-    public void resize(int width, int height) {
-
+    public void actualizarVista() {
+        logoScale();
     }
 
     @Override
@@ -124,12 +96,8 @@ public class SplashScreen implements Screen {
     }
 
     @Override
-    public void hide() {
-
-    }
-
-    @Override
     public void dispose() {
-
+        // Libera las texturas
+        textureLogo.dispose();
     }
 }
