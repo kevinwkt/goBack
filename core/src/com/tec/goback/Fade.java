@@ -5,14 +5,20 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.Loader;
 
 /**
+ *
  * Created by gerry on 3/18/17.
  */
-class Fade extends Screen
-{
+public class Fade implements Screen {
     private final App app; //Main app class
 
     //Screen sizes
@@ -23,33 +29,24 @@ class Fade extends Screen
 
     private AssetManager manager;  // AssetManager
     private LoaderState loaderState; //game state
+    private LoaderState prev;
 
     private OrthographicCamera camera;
-    private Sprite
     private Viewport view;
+    private SpriteBatch batch;
 
-    public Fade(App app, LoaderState loaderState) {
+    public Fade(App app, LoaderState loaderState, LoaderState prev) {
         this.app = app;
         this.loaderState = loaderState;
+        this.prev = prev;
     }
 
     @Override
     public void show() {
         manager = app.getAssetManager();
         cameraInit();
-        objectInit();
-
-        // switch (loaderState) {
-        //     case MENU:
-        //         cargarRecursosMenu();
-        //         break;
-        //     case NIVEL_MARIO:
-        //         cargarRecursosMario();
-        //         break;
-        //     case NIVEL_WHACK_A_MOLE:
-        //         cargarRecursosWhackAMole();
-        //         break;
-        // }
+        batch = new SpriteBatch();
+        superLoad();
     }
 
     private void cameraInit() {
@@ -59,64 +56,10 @@ class Fade extends Screen
         view = new StretchViewport(WIDTH, HEIGHT);
     }
 
-    private void textureInit() {
-        background = new Texture("HARBOR/GoBackHARBOR0.png");
-        aboutBtn = new Texture("Interfaces/MENU/ABOUT.png"); 
-        arcadeBtn = new Texture("Interfaces/MENU/ARCADE.png");
-        soundBtn = new Texture("Interfaces/MENU/SOUND.png");
-        storyBtn = new Texture("Interfaces/MENU/STORY.png");
-        title = new Texture("Interfaces/MENU/TITLE.png");
-    }
-
-    private void objectInit() {}
-
-/*
-    LEVEL0,
-    LEVEL1,
-    LEVEL2,
-    LEVEL3,
-    BOSS1,
-    BOSS2,
-    BOSS3,
-    ARCADE
-*/
-    private void loadLevel0() {
-        // manager.load("whackamole/fondoPasto.jpg", Texture.class);
-        // manager.load("whackamole/hoyo.png", Texture.class);
-        // manager.load("whackamole/mole.png", Texture.class);
-        // manager.load("whackamole/estrellasGolpe.png", Texture.class);
-        // manager.load("whackamole/mazo.png", Texture.class);
-        // manager.load("whackamole/golpe.mp3", Sound.class);
-        // manager.load("whackamole/risa.mp3", Sound.class);
-        // manager.load("comun/btnPausa.png", Texture.class);
-        // manager.load("whackamole/btnSalir.png", Texture.class);
-        // manager.load("whackamole/btnReintentar.png", Texture.class);
-        // manager.load("whackamole/btnContinuar.png", Texture.class);
-    }
-
-    private void cargarRecursosMario() {
-        // manager.load("mario/marioSprite.png", Texture.class);
-        // manager.load("mario/mapaMario.tmx", TiledMap.class);
-        // manager.load("mario/marioBros.mp3",Music.class);
-        // manager.load("mario/moneda.mp3",Sound.class);
-        // manager.load("mario/padBack.png", Texture.class);
-        // manager.load("mario/padKnob.png", Texture.class);
-    }
-
-    private void cargarRecursosMenu() {
-        // manager.load("menu/btnJugarMario.png", Texture.class);
-        // manager.load("menu/btnJugarMarioP.png", Texture.class);
-        // manager.load("menu/btnJugarRunner.png", Texture.class);
-        // manager.load("menu/btnJugarRunnerP.png", Texture.class);
-        // manager.load("menu/btnJugarWhackAMole.png", Texture.class);
-        // manager.load("menu/btnJugarWhackAMoleP.png", Texture.class);
-        // manager.load("menu/fondo.jpg", Texture.class);
-    }
-
     @Override
     public void render(float delta) {
         cls();
-        batch.setProjectionMatrix(camara.combined);
+        batch.setProjectionMatrix(camera.combined);
         batch.begin();
 
         batch.end();
@@ -124,19 +67,114 @@ class Fade extends Screen
         goNextScreen();
     }
 
+    @Override
+    public void resize(int width, int height) {
+
+    }
+
+    private void superLoad(){
+            switch (loaderState) {
+                case ABOUT:
+                    manager.load("HARBOR/GoBackHARBOR0.png", Texture.class);
+                    manager.load("Interfaces/ABOUT/ABOUTCast.png", Texture.class);
+                    manager.load("Interfaces/ABOUT/ABOUTBack.png", Texture.class);
+                    break;
+                case MAINMENU:
+                    manager.load("HARBOR/GoBackHARBOR0.png", Texture.class);
+                    manager.load("Interfaces/MENU/ABOUT.png", Texture.class); 
+                    manager.load("Interfaces/MENU/ARCADE.png", Texture.class);
+                    manager.load("Interfaces/MENU/SOUND.png", Texture.class);
+                    manager.load("Interfaces/MENU/STORY.png", Texture.class);
+                    manager.load("Interfaces/MENU/TITLE.png", Texture.class);
+                    break;
+                case PAUSE:
+                    manager.load("HARBOR/GoBackHARBOR0.png", Texture.class);
+                    manager.load("Interfaces/PAUSE/PAUSEBottomDisplay.png", Texture.class);
+                    manager.load("Interfaces/PAUSE/PAUSEMapList.png", Texture.class);
+                    manager.load("Interfaces/PAUSE/PAUSEQuit.png", Texture.class);
+                    manager.load("Interfaces/PAUSE/PAUSETopDisplay.png", Texture.class);
+
+                    manager.load("Interfaces/SOUND/SOUNDMusicON.png", Texture.class);
+                    manager.load("Interfaces/SOUND/SOUNDMusic.png", Texture.class);
+                    manager.load("Interfaces/SOUND/SOUNDSoundON.png", Texture.class);
+                    manager.load("Interfaces/SOUND/SOUNDSound.png", Texture.class);
+                    break;
+                case SOUNDSETTINGS:
+                    manager.load("Interfaces/SOUND/SOUNDMusicON.png", Texture.class);
+                    manager.load("Interfaces/SOUND/SOUNDMusic.png", Texture.class);
+                    manager.load("Interfaces/SOUND/SOUNDSoundON.png", Texture.class);
+                    manager.load("Interfaces/SOUND/SOUNDSound.png", Texture.class);
+                    manager.load("HARBOR/GoBackHARBOR0.png", Texture.class);
+                    manager.load("Interfaces/SOUND/SOUNDBack.png", Texture.class);
+                    manager.load("Interfaces/SOUND/SOUNDDecoration.png", Texture.class);
+                    break;
+                case STORY:
+
+                    break;
+                case LEVEL1:
+
+                    break;
+                case LEVEL2:
+
+                    break;
+                case LEVEL3:
+
+                    break;
+                case BOSS1:
+
+                    break;
+                case BOSS2:
+
+                    break;
+                case BOSS3:
+
+                    break;
+                case ARCADE:
+
+                    break;
+            }
+    }
+
     private void goNextScreen() {
         if (manager.update()) { // Done loading?
-            // switch (loaderState) {
-            //     case MENU:
-            //         juego.setScreen(new PantallaMenu(juego));   // 100% de carga
-            //         break;
-            //     case NIVEL_MARIO:
-            //         juego.setScreen(new PantallaMario(juego));   // 100% de carga
-            //         break;
-            //     case NIVEL_WHACK_A_MOLE:
-            //         juego.setScreen(new PantallaWhackAMole(juego));
-            //         break;
-            // }
+            switch (loaderState) {
+                case ABOUT:
+                    app.setScreen(new About(app));
+                    break;
+                case MAINMENU:
+                    app.setScreen(new MainMenu(app));
+                    break;
+                case PAUSE:
+                    app.setScreen(new Pause(app, prev));
+                    break;
+                case SOUNDSETTINGS:
+                    app.setScreen(new SoundSettings(app));
+                    break;
+                case STORY:
+                    
+                    break;
+                case LEVEL1:
+
+                    break;
+                case LEVEL2:
+
+                    break;
+                case LEVEL3:
+
+                    break;
+                case BOSS1:
+
+                    break;
+                case BOSS2:
+
+                    break;
+                case BOSS3:
+
+                    break;
+                case ARCADE:
+
+                    break;
+            }
         }
     }
 
@@ -152,6 +190,11 @@ class Fade extends Screen
 
     @Override
     public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
 
     }
 

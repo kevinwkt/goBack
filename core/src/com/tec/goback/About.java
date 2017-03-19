@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 public class About implements Screen {
     //Main app class
     private final App app;
+    private AssetManager aManager;
 
 
     //Screen sizes
@@ -49,6 +50,7 @@ public class About implements Screen {
 
     public About (App app) {
         this.app = app;
+        this.aManager = app.getAssetManager();
     }
 
     @Override
@@ -59,9 +61,9 @@ public class About implements Screen {
     }
 
     private void textureInit() {
-        background = new Texture("HARBOR/GoBackHARBOR0.png");
-        castOverlay = new Texture("Interfaces/ABOUT/ABOUTCast.png");
-        backButton = new Texture("Interfaces/ABOUT/ABOUTBack.png");
+        background = aManager.get("HARBOR/GoBackHARBOR0.png");
+        castOverlay = aManager.get("Interfaces/ABOUT/ABOUTCast.png");
+        backButton = aManager.get("Interfaces/ABOUT/ABOUTBack.png");
     }
 
     private void objectInit() {
@@ -89,7 +91,7 @@ public class About implements Screen {
         backImgBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new MainMenu(app));
+                app.setScreen(new Fade(app, LoaderState.MAINMENU, LoaderState.ABOUT));
             }
         });
 
@@ -141,6 +143,8 @@ public class About implements Screen {
 
     @Override
     public void dispose() {
-
+        aManager.unload("HARBOR/GoBackHARBOR0.png", Texture.class);
+        aManager.unload("Interfaces/ABOUT/ABOUTCast.png", Texture.class);
+        aManager.unload("Interfaces/ABOUT/ABOUTBack.png", Texture.class);
     }
 }

@@ -1,11 +1,9 @@
 package com.tec.goback;
 
-import com.badlogic.gdx.ApplicationAdapter;
+
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.assets.AssetManager;
+
 
 public class App extends Game {
 
@@ -17,17 +15,16 @@ public class App extends Game {
 
 	@Override
 	public void create () {
-		setScreen(new MainMenu(this));
+		setScreen(new SplashScreen(this));
 	}
 
-	// Para que las otras pantallas usen el assetManager
     public AssetManager getAssetManager() {
-        return assetManager;
+        return aManager;
     }
 
 	@Override
     public void dispose() {
         super.dispose();
-        assetManager.clear();
+        aManager.clear();
     }
 }

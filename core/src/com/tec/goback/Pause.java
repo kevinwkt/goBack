@@ -25,9 +25,10 @@ public class Pause implements Screen{
 
     //Main app class
     private final App app;
+    private AssetManager aManager;
 
     //Caller screen to goBack to
-    private Screen prev;
+    private LoaderState prev;
 
     //Screen sizes
     public static final float WIDTH = 1280;
@@ -70,9 +71,10 @@ public class Pause implements Screen{
 
 
     //Constructor recieves main App class (implements Game)
-    public Pause(App app, Screen prev) {
+    public Pause(App app, LoaderState prev) {
         this.app = app;
         this.prev = prev;
+        this.aManager = app.getAssetManager();
     }
 
     //Call other methods because readability
@@ -92,31 +94,31 @@ public class Pause implements Screen{
 
     private void textureInit() {
 
-        background = new Texture("HARBOR/GoBackHARBOR0.png");
-        bottom = new Texture("Interfaces/PAUSE/PAUSEBottomDisplay.png");
-        map = new Texture("Interfaces/PAUSE/PAUSEMapList.png");
-        quitBton = new Texture("Interfaces/PAUSE/PAUSEQuit.png");
-        top = new Texture("Interfaces/PAUSE/PAUSETopDisplay.png");
-        backBton = new Texture("Interfaces/PAUSE/PAUSEback.png");
+        background = aManager.get("HARBOR/GoBackHARBOR0.png");
+        bottom = aManager.get("Interfaces/PAUSE/PAUSEBottomDisplay.png");
+        map = aManager.get("Interfaces/PAUSE/PAUSEMapList.png");
+        quitBton = aManager.get("Interfaces/PAUSE/PAUSEQuit.png");
+        top = aManager.get("Interfaces/PAUSE/PAUSETopDisplay.png");
+        backBton = aManager.get("Interfaces/PAUSE/PAUSEback.png");
 
         if(prefes.getBoolean("soundOn")){
-            musicBton = new Texture("Interfaces/SOUND/SOUNDMusicON.png");
+            musicBton = aManager.get("Interfaces/SOUND/SOUNDMusicON.png");
         }else{
-                musicBton = new Texture("Interfaces/SOUND/SOUNDMusic.png");
+                musicBton = aManager.get("Interfaces/SOUND/SOUNDMusic.png");
         }
         if(prefes.getBoolean("fxOn")){
-            fxBton = new Texture("Interfaces/SOUND/SOUNDSoundON.png");
+            fxBton = aManager.get("Interfaces/SOUND/SOUNDSoundON.png");
         }else{
-            fxBton = new Texture("Interfaces/SOUND/SOUNDSound.png");
+            fxBton = aManager.get("Interfaces/SOUND/SOUNDSound.png");
         }
     }
 
     public void changeSoundTexture(){
         musicImg.remove();
         if(prefes.getBoolean("soundOn")){
-            musicBton = new Texture("Interfaces/SOUND/SOUNDMusicON.png");
+            musicBton = aManager.get("Interfaces/SOUND/SOUNDMusicON.png");
         }else{
-            musicBton = new Texture("Interfaces/SOUND/SOUNDMusic.png");
+            musicBton = aManager.get("Interfaces/SOUND/SOUNDMusic.png");
         }
         musicPlay = new TextureRegionDrawable(new TextureRegion(musicBton));
         musicImg = new ImageButton(musicPlay );
@@ -142,9 +144,9 @@ public class Pause implements Screen{
     private void changeFxTexture() {
         fxImg.remove();
         if(prefes.getBoolean("fxOn")){
-            fxBton = new Texture("Interfaces/SOUND/SOUNDSoundON.png");
+            fxBton = aManager.get("Interfaces/SOUND/SOUNDSoundON.png");
         }else{
-            fxBton = new Texture("Interfaces/SOUND/SOUNDSound.png");
+            fxBton = aManager.get("Interfaces/SOUND/SOUNDSound.png");
         }
 
         fxPlay = new TextureRegionDrawable(new TextureRegion(fxBton));
@@ -208,7 +210,7 @@ public class Pause implements Screen{
         quitBtonImg.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new MainMenu(app));
+                app.setScreen(new Fade(app, LoaderState.MAINMENU, LoaderState.PAUSE));
             }
         });
 
@@ -223,7 +225,7 @@ public class Pause implements Screen{
         backBtonImg.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(prev);
+                app.setScreen(new Fade(app, prev, LoaderState.PAUSE));
             }
         });
 

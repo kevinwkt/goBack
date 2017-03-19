@@ -1,15 +1,21 @@
-package mx.rmr.App201711;
+package com.tec.goback;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.tec.goback.App;
+import com.tec.goback.Fade;
+import com.tec.goback.LoaderState;
 
 /**
  * SplashScreen
  */
 
-class SplashScreen extends Screen
+public class SplashScreen implements Screen
 {
 
     private final App app; //Main app class
@@ -29,16 +35,15 @@ class SplashScreen extends Screen
     private Texture textureLogo;
     private Sprite spriteLogo;
 
-    // Constructor, guarda la referencia al app
     public SplashScreen(App app) {
-        this.app = App;
+        this.app = app;
     }
 
     @Override
     public void show() {
         cameraInit();
         textureInit();
-       
+        batch = new SpriteBatch();
         logoScale();
     }
 
@@ -65,24 +70,25 @@ class SplashScreen extends Screen
     @Override
     public void render(float delta) {
         cls();
-        batch.setProjectionMatrix(camara.combined);
+        batch.setProjectionMatrix(camera.combined);
         batch.begin();
         spriteLogo.draw(batch);
         batch.end();
 
         upTime -= delta;
         if (upTime<=0) {
-            app.setScreen(new Fade(app, Pantallas.MAINMENU));
+            app.setScreen(new Fade(app, LoaderState.MAINMENU, LoaderState.MAINMENU));
         }
-    }
-    private void cls() {
-        Gdx.gl.glClearColor(0,0,0,1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
     @Override
-    public void actualizarVista() {
-        logoScale();
+    public void resize(int width, int height) {
+
+    }
+
+    private void cls() {
+        Gdx.gl.glClearColor(0,0,0,1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
     @Override
@@ -92,6 +98,11 @@ class SplashScreen extends Screen
 
     @Override
     public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
 
     }
 

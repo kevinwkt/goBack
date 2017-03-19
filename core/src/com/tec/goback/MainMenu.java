@@ -2,6 +2,7 @@ package com.tec.goback;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -51,9 +52,12 @@ public class MainMenu implements Screen {
     //Stage
     private Stage mainMenuStage;
 
+    private AssetManager aManager;
+
     //Constructor recieves main App class (implements Game)
     public MainMenu(App app) {
         this.app = app;
+        this.aManager = app.getAssetManager();
     }
 
     //Call other methods because FIS
@@ -72,12 +76,12 @@ public class MainMenu implements Screen {
     }
 
     private void textureInit() {
-        background = new Texture("HARBOR/GoBackHARBOR0.png");
-        aboutBtn = new Texture("Interfaces/MENU/ABOUT.png"); 
-        arcadeBtn = new Texture("Interfaces/MENU/ARCADE.png");
-        soundBtn = new Texture("Interfaces/MENU/SOUND.png");
-        storyBtn = new Texture("Interfaces/MENU/STORY.png");
-        title = new Texture("Interfaces/MENU/TITLE.png");
+        background = aManager.get("HARBOR/GoBackHARBOR0.png");
+        aboutBtn = aManager.get("Interfaces/MENU/ABOUT.png"); 
+        arcadeBtn = aManager.get("Interfaces/MENU/ARCADE.png");
+        soundBtn = aManager.get("Interfaces/MENU/SOUND.png");
+        storyBtn = aManager.get("Interfaces/MENU/STORY.png");
+        title = aManager.get("Interfaces/MENU/TITLE.png");
     }
 
     private void objectInit() { //MAYBE PROBABLY WORKING   
@@ -104,7 +108,7 @@ public class MainMenu implements Screen {
         aboutBtnImg.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new About(app));
+                app.setScreen(new Fade(app, LoaderState.ABOUT, LoaderState.MAINMENU));
             }
         });
 
@@ -118,7 +122,7 @@ public class MainMenu implements Screen {
         soundBtnImg.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new SoundSettings(app));
+                app.setScreen(new Fade(app, LoaderState.SOUNDSETTINGS, LoaderState.MAINMENU));
             }
         });
 
@@ -132,7 +136,7 @@ public class MainMenu implements Screen {
         storyBtnImg.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new Story(app));
+                app.setScreen(new Fade(app, LoaderState.LEVEL0, LoaderState.MAINMENU));
             }
         });
 

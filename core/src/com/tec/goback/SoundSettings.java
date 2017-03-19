@@ -25,6 +25,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 public class SoundSettings implements Screen{
 
     private final App app;
+    private AssetManager aManager;
 
     public static final float WIDTH = 1280;
     public static final float HEIGHT = 720;
@@ -62,6 +63,7 @@ public class SoundSettings implements Screen{
 
     public SoundSettings(App app) {
         this.app = app;
+        this.aManager = app.getAssetManager();
     }
 
 
@@ -81,18 +83,18 @@ public class SoundSettings implements Screen{
     }
 
     private void generalTextureInit() {
-        background = new Texture("HARBOR/GoBackHARBOR0.png");
-        backButton = new Texture("Interfaces/SOUND/SOUNDBack.png");
-        soundDecoration = new Texture("Interfaces/SOUND/SOUNDDecoration.png");
+        background = aManager.get("HARBOR/GoBackHARBOR0.png");
+        backButton = aManager.get("Interfaces/SOUND/SOUNDBack.png");
+        soundDecoration = aManager.get("Interfaces/SOUND/SOUNDDecoration.png");
         if(prefes.getBoolean("soundOn")){
-            musicButton = new Texture("Interfaces/SOUND/SOUNDMusicON.png");
+            musicButton = aManager.get("Interfaces/SOUND/SOUNDMusicON.png");
         }else{
-            musicButton = new Texture("Interfaces/SOUND/SOUNDMusic.png");
+            musicButton = aManager.get("Interfaces/SOUND/SOUNDMusic.png");
         }
         if(prefes.getBoolean("fxOn")){
-            fxButton = new Texture("Interfaces/SOUND/SOUNDSoundON.png");
+            fxButton = aManager.get("Interfaces/SOUND/SOUNDSoundON.png");
         }else{
-            fxButton = new Texture("Interfaces/SOUND/SOUNDSound.png");
+            fxButton = aManager.get("Interfaces/SOUND/SOUNDSound.png");
         }
 
     }
@@ -100,12 +102,12 @@ public class SoundSettings implements Screen{
     private void changeSoundTexture() {
         musicImg.remove();
         if(prefes.getBoolean("soundOn")){
-            musicButton = new Texture("Interfaces/SOUND/SOUNDMusicON.png");
+            musicButton = aManager.get("Interfaces/SOUND/SOUNDMusicON.png");
         }else{
-            musicButton = new Texture("Interfaces/SOUND/SOUNDMusic.png");
+            musicButton = aManager.get("Interfaces/SOUND/SOUNDMusic.png");
         }
         musicPlay = new TextureRegionDrawable(new TextureRegion(musicButton));
-        musicImg = new ImageButton(musicPlay );
+        musicImg = new ImageButton(musicPlay);
         musicImg.setPosition(4*WIDTH/7, 8*HEIGHT/15);
         soundSettingsStage.addActor(musicImg);
 
@@ -179,7 +181,7 @@ public class SoundSettings implements Screen{
         backBtnImg.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new MainMenu(app));
+                app.setScreen(new Fade(app, LoaderState.MAINMENU, LoaderState.MAINMENU));
             }
         });
 
@@ -268,6 +270,12 @@ public class SoundSettings implements Screen{
 
     @Override
     public void dispose() {
-
+        aManager.unload("Interfaces/SOUND/SOUNDMusicON.png", Texture.class);
+        aManager.unload("Interfaces/SOUND/SOUNDMusic.png", Texture.class);
+        aManager.unload("Interfaces/SOUND/SOUNDSoundON.png", Texture.class);
+        aManager.unload("Interfaces/SOUND/SOUNDSound.png", Texture.class);
+        aManager.unload("HARBOR/GoBackHARBOR0.png", Texture.class);
+        aManager.unload("Interfaces/SOUND/SOUNDBack.png", Texture.class);
+        aManager.unload("Interfaces/SOUND/SOUNDDecoration.png", Texture.class);
     }
 }
