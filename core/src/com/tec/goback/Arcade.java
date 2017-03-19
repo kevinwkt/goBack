@@ -91,7 +91,7 @@ public class Arcade implements Screen {
         plasticEarthImg.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new Fade(app, LoaderState.PAUSE, LoaderState.ARCADE));
+                app.setScreen(new Fade(app, LoaderState.PAUSE));
             }
         });
 

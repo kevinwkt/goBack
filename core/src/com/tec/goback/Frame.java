@@ -105,7 +105,7 @@ public class Frame implements Screen {
                         break;
 
                 }
-                app.setScreen(new Fade(app, LoaderState.PAUSE, toRet));
+                app.setScreen(new Fade(app, LoaderState.PAUSE));
             }
         });
 

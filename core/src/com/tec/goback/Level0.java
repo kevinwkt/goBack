@@ -3,6 +3,7 @@ package com.tec.goback;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -60,7 +61,7 @@ public class Level0 implements Screen{
 
     public Level0(App app){
         this.app = app;
-        this.aManager = app;
+        this.aManager = app.getAssetManager();
     }
 
     @Override

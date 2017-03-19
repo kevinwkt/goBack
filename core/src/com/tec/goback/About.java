@@ -92,7 +92,7 @@ public class About implements Screen {
         backImgBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new Fade(app, LoaderState.MAINMENU, LoaderState.ABOUT));
+                app.setScreen(new Fade(app, LoaderState.MAINMENU));
             }
         });
 

@@ -28,8 +28,6 @@ public class Pause implements Screen{
     private final App app;
     private AssetManager aManager;
 
-    //Caller screen to goBack to
-    private LoaderState prev;
 
     //Screen sizes
     public static final float WIDTH = 1280;
@@ -74,7 +72,6 @@ public class Pause implements Screen{
     //Constructor recieves main App class (implements Game)
     public Pause(App app, LoaderState prev) {
         this.app = app;
-        this.prev = prev;
         this.aManager = app.getAssetManager();
     }
 
@@ -94,17 +91,6 @@ public class Pause implements Screen{
     }
 
     private void textureInit() {
-        aManager.load("HARBOR/GoBackHARBOR0.png", Texture.class);
-        aManager.load("Interfaces/PAUSE/PAUSEBottomDisplay.png", Texture.class);
-        aManager.load("Interfaces/PAUSE/PAUSEMapList.png", Texture.class);
-        aManager.load("Interfaces/PAUSE/PAUSEQuit.png", Texture.class);
-        aManager.load("Interfaces/PAUSE/PAUSETopDisplay.png", Texture.class);
-        aManager.load("Interfaces/PAUSE/PAUSEback.png", Texture.class);
-        aManager.load("Interfaces/SOUND/SOUNDMusicON.png", Texture.class);
-        aManager.load("Interfaces/SOUND/SOUNDMusic.png", Texture.class);
-        aManager.load("Interfaces/SOUND/SOUNDSoundON.png", Texture.class);
-        aManager.load("Interfaces/SOUND/SOUNDSound.png", Texture.class);
-
         background = aManager.get("HARBOR/GoBackHARBOR0.png");
         bottom = aManager.get("Interfaces/PAUSE/PAUSEBottomDisplay.png");
         map = aManager.get("Interfaces/PAUSE/PAUSEMapList.png");
@@ -221,7 +207,7 @@ public class Pause implements Screen{
         quitBtonImg.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new Fade(app, LoaderState.MAINMENU, LoaderState.PAUSE));
+                app.setScreen(new Fade(app, LoaderState.MAINMENU));
             }
         });
 
@@ -236,7 +222,7 @@ public class Pause implements Screen{
         backBtonImg.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new Fade(app, prev, LoaderState.PAUSE));
+                app.setScreen(new Fade(app, LoaderState.PAUSE));
             }
         });
 

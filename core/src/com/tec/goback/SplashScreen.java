@@ -77,7 +77,7 @@ public class SplashScreen implements Screen
 
         upTime -= delta;
         if (upTime<=0) {
-            app.setScreen(new Fade(app, LoaderState.MAINMENU, LoaderState.MAINMENU));
+            app.setScreen(new Fade(app, LoaderState.MAINMENU));
         }
     }
 
