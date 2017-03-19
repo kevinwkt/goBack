@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -181,7 +182,7 @@ public class SoundSettings implements Screen{
         backBtnImg.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new Fade(app, LoaderState.MAINMENU, LoaderState.MAINMENU));
+                app.setScreen(new Fade(app, LoaderState.MAINMENU));
             }
         });
 
