@@ -136,7 +136,9 @@ public class MainMenu implements Screen {
         storyBtnImg.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new Fade(app, LoaderState.LEVEL0, LoaderState.MAINMENU));
+
+                app.setScreen(new Frame(app));
+
             }
         });
 
