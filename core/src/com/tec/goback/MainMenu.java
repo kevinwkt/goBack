@@ -108,7 +108,7 @@ public class MainMenu implements Screen {
         aboutBtnImg.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new Fade(app, LoaderState.ABOUT, LoaderState.MAINMENU));
+                app.setScreen(new Fade(app, LoaderState.ABOUT));
             }
         });
 
@@ -122,7 +122,7 @@ public class MainMenu implements Screen {
         soundBtnImg.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new Fade(app, LoaderState.SOUNDSETTINGS, LoaderState.MAINMENU));
+                app.setScreen(new Fade(app, LoaderState.SOUNDSETTINGS));
             }
         });
 
@@ -137,7 +137,7 @@ public class MainMenu implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                app.setScreen(new Fade(app, LoaderState.LEVEL0, LoaderState.MAINMENU));
+                app.setScreen(new Fade(app, LoaderState.LEVEL0));
 
             }
         });
