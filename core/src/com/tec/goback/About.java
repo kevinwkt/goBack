@@ -38,7 +38,7 @@ public class About implements Screen {
     private Viewport view;
 
     //Textures
-    private Texture background;//Background that changes with progress
+    public Texture background;//Background that changes with progress
     private Texture castOverlay;
     private Texture backButton;//Image that holds creators photos and back button
 

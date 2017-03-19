@@ -35,15 +35,15 @@ public class Frame implements Screen {
     private OrthographicCamera camera;
 
     //Main app class
-    private Viewport view;
+    public Viewport view;
 
     //Textures
     private Texture pauseButton;//Image that holds creators photos and back button
 
-    private SpriteBatch batch;
+    public SpriteBatch batch;
 
     //Stage
-    private Stage frameStage;
+    public Stage frameStage;
 
     public Frame(App app) {
         this.app = app;
