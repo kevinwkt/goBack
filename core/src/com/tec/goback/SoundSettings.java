@@ -68,13 +68,8 @@ public class SoundSettings implements Screen{
     @Override
     public void show() {
         cameraInit();
-
         generalTextureInit();
         objectInit();
-
-
-
-
     }
 
 
@@ -82,7 +77,6 @@ public class SoundSettings implements Screen{
         camera = new OrthographicCamera(WIDTH,HEIGHT);
         camera.position.set(HALFW,HALFH,0);
         camera.update();
-
         view = new StretchViewport(WIDTH,HEIGHT);
     }
 
