@@ -8,6 +8,10 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+/**
+ * Created by kevin on 3/19/2017.
+ */
+
 public class Sophie extends Squirt
 {
     private final float vx = 4;      // Horizontal Velocity
@@ -141,11 +145,11 @@ public class Sophie extends Squirt
                 int d= pref.getInteger("level");
                 switch (d){
                     case 1:
-                        if (newX <= Level1.WIDTH - sprite.getWidth()) sprite.setX(newX);
+                        if (/*newX <= Level1.WIDTH - sprite.getWidth()*/true) sprite.setX(newX);
                     case 2:
-                        if (newX <= Level2.WIDTH - sprite.getWidth()) sprite.setX(newX);
+                        if (/*newX <= Level2.WIDTH - sprite.getWidth()*/true) sprite.setX(newX);
                     case 3:
-                        if (newX <= Level3.WIDTH - sprite.getWidth()) sprite.setX(newX);
+                        if (/*newX <= Level3.WIDTH - sprite.getWidth()*/true) sprite.setX(newX);
                 }
             }
         }
@@ -156,11 +160,11 @@ public class Sophie extends Squirt
                 int d= pref.getInteger("level");
                 switch (d){
                     case 1:
-                        if (newX <= Level1.WIDTH - sprite.getWidth()) sprite.setX(newX);
+                        if (/*newX <= Level1.WIDTH - sprite.getWidth()*/true) sprite.setX(newX);
                     case 2:
-                        if (newX <= Level2.WIDTH - sprite.getWidth()) sprite.setX(newX);
+                        if (/*newX <= Level2.WIDTH - sprite.getWidth()*/true) sprite.setX(newX);
                     case 3:
-                        if (newX <= Level3.WIDTH - sprite.getWidth()) sprite.setX(newX);
+                        if (/*newX <= Level3.WIDTH - sprite.getWidth()*/true) sprite.setX(newX);
                 }
             }
         }
