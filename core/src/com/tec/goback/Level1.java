@@ -45,7 +45,7 @@ public class Level1 extends Frame {
         frameStage = new Stage(view, batch);
 
         //Background
-        background = new Texture("");
+        /*background = new Texture("");
         Image bgImg = new Image(background);
         bgImg.setPosition(HALFW-bgImg.getWidth()/2, HALFH-bgImg.getHeight()/2);
         aboutScreenStage.addActor(bgImg);
@@ -53,6 +53,6 @@ public class Level1 extends Frame {
         //Cast  overlay image
         Image castImg = new Image(castOverlay);
         castImg.setPosition(HALFW-castImg.getWidth()/2, HALFH-castImg.getHeight()/2);
-        aboutScreenStage.addActor(castImg);
+        aboutScreenStage.addActor(castImg);*/
     }
 }
