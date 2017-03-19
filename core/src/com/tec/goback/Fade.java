@@ -136,10 +136,10 @@ public class Fade implements Screen {
                     app.setScreen(new SoundSettings(app));
                     break;
                 case LEVEL0:
-                    
+                    app.setScreen(new Level0(app));
                     break;
                 case LEVEL1:
-
+                    app.setScreen(new Level1(app));
                     break;
                 case LEVEL2:
 

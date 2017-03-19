@@ -122,8 +122,14 @@ public class Level0 implements Screen{
         boatSprite.setPosition(boatXPosition,HEIGHT/2-boatSprite.getHeight()/2);
         oarSprite.draw(batch);
         oarSprite.setPosition(oarXPosition,HEIGHT/2-oarSprite.getHeight()/2-80);
+        if(boatSprite.getX() > 850){
+            changeScreen(boatSprite);
+        }
 
         batch.end();
+    }
+
+    private void changeScreen(Sprite boatSprite) {
     }
 
     private void moveObject(float delta, Sprite sprite, float xPosition, boolean rotateLeft, String type) {

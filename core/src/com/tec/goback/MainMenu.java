@@ -154,7 +154,8 @@ public class MainMenu implements Screen {
                     case 4:
                         next = LoaderState.LEVEL3;
                         break;
-                    default: next = LoaderState.LEVEL0;
+                    default:
+                        next = LoaderState.LEVEL0;
                 }
 
                 app.setScreen(new Fade(app, next));
