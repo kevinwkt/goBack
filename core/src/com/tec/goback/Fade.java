@@ -108,7 +108,7 @@ public class Fade implements Screen {
                     manager.load("Interfaces/SOUND/SOUNDBack.png", Texture.class);
                     manager.load("Interfaces/SOUND/SOUNDDecoration.png", Texture.class);
                     break;
-                case STORY:
+                case LEVEL0:
 
                     break;
                 case LEVEL1:
@@ -150,7 +150,7 @@ public class Fade implements Screen {
                 case SOUNDSETTINGS:
                     app.setScreen(new SoundSettings(app));
                     break;
-                case STORY:
+                case LEVEL0:
                     
                     break;
                 case LEVEL1:

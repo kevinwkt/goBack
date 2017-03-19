@@ -2,6 +2,7 @@ package com.tec.goback;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -143,8 +144,8 @@ public class About implements Screen {
 
     @Override
     public void dispose() {
-        aManager.unload("HARBOR/GoBackHARBOR0.png", Texture.class);
-        aManager.unload("Interfaces/ABOUT/ABOUTCast.png", Texture.class);
-        aManager.unload("Interfaces/ABOUT/ABOUTBack.png", Texture.class);
+        aManager.unload("HARBOR/GoBackHARBOR0.png");
+        aManager.unload("Interfaces/ABOUT/ABOUTCast.png");
+        aManager.unload("Interfaces/ABOUT/ABOUTBack.png");
     }
 }

@@ -139,8 +139,6 @@ public class MainMenu implements Screen {
 
                 app.setScreen(new Fade(app, LoaderState.LEVEL0, LoaderState.MAINMENU));
 
-                app.setScreen(new Frame(app));
-
             }
         });
 

@@ -1,6 +1,7 @@
 package com.tec.goback;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -24,6 +25,7 @@ public class Frame implements Screen {
     //Main app class
     private final App app;
 
+    Preferences pref=Gdx.app.getPreferences("getLevel");
 
     //Screen sizes
     public static final float WIDTH = 1280;
@@ -84,11 +86,26 @@ public class Frame implements Screen {
         pauseImgBtn.setPosition(WIDTH-pauseImgBtn.getWidth()-10, HEIGHT-pauseImgBtn.getHeight()-10);
         frameStage.addActor(pauseImgBtn);
 
-        final Screen toRet = this;
+
         pauseImgBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new Pause(app, toRet));
+                LoaderState toRet = LoaderState.LEVEL0;
+
+                int d = pref.getInteger("level");
+                switch (d){
+                    case 1:
+                        toRet = LoaderState.LEVEL1;
+                        break;
+                    case 2:
+                        toRet = LoaderState.LEVEL2;
+                        break;
+                    case 3:
+                        toRet = LoaderState.LEVEL3;
+                        break;
+
+                }
+                app.setScreen(new Fade(app, LoaderState.PAUSE, toRet));
             }
         });
 
