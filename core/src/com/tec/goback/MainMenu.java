@@ -1,6 +1,7 @@
 package com.tec.goback;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
@@ -24,6 +25,8 @@ public class MainMenu implements Screen {
 
     //Main app class
     private final App app;
+
+    Preferences pref=Gdx.app.getPreferences("getLevel");
 
     //Screen sizes
     public static final float WIDTH = 1280;
@@ -136,8 +139,25 @@ public class MainMenu implements Screen {
         storyBtnImg.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                LoaderState next;
+                int d= pref.getInteger("level");
+                switch (d){
+                    case 1:
+                        next = LoaderState.LEVEL1;
+                       break;
+                    case 2:
+                        next = LoaderState.LEVEL2;
+                        break;
+                    case 3:
+                        next = LoaderState.LEVEL3;
+                       break;
+                    case 4:
+                        next = LoaderState.LEVEL3;
+                        break;
+                    default: next = LoaderState.LEVEL0;
+                }
 
-                app.setScreen(new Fade(app, LoaderState.LEVEL0));
+                app.setScreen(new Fade(app, next));
 
             }
         });
