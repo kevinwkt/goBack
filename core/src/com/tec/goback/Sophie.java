@@ -81,6 +81,7 @@ public class Sophie extends Squirt
         // Dibuja el personaje dependiendo del estadoMovimiento
         TextureRegion region;
         switch (currentstate) {
+            //case HIT:
             case WAKING:
                 timerchangeframewake +=Gdx.graphics.getDeltaTime();
                 region=waking.getKeyFrame(timerchangeframewake);
@@ -119,6 +120,7 @@ public class Sophie extends Squirt
     // Actualiza el sprite, de acuerdo al estadoMovimiento y estadoSalto
     public void update() {
         switch (currentstate) {
+            case HIT:
             case MOVE_RIGHT:
             case MOVE_LEFT:
                 moveHorizontal();
@@ -162,6 +164,18 @@ public class Sophie extends Squirt
                 }
             }
         }
+//        if ( currentstate== MovementState.HIT) {
+//            newX -= vx;
+//            int d= pref.getInteger("level");
+//            switch (d){
+//                case 1:
+//                    if (newX <= Level1.WIDTH - sprite.getWidth()) sprite.setX(newX);
+//                case 2:
+//                    if (newX <= Level2.WIDTH - sprite.getWidth()) sprite.setX(newX);
+//                case 3:
+//                    if (newX <= Level3.WIDTH - sprite.getWidth()) sprite.setX(newX);
+//            }
+//        }
     }
 
     // Revisa si toca una moneda
