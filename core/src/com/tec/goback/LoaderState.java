@@ -9,7 +9,7 @@ public enum LoaderState {
     MAINMENU,
     PAUSE,
     SOUNDSETTINGS,
-    STORY,
+    LEVEL0,
     LEVEL1,
     LEVEL2,
     LEVEL3,
