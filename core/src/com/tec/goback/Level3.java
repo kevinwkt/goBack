@@ -7,6 +7,6 @@ import com.badlogic.gdx.Screen;
  */
 public class Level3 extends Frame {
     public Level3(App app) {
-        super(app);
+        super(app, 3840,720);
     }
 }
