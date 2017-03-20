@@ -38,7 +38,7 @@ public class Sophie extends Squirt
         // La divide en 4 frames de 32x64 (ver marioSprite.png)
         TextureRegion[][] texturaPersonaje = texturaCompleta.split(160,160);
         // Crea la animación con tiempo de 0.15 segundos entre frames.
-        standby = new Animation(0.06f, texturaPersonaje[0][0], texturaPersonaje[0][1],
+        standby = new Animation(0.18f, texturaPersonaje[0][0], texturaPersonaje[0][1],
                 texturaPersonaje[0][2], texturaPersonaje[0][3],texturaPersonaje[0][4],
                 texturaPersonaje[0][5], texturaPersonaje[0][6]);
         walking = new Animation(0.06f, texturaPersonaje[0][7], texturaPersonaje[0][8],
@@ -48,7 +48,7 @@ public class Sophie extends Squirt
                 texturaPersonaje[0][17], texturaPersonaje[0][18], texturaPersonaje[0][19],
                 texturaPersonaje[0][20],texturaPersonaje[0][21], texturaPersonaje[0][22],
                 texturaPersonaje[0][23], texturaPersonaje[0][24],texturaPersonaje[0][25]);
-        waking= new Animation(0.1f, texturaPersonaje[0][42], texturaPersonaje[0][41],
+        waking= new Animation(0.15f, texturaPersonaje[0][42], texturaPersonaje[0][41],
                 texturaPersonaje[0][40], texturaPersonaje[0][39],
                 texturaPersonaje[0][38], texturaPersonaje[0][37],texturaPersonaje[0][36],
                 texturaPersonaje[0][35], texturaPersonaje[0][34], texturaPersonaje[0][33],
@@ -66,14 +66,15 @@ public class Sophie extends Squirt
         // Animación infinita
         standby.setPlayMode(Animation.PlayMode.LOOP);
         walking.setPlayMode(Animation.PlayMode.LOOP);
-        waking.setPlayMode(Animation.PlayMode.LOOP);
-        dying.setPlayMode(Animation.PlayMode.LOOP);
+        //waking.setPlayMode(Animation.PlayMode.LOOP);
+        //dying.setPlayMode(Animation.PlayMode.LOOP);
 
         // Inicia el timer que contará tiempo para saber qué frame se dibuja
         timerchangeframewalk = 0;
         timerchangeframestandby=0;
         timerchangeframedie=0;
         timerchangeframewake=0;
+
 
         // Crea el sprite con el personaje quieto (idle)
         sprite = new Sprite(texturaPersonaje[0][0]);    // QUIETO
@@ -90,6 +91,8 @@ public class Sophie extends Squirt
                 timerchangeframewake +=Gdx.graphics.getDeltaTime();
                 region=waking.getKeyFrame(timerchangeframewake);
                 batch.draw(region,sprite.getX(),sprite.getY());
+                if(waking.isAnimationFinished(timerchangeframewake))
+                    currentstate=MovementState.STILL;
                 break;
             case DYING:
                 timerchangeframedie +=Gdx.graphics.getDeltaTime();
@@ -144,8 +147,8 @@ public class Sophie extends Squirt
                 // Prueba que no salga del mundo por la derecha
                 int d= pref.getInteger("level");
                 switch (d){
-                    case 1:
-                        if (/*newX <= Level1.WIDTH - sprite.getWidth()*/true) sprite.setX(newX);
+                    case 0:
+                        if (newX <= Level1.WIDTH_MAP - sprite.getWidth()) sprite.setX(newX);
                         break;
                     case 2:
                         if (/*newX <= Level2.WIDTH - sprite.getWidth()*/true) sprite.setX(newX);

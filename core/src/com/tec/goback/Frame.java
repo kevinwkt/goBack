@@ -30,10 +30,13 @@ public class Frame implements Screen {
     Preferences pref=Gdx.app.getPreferences("getLevel");
 
     //Screen sizes
-    public static final float WIDTH = 1280;
-    public static final float HEIGHT = 720;
-    public static final float HALFW = WIDTH/2;
-    public static final float HALFH = HEIGHT/2;
+    protected static  float WIDTH_MAP;
+    protected static  float HEIGHT_MAP;
+
+    protected static final float WIDTH = 1280;
+    protected static final float HEIGHT = 720;
+    protected static final float HALFW = WIDTH/2;
+    protected static final float HALFH = HEIGHT/2;
 
     //Camera
     protected OrthographicCamera camera;
@@ -58,9 +61,11 @@ public class Frame implements Screen {
     //AssetMng
     protected AssetManager aManager;
 
-    public Frame(App app) {
+    public Frame(App app, float WIDTH_MAP, float HEIGHT_MAP) {
         this.app = app;
         aManager= app.getAssetManager();
+        this.WIDTH_MAP = WIDTH_MAP;
+        this.HEIGHT_MAP = HEIGHT_MAP;
     }
 
     @Override
@@ -78,7 +83,7 @@ public class Frame implements Screen {
         camera.position.set(HALFW, HALFH, 0);
         camera.update();
 
-        view = new StretchViewport(WIDTH, HEIGHT);
+        view = new StretchViewport(WIDTH, HEIGHT, camera);
     }
 
 
