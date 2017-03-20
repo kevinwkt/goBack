@@ -44,12 +44,6 @@ public class Arcade extends Frame {
     private Music bgMusic;
     private Sound fx;
 
-    //Camera
-    private OrthographicCamera camera;
-
-    //Viewport
-    private Viewport view;
-
     //Textures
     private Texture background; //Background
     private Texture sophieTexture;
@@ -84,6 +78,8 @@ public class Arcade extends Frame {
         batch.setProjectionMatrix(super.camera.combined);
         cls();
         batch.begin();
+
+
         batch.draw(background,0,0);
         batch.draw(sophieTexture,640,200);
 
