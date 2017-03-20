@@ -48,6 +48,28 @@ public class Level1 extends Frame implements Screen {
     // batch
     private SpriteBatch batch;
 
+    //for dialogue
+    private Dialogue dialogue;
+
+    private Texture oldmanEyesClosed;
+    private Texture oldmanStand;
+    private Texture oldmanNod;
+    private Texture oldmanEyesOpened;
+
+    private Texture sophieBlink;
+    private Texture sophieConcerned;
+    private Texture sophieNormal;
+    private Texture sophieSurprised;
+
+
+    private Sprite oldmanEyesClosedSpr;
+    private Sprite oldmanStandSpr;
+    private Sprite oldmanNodSpr;
+    private Sprite oldmanEyesOpenedSpr;
+    private Sprite sophieBlinkSpr;
+    private Sprite sophieConcernedSpr;
+    private Sprite sophieNormalSpr;
+    private Sprite sophieSurprisedSpr;
 
     public static final float LEFT_LIMIT = 816;
 
@@ -86,6 +108,8 @@ public class Level1 extends Frame implements Screen {
         batch.setProjectionMatrix(super.camera.combined);
         batch.begin();
 
+
+
         batch.draw(background,0,0);
 
         batch.draw(pauseButton,camera.position.x-HALFW,camera.position.y-HALFH);
@@ -96,6 +120,13 @@ public class Level1 extends Frame implements Screen {
 
 
         //pauseSprite.draw(batch);
+
+        
+        /*dialogue.makeText(batch, "He’s taking me back…. He’s taking me back….. He surely is taking me back You! It’s been a long long time. The boat will be coming back soon,  I hope what I have is enough. Will you be going back, too?", oldmanStandSpr, sophieNormalSpr, false);
+        dialogue.makeText(batch, "I don’t know… Where am I…?", oldmanStandSpr, sophieNormalSpr, true);
+        dialogue.makeText(batch, "You sweet girl, it really is a shame. I’ve done some terrible things, but I guess I can help somebody for a change. Take this, it will help you on your journey.", oldmanStandSpr, sophieNormalSpr, false);
+        dialogue.makeText(batch, "You need to pay to ride the boat, to go back. \n I used one too, but I’m going back and they can’t come on board.", oldmanNodSpr, sophieNormalSpr, false); */
+
 
         if (state==GameState.PAUSED) {
             pauseStage.draw();
@@ -118,6 +149,7 @@ public class Level1 extends Frame implements Screen {
         }
         sophie.draw(batch);
         updateCamera();
+
         batch.end();
 
     }
@@ -171,6 +203,24 @@ public class Level1 extends Frame implements Screen {
     private void textureInit() {
         sophieTexture = new Texture("Squirts/Sophie/SOPHIEWalk.png");
         sophie = new Sophie(sophieTexture, 100,100);
+
+        sophieBlink = manager.get("SOPHIE/DIALOGUESophieBlink.png");
+        sophieConcerned = manager.get("SOPHIE/DIALOGUESophieConcern.png");
+        sophieNormal = manager.get("SOPHIE/DIALOGUESophieNormal.png");
+        sophieSurprised = manager.get("SOPHIE/DIALOGUESophieSurprise.png");
+        oldmanEyesClosed = manager.get("/OLDMAN/STILL/OLDMANStill00.png");
+        oldmanStand = manager.get("/OLDMAN/STILL/OLDMANStill01.png");
+        oldmanNod = manager.get("/OLDMAN/STILL/OLDMANStill02.png");
+        oldmanEyesOpened = manager.get("/OLDMAN/STILL/OLDMANStill03.png");
+
+        oldmanEyesClosedSpr = new Sprite(sophieBlink);
+        oldmanStandSpr = new Sprite(sophieConcerned);
+        oldmanNodSpr = new Sprite(sophieNormal);
+        oldmanEyesOpenedSpr = new Sprite(sophieSurprised);
+        sophieBlinkSpr = new Sprite(oldmanEyesClosed);
+        sophieConcernedSpr = new Sprite(oldmanStand);
+        sophieNormalSpr = new Sprite(oldmanNod);
+        sophieSurprisedSpr = new Sprite(oldmanEyesOpened);
 
         //Background
         background = new Texture("HARBOR/GoBackHARBORPanoramic.png");

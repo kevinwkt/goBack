@@ -68,7 +68,6 @@ public class Level0 implements Screen {
 
     //textboxes
     private Dialogue dialogue;
-    private Float dialogueTime = (float) 0.0;
 
     public Level0(App app) {
         this.app = app;
@@ -144,7 +143,7 @@ public class Level0 implements Screen {
             changeScreen(boatSprite);
         }
         if(boatSprite.getX() > 400 && boatSprite.getX() < 1000){
-            dialogue.makeText(batch, "Vampire Weekend - One (Blake's got a new face) - High Quality. A Great Song!", charonSprite0);
+            dialogue.makeText(batch, "We only come to sleep.\nWe only come to dream.", charonSprite0);
         }
 
         batch.end();

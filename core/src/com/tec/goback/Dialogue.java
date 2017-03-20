@@ -65,9 +65,9 @@ public class Dialogue {
         right.setPosition(0, WIDTH-right.getWidth());
 
         if(rightTalks){
-            left.setColor(0.5F, 0.5F, 0.5F, 1.0F);
+            left.setColor(0.5F, 0.5F, 0.5F, 0.6F);
         }else{
-            right.setColor(0.5F, 0.5F, 0.5F, 1.0F);
+            right.setColor(0.5F, 0.5F, 0.5F, 1.6F);
         }
         right.draw(batch);
         left.draw(batch);

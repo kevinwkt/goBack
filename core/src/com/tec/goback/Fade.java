@@ -103,7 +103,14 @@ public class Fade implements Screen {
                     break;
                 case LEVEL1:
                     manager.load("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTYellowOrb.png",Texture.class);
-
+                    manager.load("OLDMAN/STILL/OLDMANStill00.png", Texture.class);
+                    manager.load("OLDMAN/STILL/OLDMANStill01.png", Texture.class);
+                    manager.load("OLDMAN/STILL/OLDMANStill02.png", Texture.class);
+                    manager.load("OLDMAN/STILL/OLDMANStill03.png", Texture.class);
+                    manager.load("SOPHIE/DIALOGUESophieBlink.png", Texture.class);
+                    manager.load("SOPHIE/DIALOGUESophieConcern.png", Texture.class);
+                    manager.load("SOPHIE/DIALOGUESophieNormal.png", Texture.class);
+                    manager.load("SOPHIE/DIALOGUESophieSurprise.png", Texture.class);
                     break;
                 case LEVEL2:
 
