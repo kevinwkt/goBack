@@ -157,7 +157,7 @@ public class Sophie extends Squirt
                 // Prueba que no salga del mundo por la derecha
                 int d= pref.getInteger("level");
                 switch (d){
-                    case 0:
+                    case 1:
                         if (newX <= Level1.WIDTH_MAP - sprite.getWidth()){
                             sprite.setX(newX);
                         }
@@ -177,7 +177,7 @@ public class Sophie extends Squirt
                 newX -= vx;
                 int d= pref.getInteger("level");
                 switch (d){
-                    case 0:
+                    case 1:
                         if (newX >= Level1.LEFT_LIMIT){
                             sprite.setX(newX);
                         }

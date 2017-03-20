@@ -25,6 +25,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
  * Created by sergiohernandezjr on 18/03/17.
+ * Con ayuda de DON PABLO
  */
 public class Level1 extends Frame implements Screen {
     private App app;

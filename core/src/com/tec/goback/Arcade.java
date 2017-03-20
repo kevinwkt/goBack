@@ -21,14 +21,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
-
+//
 import java.util.ArrayList;
 
 /**
  * Created by gerry on 2/18/17.
  */
-public class Arcade extends Frame {
+public class Arcade extends Frame implements Screen {
 
     //Arraylist
     private ArrayList<OrbAttack> myAttacks;
@@ -112,6 +111,31 @@ public class Arcade extends Frame {
             pauseStage.draw();
         }
         batch.end();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
+
+    }
+
+    @Override
+    public void dispose() {
+
     }
 
     private void textureInit() {

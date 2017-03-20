@@ -24,6 +24,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
  * Created by sergiohernandezjr on 16/02/17.
+ * Con ayuda de DON PABLO
  */
 
 public abstract class Frame implements Screen {
