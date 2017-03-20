@@ -123,19 +123,21 @@ public class Level0 implements Screen{
         boatSprite.setPosition(boatXPosition,HEIGHT/2-boatSprite.getHeight()/2);
         oarSprite.draw(batch);
         oarSprite.setPosition(oarXPosition,HEIGHT/2-oarSprite.getHeight()/2-80);
-        if(boatSprite.getX() > 850){
+        if(boatSprite.getX() > 1250){
             changeScreen(boatSprite);
         }
 
         batch.end();
     }
 
-    private void changeScreen(Sprite boatSprite) {
+    private void changeScreen(Sprite sprite) {
+        app.setScreen(new Fade(app,LoaderState.LEVEL1));
+        this.dispose();
     }
 
     private void moveObject(float delta, Sprite sprite, float xPosition, boolean rotateLeft, String type) {
 
-        xPosition += delta*40;
+        xPosition += delta*200;
         if(rotateLeft){
             sprite.rotate((float) 0.25);
         }else{
@@ -159,7 +161,7 @@ public class Level0 implements Screen{
 
     @Override
     public void resize(int width, int height) {
-        //view.update(width, height);
+        
     }
 
     @Override
