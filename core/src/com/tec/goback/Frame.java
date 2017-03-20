@@ -61,15 +61,14 @@ public class Frame implements Screen {
     public Frame(App app) {
         this.app = app;
         aManager= app.getAssetManager();
-
-        pauseStage = new Pause(view, batch, app);
     }
 
     @Override
     public void show() {
         cameraInit();
-        textureInit();
         pauseInit();
+
+        pauseStage = new Pause(view, batch, app);
     }
 
     private void cameraInit() {
@@ -80,14 +79,12 @@ public class Frame implements Screen {
         view = new StretchViewport(WIDTH, HEIGHT);
     }
 
-    private void textureInit() {
-        //Override always
-    }
 
     private void pauseInit() {
-        pauseButton = aManager.get("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTPause.png");
         batch = new SpriteBatch();
         frameStage = new Stage(view, batch);
+
+        pauseButton = aManager.get("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTPause.png");
 
         //Pause button
         TextureRegionDrawable pauseBtnTrd = new TextureRegionDrawable(new TextureRegion(pauseButton));
@@ -97,14 +94,14 @@ public class Frame implements Screen {
         frameStage.addActor(pauseImgBtn);
 
 
-        pauseImgBtn.addListener(new ClickListener(){
+        /*pauseImgBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 LoaderState toRet = LoaderState.LEVEL0;
 
                 int d = pref.getInteger("level");
                 switch (d){
-                    case 1:
+                    case 0:
                         toRet = LoaderState.LEVEL1;
                         break;
                     case 2:
@@ -115,9 +112,9 @@ public class Frame implements Screen {
                         break;
 
                 }
-                app.setScreen(new Fade(app, LoaderState.PAUSE));
+                app.setScreen(new Fade(app, toRet));
             }
-        });
+        });*/
 
         //pass the Stage
         Gdx.input.setInputProcessor(frameStage);
