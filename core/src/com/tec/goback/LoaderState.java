@@ -17,5 +17,4 @@ public enum LoaderState {
     BOSS2,
     BOSS3,
     ARCADE
-
 }

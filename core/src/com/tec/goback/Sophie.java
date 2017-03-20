@@ -146,10 +146,13 @@ public class Sophie extends Squirt
                 switch (d){
                     case 1:
                         if (/*newX <= Level1.WIDTH - sprite.getWidth()*/true) sprite.setX(newX);
+                        break;
                     case 2:
                         if (/*newX <= Level2.WIDTH - sprite.getWidth()*/true) sprite.setX(newX);
+                        break;
                     case 3:
                         if (/*newX <= Level3.WIDTH - sprite.getWidth()*/true) sprite.setX(newX);
+                        break;
                 }
             }
         }
@@ -161,10 +164,13 @@ public class Sophie extends Squirt
                 switch (d){
                     case 1:
                         if (/*newX <= Level1.WIDTH - sprite.getWidth()*/true) sprite.setX(newX);
+                        break;
                     case 2:
                         if (/*newX <= Level2.WIDTH - sprite.getWidth()*/true) sprite.setX(newX);
+                        break;
                     case 3:
                         if (/*newX <= Level3.WIDTH - sprite.getWidth()*/true) sprite.setX(newX);
+                        break;
                 }
             }
         }
