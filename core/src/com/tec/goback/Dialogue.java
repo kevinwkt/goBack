@@ -2,6 +2,7 @@ package com.tec.goback;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -33,28 +34,48 @@ public class Dialogue {
     public void makeText(SpriteBatch batch, String msj){
 
         GlyphLayout glyph = new GlyphLayout();
-        glyph.setText(font, msj);
 
-        batch.draw(sheetTexture, 150, 0);
-        font.draw(batch, glyph, 100, 50);
+        batch.draw(sheetTexture, HALFW-sheetTexture.getWidth()/2, 0);
+
+        glyph.setText(font, msj, Color.BLACK, 710.0F, 30, true);
+        font.draw(batch ,glyph,HALFW-sheetTexture.getWidth()/2+185, sheetTexture.getHeight()-115);
     }
 
     public void makeText(SpriteBatch batch, String msj, Sprite left){
 
         GlyphLayout glyph = new GlyphLayout();
-        glyph.setText(font, msj);
 
-        batch.draw(sheetTexture, 150, 0);
-        font.draw(batch, glyph, 100, 50);
+
+
+        left.setPosition(0,0);
+        left.draw(batch);
+        batch.draw(sheetTexture, HALFW-sheetTexture.getWidth()/2, 0);
+
+        glyph.setText(font, msj, Color.BLACK, 710.0F, 30, true);
+        font.draw(batch ,glyph,HALFW-sheetTexture.getWidth()/2+185, sheetTexture.getHeight()-115);
     }
 
-    public void makeText(SpriteBatch batch, String msj, Sprite left, Sprite right){
+    public void makeText(SpriteBatch batch, String msj, Sprite left, Sprite right, boolean rightTalks){
 
         GlyphLayout glyph = new GlyphLayout();
-        glyph.setText(font, msj);
 
-        batch.draw(sheetTexture, 150, 0);
-        font.draw(batch, glyph, 100, 50);
+
+
+        left.setPosition(0,0);
+        right.setPosition(0, WIDTH-right.getWidth());
+
+        if(rightTalks){
+            left.setColor(0.5F, 0.5F, 0.5F, 1.0F);
+        }else{
+            right.setColor(0.5F, 0.5F, 0.5F, 1.0F);
+        }
+        right.draw(batch);
+        left.draw(batch);
+
+        batch.draw(sheetTexture, HALFW-sheetTexture.getWidth()/2, 0);
+
+        glyph.setText(font, msj, Color.BLACK, 710.0F, 30, true);
+        font.draw(batch ,glyph,HALFW-sheetTexture.getWidth()/2+185, sheetTexture.getHeight()-115);
     }
 
 }

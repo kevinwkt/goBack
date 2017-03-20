@@ -66,6 +66,11 @@ public class MainMenu implements Screen {
     //Call other methods because FIS
     @Override
     public void show() {
+        //    -----------------------  TO GET INTO LEVEL 0 TEMPORAL OMG
+        pref.putInteger("level",0);
+        pref.flush();
+
+
         cameraInit();
         textureInit();
         objectInit();
@@ -140,7 +145,9 @@ public class MainMenu implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 LoaderState next;
+
                 int d= pref.getInteger("level");
+                Gdx.app.log("concha",""+d);
                 switch (d){
                     case 1:
                         next = LoaderState.LEVEL1;

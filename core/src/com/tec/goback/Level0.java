@@ -2,6 +2,7 @@ package com.tec.goback;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
@@ -23,6 +24,9 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  */
 
 public class Level0 implements Screen {
+
+
+    Preferences pref = Gdx.app.getPreferences("getLevel");
 
     private final App app;
     private AssetManager aManager;
@@ -90,8 +94,8 @@ public class Level0 implements Screen {
         background = aManager.get("INTRO/INTROBackground.png");
         boat = aManager.get("INTRO/INTROBoat.png");
         oar = aManager.get("INTRO/INTROOar.png");
-        charon0 = aManager.get("INTROAbundioDialogue.png");
-        charon1 = aManager.get("INTROAbundioDialogueBlink.png");
+        charon0 = aManager.get("INTRO/INTROAbundioDialogue.png");
+        charon1 = aManager.get("INTRO/INTROAbundioDialogueBlink.png");
     }
 
     private void objectInit() {
@@ -115,7 +119,7 @@ public class Level0 implements Screen {
         //charon
         charonSprite0 = new Sprite(charon0);
         charonSprite1 = new Sprite(charon1);
-        
+
         Gdx.input.setCatchBackKey(true);
 
     }
@@ -129,15 +133,18 @@ public class Level0 implements Screen {
         moveObject(delta, boatSprite, boatXPosition, boatRotateLeft, "boat");
         moveObject(delta, oarSprite, oarXPosition, oarRotateLeft, "oar");
         batch.draw(background, 0, 0);
+
         boatSprite.draw(batch);
         boatSprite.setPosition(boatXPosition, HALFH - boatSprite.getHeight() / 2);
+
         oarSprite.draw(batch);
         oarSprite.setPosition(oarXPosition, HALFH - oarSprite.getHeight() / 2 - 80);
+
         if (boatSprite.getX() > 1250) {
             changeScreen(boatSprite);
         }
         if(boatSprite.getX() > 400 && boatSprite.getX() < 1000){
-            dialogue.make(batch, "La concha la lora");
+            dialogue.makeText(batch, "Vampire Weekend - One (Blake's got a new face) - High Quality. A Great Song!", charonSprite0);
         }
 
 
@@ -163,12 +170,18 @@ public class Level0 implements Screen {
 
     private void changeScreen(Sprite sprite) {
         app.setScreen(new Fade(app, LoaderState.LEVEL1));
+
+        pref.putInteger("level",1);
+        pref.flush();
+
+
+
         this.dispose();
     }
 
     private void moveObject(float delta, Sprite sprite, float xPosition, boolean rotateLeft, String type) {
 
-        xPosition += delta * 40;
+        xPosition += delta * 100;
         if (rotateLeft) {
             sprite.rotate((float) 0.25);
         } else {

@@ -98,8 +98,8 @@ public class Fade implements Screen {
                     manager.load("INTRO/INTROBackground.png", Texture.class);
                     manager.load("INTRO/INTROBoat.png", Texture.class);
                     manager.load("INTRO/INTROOar.png", Texture.class);
-                    manager.load("INTROAbundioDialogue.png", Texture.class);
-                    manager.load("INTROAbundioDialogueBlink.png", Texture.class);
+                    manager.load("INTRO/INTROAbundioDialogue.png", Texture.class);
+                    manager.load("INTRO/INTROAbundioDialogueBlink.png", Texture.class);
                     break;
                 case LEVEL1:
 
