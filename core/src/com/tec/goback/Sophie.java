@@ -29,7 +29,7 @@ public class Sophie extends Squirt
     Preferences pref=Gdx.app.getPreferences("getLevel");
     // TIME TO CHANGE FRAMES
 
-    private MovementState currentstate = MovementState.STILL;
+    private MovementState currentstate = MovementState.STILL_RIGHT;
 
     // Recibe una imagen con varios frames (ver marioSprite.png)
     public Sophie(Texture textura, float x, float y) {
@@ -92,7 +92,7 @@ public class Sophie extends Squirt
                 region=waking.getKeyFrame(timerchangeframewake);
                 batch.draw(region,sprite.getX(),sprite.getY());
                 if(waking.isAnimationFinished(timerchangeframewake))
-                    currentstate=MovementState.STILL;
+                    currentstate=MovementState.STILL_RIGHT;
                 break;
             case DYING:
                 timerchangeframedie +=Gdx.graphics.getDeltaTime();
@@ -115,10 +115,20 @@ public class Sophie extends Squirt
                 }
                 batch.draw(region,sprite.getX(),sprite.getY());
                 break;
-            case STILL:
             case CREATING:
+            case STILL_LEFT:
+            case STILL_RIGHT:
                 timerchangeframestandby += Gdx.graphics.getDeltaTime();
-                region=standby.getKeyFrame(timerchangeframestandby);
+                region = standby.getKeyFrame(timerchangeframestandby);
+                if (currentstate== MovementState.STILL_LEFT) {
+                    if (!region.isFlipX()) {
+                        region.flip(true,false);
+                    }
+                } else {
+                    if (region.isFlipX()) {
+                        region.flip(true,false);
+                    }
+                }
                 batch.draw(region,sprite.getX(),sprite.getY()); // Dibuja el sprite estático
                 break;
         }
@@ -147,8 +157,10 @@ public class Sophie extends Squirt
                 // Prueba que no salga del mundo por la derecha
                 int d= pref.getInteger("level");
                 switch (d){
-                    case 0:
-                        if (newX <= Level1.WIDTH_MAP - sprite.getWidth()) sprite.setX(newX);
+                    case 1:
+                        if (newX <= Level1.WIDTH_MAP - sprite.getWidth()){
+                            sprite.setX(newX);
+                        }
                         break;
                     case 2:
                         if (/*newX <= Level2.WIDTH - sprite.getWidth()*/true) sprite.setX(newX);
@@ -166,7 +178,9 @@ public class Sophie extends Squirt
                 int d= pref.getInteger("level");
                 switch (d){
                     case 1:
-                        if (/*newX <= Level1.WIDTH - sprite.getWidth()*/true) sprite.setX(newX);
+                        if (newX >= Level1.LEFT_LIMIT){
+                            sprite.setX(newX);
+                        }
                         break;
                     case 2:
                         if (/*newX <= Level2.WIDTH - sprite.getWidth()*/true) sprite.setX(newX);
@@ -210,7 +224,7 @@ public class Sophie extends Squirt
 //    }
 
     // Accesor de estadoMovimiento
-    public MovementState getEstadoMovimiento() {
+    public MovementState getMovementState() {
         return currentstate;
     }
 
@@ -222,7 +236,8 @@ public class Sophie extends Squirt
     public enum MovementState {
         CREATING,
         WAKING,
-        STILL,
+        STILL_RIGHT,
+        STILL_LEFT,
         HIT,
         MOVE_LEFT,
         MOVE_RIGHT,

@@ -147,17 +147,6 @@ public class Level0 implements Screen {
             dialogue.makeText(batch, "Vampire Weekend - One (Blake's got a new face) - High Quality. A Great Song!", charonSprite0);
         }
 
-
-
-
-
-
-
-
-
-
-
-
         batch.end();
 
 
@@ -169,12 +158,9 @@ public class Level0 implements Screen {
     }
 
     private void changeScreen(Sprite sprite) {
-        app.setScreen(new Fade(app, LoaderState.LEVEL1));
-
         pref.putInteger("level",1);
         pref.flush();
-
-
+        app.setScreen(new Fade(app, LoaderState.LEVEL1));
 
         this.dispose();
     }

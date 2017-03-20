@@ -102,6 +102,7 @@ public class Fade implements Screen {
                     manager.load("INTRO/INTROAbundioDialogueBlink.png", Texture.class);
                     break;
                 case LEVEL1:
+                    manager.load("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTYellowOrb.png",Texture.class);
 
                     break;
                 case LEVEL2:
