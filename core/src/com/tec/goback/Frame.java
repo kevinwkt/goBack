@@ -379,8 +379,3 @@ public class Frame implements Screen {
     }
 }
 
-enum GameState {
-    PLAYING,
-    LOST,
-    PAUSED
-}
