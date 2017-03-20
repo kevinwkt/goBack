@@ -22,15 +22,16 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * Created by pablo on 18/03/17.
  */
 
-public class Level0 implements Screen{
+public class Level0 implements Screen {
 
     private final App app;
     private AssetManager aManager;
+    private GameState state = GameState.PLAYING;
 
     public static final float WIDTH = 1280;
     public static final float HEIGHT = 720;
-    public static final float HALFW = WIDTH/2;
-    public static final float HALFH = HEIGHT/2;
+    public static final float HALFW = WIDTH / 2;
+    public static final float HALFH = HEIGHT / 2;
 
     private Viewport view;
 
@@ -41,10 +42,15 @@ public class Level0 implements Screen{
     private Texture background;
     private Texture boat;
     private Texture oar;
+    private Texture charon0;
+    private Texture charon1;
 
     private SpriteBatch batch;
 
-    private Stage level0Stage;
+
+    //charon
+    private Sprite charonSprite0;
+    private Sprite charonSprite1;
 
     // boat atributes
     private Sprite boatSprite;
@@ -57,9 +63,10 @@ public class Level0 implements Screen{
     boolean oarRotateLeft = false;
 
     //textboxes
+    private Dialogue dialogue;
+    private Float dialogueTime = (float) 0.0;
 
-
-    public Level0(App app){
+    public Level0(App app) {
         this.app = app;
         this.aManager = app.getAssetManager();
     }
@@ -72,10 +79,10 @@ public class Level0 implements Screen{
     }
 
     private void cameraInit() {
-        camera = new OrthographicCamera(WIDTH,HEIGHT);
-        camera.position.set(HALFW,HALFH,0);
+        camera = new OrthographicCamera(WIDTH, HEIGHT);
+        camera.position.set(HALFW, HALFH, 0);
         camera.update();
-        view = new StretchViewport(WIDTH,HEIGHT);
+        view = new StretchViewport(WIDTH, HEIGHT);
 
     }
 
@@ -83,20 +90,20 @@ public class Level0 implements Screen{
         background = aManager.get("INTRO/INTROBackground.png");
         boat = aManager.get("INTRO/INTROBoat.png");
         oar = aManager.get("INTRO/INTROOar.png");
+        charon0 = aManager.get("INTROAbundioDialogue.png");
+        charon1 = aManager.get("INTROAbundioDialogueBlink.png");
     }
 
     private void objectInit() {
-        batch = new SpriteBatch();
 
-        level0Stage = new Stage(view,batch);
+        batch = new SpriteBatch();
+        dialogue = new Dialogue(aManager);
 
         // background
         Image backImg = new Image(background);
-        backImg.setPosition(WIDTH/2-backImg.getWidth()/2, HEIGHT/2-backImg.getHeight()/2);
-        level0Stage.addActor(backImg);
+        backImg.setPosition(WIDTH / 2 - backImg.getWidth() / 2, HEIGHT / 2 - backImg.getHeight() / 2);
 
         //boat
-
         boatSprite = new Sprite(boat);
         boatXPosition = -boatSprite.getWidth();
 
@@ -105,53 +112,77 @@ public class Level0 implements Screen{
         oarSprite.setRotation(-13);
         oarXPosition = -oarSprite.getWidth();
 
-        Gdx.input.setInputProcessor(level0Stage);
+        //charon
+        charonSprite0 = new Sprite(charon0);
+        charonSprite1 = new Sprite(charon1);
+        
         Gdx.input.setCatchBackKey(true);
 
     }
 
 
-
     @Override
     public void render(float delta) {
+        cls();
         batch.setProjectionMatrix(camera.combined);
-        moveObject(delta,boatSprite, boatXPosition, boatRotateLeft, "boat");
-        moveObject(delta,oarSprite, oarXPosition, oarRotateLeft, "oar");
         batch.begin();
-        batch.draw(background,0,0);
+        moveObject(delta, boatSprite, boatXPosition, boatRotateLeft, "boat");
+        moveObject(delta, oarSprite, oarXPosition, oarRotateLeft, "oar");
+        batch.draw(background, 0, 0);
         boatSprite.draw(batch);
-        boatSprite.setPosition(boatXPosition,HEIGHT/2-boatSprite.getHeight()/2);
+        boatSprite.setPosition(boatXPosition, HALFH - boatSprite.getHeight() / 2);
         oarSprite.draw(batch);
-        oarSprite.setPosition(oarXPosition,HEIGHT/2-oarSprite.getHeight()/2-80);
-        if(boatSprite.getX() > 1250){
+        oarSprite.setPosition(oarXPosition, HALFH - oarSprite.getHeight() / 2 - 80);
+        if (boatSprite.getX() > 1250) {
             changeScreen(boatSprite);
         }
+        if(boatSprite.getX() > 400 && boatSprite.getX() < 1000){
+            dialogue.make(batch, "La concha la lora");
+        }
+
+
+
+
+
+
+
+
+
+
+
 
         batch.end();
+
+
+    }
+
+    private void cls() {
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
     private void changeScreen(Sprite sprite) {
-        app.setScreen(new Fade(app,LoaderState.LEVEL1));
+        app.setScreen(new Fade(app, LoaderState.LEVEL1));
         this.dispose();
     }
 
     private void moveObject(float delta, Sprite sprite, float xPosition, boolean rotateLeft, String type) {
 
-        xPosition += delta*200;
-        if(rotateLeft){
+        xPosition += delta * 40;
+        if (rotateLeft) {
             sprite.rotate((float) 0.25);
-        }else{
+        } else {
             sprite.rotate((float) -0.25);
         }
-        if(sprite.getRotation() > 5 ){
+        if (sprite.getRotation() > 5) {
             rotateLeft = false;
-        }else if(sprite.getRotation() < -20){
+        } else if (sprite.getRotation() < -20) {
             rotateLeft = true;
         }
-        if(type.equals("boat")){
+        if (type.equals("boat")) {
             boatXPosition = xPosition;
             boatRotateLeft = rotateLeft;
-        }else{
+        } else {
             oarXPosition = xPosition;
             oarRotateLeft = rotateLeft;
         }
@@ -161,7 +192,7 @@ public class Level0 implements Screen{
 
     @Override
     public void resize(int width, int height) {
-        
+
     }
 
     @Override
