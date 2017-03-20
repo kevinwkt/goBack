@@ -10,6 +10,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
@@ -53,6 +54,10 @@ public class Arcade extends Frame implements Screen {
     private Texture orbblue;
     private Texture orbyellow;
 
+    private Sprite orby;
+    private Sprite orbb;
+    private Sprite orbr;
+
     public static final float WIDTH_MAP = 1280;
     public static final float HEIGHT_MAP = 720;
 
@@ -84,22 +89,50 @@ public class Arcade extends Frame implements Screen {
 
         switch (d){
             case 1:
-                batch.draw(orbyellow,0,0);
+                orby.draw(batch);
+                orby.setPosition(0,0);
                 batch.draw(eyesyellow,0,0);
                 break;
             case 2:
-                batch.draw(orbyellow,0,0);
+                orby.draw(batch);
+                orby.setPosition(0,0);
                 batch.draw(eyesyellow,0,0);
-                batch.draw(orbblue,0,0);
+                orbb.draw(batch);
+                orbb.setPosition(0,0);
                 batch.draw(eyesblue,0,0);
+                switch (currentColor){
+                    case YELLOW:
+                        orbb.setColor(0.5F, 0.5F, 0.5F, 0.6F);
+                        break;
+                    case BLUE:
+                        orby.setColor(0.5F, 0.5F, 0.5F, 0.6F);
+                        break;
+                }
                 break;
             case 3:
-                batch.draw(orbyellow,0,0);
+                orby.draw(batch);
+                orby.setPosition(0,0);
                 batch.draw(eyesyellow,0,0);
-                batch.draw(orbblue,0,0);
+                orbb.draw(batch);
+                orbb.setPosition(0,0);
                 batch.draw(eyesblue,0,0);
-                batch.draw(orbred,0,0);
+                orbr.draw(batch);
+                orbr.setPosition(0,0);
                 batch.draw(eyesred,0,0);
+                switch (currentColor){
+                    case YELLOW:
+                        orbb.setColor(0.5F, 0.5F, 0.5F, 0.6F);
+                        orbr.setColor(0.5F, 0.5F, 0.5F, 0.6F);
+                        break;
+                    case BLUE:
+                        orby.setColor(0.5F, 0.5F, 0.5F, 0.6F);
+                        orbr.setColor(0.5F, 0.5F, 0.5F, 0.6F);
+                        break;
+                    case RED:
+                        orby.setColor(0.5F, 0.5F, 0.5F, 0.6F);
+                        orbb.setColor(0.5F, 0.5F, 0.5F, 0.6F);
+                        break;
+                }
                 break;
         }
         if (state==GameState.PAUSED) {
@@ -142,12 +175,15 @@ public class Arcade extends Frame implements Screen {
             case 1:
                 orbyellow= new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png");
                 eyesyellow= new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrbEyes.png");
+                orby=new Sprite(orbyellow);
                 break;
             case 2:
                 orbyellow= new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png");
                 eyesyellow= new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrbEyes.png");
                 orbblue= new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrb.png");
                 eyesblue= new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrbEyes.png");
+                orby=new Sprite(orbyellow);
+                orbb=new Sprite(orbblue);
                 break;
             case 3:
                 orbyellow= new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png");
@@ -156,6 +192,9 @@ public class Arcade extends Frame implements Screen {
                 eyesblue= new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrbEyes.png");
                 orbred= new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADERedOrb.png");
                 eyesred= new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADERedOrbEyes.png");
+                orby=new Sprite(orbyellow);
+                orbb=new Sprite(orbblue);
+                orbr=new Sprite(orbred);
                 break;
         }
     }
