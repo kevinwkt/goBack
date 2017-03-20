@@ -88,11 +88,11 @@ public class MainMenu implements Screen {
     }
 
     private void objectInit() { //MAYBE PROBABLY WORKING
-        batch = new SpriteBatch();
-        mainMenuStage = new Stage(view, batch);
 
         //background hace Image
         Image backgroundImg = new Image(background);
+        batch = new SpriteBatch();
+        mainMenuStage = new Stage(view, batch);
         backgroundImg.setPosition(HALFW-backgroundImg.getWidth()/2, HALFH-backgroundImg.getHeight()/2);
         mainMenuStage.addActor(backgroundImg);
 

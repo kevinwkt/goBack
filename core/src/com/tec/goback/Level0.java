@@ -114,6 +114,7 @@ public class Level0 implements Screen{
 
     @Override
     public void render(float delta) {
+        batch.setProjectionMatrix(camera.combined);
         moveObject(delta,boatSprite, boatXPosition, boatRotateLeft, "boat");
         moveObject(delta,oarSprite, oarXPosition, oarRotateLeft, "oar");
         batch.begin();
@@ -158,7 +159,7 @@ public class Level0 implements Screen{
 
     @Override
     public void resize(int width, int height) {
-        view.update(width, height);
+        //view.update(width, height);
     }
 
     @Override

@@ -36,7 +36,7 @@ public class Frame implements Screen {
     public static final float HALFH = HEIGHT/2;
 
     //Camera
-    private OrthographicCamera camera;
+    protected OrthographicCamera camera;
 
     //Main app class
     protected Viewport view;
@@ -69,6 +69,8 @@ public class Frame implements Screen {
         pauseInit();
 
         pauseStage = new Pause(view, batch, app);
+        batch = new SpriteBatch();
+        frameStage = new Stage(view, batch);
     }
 
     private void cameraInit() {
