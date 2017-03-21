@@ -96,12 +96,6 @@ public abstract class Frame implements Screen {
         pauseStage = new Pause(view, batch, app);
 
         pauseButton = aManager.get("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTPause.png");
-        pauseSprite = new Sprite(pauseButton);
-
-
-        //Pause button
-        TextureRegionDrawable pauseBtnTrd = new TextureRegionDrawable(new TextureRegion(pauseButton));
-        ImageButton pauseImgBtn = new ImageButton(pauseBtnTrd);
 
 
         //pass the Stage
