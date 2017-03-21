@@ -73,7 +73,7 @@ public class Level1 extends Frame implements Screen {
 
     public static final float LEFT_LIMIT = 816;
 
-    private final float SOPHIE_START_X=2272;
+    private final float SOPHIE_START_X=1850;
     private final float SOPHIE_START_Y=220;
 
     public static final float WIDTH_MAP = 3840;
@@ -116,7 +116,7 @@ public class Level1 extends Frame implements Screen {
         sophie.update();
 
         yellowOrb.draw(batch);
-        yellowOrb.setPosition(3080,220);
+
 
 
 
@@ -138,10 +138,12 @@ public class Level1 extends Frame implements Screen {
 
 
         if(!orbEncontrado){
-            if(yellowOrb.getBoundingRectangle().contains(sophie.sprite.getX()+sophie.sprite.getWidth(),sophie.sprite.getY())){
+            yellowOrb.setPosition(1350,220);
+            if(yellowOrb.getBoundingRectangle().contains(sophie.sprite.getX(),sophie.sprite.getY())){
                 orbEncontrado = true;
             }
         }else{
+
             if(sophie.getMovementState()==Sophie.MovementState.STILL_LEFT||
                     sophie.getMovementState()==Sophie.MovementState.MOVE_LEFT)
                 yellowOrb.setPosition(yellowOrb.getWidth()+sophie.sprite.getX(),sophie.sprite.getY());
@@ -184,7 +186,7 @@ public class Level1 extends Frame implements Screen {
     }
 
     private void updateCamera() {
-        float posX = sophie.sprite.getX();
+        float posX = sophie.sprite.getX()+sophie.sprite.getWidth()/2;
         // Si está en la parte 'media'
         if (posX>=HALFW && posX<=WIDTH_MAP-HALFW) {
             // El personaje define el centro de la cámara
