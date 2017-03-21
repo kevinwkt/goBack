@@ -1,26 +1,25 @@
 package com.tec.goback;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 
 /**
  * Created by kevin on 3/20/2017.
  */
 
-public class OrbAttack extends Squirt {
+public class ArcadeLizard extends Squirt {
 
-    private int vx = 5;      // Total Velocity
+    private int hp=80;
+    private int vx = 4;      // Total Velocity
     private Vector3 v = new Vector3();
     private float dirx;
     private float diry;
     private float gradient;
-    private attackState currentstate = attackState.MOVING;
+    private lizardState currentstate = lizardState.MOVING;
 
-    public OrbAttack(Texture textura, float x, float y, float dirx, float diry) {
+    public ArcadeLizard(Texture textura, float x, float y) {
 
         // Crea el sprite con el personaje quieto (idle)
         sprite = new Sprite(textura);    // QUIETO
@@ -42,7 +41,8 @@ public class OrbAttack extends Squirt {
                 moveTowards();
                 break;
             case HIT:
-                dispose();
+                hp-=
+                if(hp<=0) dispose();
                 break;
         }
     }
@@ -61,12 +61,12 @@ public class OrbAttack extends Squirt {
         sprite.getTexture().dispose();
     }
 
-    public attackState getEstadoMovimiento() {
+    public lizardState getEstadoMovimiento() {
         return currentstate;
     }
 
     // Modificador de estadoMovimiento
-    public void setMovementState(attackState ms) {
+    public void setMovementState(lizardState ms) {
         this.currentstate = ms;
     }
 
@@ -74,9 +74,9 @@ public class OrbAttack extends Squirt {
         return v;
     }
 
-    public enum attackState {
+    public enum lizardState {
         MOVING,
         HIT
     }
-}
 
+}
