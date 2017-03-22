@@ -73,7 +73,7 @@ public class Level1 extends Frame implements Screen {
 
     public static final float LEFT_LIMIT = 816;
 
-    private final float SOPHIE_START_X=2272;
+    private final float SOPHIE_START_X=1850;
     private final float SOPHIE_START_Y=220;
 
     public static final float WIDTH_MAP = 3840;
@@ -112,11 +112,12 @@ public class Level1 extends Frame implements Screen {
 
         batch.draw(background,0,0);
 
-        batch.draw(pauseButton,camera.position.x-HALFW,camera.position.y-HALFH);
+        batch.draw(pauseButton,camera.position.x+HALFW-pauseButton.getWidth(),camera.position.y-HALFH);
         sophie.update();
 
         yellowOrb.draw(batch);
-        yellowOrb.setPosition(3080,220);
+
+
 
 
         //pauseSprite.draw(batch);
@@ -137,15 +138,20 @@ public class Level1 extends Frame implements Screen {
 
 
         if(!orbEncontrado){
-            if(yellowOrb.getBoundingRectangle().contains(sophie.sprite.getX()+sophie.sprite.getWidth(),sophie.sprite.getY())){
+            yellowOrb.setPosition(1350,220);
+            if(yellowOrb.getBoundingRectangle().contains(sophie.sprite.getX(),sophie.sprite.getY())){
                 orbEncontrado = true;
             }
         }else{
+
             if(sophie.getMovementState()==Sophie.MovementState.STILL_LEFT||
                     sophie.getMovementState()==Sophie.MovementState.MOVE_LEFT)
                 yellowOrb.setPosition(yellowOrb.getWidth()+sophie.sprite.getX(),sophie.sprite.getY());
             else
                 yellowOrb.setPosition(sophie.sprite.getX()-yellowOrb.getWidth(),sophie.sprite.getY());
+            oldmanEyesOpenedSpr.draw(batch);
+            oldmanEyesOpenedSpr.setPosition(850,220);
+
         }
         sophie.draw(batch);
         updateCamera();
@@ -180,7 +186,7 @@ public class Level1 extends Frame implements Screen {
     }
 
     private void updateCamera() {
-        float posX = sophie.sprite.getX();
+        float posX = sophie.sprite.getX()+sophie.sprite.getWidth()/2;
         // Si está en la parte 'media'
         if (posX>=HALFW && posX<=WIDTH_MAP-HALFW) {
             // El personaje define el centro de la cámara
@@ -204,23 +210,23 @@ public class Level1 extends Frame implements Screen {
         sophieTexture = new Texture("Squirts/Sophie/SOPHIEWalk.png");
         sophie = new Sophie(sophieTexture, 100,100);
 
-        sophieBlink = manager.get("SOPHIE/DIALOGUESophieBlink.png");
-        sophieConcerned = manager.get("SOPHIE/DIALOGUESophieConcern.png");
-        sophieNormal = manager.get("SOPHIE/DIALOGUESophieNormal.png");
-        sophieSurprised = manager.get("SOPHIE/DIALOGUESophieSurprise.png");
-        oldmanEyesClosed = manager.get("/OLDMAN/STILL/OLDMANStill00.png");
-        oldmanStand = manager.get("/OLDMAN/STILL/OLDMANStill01.png");
-        oldmanNod = manager.get("/OLDMAN/STILL/OLDMANStill02.png");
-        oldmanEyesOpened = manager.get("/OLDMAN/STILL/OLDMANStill03.png");
+        sophieBlink = aManager.get("SOPHIE/DIALOGUESophieBlink.png");
+        sophieConcerned = aManager.get("SOPHIE/DIALOGUESophieConcern.png");
+        sophieNormal = aManager.get("SOPHIE/DIALOGUESophieNormal.png");
+        sophieSurprised = aManager.get("SOPHIE/DIALOGUESophieSurprise.png");
+        oldmanEyesClosed = aManager.get("OLDMAN/STILL/OLDMANStill00.png");
+        oldmanStand = aManager.get("OLDMAN/STILL/OLDMANStill01.png");
+        oldmanNod = aManager.get("OLDMAN/STILL/OLDMANStill02.png");
+        oldmanEyesOpened = aManager.get("OLDMAN/STILL/OLDMANStill03.png");
 
-        oldmanEyesClosedSpr = new Sprite(sophieBlink);
-        oldmanStandSpr = new Sprite(sophieConcerned);
-        oldmanNodSpr = new Sprite(sophieNormal);
-        oldmanEyesOpenedSpr = new Sprite(sophieSurprised);
-        sophieBlinkSpr = new Sprite(oldmanEyesClosed);
-        sophieConcernedSpr = new Sprite(oldmanStand);
-        sophieNormalSpr = new Sprite(oldmanNod);
-        sophieSurprisedSpr = new Sprite(oldmanEyesOpened);
+        oldmanEyesClosedSpr = new Sprite(oldmanEyesClosed);
+        oldmanStandSpr = new Sprite(oldmanStand);
+        oldmanNodSpr = new Sprite(oldmanNod);
+        oldmanEyesOpenedSpr = new Sprite(oldmanEyesOpened);
+        sophieBlinkSpr = new Sprite(sophieBlink);
+        sophieConcernedSpr = new Sprite(sophieConcerned);
+        sophieNormalSpr = new Sprite(sophieNormal);
+        sophieSurprisedSpr = new Sprite(sophieSurprised);
 
         //Background
         background = new Texture("HARBOR/GoBackHARBORPanoramic.png");
@@ -247,8 +253,9 @@ public class Level1 extends Frame implements Screen {
         public boolean touchDown(int screenX, int screenY, int pointer, int button) {
             v.set(screenX,screenY,0);
             camera.unproject(v);
+
             if(sophie.getMovementState()==Sophie.MovementState.STILL_LEFT||sophie.getMovementState()==Sophie.MovementState.STILL_RIGHT) {
-                if(sophie.sprite.getX() - v.x > 522 && v.y < 135){
+                if(sophie.sprite.getX() - v.x < -522 && v.y < 135){
                     state = GameState.PAUSED;
 
                 }else{
