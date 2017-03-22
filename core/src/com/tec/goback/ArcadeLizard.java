@@ -41,7 +41,7 @@ public class ArcadeLizard extends Squirt {
                 moveTowards();
                 break;
             case HIT:
-                hp-=
+                hp-=0;
                 if(hp<=0) dispose();
                 break;
         }
