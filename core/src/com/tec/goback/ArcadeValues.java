@@ -22,7 +22,6 @@ class ArcadeValues {
 
 
 
-
     static float pxToMeters(float n){
         return n/100;
     }
