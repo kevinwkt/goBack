@@ -19,7 +19,7 @@ import com.badlogic.gdx.physics.box2d.World;
 class OrbAttack extends Squirt {
 
     private int color;
-    private static float SPEED = 6;
+    private static float SPEED = 4;
     private Body body;
     private CircleShape shape;
     private Sprite sprite;
