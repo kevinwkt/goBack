@@ -1,82 +1,76 @@
 package com.tec.goback;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.World;
 
 /**
  * Created by kevin on 3/20/2017.
  */
 
-public class ArcadeLizard extends Squirt {
+class ArcadeLizard extends Squirt {
 
-    private int hp=80;
-    private int vx = 4;      // Total Velocity
-    private Vector3 v = new Vector3();
-    private float dirx;
-    private float diry;
-    private float gradient;
-    private lizardState currentstate = lizardState.MOVING;
+    private PolygonShape shape;
+    private int rightLeft;
+    private static float SPEED = 0.4;
+    private Body body;
 
-    public ArcadeLizard(Texture textura, float x, float y) {
+    public ArcadeLizard(World world,int fromWhere, Texture tx) {
+        this.sprite = new Sprite(tx);
+        this.rightLeft = type;
 
-        // Crea el sprite con el personaje quieto (idle)
-        sprite = new Sprite(textura);    // QUIETO
-        sprite.setPosition(x, y);    // Posición inicial
-        v.set(x,y,0);
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(ArcadeValues.meterspelletOriginX, ArcadeValues.meterspelletOriginY);
 
-        this.dirx=dirx-x;
-        this.diry=diry-y;
-        this.gradient=this.diry/this.dirx;
+        body = world.createBody(bodyDef);
+        fixturer(0.1f, 0.7f);
+        body.setBullet(true);
+
+        body.setLinearVelocity(MathUtils.cosDeg(angle) * SPEED, MathUtils.sinDeg(angle) * SPEED);
+        body.setUserData(this);
+    }
+
+    private void fixturer(float density, float restitution) {
+
+        //neumann preventive shit
+        for (Fixture fix : body.getFixtureList()) {body.destroyFixture(fix);}
+
+        //lizard
+        shape = new PolygonShape();
+        shape.setAsBox(ArcadeValues.pxToMeters(sprite.getHeight()), ArcadeValues.pxToMeters(sprite.getWidth()));
+
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.density = density;
+        fixtureDef.restitution = restitution;
+        fixtureDef.shape = shape;
+        fixtureDef.friction = 0;
+
+        fixtureDef.filter.categoryBits = ArcadeValues.pelletCat; //its category
+        fixtureDef.filter.maskBits = ArcadeValues.pelletMask; //or of its category with colliding categories
+
+        body.createFixture(fixtureDef);
     }
 
     public void draw(SpriteBatch batch) {
-        batch.draw(sprite, sprite.getX(), sprite.getY());
+        sprite.setCenter(ArcadeValues.metersToPx(body.getPosition().x), ArcadeValues.metersToPx(body.getPosition().y));
+        sprite.draw(batch);
     }
 
-    public void update() {
-        switch (currentstate) {
-            case MOVING:
-                moveTowards();
-                break;
-            case HIT:
-                hp-=0;
-                if(hp<=0) dispose();
-                break;
-        }
+    public int getRightLeft(){
+        return rightLeft;
     }
 
-    public void moveTowards(){
-        float movex= v.x;
-        float movey=v.y;
 
-        movex+=gradient*vx;
-        movey+=gradient*vx;
-        sprite.setPosition(movex,movey);
-        v.set(movex,movey,0);
-    }
 
-    public void dispose(){
-        sprite.getTexture().dispose();
-    }
-
-    public lizardState getEstadoMovimiento() {
-        return currentstate;
-    }
-
-    // Modificador de estadoMovimiento
-    public void setMovementState(lizardState ms) {
-        this.currentstate = ms;
-    }
-
-    public Vector3 getPosition(){
-        return v;
-    }
-
-    public enum lizardState {
-        MOVING,
-        HIT
-    }
 
 }
+
