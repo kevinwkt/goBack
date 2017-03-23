@@ -5,10 +5,10 @@ package com.tec.goback;
  */
 
 class ArcadeValues {
-    static final float pelletOriginX = 100;
-    static final float pelletOriginY = 600;
+    static final float pelletOriginX = 600;
+    static final float pelletOriginY = 100;
     static final float meterspelletOriginX = 6f;
-    static final float meterspelletOriginY = 0.01f;
+    static final float meterspelletOriginY = 1f;
 
     static final short wallCat = 1;
     static final short pelletCat = 2;
@@ -24,10 +24,10 @@ class ArcadeValues {
 
 
     static float pxToMeters(float n){
-        return n;
+        return n/100;
     }
 
     static float metersToPx(float n){
-        return n;
+        return n*100;
     }
 }

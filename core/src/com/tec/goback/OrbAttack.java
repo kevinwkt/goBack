@@ -22,23 +22,31 @@ class OrbAttack extends Squirt {
     private static float SPEED = 6;
     private Body body;
     private CircleShape shape;
+    private Sprite sprite;
 
     public OrbAttack(World world, int type, float angle, Texture tx) {
         this.sprite = new Sprite(tx);
-        sprite.setCenter(ArcadeValues.pelletOriginX, ArcadeValues.pelletOriginY);
+        sprite.setCenter(
+                ArcadeValues.pelletOriginX,
+                ArcadeValues.pelletOriginY
+        );
         this.color = type;
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(ArcadeValues.meterspelletOriginX, ArcadeValues.meterspelletOriginY);
+        bodyDef.position.set(
+                ArcadeValues.meterspelletOriginX,
+                ArcadeValues.meterspelletOriginY
+        );
 
         body = world.createBody(bodyDef);
         fixturer(0.1f, 0.7f);
         body.setBullet(true);
 
 
-        body.setLinearVelocity(MathUtils.cosDeg(angle) * SPEED,
-                MathUtils.sinDeg(angle) * SPEED);
+        body.setLinearVelocity(MathUtils.cos(angle) * SPEED,
+                MathUtils.sin(angle) * SPEED);
+        // body.setLinearVelocity(1,1);
         body.setUserData(this);
     }
 
@@ -69,7 +77,7 @@ class OrbAttack extends Squirt {
     }
 
     public void draw(SpriteBatch batch) {
-        sprite.setCenter(
+        sprite.setPosition(
                 ArcadeValues.metersToPx(body.getPosition().x),
                 ArcadeValues.metersToPx(body.getPosition().y)
         );

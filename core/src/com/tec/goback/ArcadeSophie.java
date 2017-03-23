@@ -14,19 +14,22 @@ import com.badlogic.gdx.physics.box2d.World;
 /**
  * Created by gerry on 3/22/17.
  */
-public class SophieArcade {
+public class ArcadeSophie {
     private Body body;
     private PolygonShape shape;
     private Sprite sprite;
 
-    public SophieArcade(World world, Texture tx){
+    public ArcadeSophie(World world, Texture tx){
         this.sprite = new Sprite(tx);
         sprite.setCenter(ArcadeValues.pelletOriginX, ArcadeValues.pelletOriginY);
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(ArcadeValues.meterspelletOriginX, ArcadeValues.meterspelletOriginY); // no serían metros?
-
+        //bodyDef.position.set(ArcadeValues.meterspelletOriginX, ArcadeValues.meterspelletOriginY); // no serían metros?
+        bodyDef.position.set(
+                1/*ArcadeValues.meterspelletOriginX*/,
+                1/*ArcadeValues.meterspelletOriginY*/
+        );
         body = world.createBody(bodyDef);
         fixturer(0.1f, 0.7f);
         body.setLinearVelocity(0f, 0f);
@@ -60,7 +63,6 @@ public class SophieArcade {
     }
 
     public void draw(SpriteBatch batch) {
-        body.setLinearVelocity(0f, 0f);
 
         sprite.setCenter(
                 ArcadeValues.metersToPx(body.getPosition().x),
