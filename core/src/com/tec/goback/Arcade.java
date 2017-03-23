@@ -13,7 +13,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -28,16 +31,19 @@ import java.util.ArrayList;
 /**
  * Created by gerry on 2/18/17.
  */
-public class Arcade extends Frame implements Screen {
+public class Arcade extends Frame{
 
-    //Arraylist
-    private ArrayList<OrbAttack> myAttacks;
+    private World world;
+    private ArrayList<Squirt> deadThinfs;
+
+    //temporal origin place for pellets
+    private float pelletOriginX = 100;
+    private float pelletOriginY = 100;
 
     //CURRENT COLOR ORB
     private orbColor currentColor = orbColor.YELLOW;
 
     //MOTHER FUCKER
-    Preferences pref=Gdx.app.getPreferences("getLevel");
     private int d;
 
     // Music
@@ -46,13 +52,18 @@ public class Arcade extends Frame implements Screen {
 
     //Textures
     private Texture background; //Background
-    private Texture sophieTexture;
-    private Texture orbred;
+    
+    private SophieArcade sophie;
+
     private Texture eyesred;
     private Texture eyesblue;
     private Texture eyesyellow;
+    private Texture orbred;
     private Texture orbblue;
     private Texture orbyellow;
+    private Texture pelletyellow;
+    private Texture pelletblue;
+    private Texture pelletred;
 
     private Sprite orby;
     private Sprite orbb;
@@ -65,16 +76,33 @@ public class Arcade extends Frame implements Screen {
         super(app, WIDTH_MAP,HEIGHT_MAP);
     }
 
-    private GameState state = GameState.PLAYING;
-
-    //Call other methods because FIS
     @Override
     public void show() {
         d= pref.getInteger("level");
         super.show();
         textureInit();
-        Gdx.input.setInputProcessor(new ProcesadorEntrada());// new input joystick
+        //makeWorld();
+        //makeSophie();
+        //makeBorders();
+        Gdx.input.setInputProcessor(new Input());
         Gdx.input.setCatchBackKey(true); //Not important
+    }
+
+    private void makeSophie(){
+        Texture sophieTx = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADESophie.png");
+        sophie = new SophieArcade(world, sophieTx);
+    }
+    private void makeWorld(){
+        world = new World(new Vector2(0,0), true);
+
+    }
+    private void makeBorders(){
+
+    }
+
+    private void cls() {
+        Gdx.gl.glClearColor(0,0,0,1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
     @Override
@@ -83,10 +111,23 @@ public class Arcade extends Frame implements Screen {
         cls();
         batch.begin();
 
+        drawShit();
 
+        // if (state==GameState.PAUSED) {
+        //     //Gdx.input.setInputProcessor(pauseStage);
+        //     pauseStage.draw();
+        // }
+
+        batch.end();
+    }
+    private void drawShit(){
         batch.draw(background,0,0);
-        batch.draw(sophieTexture,640,200);
+        drawOrbes();
 
+        //go to world draw its classes
+    }
+
+    private void drawOrbes(){
         switch (d){
             case 1:
                 orby.draw(batch);
@@ -135,47 +176,19 @@ public class Arcade extends Frame implements Screen {
                 }
                 break;
         }
-        if (state==GameState.PAUSED) {
-            //Gdx.input.setInputProcessor(pauseStage);
-            pauseStage.draw();
-        }
-        batch.end();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
     }
 
     private void textureInit() {
-        sophieTexture= new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADESophie.png");
-        background = new Texture("HARBOR/GoBackHARBORPanoramic.png");
+        //sophieTexture= new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADESophie.png");
+        background = new Texture("HARBOR/GoBackHARBORPanoramic.png"); //switch
 
         switch (d){
             case 1:
                 orbyellow= new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png");
                 eyesyellow= new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrbEyes.png");
                 orby=new Sprite(orbyellow);
+
+                pelletyellow = aManager.get("PELLET/ATAQUEYellowPellet.png");
                 break;
             case 2:
                 orbyellow= new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png");
@@ -184,28 +197,46 @@ public class Arcade extends Frame implements Screen {
                 eyesblue= new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrbEyes.png");
                 orby=new Sprite(orbyellow);
                 orbb=new Sprite(orbblue);
+
+                pelletyellow = aManager.get("PELLET/ATAQUEYellowPellet.png");
+                pelletblue = aManager.get("PELLET/ATAQUEBluePellet.png");
                 break;
             case 3:
-                orbyellow= new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png");
-                eyesyellow= new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrbEyes.png");
-                orbblue= new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrb.png");
-                eyesblue= new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrbEyes.png");
-                orbred= new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADERedOrb.png");
-                eyesred= new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADERedOrbEyes.png");
-                orby=new Sprite(orbyellow);
-                orbb=new Sprite(orbblue);
-                orbr=new Sprite(orbred);
+                orbyellow = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png");
+                eyesyellow = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrbEyes.png");
+                orbblue = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrb.png");
+                eyesblue = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrbEyes.png");
+                orbred = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADERedOrb.png");
+                eyesred = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADERedOrbEyes.png");
+                orby = new Sprite(orbyellow);
+                orbb = new Sprite(orbblue);
+                orbr = new Sprite(orbred);
+
+                pelletyellow = aManager.get("PELLET/ATAQUEYellowPellet.png");
+                pelletblue = aManager.get("PELLET/ATAQUEBluePellet.png");
+                pelletred = aManager.get("PELLET/ATAQUERedPellet.png");
                 break;
         }
     }
 
-    private void cls() {
-        Gdx.gl.glClearColor(0,0,0,1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-    }
+    //WTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTF
+    @Override
+    public void resize(int width, int height) {}
+    @Override
+    public void pause() {}
+
+    @Override
+    public void resume() {}
+
+    @Override
+    public void hide() {}
+
+    @Override
+    public void dispose() {}
+    //WTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTF
 
 
-    private class ProcesadorEntrada implements InputProcessor {
+    private class Input implements InputProcessor {
         private Vector3 v = new Vector3();
         @Override
         public boolean keyDown(int keycode) {
@@ -229,7 +260,8 @@ public class Arcade extends Frame implements Screen {
             Gdx.app.log("x: ", screenX + " ");
             Gdx.app.log("y: ", screenY + " ");
             Gdx.app.log("color: ", currentColor +" ");
-            if (/*ON THE BUTTON TO CHANGE COLORS*/true){
+          
+            if (/*ON THE BUTTON TO CHANGE COLORS*/!true){
                 switch (d) {
                     case 1:
                         break;
@@ -258,36 +290,28 @@ public class Arcade extends Frame implements Screen {
                         break;
                 }
             }
-            else {
-                switch (d) {
-                    case 1:
-                        myAttacks.add(new OrbAttack(orbyellow, 0, 0, screenX, screenY));
+            else {//if we're not switching
+
+                float angle = MathUtils.atan2(
+                        v.y - ArcadeValues.pelletOriginY,
+                        v.x - ArcadeValues.pelletOriginX
+                );
+
+                switch(currentColor){
+                    case YELLOW:
+                        new OrbAttack(world, 1, angle, pelletyellow);
                         break;
-                    case 2:
-                        switch (currentColor) {
-                            case BLUE:
-                                myAttacks.add(new OrbAttack(orbblue, 0, 0, screenX, screenY));
-                                break;
-                            case YELLOW:
-                                myAttacks.add(new OrbAttack(orbyellow, 0, 0, screenX, screenY));
-                                break;
-                        }
+                    case BLUE:
+                        new OrbAttack(world, 2, angle, pelletblue);
                         break;
-                    case 3:
-                        switch (currentColor) {
-                            case BLUE:
-                                myAttacks.add(new OrbAttack(orbblue, 0, 0, screenX, screenY));
-                                break;
-                            case YELLOW:
-                                myAttacks.add(new OrbAttack(orbyellow, 0, 0, screenX, screenY));
-                                break;
-                            case RED:
-                                myAttacks.add(new OrbAttack(orbred, 0, 0, screenX, screenY));
-                                break;
-                        }
+                    case RED:
+                        new OrbAttack(world, 3, angle, pelletred);
                         break;
                 }
+            
             }
+
+
             return true;
         }
 

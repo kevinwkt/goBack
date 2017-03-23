@@ -128,7 +128,15 @@ public class Fade implements Screen {
 
                     break;
                 case ARCADE:
-
+                    manager.load("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png", Texture.class);
+                    manager.load("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrbEyes.png", Texture.class);
+                    manager.load("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrb.png", Texture.class);
+                    manager.load("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrbEyes.png", Texture.class);
+                    manager.load("Interfaces/GAMEPLAY/ARCADE/ARCADERedOrb.png", Texture.class);
+                    manager.load("Interfaces/GAMEPLAY/ARCADE/ARCADERedOrbEyes.png", Texture.class);
+                    manager.load("PELLET/ATAQUEYellowPellet.png", Texture.class);
+                    manager.load("PELLET/ATAQUERedPellet.png", Texture.class);
+                    manager.load("PELLET/ATAQUEBluePellet.png", Texture.class);
                     break;
             }
     }
@@ -167,7 +175,7 @@ public class Fade implements Screen {
 
                     break;
                 case ARCADE:
-
+                    app.setScreen(new Arcade(app));
                     break;
             }
         }
