@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -27,7 +28,7 @@ public class Level0 implements Screen {
 
 
     Preferences pref = Gdx.app.getPreferences("getLevel");
-
+    Preferences soundPreferences = Gdx.app.getPreferences("My Preferences");
 
 
     private final App app;
@@ -71,6 +72,8 @@ public class Level0 implements Screen {
     //textboxes
     private Dialogue dialogue;
 
+    private Music bgMusic;
+
     public Level0(App app) {
         this.app = app;
         this.aManager = app.getAssetManager();
@@ -82,6 +85,15 @@ public class Level0 implements Screen {
         texturesInit();
         objectInit();
         Gdx.input.setInputProcessor(null);
+        musicInit();
+    }
+
+    private void musicInit() {
+        if(soundPreferences.getBoolean("soundOn")) {
+            bgMusic = aManager.get("MUSIC/GoBackMusicLevel0.mp3");
+            bgMusic.setLooping(true);
+            bgMusic.play();
+        }
     }
 
     private void cameraInit() {
@@ -145,8 +157,8 @@ public class Level0 implements Screen {
         if (boatSprite.getX() > 1250) {
             changeScreen(boatSprite);
         }
-        if(boatSprite.getX() > 400 && boatSprite.getX() < 1000){
-            dialogue.makeText(batch, "We only come to sleep.\nWe only come to dream.", charonSprite0);
+        if(boatSprite.getX() > 300 && boatSprite.getX() < 1100){
+            dialogue.makeText(batch, "We only come to sleep.\nWe only come to dream.", charonSprite0, 0);
         }
 
         batch.end();
@@ -163,7 +175,7 @@ public class Level0 implements Screen {
         pref.putInteger("level",1);
         pref.flush();
         app.setScreen(new Fade(app, LoaderState.LEVEL1));
-
+        bgMusic.stop();
         this.dispose();
     }
 

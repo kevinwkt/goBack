@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -18,6 +19,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import sun.applet.Main;
 
 /**
  * Created b1y pablo on 16/02/17.
@@ -35,8 +38,8 @@ public class SoundSettings implements Screen{
 
     // preferencias
 
-    Preferences prefes = Gdx.app.getPreferences("My Preferences");
-
+    Preferences soundPreferences = Gdx.app.getPreferences("My Preferences");
+    Preferences levelPreferences = Gdx.app.getPreferences("getLevel");
 
     private Viewport view;
 
@@ -61,10 +64,16 @@ public class SoundSettings implements Screen{
     private ImageButton fxImg;
     private TextureRegionDrawable fxPlay;
 
+    //Music
+    private Music bgMusic;  // Sonidos largos
 
-    public SoundSettings(App app) {
+    //Menu
+    private MainMenu menu;
+
+    public SoundSettings(App app, MainMenu menu) {
         this.app = app;
         this.aManager = app.getAssetManager();
+        this.menu = menu;
     }
 
 
@@ -73,6 +82,12 @@ public class SoundSettings implements Screen{
         cameraInit();
         generalTextureInit();
         objectInit();
+        musicInit();
+    }
+
+    private void musicInit() {
+        bgMusic = aManager.get("MUSIC/GoBackMusicMainMenu.mp3");
+        bgMusic.setLooping(true);
     }
 
 
@@ -84,15 +99,27 @@ public class SoundSettings implements Screen{
     }
 
     private void generalTextureInit() {
-        background = aManager.get("HARBOR/GoBackHARBOR0.png");
+        switch(levelPreferences.getInteger("level")){
+            default:
+            case 0:
+                background = aManager.get("INTRO/INTROBackground.png");
+                break;
+            case 1:
+                background = aManager.get("HARBOR/GoBackHARBOR0.png");
+                break;
+            case 2:
+                background = aManager.get("MOUNTAINS/GoBackMOUNTAINS0.png");
+                break;
+
+        }
         backButton = aManager.get("Interfaces/SOUND/SOUNDBack.png");
         soundDecoration = aManager.get("Interfaces/SOUND/SOUNDDecoration.png");
-        if(prefes.getBoolean("soundOn")){
+        if(soundPreferences.getBoolean("soundOn")){
             musicButton = aManager.get("Interfaces/SOUND/SOUNDMusicON.png");
         }else{
             musicButton = aManager.get("Interfaces/SOUND/SOUNDMusic.png");
         }
-        if(prefes.getBoolean("fxOn")){
+        if(soundPreferences.getBoolean("fxOn")){
             fxButton = aManager.get("Interfaces/SOUND/SOUNDSoundON.png");
         }else{
             fxButton = aManager.get("Interfaces/SOUND/SOUNDSound.png");
@@ -102,7 +129,7 @@ public class SoundSettings implements Screen{
 
     private void changeSoundTexture() {
         musicImg.remove();
-        if(prefes.getBoolean("soundOn")){
+        if(soundPreferences.getBoolean("soundOn")){
             musicButton = aManager.get("Interfaces/SOUND/SOUNDMusicON.png");
         }else{
             musicButton = aManager.get("Interfaces/SOUND/SOUNDMusic.png");
@@ -116,13 +143,13 @@ public class SoundSettings implements Screen{
 
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(prefes.getBoolean("soundOn")){
-                    prefes.putBoolean("soundOn",false);
+                if(soundPreferences.getBoolean("soundOn")){
+                    soundPreferences.putBoolean("soundOn",false);
 
                 }else{
-                    prefes.putBoolean("soundOn",true);
+                    soundPreferences.putBoolean("soundOn",true);
                 }
-                prefes.flush();
+                soundPreferences.flush();
                 changeSoundTexture();
             }
         });
@@ -130,7 +157,7 @@ public class SoundSettings implements Screen{
 
     private void changeFxTexture() {
         fxImg.remove();
-        if(prefes.getBoolean("fxOn")){
+        if(soundPreferences.getBoolean("fxOn")){
             fxButton = new Texture("Interfaces/SOUND/SOUNDSoundON.png");
         }else{
             fxButton = new Texture("Interfaces/SOUND/SOUNDSound.png");
@@ -145,14 +172,14 @@ public class SoundSettings implements Screen{
 
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(prefes.getBoolean("fxOn")){
-                    prefes.putBoolean("fxOn",false);
+                if(soundPreferences.getBoolean("fxOn")){
+                    soundPreferences.putBoolean("fxOn",false);
 
                 }else{
-                    prefes.putBoolean("fxOn",true);
+                    soundPreferences.putBoolean("fxOn",true);
 
                 }
-                prefes.flush();
+                soundPreferences.flush();
                 changeFxTexture();
             }
         });
@@ -182,7 +209,7 @@ public class SoundSettings implements Screen{
         backBtnImg.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new Fade(app, LoaderState.MAINMENU));
+                app.setScreen(new Fade(app, LoaderState.MAINMENU, menu));
             }
         });
 
@@ -196,13 +223,13 @@ public class SoundSettings implements Screen{
 
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(prefes.getBoolean("soundOn")){
-                    prefes.putBoolean("soundOn",false);
+                if(soundPreferences.getBoolean("soundOn")){
+                    soundPreferences.putBoolean("soundOn",false);
 
                 }else{
-                    prefes.putBoolean("soundOn",true);
+                    soundPreferences.putBoolean("soundOn",true);
                 }
-                prefes.flush();
+                soundPreferences.flush();
                 changeSoundTexture();
             }
         });
@@ -218,12 +245,12 @@ public class SoundSettings implements Screen{
 
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(prefes.getBoolean("fxOn")){
-                    prefes.putBoolean("fxOn",false);
+                if(soundPreferences.getBoolean("fxOn")){
+                    soundPreferences.putBoolean("fxOn",false);
                 }else{
-                    prefes.putBoolean("fxOn",true);
+                    soundPreferences.putBoolean("fxOn",true);
                 }
-                prefes.flush();
+                soundPreferences.flush();
                 changeFxTexture();
             }
         });
@@ -239,6 +266,10 @@ public class SoundSettings implements Screen{
     public void render(float delta) {
         cls();
         soundSettingsStage.draw();
+        if(soundPreferences.getBoolean("soundOn"))
+            bgMusic.play();
+        else
+            bgMusic.stop();
     }
 
     private void cls() {
@@ -271,12 +302,15 @@ public class SoundSettings implements Screen{
 
     @Override
     public void dispose() {
-        aManager.unload("Interfaces/SOUND/SOUNDMusicON.png");
-        aManager.unload("Interfaces/SOUND/SOUNDMusic.png");
-        aManager.unload("Interfaces/SOUND/SOUNDSoundON.png");
-        aManager.unload("Interfaces/SOUND/SOUNDSound.png");
-        aManager.unload("HARBOR/GoBackHARBOR0.png");
-        aManager.unload("Interfaces/SOUND/SOUNDBack.png");
-        aManager.unload("Interfaces/SOUND/SOUNDDecoration.png");
+        aManager.load("INTRO/INTROBackground.png", Texture.class);
+        aManager.load("HARBOR/GoBackHARBOR0.png", Texture.class);
+        aManager.load("MOUNTAINS/GoBackMOUNTAINS0.png", Texture.class); //Level2
+        //aManager.load(".png", Texture.class); //Level3
+        aManager.load("Interfaces/SOUND/SOUNDMusicON.png", Texture.class);
+        aManager.load("Interfaces/SOUND/SOUNDMusic.png", Texture.class);
+        aManager.load("Interfaces/SOUND/SOUNDSoundON.png", Texture.class);
+        aManager.load("Interfaces/SOUND/SOUNDSound.png", Texture.class);
+        aManager.load("Interfaces/SOUND/SOUNDBack.png", Texture.class);
+        aManager.load("Interfaces/SOUND/SOUNDDecoration.png", Texture.class);
     }
 }

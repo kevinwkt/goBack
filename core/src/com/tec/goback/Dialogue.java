@@ -31,7 +31,7 @@ public class Dialogue {
         sheetTexture = aManager.get("CONSTANT/CONSTDialogueBox.png");
     }
 
-    public void makeText(SpriteBatch batch, String msj){
+    public void makeText(SpriteBatch batch, String msj, int offset){
 
         GlyphLayout glyph = new GlyphLayout();
 
@@ -41,7 +41,7 @@ public class Dialogue {
         font.draw(batch ,glyph,HALFW-sheetTexture.getWidth()/2+185, sheetTexture.getHeight()-115);
     }
 
-    public void makeText(SpriteBatch batch, String msj, Sprite left){
+    public void makeText(SpriteBatch batch, String msj, Sprite left, int offset){
 
         GlyphLayout glyph = new GlyphLayout();
 
@@ -55,7 +55,7 @@ public class Dialogue {
         font.draw(batch ,glyph,HALFW-sheetTexture.getWidth()/2+185, sheetTexture.getHeight()-115);
     }
 
-    public void makeText(SpriteBatch batch, String msj, Sprite left, Sprite right, boolean rightTalks){
+    public void makeText(SpriteBatch batch, String msj, Sprite left, Sprite right, boolean rightTalks, int offset){
 
         GlyphLayout glyph = new GlyphLayout();
 
@@ -65,9 +65,9 @@ public class Dialogue {
         right.setPosition(0, WIDTH-right.getWidth());
 
         if(rightTalks){
-            left.setColor(0.5F, 0.5F, 0.5F, 0.6F);
+            left.setColor(1F, 1F, 1F, 0.6F);
         }else{
-            right.setColor(0.5F, 0.5F, 0.5F, 1.6F);
+            right.setColor(1F, 1F, 1F, 0.6F);
         }
         right.draw(batch);
         left.draw(batch);

@@ -21,6 +21,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import sun.applet.Main;
+
 /**
  * Created by gerry on 2/18/17.
  */
@@ -62,6 +64,8 @@ public class MainMenu implements Screen {
 
     Preferences soundPreferences = Gdx.app.getPreferences("My Preferences");
 
+    //Menu
+    private MainMenu menu = this;
 
     // Música
     private Music bgMusic;  // Sonidos largos
@@ -72,7 +76,6 @@ public class MainMenu implements Screen {
         this.aManager = app.getAssetManager();
     }
 
-    //Call other methods because FIS
     @Override
     public void show() {
         //    -----------------------  TO GET INTO LEVEL 0 TEMPORAL OMG
@@ -86,11 +89,8 @@ public class MainMenu implements Screen {
     }
 
     private void musicInit() {
-        if(soundPreferences.getBoolean("soundOn")){
-            bgMusic = aManager.get("MUSIC/GoBackMusicMainMenu.mp3");
-            bgMusic.setLooping(true);
-            bgMusic.play();
-        }
+        bgMusic = aManager.get("MUSIC/GoBackMusicMainMenu.mp3");
+        bgMusic.setLooping(true);
     }
 
     private void cameraInit() {
@@ -112,7 +112,6 @@ public class MainMenu implements Screen {
             case 2:
                 background = aManager.get("MOUNTAINS/GoBackMOUNTAINS0.png");
                 break;
-
         }
 
         aboutBtn = aManager.get("Interfaces/MENU/ABOUT.png");
@@ -123,7 +122,6 @@ public class MainMenu implements Screen {
     }
 
     private void objectInit() {
-
         //background hace Image
         Image backgroundImg = new Image(background);
         batch = new SpriteBatch();
@@ -143,10 +141,11 @@ public class MainMenu implements Screen {
         aboutBtnImg.setPosition(160, 10);
         mainMenuStage.addActor(aboutBtnImg);
 
+
         aboutBtnImg.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new Fade(app, LoaderState.ABOUT));
+                app.setScreen(new Fade(app, LoaderState.ABOUT, menu));
             }
         });
 
@@ -160,7 +159,7 @@ public class MainMenu implements Screen {
         soundBtnImg.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new Fade(app, LoaderState.SOUNDSETTINGS));
+                app.setScreen(new Fade(app, LoaderState.SOUNDSETTINGS, menu));
             }
         });
 
@@ -195,7 +194,8 @@ public class MainMenu implements Screen {
                 }
 
                 app.setScreen(new Fade(app, next));
-
+                bgMusic.stop();
+                menu.dispose();
             }
         });
 
@@ -206,12 +206,16 @@ public class MainMenu implements Screen {
         arcadeBtnImg.setPosition((HALFW-arcadeBtnImg.getWidth()/2)+190, HALFH-arcadeBtnImg.getHeight()/2-80);
         mainMenuStage.addActor(arcadeBtnImg);
 
-        arcadeBtnImg.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new Fade(app, LoaderState.ARCADE));
-            }
-        });
+        if(pref.getInteger("level")>1&&pref.getBoolean("boss")) {
+            arcadeBtnImg.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    app.setScreen(new Fade(app, LoaderState.ARCADE));
+                    bgMusic.stop();
+                    menu.dispose();
+                }
+            });
+        }
 
         //pass the Stage
         Gdx.input.setInputProcessor(mainMenuStage);
@@ -226,6 +230,10 @@ public class MainMenu implements Screen {
     public void render(float delta) {
         cls();
         mainMenuStage.draw();
+        if(soundPreferences.getBoolean("soundOn"))
+            bgMusic.play();
+        else
+            bgMusic.stop();
     }
 
     private void cls() {
@@ -235,7 +243,7 @@ public class MainMenu implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        view.update(width, height);
     }
 
     @Override
