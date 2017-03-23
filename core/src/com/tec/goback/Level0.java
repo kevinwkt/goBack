@@ -28,6 +28,8 @@ public class Level0 implements Screen {
 
     Preferences pref = Gdx.app.getPreferences("getLevel");
 
+
+
     private final App app;
     private AssetManager aManager;
     private GameState state = GameState.PLAYING;
@@ -79,6 +81,7 @@ public class Level0 implements Screen {
         cameraInit();
         texturesInit();
         objectInit();
+        Gdx.input.setInputProcessor(null);
     }
 
     private void cameraInit() {
