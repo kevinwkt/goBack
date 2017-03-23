@@ -1,8 +1,10 @@
 package com.tec.goback;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -26,6 +28,7 @@ public class About implements Screen {
     private final App app;
     private AssetManager aManager;
 
+    Preferences pref=Gdx.app.getPreferences("getLevel");
 
     //Screen sizes
     public static final float WIDTH = 1280;
@@ -48,10 +51,11 @@ public class About implements Screen {
 
     //Stage
     private Stage aboutScreenStage;
-
-    public About (App app) {
+    private MainMenu menu;
+    public About (App app, MainMenu menu) {
         this.app = app;
         this.aManager = app.getAssetManager();
+        this.menu = menu;
     }
 
     @Override
@@ -62,7 +66,19 @@ public class About implements Screen {
     }
 
     private void textureInit() {
-        background = aManager.get("HARBOR/GoBackHARBOR0.png");
+        switch(pref.getInteger("level")){
+            default:
+            case 0:
+                background = aManager.get("INTRO/INTROBackground.png");
+                break;
+            case 1:
+                background = aManager.get("HARBOR/GoBackHARBOR0.png");
+                break;
+            case 2:
+                background = aManager.get("MOUNTAINS/GoBackMOUNTAINS0.png");
+                break;
+
+        }
         castOverlay = aManager.get("Interfaces/ABOUT/ABOUTCast.png");
         backButton = aManager.get("Interfaces/ABOUT/ABOUTBack.png");
     }
@@ -89,10 +105,13 @@ public class About implements Screen {
         backImgBtn.setPosition(10, 10);
         aboutScreenStage.addActor(backImgBtn);
 
+        final About ab = this;
+
         backImgBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new Fade(app, LoaderState.MAINMENU));
+                app.setScreen(new Fade(app, LoaderState.MAINMENU, menu));
+                ab.dispose();
             }
         });
 
@@ -144,8 +163,12 @@ public class About implements Screen {
 
     @Override
     public void dispose() {
-        aManager.unload("HARBOR/GoBackHARBOR0.png");
-        aManager.unload("Interfaces/ABOUT/ABOUTCast.png");
-        aManager.unload("Interfaces/ABOUT/ABOUTBack.png");
+        aManager.load("INTRO/INTROBackground.png", Texture.class);
+        aManager.load("HARBOR/GoBackHARBOR0.png", Texture.class);
+        aManager.load("MOUNTAINS/GoBackMOUNTAINS0.png", Texture.class); //Level2
+        //aManager.load(".png", Texture.class); //Level3
+        aManager.load("Interfaces/ABOUT/ABOUTCast.png", Texture.class);
+        aManager.load("Interfaces/ABOUT/ABOUTBack.png", Texture.class);
+        aManager.load("MUSIC/GoBackMusicMainMenu.mp3", Music.class);
     }
 }
