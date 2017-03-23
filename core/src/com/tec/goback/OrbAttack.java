@@ -51,7 +51,6 @@ class OrbAttack extends Squirt {
     }
 
     private void fixturer(float density, float restitution) {
-
         //neumann preventive shit
         for (Fixture fix : body.getFixtureList()) {
             body.destroyFixture(fix);
@@ -87,9 +86,5 @@ class OrbAttack extends Squirt {
     public int getColor(){
         return color;
     }
-
-
-
-
 }
 

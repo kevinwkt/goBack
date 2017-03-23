@@ -16,7 +16,7 @@ import com.badlogic.gdx.physics.box2d.World;
  * Created by kevin on 3/20/2017.
  */
 
-class ArcadeLizard extends Squirt {
+class ArcadeLizard extends Enemy {
 
     private PolygonShape shape;
     private int rightLeft;
@@ -24,19 +24,8 @@ class ArcadeLizard extends Squirt {
     private Body body;
 
     public ArcadeLizard(World world,int fromWhere, Texture tx) {
-        this.sprite = new Sprite(tx);
+        super();
         this.rightLeft = type;
-
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(ArcadeValues.meterspelletOriginX, ArcadeValues.meterspelletOriginY);
-
-        body = world.createBody(bodyDef);
-        fixturer(0.1f, 0.7f);
-        body.setBullet(true);
-
-        body.setLinearVelocity(MathUtils.cosDeg(angle) * SPEED, MathUtils.sinDeg(angle) * SPEED);
-        body.setUserData(this);
     }
 
     private void fixturer(float density, float restitution) {

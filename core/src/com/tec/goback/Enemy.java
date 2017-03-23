@@ -32,7 +32,59 @@ public abstract class Enemy{
     protected static float hp;
     protected static float dmg;
     protected static int color;
-    protected static
+    protected static float SPEED;
+
+    private Body body;
+    private CircleShape shape;
+    private Sprite sprite;
+
+    public Enemy(World world, int type, float angle, Texture tx,float startX,float startY) {
+        this.sprite = new Sprite(tx);
+        this.color = type;
+
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(
+                ArcadeValues.pxToMeters(startX),
+                ArcadeValues.pxToMeters(startY)
+        );
+
+        body = world.createBody(bodyDef);
+        fixturer(0.1f, 0.7f);
+        body.setBullet(true);
+
+
+        body.setLinearVelocity(MathUtils.cos(angle) * SPEED,
+                MathUtils.sin(angle) * SPEED);
+        // body.setLinearVelocity(1,1);
+        body.setUserData(this);
+    }
+
+    public Enemy(World world, int type, int leftOrRight, Animation tx) {
+        this.sprite = new Sprite(tx);
+        this.color = type;
+
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(
+                ArcadeValues.pxToMeters(startX),
+                ArcadeValues.pxToMeters(startY)
+        );
+
+        body = world.createBody(bodyDef);
+        fixturer(0.1f, 0.7f);
+        body.setBullet(true);
+
+
+        body.setLinearVelocity(MathUtils.cos(angle) * SPEED,
+                MathUtils.sin(angle) * SPEED);
+        // body.setLinearVelocity(1,1);
+        body.setUserData(this);
+    }
+
+    public void draw(SpriteBatch batch) {
+        sprite.draw(batch);
+    }
 
     private float getDamage(){
         return dmg;
@@ -46,6 +98,14 @@ public abstract class Enemy{
         hp-=damage;
         if(hp<=0) return true;
         else return false;
+    }
+
+    public void draw(SpriteBatch batch) {
+        sprite.setPosition(
+                ArcadeValues.metersToPx(body.getPosition().x),
+                ArcadeValues.metersToPx(body.getPosition().y)
+        );
+        sprite.draw(batch);
     }
 }
 
