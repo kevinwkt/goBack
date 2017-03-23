@@ -205,15 +205,7 @@ public class MainMenu implements Screen {
 
         arcadeBtnImg.setPosition((HALFW-arcadeBtnImg.getWidth()/2)+190, HALFH-arcadeBtnImg.getHeight()/2-80);
         mainMenuStage.addActor(arcadeBtnImg);
-        arcadeBtnImg.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new Fade(app, LoaderState.ARCADE));
-                bgMusic.stop();
-                menu.dispose();
-            }
-        });
-        /*
+        
         if(pref.getInteger("level")>1&&pref.getBoolean("boss")) {
             arcadeBtnImg.addListener(new ClickListener() {
                 @Override
@@ -224,7 +216,7 @@ public class MainMenu implements Screen {
                 }
             });
         }
-        */
+
 
         //pass the Stage
         Gdx.input.setInputProcessor(mainMenuStage);
