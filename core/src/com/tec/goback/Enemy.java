@@ -33,6 +33,7 @@ public abstract class Enemy{
     protected static float dmg;
     protected static int color;
     protected static float SPEED;
+    protected static int leftright;
 
     private Body body;
     private CircleShape shape;
@@ -53,7 +54,6 @@ public abstract class Enemy{
         fixturer(0.1f, 0.7f);
         body.setBullet(true);
 
-
         body.setLinearVelocity(MathUtils.cos(angle) * SPEED,
                 MathUtils.sin(angle) * SPEED);
         // body.setLinearVelocity(1,1);
@@ -63,22 +63,19 @@ public abstract class Enemy{
     public Enemy(World world, int type, int leftOrRight, Animation tx) {
         this.sprite = new Sprite(tx);
         this.color = type;
+        this.leftright=leftOrRight;
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(
-                ArcadeValues.pxToMeters(startX),
-                ArcadeValues.pxToMeters(startY)
-        );
+        if(leftright==1) bodyDef.position.set(ArcadeValues.pxToMeters(1280+120), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
+        if(leftright==0) bodyDef.position.set(ArcadeValues.pxToMeters(-120), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
 
         body = world.createBody(bodyDef);
         fixturer(0.1f, 0.7f);
         body.setBullet(true);
 
+        body.setLinearVelocity(SPEED, 0);
 
-        body.setLinearVelocity(MathUtils.cos(angle) * SPEED,
-                MathUtils.sin(angle) * SPEED);
-        // body.setLinearVelocity(1,1);
         body.setUserData(this);
     }
 
