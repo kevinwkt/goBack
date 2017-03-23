@@ -14,7 +14,6 @@ public class Squirt
     protected Sprite sprite;    // Imagen
 
     public Squirt() {
-
     }
 
     public Squirt(Texture textura, float x, float y) {

@@ -34,9 +34,17 @@ public class Fade implements Screen {
     private Viewport view;
     private SpriteBatch batch;
 
+    private MainMenu menu;
+
     public Fade(App app, LoaderState loaderState) {
         this.app = app;
         this.loaderState = loaderState;
+    }
+
+    public Fade(App app, LoaderState loaderState, MainMenu menu) {
+        this.app = app;
+        this.loaderState = loaderState;
+        this.menu = menu;
     }
 
     @Override
@@ -73,28 +81,40 @@ public class Fade implements Screen {
     private void superLoad(){
             switch (loaderState) {
                 case ABOUT:
+                    manager.load("INTRO/INTROBackground.png", Texture.class);
                     manager.load("HARBOR/GoBackHARBOR0.png", Texture.class);
+                    manager.load("MOUNTAINS/GoBackMOUNTAINS0.png", Texture.class); //Level2
+                    //manager.load(".png", Texture.class); //Level3
                     manager.load("Interfaces/ABOUT/ABOUTCast.png", Texture.class);
                     manager.load("Interfaces/ABOUT/ABOUTBack.png", Texture.class);
+                    manager.load("MUSIC/GoBackMusicMainMenu.mp3", Music.class);
                     break;
                 case MAINMENU:
+                    manager.load("INTRO/INTROBackground.png", Texture.class);
                     manager.load("HARBOR/GoBackHARBOR0.png", Texture.class);
+                    manager.load("MOUNTAINS/GoBackMOUNTAINS0.png", Texture.class); //Level2
+                    //manager.load(".png", Texture.class); //Level3
                     manager.load("Interfaces/MENU/ABOUT.png", Texture.class); 
                     manager.load("Interfaces/MENU/ARCADE.png", Texture.class);
                     manager.load("Interfaces/MENU/SOUND.png", Texture.class);
                     manager.load("Interfaces/MENU/STORY.png", Texture.class);
                     manager.load("Interfaces/MENU/TITLE.png", Texture.class);
+                    manager.load("MUSIC/GoBackMusicMainMenu.mp3", Music.class);
                     break;
                 case SOUNDSETTINGS:
+                    manager.load("INTRO/INTROBackground.png", Texture.class);
+                    manager.load("HARBOR/GoBackHARBOR0.png", Texture.class);
+                    manager.load("MOUNTAINS/GoBackMOUNTAINS0.png", Texture.class); //Level2
+                    //manager.load(".png", Texture.class); //Level3
                     manager.load("Interfaces/SOUND/SOUNDMusicON.png", Texture.class);
                     manager.load("Interfaces/SOUND/SOUNDMusic.png", Texture.class);
                     manager.load("Interfaces/SOUND/SOUNDSoundON.png", Texture.class);
                     manager.load("Interfaces/SOUND/SOUNDSound.png", Texture.class);
-                    manager.load("HARBOR/GoBackHARBOR0.png", Texture.class);
                     manager.load("Interfaces/SOUND/SOUNDBack.png", Texture.class);
                     manager.load("Interfaces/SOUND/SOUNDDecoration.png", Texture.class);
                     break;
                 case LEVEL0:
+                    manager.load("MUSIC/GoBackMusicLevel0.mp3", Music.class);
                     manager.load("INTRO/INTROBackground.png", Texture.class);
                     manager.load("INTRO/INTROBoat.png", Texture.class);
                     manager.load("INTRO/INTROOar.png", Texture.class);
@@ -128,7 +148,15 @@ public class Fade implements Screen {
 
                     break;
                 case ARCADE:
-
+                    manager.load("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png", Texture.class);
+                    manager.load("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrbEyes.png", Texture.class);
+                    manager.load("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrb.png", Texture.class);
+                    manager.load("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrbEyes.png", Texture.class);
+                    manager.load("Interfaces/GAMEPLAY/ARCADE/ARCADERedOrb.png", Texture.class);
+                    manager.load("Interfaces/GAMEPLAY/ARCADE/ARCADERedOrbEyes.png", Texture.class);
+                    manager.load("PELLET/ATAQUEYellowPellet.png", Texture.class);
+                    manager.load("PELLET/ATAQUERedPellet.png", Texture.class);
+                    manager.load("PELLET/ATAQUEBluePellet.png", Texture.class);
                     break;
             }
     }
@@ -137,13 +165,17 @@ public class Fade implements Screen {
         if (manager.update()) { // Done loading?
             switch (loaderState) {
                 case ABOUT:
-                    app.setScreen(new About(app));
+                    app.setScreen(new About(app, menu));
                     break;
                 case MAINMENU:
-                    app.setScreen(new MainMenu(app));
+                    if(menu!=null) {
+                        app.setScreen(menu);
+                    }else {
+                        app.setScreen(new MainMenu(app));
+                    }
                     break;
                 case SOUNDSETTINGS:
-                    app.setScreen(new SoundSettings(app));
+                    app.setScreen(new SoundSettings(app, menu));
                     break;
                 case LEVEL0:
                     app.setScreen(new Level0(app));
@@ -167,7 +199,7 @@ public class Fade implements Screen {
 
                     break;
                 case ARCADE:
-
+                    app.setScreen(new Arcade(app));
                     break;
             }
         }

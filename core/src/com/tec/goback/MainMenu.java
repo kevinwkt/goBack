@@ -4,11 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -17,6 +20,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import sun.applet.Main;
 
 /**
  * Created by gerry on 2/18/17.
@@ -57,23 +62,35 @@ public class MainMenu implements Screen {
 
     private AssetManager aManager;
 
+    Preferences soundPreferences = Gdx.app.getPreferences("My Preferences");
+
+    //Menu
+    private MainMenu menu = this;
+
+    // Música
+    private Music bgMusic;  // Sonidos largos
+
     //Constructor recieves main App class (implements Game)
     public MainMenu(App app) {
         this.app = app;
         this.aManager = app.getAssetManager();
     }
 
-    //Call other methods because FIS
     @Override
     public void show() {
         //    -----------------------  TO GET INTO LEVEL 0 TEMPORAL OMG
         /*pref.putInteger("level",0);
         pref.flush();*/
 
-
         cameraInit();
         textureInit();
         objectInit();
+        musicInit();
+    }
+
+    private void musicInit() {
+        bgMusic = aManager.get("MUSIC/GoBackMusicMainMenu.mp3");
+        bgMusic.setLooping(true);
     }
 
     private void cameraInit() {
@@ -84,7 +101,19 @@ public class MainMenu implements Screen {
     }
 
     private void textureInit() {
-        background = aManager.get("HARBOR/GoBackHARBOR0.png");
+        switch(pref.getInteger("level")){
+            default:
+            case 0:
+                background = aManager.get("INTRO/INTROBackground.png");
+                break;
+            case 1:
+                background = aManager.get("HARBOR/GoBackHARBOR0.png");
+                break;
+            case 2:
+                background = aManager.get("MOUNTAINS/GoBackMOUNTAINS0.png");
+                break;
+        }
+
         aboutBtn = aManager.get("Interfaces/MENU/ABOUT.png");
         arcadeBtn = aManager.get("Interfaces/MENU/ARCADE.png");
         soundBtn = aManager.get("Interfaces/MENU/SOUND.png");
@@ -92,8 +121,7 @@ public class MainMenu implements Screen {
         title = aManager.get("Interfaces/MENU/TITLE.png");
     }
 
-    private void objectInit() { //MAYBE PROBABLY WORKING
-
+    private void objectInit() {
         //background hace Image
         Image backgroundImg = new Image(background);
         batch = new SpriteBatch();
@@ -113,10 +141,11 @@ public class MainMenu implements Screen {
         aboutBtnImg.setPosition(160, 10);
         mainMenuStage.addActor(aboutBtnImg);
 
+
         aboutBtnImg.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new Fade(app, LoaderState.ABOUT));
+                app.setScreen(new Fade(app, LoaderState.ABOUT, menu));
             }
         });
 
@@ -130,7 +159,7 @@ public class MainMenu implements Screen {
         soundBtnImg.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new Fade(app, LoaderState.SOUNDSETTINGS));
+                app.setScreen(new Fade(app, LoaderState.SOUNDSETTINGS, menu));
             }
         });
 
@@ -165,7 +194,8 @@ public class MainMenu implements Screen {
                 }
 
                 app.setScreen(new Fade(app, next));
-
+                bgMusic.stop();
+                menu.dispose();
             }
         });
 
@@ -175,13 +205,18 @@ public class MainMenu implements Screen {
 
         arcadeBtnImg.setPosition((HALFW-arcadeBtnImg.getWidth()/2)+190, HALFH-arcadeBtnImg.getHeight()/2-80);
         mainMenuStage.addActor(arcadeBtnImg);
+        
+        if(pref.getInteger("level")>1&&pref.getBoolean("boss")) {
+            arcadeBtnImg.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    app.setScreen(new Fade(app, LoaderState.ARCADE));
+                    bgMusic.stop();
+                    menu.dispose();
+                }
+            });
+        }
 
-        arcadeBtnImg.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new Arcade(app));
-            }
-        });
 
         //pass the Stage
         Gdx.input.setInputProcessor(mainMenuStage);
@@ -196,6 +231,10 @@ public class MainMenu implements Screen {
     public void render(float delta) {
         cls();
         mainMenuStage.draw();
+        if(soundPreferences.getBoolean("soundOn"))
+            bgMusic.play();
+        else
+            bgMusic.stop();
     }
 
     private void cls() {
@@ -205,7 +244,7 @@ public class MainMenu implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        view.update(width, height);
     }
 
     @Override
@@ -225,6 +264,15 @@ public class MainMenu implements Screen {
 
     @Override
     public void dispose() {
-
+        aManager.unload("INTRO/INTROBackground.png");
+        aManager.unload("HARBOR/GoBackHARBOR0.png");
+        aManager.unload("MOUNTAINS/GoBackMOUNTAINS0.png"); //Level2
+        //aManager.unload(".png"); //Level3
+        aManager.unload("Interfaces/MENU/ABOUT.png");
+        aManager.unload("Interfaces/MENU/ARCADE.png");
+        aManager.unload("Interfaces/MENU/SOUND.png");
+        aManager.unload("Interfaces/MENU/STORY.png");
+        aManager.unload("Interfaces/MENU/TITLE.png");
+        aManager.unload("MUSIC/GoBackMusicMainMenu.mp3");
     }
 }

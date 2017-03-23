@@ -201,7 +201,19 @@ public abstract class Frame implements Screen {
         }
 
         private void textureInit(){
-            background = aManager.get("HARBOR/GoBackHARBOR0.png");
+            switch(pref.getInteger("level")){
+                default:
+                case 0:
+                    background = aManager.get("INTRO/INTROBackground.png");
+                    break;
+                case 1:
+                    background = aManager.get("HARBOR/GoBackHARBOR0.png");
+                    break;
+                case 2:
+                    background = aManager.get("MOUNTAINS/GoBackMOUNTAINS0.png");
+                    break;
+
+            }
             bottom = aManager.get("Interfaces/PAUSE/PAUSEBottomDisplay.png");
             map = aManager.get("Interfaces/PAUSE/PAUSEMapList.png");
             quitBton = aManager.get("Interfaces/PAUSE/PAUSEQuit.png");
