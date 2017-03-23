@@ -15,7 +15,10 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
@@ -26,12 +29,12 @@ import java.util.ArrayList;
 /**
  * Created by gerry on 2/18/17.
  */
-public class Arcade extends Frame{
+class Arcade extends Frame{
 
     private World world;
-    private Array<Squirt> deadThings;
+    private Array<Body> deadThings;
     private ArrayList<Body> wall = new ArrayList<Body>();
-
+    private float fstep;
     //CURRENT COLOR ORB
     private orbColor currentColor = orbColor.YELLOW;
 
@@ -61,8 +64,8 @@ public class Arcade extends Frame{
     private Sprite orbb;
     private Sprite orbr;
 
-    public static final float WIDTH_MAP = 1280;
-    public static final float HEIGHT_MAP = 720;
+    private static final float WIDTH_MAP = 1280;
+    private static final float HEIGHT_MAP = 720;
 
     public Arcade(App app) {
         super(app, WIDTH_MAP,HEIGHT_MAP);
@@ -71,7 +74,6 @@ public class Arcade extends Frame{
     @Override
     public void show() {
         d = pref.getInteger("level");
-        Gdx.app.log(""+d, "el d");
         super.show();
         textureInit();
         worldInit();
@@ -88,7 +90,7 @@ public class Arcade extends Frame{
             case 1:
                 orbyellow= new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png");
                 eyesyellow= new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrbEyes.png");
-                orby=new Sprite(orbyellow);
+                orby = new Sprite(orbyellow);
 
                 pelletyellow = aManager.get("PELLET/ATAQUEYellowPellet.png");
                 break;
@@ -122,13 +124,52 @@ public class Arcade extends Frame{
     }
 
     private void worldInit(){
-        world = new World(new Vector2(0,0), true);
-        deadThings = new Array<Squirt>();
+        world = new World(Vector2.Zero, true);
+        fstep = 0f;
+        deadThings = new Array<Body>();
 
         world.setContactListener(new ContactListener() {
             @Override
             public void beginContact(Contact contact) {
                 //check who the fuck is colliding and update deadThings for deletion
+                Object ob1 = contact.getFixtureA().getBody().getUserData();
+                Object ob2 = contact.getFixtureB().getBody().getUserData();
+
+                //pellets die no matter who they collide with
+                if(ob1 instanceof OrbAttack){
+                    deadThings.add(contact.getFixtureA().getBody());
+                    //Gdx.app.log("array", deadThings.toString());
+                }
+
+                if(ob2 instanceof OrbAttack){
+                     deadThings.add(contact.getFixtureB().getBody());
+                    //Gdx.app.log("array", deadThings.toString());
+                }
+
+                    //If sophie got hit
+                if(ob1 instanceof ArcadeSophie || ob2 instanceof ArcadeSophie) {
+                    if (ob1 instanceof ArcadeSophie) {
+                        // if (((ArcadeSophie)ob1).getHurtDie(((Enemy)ob2).getColor(), ((Enemy)ob2).getDamage())
+                        //     state = GameState.PAUSED;
+                        deadThings.add(contact.getFixtureA().getBody());
+                    }
+                    if (ob2 instanceof ArcadeSophie) {
+                        //if (((ArcadeSophie)ob2).getHurtDie(((Enemy)ob1).getColor(), ((Enemy)ob2).getDamage())
+                        //    state = GameState.LOST;
+                        deadThings.add(contact.getFixtureB().getBody());
+                    }
+                }else{//If some bad guy got hit
+                   /*
+                    if (ob1 instanceof Enemy) {
+                        if (((Enemy)ob1).getHurtDie(((OrbAttack)ob2).getColor(), ((Enemy)ob2).getDamage())
+                            deadThings.add(contact.getFixtureA().getBody());
+                    }
+                    if (ob2 instanceof Enemy) {
+                        if (((ArcadeSophie)ob2).getHurtDie(((OrbAttack)ob1).getColor(), ((Enemy)ob2).getDamage())
+                            deadThings.add(contact.getFixtureB().getBody());
+                   */
+                }
+
             }
 
             @Override
@@ -149,31 +190,44 @@ public class Arcade extends Frame{
     }
 
     private void wallsInit(){
-
-        /*
-        BodyDef bdef = new BodyDef();
-        bdef.type = BodyDef.BodyType.StaticBody;
-
-        bdef.position.set(Constantes.toWorldSize(-120),0);
-        bordes.add(world.createBody(bdef));
-        crearFixtureBordes(bordes.get(0),100,Constantes.ALTO_PANTALLA);
-
-        bdef.position.set(Constantes.toWorldSize(Constantes.ANCHO_PANTALLA+120),0);
-        bordes.add(world.createBody(bdef));
-        crearFixtureBordes(bordes.get(1),100,Constantes.ALTO_PANTALLA);
-
-        bdef.position.set(Constantes.toWorldSize(-120),Constantes.toWorldSize(-120));
-        bordes.add(world.createBody(bdef));
-        crearFixtureBordes(bordes.get(2),Constantes.ANCHO_PANTALLA+200,100);
-        bdef.position.set(Constantes.toWorldSize(-120),
-                Constantes.toWorldSize(Constantes.ALTO_PANTALLA+120));
-        bordes.add(world.createBody(bdef));
-        crearFixtureBordes(bordes.get(3),Constantes.ANCHO_PANTALLA+200,100);
-        */
         BodyDef bd = new BodyDef();
-
         bd.type = BodyDef.BodyType.StaticBody;
-        //bd.position.set();
+        bd.position.set(ArcadeValues.pxToMeters(-120),0);
+
+        wall.add(world.createBody(bd)); //append to body array 
+        makeWallFixture(wall.get(0),100,HEIGHT_MAP);
+
+        bd.position.set(ArcadeValues.pxToMeters(WIDTH_MAP+120),0);
+
+        wall.add(world.createBody(bd)); //append to body array 
+        makeWallFixture(wall.get(1),100,HEIGHT_MAP);
+
+        bd.position.set(ArcadeValues.pxToMeters(-120),ArcadeValues.pxToMeters(-120));
+
+        wall.add(world.createBody(bd)); //append to body array 
+        makeWallFixture(wall.get(2),WIDTH_MAP+200,100);
+
+        bd.position.set(ArcadeValues.pxToMeters(-120), ArcadeValues.pxToMeters(HEIGHT_MAP+120));
+
+        wall.add(world.createBody(bd)); //append to body array 
+        makeWallFixture(wall.get(3),WIDTH_MAP+200,100);
+    }
+
+    private void makeWallFixture(Body b, float x, float y){
+        //neumann preventive shit 
+        for (Fixture f : b.getFixtureList()){
+            b.destroyFixture(f);
+        }
+
+        FixtureDef f = new FixtureDef();
+
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(ArcadeValues.pxToMeters(x),ArcadeValues.pxToMeters(y));
+        f.shape = shape;
+
+        f.filter.categoryBits = ArcadeValues.wallCat;
+        f.filter.maskBits = ArcadeValues.wallMask;
+        b.createFixture(f);
     }
 
     private void cls() {
@@ -186,20 +240,36 @@ public class Arcade extends Frame{
         batch.setProjectionMatrix(super.camera.combined);
         cls();
         batch.begin();
-
         drawShit();
-        world.step(1/60f, 8, 3);
 
+        //TODO DO THE PAUSE LOL
         // if (state==GameState.PAUSED) {
-        //     //Gdx.input.setInputProcessor(pauseStage);
-        //     pauseStage.draw();
         // }
+        stepper(delta);
+
 
         batch.end();
     }
+    private void stepper(float delta){
+        //much steps
+        fstep += delta;
+        while(fstep > 1/120f){
+            world.step(1/120F, 8, 3);
+            fstep -= 1/120f;
+        }
+
+        //clean dead thinfs
+        for(Body b: deadThings){
+            for(Fixture f: b.getFixtureList()){
+                b.destroyFixture(f);
+            }
+            world.destroyBody(b);
+        }
+        deadThings.clear();
+
+    }
     private void drawShit(){
-        batch.draw(background,0,0);
-        drawOrbes();
+        batch.draw(background,-2560,0);
         Array<Body> squirts = new Array<Body>();
         world.getBodies(squirts);
         Object obj;
@@ -210,10 +280,14 @@ public class Arcade extends Frame{
             }else if(obj instanceof ArcadeSophie){
                 ((ArcadeSophie)obj).draw(batch);
             }
+            //TODO DRAW ALL OF THE REMAINING ENEMIES LIKE ABOVE
         }
+        drawOrbes();
     }
 
     private void drawOrbes(){
+        //coords are temporary
+        //TODO good coords
         switch (d){
             case 1:
                 orby.setPosition(ArcadeValues.pelletOriginX-135,ArcadeValues.pelletOriginY-125);
@@ -306,8 +380,9 @@ public class Arcade extends Frame{
             Gdx.app.log("x: ", screenX + " ");
             Gdx.app.log("y: ", screenY + " ");
             Gdx.app.log("color: ", currentColor +" ");
-          
-            if (/*ON THE BUTTON TO CHANGE COLORS*/!true){
+            
+            //TODO CHECK FOR BUTTON
+            if (!true){//not true temporary
                 switch (d) {
                     case 1:
                         break;
@@ -336,14 +411,11 @@ public class Arcade extends Frame{
                         break;
                 }
             }
-            else {//if we're not switching
-
-
+            else {//if we're not switching orbes
                 float angle = MathUtils.atan2(
                         v.y - ArcadeValues.pelletOriginY,
                         v.x - ArcadeValues.pelletOriginX
                 );
-
                 switch(currentColor){
                     case YELLOW:
                         new OrbAttack(world, 1, angle, pelletyellow);

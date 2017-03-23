@@ -5,10 +5,10 @@ package com.tec.goback;
  */
 
 class ArcadeValues {
-    static final float pelletOriginX = 600;
-    static final float pelletOriginY = 100;
-    static final float meterspelletOriginX = 6f;
-    static final float meterspelletOriginY = 1f;
+    static final float pelletOriginX = 640;
+    static final float pelletOriginY = 226;
+    static final float meterspelletOriginX = pelletOriginX/100;
+    static final float meterspelletOriginY = pelletOriginY/100;
 
     //lizard settings
     static final float rightLizardOriginX=0;

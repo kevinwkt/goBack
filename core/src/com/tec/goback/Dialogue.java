@@ -31,38 +31,38 @@ public class Dialogue {
         sheetTexture = aManager.get("CONSTANT/CONSTDialogueBox.png");
     }
 
-    public void makeText(SpriteBatch batch, String msj, int offset){
+    public void makeText(SpriteBatch batch, String msj, float offset){
 
         GlyphLayout glyph = new GlyphLayout();
 
-        batch.draw(sheetTexture, HALFW-sheetTexture.getWidth()/2, 0);
+        batch.draw(sheetTexture, HALFW-sheetTexture.getWidth()/2 + offset, 0);
 
         glyph.setText(font, msj, Color.BLACK, 710.0F, 30, true);
-        font.draw(batch ,glyph,HALFW-sheetTexture.getWidth()/2+185, sheetTexture.getHeight()-115);
+        font.draw(batch ,glyph,HALFW-sheetTexture.getWidth()/2+185 + offset, sheetTexture.getHeight()-115);
     }
 
-    public void makeText(SpriteBatch batch, String msj, Sprite left, int offset){
+    public void makeText(SpriteBatch batch, String msj, Sprite left, float offset){
 
         GlyphLayout glyph = new GlyphLayout();
 
 
 
-        left.setPosition(0,0);
+        left.setPosition(0,0); //corregir offset
         left.draw(batch);
-        batch.draw(sheetTexture, HALFW-sheetTexture.getWidth()/2, 0);
+        batch.draw(sheetTexture, HALFW-sheetTexture.getWidth()/2 + offset, 0);
 
         glyph.setText(font, msj, Color.BLACK, 710.0F, 30, true);
-        font.draw(batch ,glyph,HALFW-sheetTexture.getWidth()/2+185, sheetTexture.getHeight()-115);
+        font.draw(batch ,glyph,HALFW-sheetTexture.getWidth()/2+185 + offset, sheetTexture.getHeight()-115);
     }
 
-    public void makeText(SpriteBatch batch, String msj, Sprite left, Sprite right, boolean rightTalks, int offset){
+    public void makeText(SpriteBatch batch, String msj, Sprite left, Sprite right, boolean rightTalks, float offset){
 
         GlyphLayout glyph = new GlyphLayout();
 
 
 
-        left.setPosition(0,0);
-        right.setPosition(0, WIDTH-right.getWidth());
+        left.setPosition(0 ,0); // corregir offset
+        right.setPosition(0 , WIDTH-right.getWidth()); // corregir offset
 
         if(rightTalks){
             left.setColor(1F, 1F, 1F, 0.6F);
@@ -72,10 +72,10 @@ public class Dialogue {
         right.draw(batch);
         left.draw(batch);
 
-        batch.draw(sheetTexture, HALFW-sheetTexture.getWidth()/2, 0);
+        batch.draw(sheetTexture, HALFW-sheetTexture.getWidth()/2 + offset, 0);
 
         glyph.setText(font, msj, Color.BLACK, 710.0F, 30, true);
-        font.draw(batch ,glyph,HALFW-sheetTexture.getWidth()/2+185, sheetTexture.getHeight()-115);
+        font.draw(batch ,glyph,HALFW-sheetTexture.getWidth()/2+185 + offset, sheetTexture.getHeight()-115);
     }
 
 }
