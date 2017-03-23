@@ -14,19 +14,23 @@ import com.badlogic.gdx.physics.box2d.World;
 /**
  * Created by gerry on 3/22/17.
  */
-public class SophieArcade {
+public class ArcadeSophie {
     private Body body;
     private PolygonShape shape;
     private Sprite sprite;
+    private float life;
+    private int color = 1;
 
-    public SophieArcade(World world, Texture tx){
+    public ArcadeSophie(World world, Texture tx){
         this.sprite = new Sprite(tx);
-        sprite.setCenter(ArcadeValues.pelletOriginX, ArcadeValues.pelletOriginY);
+        sprite.setCenter(ArcadeValues.pelletOriginX-100, ArcadeValues.pelletOriginY);
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(ArcadeValues.meterspelletOriginX, ArcadeValues.meterspelletOriginY); // no serían metros?
-
+        bodyDef.position.set(
+                ArcadeValues.meterspelletOriginX-1,
+                ArcadeValues.meterspelletOriginY+1.05f
+        );
         body = world.createBody(bodyDef);
         fixturer(0.1f, 0.7f);
         body.setLinearVelocity(0f, 0f);
@@ -43,8 +47,8 @@ public class SophieArcade {
         //shape of girl
         shape = new PolygonShape();
         shape.setAsBox(
-                ArcadeValues.pxToMeters(sprite.getHeight()),
-                ArcadeValues.pxToMeters(sprite.getWidth())
+                ArcadeValues.pxToMeters(sprite.getHeight())-0.1f,
+                ArcadeValues.pxToMeters(sprite.getWidth())-0.1f
         );
 
         FixtureDef fixtureDef = new FixtureDef();
@@ -54,13 +58,25 @@ public class SophieArcade {
         fixtureDef.friction = 0;
 
         fixtureDef.filter.categoryBits = ArcadeValues.sophieCat; //its category
-        fixtureDef.filter.maskBits = ArcadeValues.sophieCat; //or of its category with colliding categories
+        fixtureDef.filter.maskBits = ArcadeValues.sophieMask; //or of its category with colliding categories
 
         body.createFixture(fixtureDef);
     }
 
+    public void setColor(int color){
+        this.color = color;
+    }
+
+    public boolean getHurtDie(int type, float damage){
+        if(color == type){
+            life -= damage;
+        }else{
+            life -= damage * 2;
+        }
+        return life <= 0.0f ? true : false;
+    }
+
     public void draw(SpriteBatch batch) {
-        body.setLinearVelocity(0f, 0f);
 
         sprite.setCenter(
                 ArcadeValues.metersToPx(body.getPosition().x),
