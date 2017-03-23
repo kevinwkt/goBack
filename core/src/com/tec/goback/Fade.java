@@ -170,10 +170,8 @@ public class Fade implements Screen {
                 case MAINMENU:
                     if(menu!=null) {
                         app.setScreen(menu);
-                        Gdx.app.log("Regresa ", "main");
                     }else {
                         app.setScreen(new MainMenu(app));
-                        Gdx.app.log("Nuevo", "main");
                     }
                     break;
                 case SOUNDSETTINGS:
