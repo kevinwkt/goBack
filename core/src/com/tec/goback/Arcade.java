@@ -36,8 +36,9 @@ class Arcade extends Frame{
     private ArrayList<Body> wall = new ArrayList<Body>();
     private float fstep;
 
-    private float frequency = ArcadeValues.initalFrequency;
-    private float factor = ArcadeValues.initialFactor;
+
+    private float betweenSpawns = (1f/60f)/ArcadeValues.initalFrequency;
+    private float factor = 1f/ArcadeValues.initialFactor;
     private float elapsed = 0;
     //CURRENT COLOR ORB
     private orbColor currentColor = orbColor.YELLOW;
@@ -259,8 +260,16 @@ class Arcade extends Frame{
     }
 
     private void spawnMonsters(float delta){
+        elapsed += delta;
+        if(elapsed > betweenSpawns){
+            spawnSomething();
+            elapsed = 0;
+            betweenSpawns *= factor;
+        }
+    }
 
-        Gdx.app.log("delta", ""+delta);
+    private void spawnSomething(){
+
     }
 
     private void stepper(float delta){
