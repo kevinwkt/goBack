@@ -115,6 +115,10 @@ public class Sophie extends Squirt
                 }
                 batch.draw(region,sprite.getX(),sprite.getY());
                 break;
+            case SLEEPING:
+                region = waking.getKeyFrame(0);
+                batch.draw(region,sprite.getX(),sprite.getY());
+                break;
             case CREATING:
             case STILL_LEFT:
             case STILL_RIGHT:
@@ -241,6 +245,7 @@ public class Sophie extends Squirt
         HIT,
         MOVE_LEFT,
         MOVE_RIGHT,
-        DYING
+        DYING,
+        SLEEPING
     }
 }
