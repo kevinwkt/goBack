@@ -1,33 +1,22 @@
 package com.tec.goback;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
  * Created by sergiohernandezjr on 18/03/17.
  * Con ayuda de DON PABLO
  */
-public class Level1 extends Frame implements Screen {
+public class Level1 extends Frame {
     private App app;
 
     private Sophie sophie;
@@ -36,6 +25,9 @@ public class Level1 extends Frame implements Screen {
     // orb
     private Sprite yellowOrb;
     private boolean orbEncontrado = false;
+    private float orbXPosition = 1350;
+    private float orbYPosition = 150;
+    private OrbMovement currentOrbState = OrbMovement.GOING_DOWN;
 
     // Música
     private Music bgMusic;
@@ -50,6 +42,9 @@ public class Level1 extends Frame implements Screen {
 
     //for dialogue
     private Dialogue dialogue;
+    private boolean dialogueOn = false;
+    private float dialogueTime = 0;
+    private int dialogueSprite = 1;
 
     private Texture oldmanEyesClosed;
     private Texture oldmanStand;
@@ -71,7 +66,7 @@ public class Level1 extends Frame implements Screen {
     private Sprite sophieNormalSpr;
     private Sprite sophieSurprisedSpr;
 
-    public static final float LEFT_LIMIT = 816;
+    public static final float LEFT_LIMIT = 980;
 
     private final float SOPHIE_START_X=1850;
     private final float SOPHIE_START_Y=220;
@@ -90,7 +85,7 @@ public class Level1 extends Frame implements Screen {
         objectInit();
 
         textureInit();
-        sophie.setMovementState(Sophie.MovementState.WAKING);
+        sophie.setMovementState(Sophie.MovementState.SLEEPING);
         sophie.sprite.setPosition(SOPHIE_START_X, SOPHIE_START_Y);
 
         Gdx.input.setCatchBackKey(true);
@@ -100,6 +95,8 @@ public class Level1 extends Frame implements Screen {
     private void objectInit() {
         batch = new SpriteBatch();
         yellowOrb = new Sprite((Texture)aManager.get("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTYellowOrb.png"));
+        yellowOrb.setPosition(orbXPosition,orbYPosition);
+        dialogue = new Dialogue(aManager);
     }
 
     @Override
@@ -109,8 +106,9 @@ public class Level1 extends Frame implements Screen {
         batch.begin();
 
 
-
         batch.draw(background,0,0);
+        sophie.draw(batch);
+
 
         batch.draw(pauseButton,camera.position.x+HALFW-pauseButton.getWidth(),camera.position.y-HALFH);
         sophie.update();
@@ -123,11 +121,10 @@ public class Level1 extends Frame implements Screen {
         //pauseSprite.draw(batch);
 
         
-        /*dialogue.makeText(batch, "He’s taking me back…. He’s taking me back….. He surely is taking me back You! It’s been a long long time. The boat will be coming back soon,  I hope what I have is enough. Will you be going back, too?", oldmanStandSpr, sophieNormalSpr, false);
+        /*dialogue.makeText(batch, "He’s taking me back…. He’s taking me back….. He surely is taking me back You! It’s been a long long time. The boat will be coming back soon,  I hope what I have is enough. Will you be going back, too?", oldmanStandSpr, sophieNormalSpr, true,0);
         dialogue.makeText(batch, "I don’t know… Where am I…?", oldmanStandSpr, sophieNormalSpr, true);
         dialogue.makeText(batch, "You sweet girl, it really is a shame. I’ve done some terrible things, but I guess I can help somebody for a change. Take this, it will help you on your journey.", oldmanStandSpr, sophieNormalSpr, false);
         dialogue.makeText(batch, "You need to pay to ride the boat, to go back. \n I used one too, but I’m going back and they can’t come on board.", oldmanNodSpr, sophieNormalSpr, false); */
-
 
         if (state==GameState.PAUSED) {
             pauseStage.draw();
@@ -135,29 +132,91 @@ public class Level1 extends Frame implements Screen {
         }else if(state==GameState.PLAYING){
             Gdx.input.setInputProcessor(new Input());
         }
+        moveOrb(delta);
+        checkOrbCollision(delta);
+        ckeckOldManCollision(delta);
 
 
+        updateCamera();
+
+        batch.end();
+
+    }
+
+    private void ckeckOldManCollision(float delta) {
+
+        if(sophie.sprite.getBoundingRectangle().contains(oldmanEyesOpenedSpr.getX()+(sophie.sprite.getWidth()/2 + 7), oldmanEyesOpenedSpr.getY()) && dialogueSprite <= 4){
+            dialogueTime += delta;
+            dialogueOn = true;
+            switch (dialogueSprite){
+                case 1:
+                    dialogue.makeText(batch, "He’s taking me back…. He’s taking me back….. He surely is taking me back You! It’s been a long long time. The boat will be coming back soon,  I hope what I have is enough. Will you be going back, too?", oldmanStandSpr, sophieNormalSpr, true, camera.position.x/2-oldmanEyesOpenedSpr.getWidth());
+                    break;
+                case 2:
+                    dialogue.makeText(batch, "I don’t know… Where am I…?", oldmanStandSpr, sophieNormalSpr, true, camera.position.x/2-oldmanEyesOpenedSpr.getWidth());
+                    break;
+                case 3:
+                    dialogue.makeText(batch, "You sweet girl, it really is a shame. I’ve done some terrible things, but I guess I can help somebody for a change. Take this, it will help you on your journey.", oldmanStandSpr, sophieNormalSpr, false,camera.position.x/2-oldmanEyesOpenedSpr.getWidth());
+                    break;
+                case 4:
+                    dialogue.makeText(batch, "You need to pay to ride the boat, to go back. \n I used one too, but I’m going back and they can’t come on board.", oldmanNodSpr, sophieNormalSpr, false,camera.position.x/2-oldmanEyesOpenedSpr.getWidth());
+                    break;
+                default:
+                    break;
+            }
+
+            if(dialogueTime > 2.5){
+                dialogueSprite += 1;
+                dialogueTime = 0;
+                if(dialogueSprite >= 4){
+                    dialogueOn = false;
+                }
+
+            }
+        }
+
+    }
+
+    private void checkOrbCollision(float delta) {
         if(!orbEncontrado){
-            yellowOrb.setPosition(1350,220);
-            if(yellowOrb.getBoundingRectangle().contains(sophie.sprite.getX(),sophie.sprite.getY())){
+
+            if(yellowOrb.getBoundingRectangle().contains(sophie.sprite.getX()+yellowOrb.getBoundingRectangle().getWidth()/2,sophie.sprite.getY())){
                 orbEncontrado = true;
+                sophie.setMovementState(Sophie.MovementState.WAKING);
             }
         }else{
 
             if(sophie.getMovementState()==Sophie.MovementState.STILL_LEFT||
                     sophie.getMovementState()==Sophie.MovementState.MOVE_LEFT)
-                yellowOrb.setPosition(yellowOrb.getWidth()+sophie.sprite.getX(),sophie.sprite.getY());
+                yellowOrb.setPosition(yellowOrb.getWidth()+sophie.sprite.getX(),orbYPosition);
             else
-                yellowOrb.setPosition(sophie.sprite.getX()-yellowOrb.getWidth(),sophie.sprite.getY());
+                yellowOrb.setPosition(sophie.sprite.getX()-yellowOrb.getWidth(),orbYPosition);
             oldmanEyesOpenedSpr.draw(batch);
-            oldmanEyesOpenedSpr.setPosition(850,220);
+            oldmanEyesOpenedSpr.setPosition(900,220);
 
         }
-        sophie.draw(batch);
-        updateCamera();
+    }
 
-        batch.end();
+    private void moveOrb(float delta) {
 
+        if(orbYPosition >= 155){ // 155
+            currentOrbState = OrbMovement.GOING_DOWN;
+        }else if(orbYPosition <= 145){ //145
+            currentOrbState = OrbMovement.GOING_UP;
+        }
+
+        if(!orbEncontrado){
+            orbXPosition += delta * 100;
+
+        }
+
+        if(currentOrbState == OrbMovement.GOING_UP){
+            orbYPosition += delta*30;
+        }else if(currentOrbState == OrbMovement.GOING_DOWN){
+            orbYPosition -= delta*30;
+        }
+
+        yellowOrb.setPosition(orbXPosition,orbYPosition);
     }
 
     @Override
@@ -231,7 +290,10 @@ public class Level1 extends Frame implements Screen {
         //Background
         background = new Texture("HARBOR/GoBackHARBORPanoramic.png");
     }
-
+    private enum OrbMovement{
+        GOING_UP,
+        GOING_DOWN
+    }
     private class Input implements InputProcessor {
         private Vector3 v = new Vector3();
         @Override
@@ -255,17 +317,19 @@ public class Level1 extends Frame implements Screen {
             camera.unproject(v);
 
             if(sophie.getMovementState()==Sophie.MovementState.STILL_LEFT||sophie.getMovementState()==Sophie.MovementState.STILL_RIGHT) {
+
                 if(sophie.sprite.getX() - v.x < -522 && v.y < 135){
                     state = GameState.PAUSED;
-
                 }else{
-                    if (v.x >= camera.position.x) {
-                        sophie.setMovementState(Sophie.MovementState.MOVE_RIGHT);
-                    } else {
-                        sophie.setMovementState(Sophie.MovementState.MOVE_LEFT);
+                    if(!dialogueOn){
+                        if (v.x >= camera.position.x) {
+                            sophie.setMovementState(Sophie.MovementState.MOVE_RIGHT);
+                        } else {
+                            sophie.setMovementState(Sophie.MovementState.MOVE_LEFT);
+                        }
                     }
-                }
 
+                }
             }
             return true;
         }
@@ -274,7 +338,7 @@ public class Level1 extends Frame implements Screen {
         public boolean touchUp(int screenX, int screenY, int pointer, int button) {
             if(sophie.getMovementState()==Sophie.MovementState.MOVE_LEFT)
                 sophie.setMovementState(Sophie.MovementState.STILL_LEFT);
-            else
+            else if(sophie.getMovementState() == Sophie.MovementState.MOVE_RIGHT)
                 sophie.setMovementState(Sophie.MovementState.STILL_RIGHT);
             return true;
         }
