@@ -4,11 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -57,6 +60,12 @@ public class MainMenu implements Screen {
 
     private AssetManager aManager;
 
+    Preferences soundPreferences = Gdx.app.getPreferences("My Preferences");
+
+
+    // Música
+    private Music bgMusic;  // Sonidos largos
+
     //Constructor recieves main App class (implements Game)
     public MainMenu(App app) {
         this.app = app;
@@ -70,10 +79,18 @@ public class MainMenu implements Screen {
         /*pref.putInteger("level",0);
         pref.flush();*/
 
-
         cameraInit();
         textureInit();
         objectInit();
+        musicInit();
+    }
+
+    private void musicInit() {
+        if(soundPreferences.getBoolean("soundOn")){
+            bgMusic = aManager.get("MUSIC/GoBackMusicMainMenu.mp3");
+            bgMusic.setLooping(true);
+            bgMusic.play();
+        }
     }
 
     private void cameraInit() {
@@ -84,7 +101,20 @@ public class MainMenu implements Screen {
     }
 
     private void textureInit() {
-        background = aManager.get("HARBOR/GoBackHARBOR0.png");
+        switch(pref.getInteger("level")){
+            default:
+            case 0:
+                background = aManager.get("INTRO/INTROBackground.png");
+                break;
+            case 1:
+                background = aManager.get("HARBOR/GoBackHARBOR0.png");
+                break;
+            case 2:
+                background = aManager.get("MOUNTAINS/GoBackMOUNTAINS0.png");
+                break;
+
+        }
+
         aboutBtn = aManager.get("Interfaces/MENU/ABOUT.png");
         arcadeBtn = aManager.get("Interfaces/MENU/ARCADE.png");
         soundBtn = aManager.get("Interfaces/MENU/SOUND.png");
@@ -92,7 +122,7 @@ public class MainMenu implements Screen {
         title = aManager.get("Interfaces/MENU/TITLE.png");
     }
 
-    private void objectInit() { //MAYBE PROBABLY WORKING
+    private void objectInit() {
 
         //background hace Image
         Image backgroundImg = new Image(background);
@@ -179,7 +209,7 @@ public class MainMenu implements Screen {
         arcadeBtnImg.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                app.setScreen(new Arcade(app));
+                app.setScreen(new Fade(app, LoaderState.ARCADE));
             }
         });
 
@@ -225,6 +255,15 @@ public class MainMenu implements Screen {
 
     @Override
     public void dispose() {
-
+        aManager.unload("INTRO/INTROBackground.png");
+        aManager.unload("HARBOR/GoBackHARBOR0.png");
+        aManager.unload("MOUNTAINS/GoBackMOUNTAINS0.png"); //Level2
+        //aManager.unload(".png"); //Level3
+        aManager.unload("Interfaces/MENU/ABOUT.png");
+        aManager.unload("Interfaces/MENU/ARCADE.png");
+        aManager.unload("Interfaces/MENU/SOUND.png");
+        aManager.unload("Interfaces/MENU/STORY.png");
+        aManager.unload("Interfaces/MENU/TITLE.png");
+        aManager.unload("MUSIC/GoBackMusicMainMenu.mp3");
     }
 }

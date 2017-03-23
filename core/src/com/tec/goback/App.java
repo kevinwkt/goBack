@@ -31,6 +31,7 @@ public class App extends Game {
 		aManager.load("Interfaces/SOUND/SOUNDSoundON.png", Texture.class);
 		aManager.load("Interfaces/SOUND/SOUNDSound.png", Texture.class);
 		aManager.load("CONSTANT/CONSTDialogueBox.png", Texture.class);
+		aManager.load("Interfaces/GAMEPLAY/ARCADE/ARCADESophie.png", Texture.class);
 	}
 
     public AssetManager getAssetManager() {
