@@ -162,7 +162,7 @@ public class Sophie extends Squirt
                 int d= pref.getInteger("level");
                 switch (d){
                     case 1:
-                        if (newX <= Level1.WIDTH_MAP - sprite.getWidth()){
+                        if (newX <= Level1.RIGHT_LIMIT){
                             sprite.setX(newX);
                         }
                         break;
