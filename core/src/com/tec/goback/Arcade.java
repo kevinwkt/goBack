@@ -159,7 +159,7 @@ class Arcade extends Frame{
         spike=new Texture("MINIONS/SPIKE/MINIONYellowSpike00.png");
 
         TextureRegion texturaCompleta = new TextureRegion(lizard);
-        TextureRegion[][] texturaPersonaje = texturaCompleta.split(241,77);
+        TextureRegion[][] texturaPersonaje = texturaCompleta.split(227,65);
         lizardAnimation = new Animation(0.18f, texturaPersonaje[0][0], texturaPersonaje[0][1]);
         lizardAnimation.setPlayMode(Animation.PlayMode.LOOP);
 

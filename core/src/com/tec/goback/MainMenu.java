@@ -79,8 +79,8 @@ public class MainMenu implements Screen {
     @Override
     public void show() {
         //    -----------------------  TO GET INTO LEVEL 0 TEMPORAL OMG
-        /*pref.putInteger("level",0);
-        pref.flush();*/
+        pref.putInteger("level",1);
+        pref.flush();
 
         cameraInit();
         textureInit();
