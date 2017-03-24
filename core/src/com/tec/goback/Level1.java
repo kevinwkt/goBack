@@ -113,8 +113,9 @@ public class Level1 extends Frame {
     }
 
     private void musicInit() {
+        bgMusic = aManager.get("MUSIC/GoBackMusicLevel1.mp3");
         if(soundPreferences.getBoolean("soundOn")) {
-            bgMusic = aManager.get("MUSIC/GoBackMusicLevel1.mp3");
+
             bgMusic.setLooping(true);
             bgMusic.play();
         }
@@ -168,6 +169,8 @@ public class Level1 extends Frame {
         if(soundPreferences.getBoolean("soundOn")){
             if(bgMusic!= null){
                 bgMusic.play();
+            }else{
+
             }
 
             laMegaConcha = 0;
