@@ -23,6 +23,9 @@ public class Level1 extends Frame {
     private Texture sophieTexture;
 
     private Boolean bossMode = false;
+    Preferences pref = Gdx.app.getPreferences("getLevel");
+    Preferences soundPreferences = Gdx.app.getPreferences("My Preferences");
+
 
     // lizard
     private Sprite lizardSpr;
@@ -42,6 +45,7 @@ public class Level1 extends Frame {
     private float orbXPosition = 1350;
     private float orbYPosition = 150;
     private OrbMovement currentOrbState = OrbMovement.GOING_DOWN;
+    private int laMegaConcha = 0;
 
     //BG
     Texture background;
@@ -87,8 +91,7 @@ public class Level1 extends Frame {
 
     private final float DISTANCE_ORB_SOPHIE = 40;
 
-    Preferences pref = Gdx.app.getPreferences("getLevel");
-    Preferences soundPreferences = Gdx.app.getPreferences("My Preferences");
+
 
     public Level1(App app) {
         super(app, WIDTH_MAP,HEIGHT_MAP);
@@ -155,15 +158,31 @@ public class Level1 extends Frame {
         yellowOrb.setPosition(orbXPosition,orbYPosition);
         dialogue = new Dialogue(aManager);
         oldmanEyesOpenedSpr.setPosition(900,220);
+
     }
 
     @Override
     public void render(float delta) {
         cls();
-        /*if(soundPreferences.getBoolean("soundOn"))
-            bgMusic.play();
-        /*else
-            bgMusic.pause();*/
+
+        if(soundPreferences.getBoolean("soundOn")){
+            if(bgMusic!= null){
+                bgMusic.play();
+            }
+
+            laMegaConcha = 0;
+        }else{
+            if(laMegaConcha == 0){
+                Gdx.app.log("",bgMusic+"");
+                if(bgMusic!= null){
+                    bgMusic.stop();
+                }
+
+
+            }
+            laMegaConcha++;
+        }
+
 
         batch.setProjectionMatrix(super.camera.combined);
         batch.begin();
@@ -396,6 +415,8 @@ public class Level1 extends Frame {
         GOING_UP,
         GOING_DOWN
     }
+
+
     private class Input implements InputProcessor {
         private Vector3 v = new Vector3();
         @Override
