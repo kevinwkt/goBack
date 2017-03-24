@@ -43,10 +43,6 @@ public class Level1 extends Frame {
     private float orbYPosition = 150;
     private OrbMovement currentOrbState = OrbMovement.GOING_DOWN;
 
-    // Música
-    private Music bgMusic;
-    private Sound fx;
-
     //BG
     Texture background;
 

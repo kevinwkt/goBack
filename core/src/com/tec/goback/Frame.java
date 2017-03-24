@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -68,6 +69,9 @@ public abstract class Frame implements Screen {
 
     // pause button
     protected Sprite pauseSprite;
+
+    //Music
+    protected Music bgMusic;
 
     public Frame(App app, float WIDTH_MAP, float HEIGHT_MAP) {
         this.app = app;
@@ -299,9 +303,11 @@ public abstract class Frame implements Screen {
                 public void clicked(InputEvent event, float x, float y) {
                     if(prefes.getBoolean("soundOn")){
                         prefes.putBoolean("soundOn",false);
+                        bgMusic.stop();
 
                     }else{
                         prefes.putBoolean("soundOn",true);
+                        bgMusic.play();
                     }
                     prefes.flush();
                     changeSoundTexture();

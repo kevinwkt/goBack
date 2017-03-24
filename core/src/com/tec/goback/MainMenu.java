@@ -68,7 +68,7 @@ public class MainMenu implements Screen {
     private MainMenu menu = this;
 
     // Música
-    private Music bgMusic;  // Sonidos largos
+    private Music bgMusic;
 
     //Constructor recieves main App class (implements Game)
     public MainMenu(App app) {
@@ -94,6 +94,8 @@ public class MainMenu implements Screen {
     private void musicInit() {
         bgMusic = aManager.get("MUSIC/GoBackMusicMainMenu.mp3");
         bgMusic.setLooping(true);
+        bgMusic.play();
+        bgMusic.setVolume(1);
     }
 
     private void cameraInit() {
