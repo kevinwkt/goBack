@@ -8,6 +8,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
@@ -17,14 +18,16 @@ import com.badlogic.gdx.math.Vector3;
  * Con ayuda de DON PABLO
  */
 public class Level1 extends Frame {
-    private App app;
 
     private Sophie sophie;
     private Texture sophieTexture;
 
+    // newspaper
+    private Sprite newspaperSpr;
+
     // orb
     private Sprite yellowOrb;
-    private boolean orbEncontrado = false;
+    private boolean foundOrb = false;
     private float orbXPosition = 1350;
     private float orbYPosition = 150;
     private OrbMovement currentOrbState = OrbMovement.GOING_DOWN;
@@ -67,6 +70,7 @@ public class Level1 extends Frame {
     private Sprite sophieSurprisedSpr;
 
     public static final float LEFT_LIMIT = 980;
+    public static float RIGHT_LIMIT = 3700;
 
     private final float SOPHIE_START_X=1850;
     private final float SOPHIE_START_Y=220;
@@ -74,17 +78,19 @@ public class Level1 extends Frame {
     public static final float WIDTH_MAP = 3840;
     public static final float HEIGHT_MAP = 720;
 
+    private final float DISTANCE_ORB_SOPHIE = 40;
+
     public Level1(App app) {
         super(app, WIDTH_MAP,HEIGHT_MAP);
-        //this.app = app;
     }
 
     @Override
     public void show() {
         super.show();
+        textureInit();
         objectInit();
 
-        textureInit();
+
         sophie.setMovementState(Sophie.MovementState.SLEEPING);
         sophie.sprite.setPosition(SOPHIE_START_X, SOPHIE_START_Y);
 
@@ -92,11 +98,41 @@ public class Level1 extends Frame {
         Gdx.input.setInputProcessor(new Input());
     }
 
+    private void textureInit() {
+        sophieTexture = new Texture("Squirts/Sophie/SOPHIEWalk.png");
+        sophie = new Sophie(sophieTexture, 100,100);
+
+        sophieBlink = aManager.get("SOPHIE/DIALOGUESophieBlink.png");
+        sophieConcerned = aManager.get("SOPHIE/DIALOGUESophieConcern.png");
+        sophieNormal = aManager.get("SOPHIE/DIALOGUESophieNormal.png");
+        sophieSurprised = aManager.get("SOPHIE/DIALOGUESophieSurprise.png");
+        oldmanEyesClosed = aManager.get("OLDMAN/STILL/OLDMANStill00.png");
+        oldmanStand = aManager.get("OLDMAN/STILL/OLDMANStill01.png");
+        oldmanNod = aManager.get("OLDMAN/STILL/OLDMANStill02.png");
+        oldmanEyesOpened = aManager.get("OLDMAN/STILL/OLDMANStill03.png");
+
+        oldmanEyesClosedSpr = new Sprite(oldmanEyesClosed);
+        oldmanStandSpr = new Sprite(oldmanStand);
+        oldmanNodSpr = new Sprite(oldmanNod);
+        oldmanEyesOpenedSpr = new Sprite(oldmanEyesOpened);
+        sophieBlinkSpr = new Sprite(sophieBlink);
+        sophieConcernedSpr = new Sprite(sophieConcerned);
+        sophieNormalSpr = new Sprite(sophieNormal);
+        sophieSurprisedSpr = new Sprite(sophieSurprised);
+
+        yellowOrb = new Sprite((Texture)aManager.get("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTYellowOrb.png"));
+        newspaperSpr = new Sprite((Texture)aManager.get("CLUES/Newspaper/CLUESNewspaper.png"));
+
+        //Background
+        background = new Texture("HARBOR/GoBackHARBORPanoramic.png");
+    }
+
     private void objectInit() {
         batch = new SpriteBatch();
-        yellowOrb = new Sprite((Texture)aManager.get("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTYellowOrb.png"));
+
         yellowOrb.setPosition(orbXPosition,orbYPosition);
         dialogue = new Dialogue(aManager);
+        oldmanEyesOpenedSpr.setPosition(900,220);
     }
 
     @Override
@@ -105,26 +141,16 @@ public class Level1 extends Frame {
         batch.setProjectionMatrix(super.camera.combined);
         batch.begin();
 
-
         batch.draw(background,0,0);
+        drawNewspaper(batch);
         sophie.draw(batch);
-
 
         batch.draw(pauseButton,camera.position.x+HALFW-pauseButton.getWidth(),camera.position.y-HALFH);
         sophie.update();
 
         yellowOrb.draw(batch);
 
-
-
-
         //pauseSprite.draw(batch);
-
-        
-        /*dialogue.makeText(batch, "He’s taking me back…. He’s taking me back….. He surely is taking me back You! It’s been a long long time. The boat will be coming back soon,  I hope what I have is enough. Will you be going back, too?", oldmanStandSpr, sophieNormalSpr, true,0);
-        dialogue.makeText(batch, "I don’t know… Where am I…?", oldmanStandSpr, sophieNormalSpr, true);
-        dialogue.makeText(batch, "You sweet girl, it really is a shame. I’ve done some terrible things, but I guess I can help somebody for a change. Take this, it will help you on your journey.", oldmanStandSpr, sophieNormalSpr, false);
-        dialogue.makeText(batch, "You need to pay to ride the boat, to go back. \n I used one too, but I’m going back and they can’t come on board.", oldmanNodSpr, sophieNormalSpr, false); */
 
         if (state==GameState.PAUSED) {
             pauseStage.draw();
@@ -133,14 +159,29 @@ public class Level1 extends Frame {
             Gdx.input.setInputProcessor(new Input());
         }
         moveOrb(delta);
-        checkOrbCollision(delta);
+        checkOrbCollision();
         ckeckOldManCollision(delta);
-
+        checkNewsPaperCollicson();
 
         updateCamera();
 
         batch.end();
 
+    }
+
+    private void checkNewsPaperCollicson() {
+        if(sophie.sprite.getBoundingRectangle().contains(newspaperSpr.getX(),newspaperSpr.getY())){
+            RIGHT_LIMIT = 2900;
+            Gdx.app.log("concha","de la lora");
+            dialogueOn = true;
+        }
+    }
+
+    private void drawNewspaper(Batch batch) {
+        if(dialogueSprite > 4){
+            newspaperSpr.setPosition(3050,220);
+            newspaperSpr.draw(batch);
+        }
     }
 
     private void ckeckOldManCollision(float delta) {
@@ -177,22 +218,21 @@ public class Level1 extends Frame {
 
     }
 
-    private void checkOrbCollision(float delta) {
-        if(!orbEncontrado){
+    private void checkOrbCollision() {
 
+        if(!foundOrb){
             if(yellowOrb.getBoundingRectangle().contains(sophie.sprite.getX()+yellowOrb.getBoundingRectangle().getWidth()/2,sophie.sprite.getY())){
-                orbEncontrado = true;
+                foundOrb = true;
                 sophie.setMovementState(Sophie.MovementState.WAKING);
             }
         }else{
+            if(yellowOrb.getX()<(sophie.sprite.getX()-yellowOrb.getWidth()-DISTANCE_ORB_SOPHIE)){
+                yellowOrb.setPosition(sophie.sprite.getX()-yellowOrb.getWidth()-DISTANCE_ORB_SOPHIE+1,yellowOrb.getY());
+            }else if((sophie.sprite.getX()+sophie.sprite.getWidth()+DISTANCE_ORB_SOPHIE)<yellowOrb.getX()){
+                yellowOrb.setPosition(sophie.sprite.getX()+sophie.sprite.getWidth()+DISTANCE_ORB_SOPHIE-1, yellowOrb.getY());
+            }
 
-            if(sophie.getMovementState()==Sophie.MovementState.STILL_LEFT||
-                    sophie.getMovementState()==Sophie.MovementState.MOVE_LEFT)
-                yellowOrb.setPosition(yellowOrb.getWidth()+sophie.sprite.getX(),orbYPosition);
-            else
-                yellowOrb.setPosition(sophie.sprite.getX()-yellowOrb.getWidth(),orbYPosition);
             oldmanEyesOpenedSpr.draw(batch);
-            oldmanEyesOpenedSpr.setPosition(900,220);
 
         }
     }
@@ -205,9 +245,11 @@ public class Level1 extends Frame {
             currentOrbState = OrbMovement.GOING_UP;
         }
 
-        if(!orbEncontrado){
+        if(!foundOrb){
             orbXPosition += delta * 100;
 
+        }else{
+            orbXPosition = yellowOrb.getX();
         }
 
         if(currentOrbState == OrbMovement.GOING_UP){
@@ -217,11 +259,13 @@ public class Level1 extends Frame {
         }
 
         yellowOrb.setPosition(orbXPosition,orbYPosition);
+
+
     }
 
     @Override
     public void resize(int width, int height) {
-
+        view.update(width, height);
     }
 
     @Override
@@ -265,31 +309,7 @@ public class Level1 extends Frame {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
-    private void textureInit() {
-        sophieTexture = new Texture("Squirts/Sophie/SOPHIEWalk.png");
-        sophie = new Sophie(sophieTexture, 100,100);
 
-        sophieBlink = aManager.get("SOPHIE/DIALOGUESophieBlink.png");
-        sophieConcerned = aManager.get("SOPHIE/DIALOGUESophieConcern.png");
-        sophieNormal = aManager.get("SOPHIE/DIALOGUESophieNormal.png");
-        sophieSurprised = aManager.get("SOPHIE/DIALOGUESophieSurprise.png");
-        oldmanEyesClosed = aManager.get("OLDMAN/STILL/OLDMANStill00.png");
-        oldmanStand = aManager.get("OLDMAN/STILL/OLDMANStill01.png");
-        oldmanNod = aManager.get("OLDMAN/STILL/OLDMANStill02.png");
-        oldmanEyesOpened = aManager.get("OLDMAN/STILL/OLDMANStill03.png");
-
-        oldmanEyesClosedSpr = new Sprite(oldmanEyesClosed);
-        oldmanStandSpr = new Sprite(oldmanStand);
-        oldmanNodSpr = new Sprite(oldmanNod);
-        oldmanEyesOpenedSpr = new Sprite(oldmanEyesOpened);
-        sophieBlinkSpr = new Sprite(sophieBlink);
-        sophieConcernedSpr = new Sprite(sophieConcerned);
-        sophieNormalSpr = new Sprite(sophieNormal);
-        sophieSurprisedSpr = new Sprite(sophieSurprised);
-
-        //Background
-        background = new Texture("HARBOR/GoBackHARBORPanoramic.png");
-    }
     private enum OrbMovement{
         GOING_UP,
         GOING_DOWN
@@ -317,7 +337,6 @@ public class Level1 extends Frame {
             camera.unproject(v);
 
             if(sophie.getMovementState()==Sophie.MovementState.STILL_LEFT||sophie.getMovementState()==Sophie.MovementState.STILL_RIGHT) {
-
                 if(sophie.sprite.getX() - v.x < -522 && v.y < 135){
                     state = GameState.PAUSED;
                 }else{
