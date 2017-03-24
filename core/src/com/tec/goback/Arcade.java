@@ -92,7 +92,7 @@ class Arcade extends Frame{
     private static final float WIDTH_MAP = 1280;
     private static final float HEIGHT_MAP = 720;
 
-    Input input;
+    private Input input;
 
     public Arcade(App app) {
         super(app, WIDTH_MAP,HEIGHT_MAP);
@@ -210,25 +210,26 @@ class Arcade extends Frame{
                     //If sophie got hit
                 if(ob1 instanceof ArcadeSophie || ob2 instanceof ArcadeSophie) {
                     if (ob1 instanceof ArcadeSophie) {
-                        // if (((ArcadeSophie)ob1).getHurtDie(((Enemy)ob2).getColor(), ((Enemy)ob2).getDamage())
-                        //     state = GameState.PAUSED;
+                        if (((ArcadeSophie)ob1).getHurtDie(((Enemy)ob2).getColor(), ((Enemy)ob2).getDamage()))
+                            state = GameState.PAUSED;
                         deadThings.add(contact.getFixtureA().getBody());
                     }
                     if (ob2 instanceof ArcadeSophie) {
-                        //if (((ArcadeSophie)ob2).getHurtDie(((Enemy)ob1).getColor(), ((Enemy)ob2).getDamage())
-                        //    state = GameState.LOST;
+                        if (((ArcadeSophie)ob2).getHurtDie(((Enemy)ob1).getColor(), ((Enemy)ob2).getDamage()))
+                            state = GameState.LOST;
                         deadThings.add(contact.getFixtureB().getBody());
                     }
+
                 }else{//If some bad guy got hit
-                   /*
+
                     if (ob1 instanceof Enemy) {
-                        if (((Enemy)ob1).getHurtDie(((OrbAttack)ob2).getColor(), ((Enemy)ob2).getDamage())
+                        if ( ((Enemy)ob1).getHurtDie( ((OrbAttack)ob2).getColor(), 20f) )
                             deadThings.add(contact.getFixtureA().getBody());
                     }
                     if (ob2 instanceof Enemy) {
-                        if (((ArcadeSophie)ob2).getHurtDie(((OrbAttack)ob1).getColor(), ((Enemy)ob2).getDamage())
+                        if (((Enemy)ob2).getHurtDie(((OrbAttack)ob1).getColor(), 20f))
                             deadThings.add(contact.getFixtureB().getBody());
-                   */
+                    }
                 }
 
             }
@@ -248,6 +249,7 @@ class Arcade extends Frame{
     private void sophieInit(){
         Texture sophieTx = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADESophie.png");
         sophie = new ArcadeSophie(world, sophieTx);
+        sophie.setColor(1);
     }
 
     private void wallsInit(){
@@ -303,7 +305,7 @@ class Arcade extends Frame{
 
         batch.begin();
 
-        drawShit(delta);
+        drawShit();
         batch.draw(pauseButton,camera.position.x+HALFW-pauseButton.getWidth(),camera.position.y-HALFH);
 
         if (state==GameState.PAUSED) {
@@ -431,7 +433,7 @@ class Arcade extends Frame{
 
     }
 
-    private void drawShit(float delta){
+    private void drawShit(){
         batch.draw(background,-2560,0);
         Array<Body> squirts = new Array<Body>();
         world.getBodies(squirts);
@@ -443,7 +445,7 @@ class Arcade extends Frame{
             }else if(obj instanceof ArcadeSophie){
                 ((ArcadeSophie)obj).draw(batch);
             }else if(obj instanceof ArcadeLizard){
-                ((ArcadeLizard)obj).draw(batch, delta);
+                ((ArcadeLizard)obj).draw(batch);
             }
             //TODO DRAW ALL OF THE REMAINING ENEMIES LIKE ABOVE
         }
@@ -550,16 +552,18 @@ class Arcade extends Frame{
 
             //TODO CHECK FOR BUTTON
             //TODO COOLDOWN FOR SHOOTING
-            if (!true){//not true temporary
+            if (!true){                                     //if hit orb
                 switch (d) {
                     case 1:
                         break;
                     case 2:
                         switch (currentColor) {
                             case BLUE:
+                                sophie.setColor(1);
                                 currentColor=orbColor.YELLOW;
                                 break;
                             case YELLOW:
+                                sophie.setColor(2);
                                 currentColor=orbColor.BLUE;
                                 break;
                         }
@@ -567,21 +571,24 @@ class Arcade extends Frame{
                     case 3:
                         switch (currentColor) {
                             case BLUE:
+                                sophie.setColor(3);
                                 currentColor=orbColor.RED;
                                 break;
                             case YELLOW:
+                                sophie.setColor(2);
                                 currentColor=orbColor.BLUE;
                                 break;
                             case RED:
+                                sophie.setColor(1);
                                 currentColor=orbColor.YELLOW;
                                 break;
                         }
                         break;
                 }
             }
-            else if(v.x > 1172 && v.y < 135){
+            else if(v.x > 1172 && v.y < 135){               //if hit pause
                 state = GameState.PAUSED;
-            }else{//if we're not switching orbes
+            }else{                                          //if we're not switching orbs
                 float angle = MathUtils.atan2(
                         v.y - ArcadeValues.pelletOriginY,
                         v.x - ArcadeValues.pelletOriginX

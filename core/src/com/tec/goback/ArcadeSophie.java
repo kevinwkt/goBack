@@ -82,6 +82,7 @@ public class ArcadeSophie {
                 ArcadeValues.metersToPx(body.getPosition().x),
                 ArcadeValues.metersToPx(body.getPosition().y)
         );
+        sprite.setColor(1.0f, 1.0f, 1.0f, life);
 
         sprite.draw(batch);
     }
