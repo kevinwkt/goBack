@@ -114,7 +114,7 @@ public abstract class Enemy{
         return leftRight;
     }
 
-    public boolean getHurtDie(float damage,int color){
+    public boolean getHurtDie(int color, float damage){
         hp-=damage;
         if(hp<=0) return true;
         else return false;
