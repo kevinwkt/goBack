@@ -211,7 +211,7 @@ class Arcade extends Frame{
                 if(ob1 instanceof ArcadeSophie || ob2 instanceof ArcadeSophie) {
                     if (ob1 instanceof ArcadeSophie) {
                         if (((ArcadeSophie)ob1).getHurtDie(((Enemy)ob2).getColor(), ((Enemy)ob2).getDamage()))
-                            state = GameState.PAUSED;
+                            state = GameState.LOST;
                         deadThings.add(contact.getFixtureA().getBody());
                     }
                     if (ob2 instanceof ArcadeSophie) {
@@ -219,6 +219,7 @@ class Arcade extends Frame{
                             state = GameState.LOST;
                         deadThings.add(contact.getFixtureB().getBody());
                     }
+                    Gdx.app.log("sophie", "wash it");
 
                 }else{//If some bad guy got hit
 
@@ -230,6 +231,7 @@ class Arcade extends Frame{
                         if (((Enemy)ob2).getHurtDie(((OrbAttack)ob1).getColor(), 20f))
                             deadThings.add(contact.getFixtureB().getBody());
                     }
+                    Gdx.app.log("enemy", "was hit");
                 }
 
             }
