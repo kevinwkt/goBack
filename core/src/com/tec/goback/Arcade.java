@@ -177,11 +177,6 @@ class Arcade extends Frame{
         skullRedAnimation.setPlayMode(Animation.PlayMode.LOOP);
         skullYellowAnimation.setPlayMode(Animation.PlayMode.LOOP);
 
-        timerchangeframegoo = 0;
-        timerchangeframelizard=0;
-        timerchangeframeskullblue=0;
-        timerchangeframeskullred=0;
-        timerchangeframeskullyellow=0;
     }
 
     private void worldInit(){
@@ -210,14 +205,18 @@ class Arcade extends Frame{
                     //If sophie got hit
                 if(ob1 instanceof ArcadeSophie || ob2 instanceof ArcadeSophie) {
                     if (ob1 instanceof ArcadeSophie) {
-                        if (((ArcadeSophie)ob1).getHurtDie(((Enemy)ob2).getColor(), ((Enemy)ob2).getDamage()))
+                        if (((ArcadeSophie)ob1).getHurtDie(((Enemy)ob2).getColor(), ((Enemy)ob2).getDamage())){
                             state = GameState.LOST;
-                        deadThings.add(contact.getFixtureA().getBody());
+                            deadThings.add(contact.getFixtureA().getBody());
+                        }
+                        deadThings.add(contact.getFixtureB().getBody());
                     }
                     if (ob2 instanceof ArcadeSophie) {
-                        if (((ArcadeSophie)ob2).getHurtDie(((Enemy)ob1).getColor(), ((Enemy)ob2).getDamage()))
+                        if (((ArcadeSophie)ob2).getHurtDie(((Enemy)ob1).getColor(), ((Enemy)ob2).getDamage())){
                             state = GameState.LOST;
-                        deadThings.add(contact.getFixtureB().getBody());
+                            deadThings.add(contact.getFixtureB().getBody());
+                        }
+                        deadThings.add(contact.getFixtureA().getBody());
                     }
                     Gdx.app.log("sophie", "wash it");
 
@@ -337,56 +336,69 @@ class Arcade extends Frame{
 
     private void spawnSomething(){
         float r = MathUtils.random();
+        float lr =MathUtils.random();
         int color  = calcColor();
         if(r >= 0.0f && r < 0.25f){//lizard
             switch (color){
                 case(1):
-                    new ArcadeLizard(world, color, 1, lizardAnimation);
+                    if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
+                    else new ArcadeLizard(world, color, 0, lizardAnimation);
                     break;
                 case(2):
-                    new ArcadeLizard(world, color, 1, lizardAnimation);
+                    if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
+                    else new ArcadeLizard(world, color, 0, lizardAnimation);
                     break;
                 case(3):
-                    new ArcadeLizard(world, color, 1, lizardAnimation);
+                    if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
+                    else new ArcadeLizard(world, color, 0, lizardAnimation);
                     break;
             }
         }
         if(r >= 0.25f && r < 0.5f){//spike
             switch (color){
                 case(1):
-                    new ArcadeLizard(world, color, 1, lizardAnimation);
+                    if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
+                    else new ArcadeLizard(world, color, 0, lizardAnimation);
                     break;
                 case(2):
-                    new ArcadeLizard(world, color, 1, lizardAnimation);
+                    if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
+                    else new ArcadeLizard(world, color, 0, lizardAnimation);
                     break;
                 case(3):
-                    new ArcadeLizard(world, color, 1, lizardAnimation);
+                    if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
+                    else new ArcadeLizard(world, color, 0, lizardAnimation);
                     break;
             }
         }
         if(r >= 0.5f && r < 0.75f){//goo
             switch (color){
                 case(1):
-                    new ArcadeLizard(world, color, 1, lizardAnimation);
+                    if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
+                    else new ArcadeLizard(world, color, 0, lizardAnimation);
                     break;
                 case(2):
-                    new ArcadeLizard(world, color, 1, lizardAnimation);
+                    if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
+                    else new ArcadeLizard(world, color, 0, lizardAnimation);
                     break;
                 case(3):
-                    new ArcadeLizard(world, color, 1, lizardAnimation);
+                    if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
+                    else new ArcadeLizard(world, color, 0, lizardAnimation);
                     break;
             }
         }
         if(r >= 0.75f && r <= 1.0f){//skull
             switch (color){
                 case(1):
-                    new ArcadeLizard(world, color, 1, lizardAnimation);
+                    if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
+                    else new ArcadeLizard(world, color, 0, lizardAnimation);
                     break;
                 case(2):
-                    new ArcadeLizard(world, color, 1, lizardAnimation);
+                    if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
+                    else new ArcadeLizard(world, color, 0, lizardAnimation);
                     break;
                 case(3):
-                    new ArcadeLizard(world, color, 1, lizardAnimation);
+                    if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
+                    else new ArcadeLizard(world, color, 0, lizardAnimation);
                     break;
             }
         }

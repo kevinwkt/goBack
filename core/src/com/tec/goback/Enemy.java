@@ -82,21 +82,20 @@ public abstract class Enemy{
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         if(leftRight==1) {
             //bodyDef.position.set(ArcadeValues.pxToMeters(1280+120), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
-            bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX+500), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
+            bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX+800), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY+50));
             body = world.createBody(bodyDef);
             fixturer(0f, 0f);
             body.setBullet(true);
-            body.setLinearVelocity(-3, 0f);
         }
         if(leftRight==0) {
             //bodyDef.position.set(ArcadeValues.pxToMeters(-120), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
-            bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX-500), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
+            bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX-800), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY+50));
             body = world.createBody(bodyDef);
             fixturer(0.1f, 0.7f);
             body.setBullet(true);
-            body.setLinearVelocity(SPEED, 0);
         }
 
+        //DONT FORGET TO body.setLinearVelocity(SPEED,0f); FOR EACH ENEMY
         body.setUserData(this);
     }
 
@@ -115,9 +114,12 @@ public abstract class Enemy{
     }
 
     public boolean getHurtDie(int color, float damage){
-        hp-=damage;
-        if(hp<=0) return true;
-        else return false;
+        if(color == this.color){
+            hp -= damage*2;
+        }else{
+            hp -= damage;
+        }
+        return hp <= 0.0f ? true : false;
     }
 
     abstract void draw(SpriteBatch batch);

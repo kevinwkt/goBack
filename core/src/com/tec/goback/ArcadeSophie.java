@@ -29,7 +29,7 @@ public class ArcadeSophie {
         bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.set(
                 ArcadeValues.meterspelletOriginX-1,
-                ArcadeValues.meterspelletOriginY+1.05f
+                ArcadeValues.meterspelletOriginY+0.95f
         );
         body = world.createBody(bodyDef);
         fixturer(0.1f, 0.7f);

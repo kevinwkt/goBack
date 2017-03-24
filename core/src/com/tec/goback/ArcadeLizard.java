@@ -21,11 +21,19 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 class ArcadeLizard extends Enemy {
 
     private PolygonShape shape;
+    private int walkCounter;
+    private int walkLimit;
+    private boolean walkCond=true;
 
     public ArcadeLizard(World world, int type, int leftOrRight, Animation tx) {
         super(world,type,leftOrRight,tx);
-        SPEED=2f;
+        SPEED=1f;
+        if(leftOrRight==1) body.setLinearVelocity(-SPEED, 0f);
+        if(leftOrRight==0) body.setLinearVelocity(SPEED,0f);
         timeframe=0;
+        walkCounter=0;
+        dmg=15f;
+        hp=80;
     }
 
     void fixturer(float density, float restitution) {
@@ -35,7 +43,7 @@ class ArcadeLizard extends Enemy {
 
         //lizard
         shape = new PolygonShape();
-        shape.setAsBox(ArcadeValues.pxToMeters(227f), ArcadeValues.pxToMeters(67f));
+        shape.setAsBox(ArcadeValues.pxToMeters(100f), ArcadeValues.pxToMeters(35f));
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.density = density;
@@ -52,12 +60,28 @@ class ArcadeLizard extends Enemy {
     void draw(SpriteBatch batch) {
         timeframe +=Gdx.graphics.getDeltaTime();
         region=an.getKeyFrame(timeframe);
+        if (!region.isFlipX()) {
+            if(leftRight==0) region.flip(true,false);
+        }
+        if(region.isFlipX()){
+            if(leftRight==1) region.flip(true,false);
+        }
+        if(walkCounter==0){
+            walkLimit=50 + (int)(Math.random() * 100);
+        }
+        if(walkCounter==walkLimit&&walkCond) {
+            walkCounter=0;
+            walkCond=false;
+            body.setLinearVelocity(0f,0f);
+        }
+        if(walkCounter==walkLimit&&!walkCond) {
+            walkCounter=0;
+            walkCond=true;
+            if(leftRight==1) body.setLinearVelocity(-SPEED, 0f);
+            if(leftRight==0) body.setLinearVelocity(SPEED,0f);
+        }
         batch.draw(region, ArcadeValues.metersToPx(body.getPosition().x)-120, ArcadeValues.metersToPx(body.getPosition().y)-39);
+        walkCounter++;
     }
-
-    private void waitGo(){
-
-    }
-
 }
 

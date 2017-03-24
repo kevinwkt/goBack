@@ -24,6 +24,8 @@ class OrbAttack extends Squirt {
     private CircleShape shape;
     private Sprite sprite;
 
+    protected float dmg=20;
+
     public OrbAttack(World world, int type, float angle, Texture tx) {
         this.sprite = new Sprite(tx);
         sprite.setCenter(
@@ -60,7 +62,7 @@ class OrbAttack extends Squirt {
         shape = new CircleShape();
 
         shape.setRadius(
-                ArcadeValues.pxToMeters((sprite.getWidth()/2f))
+                ArcadeValues.pxToMeters(0.05f)
         );//sprite translated to meters
 
         FixtureDef fixtureDef = new FixtureDef();
