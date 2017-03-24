@@ -90,7 +90,7 @@ public class Level0 implements Screen {
 
     private void musicInit() {
         if(soundPreferences.getBoolean("soundOn")) {
-            bgMusic = aManager.get("MUSIC/GoBackMusicLevel0.mp3");
+            bgMusic = aManager.get("MUSIC/GoBackMusicMainMenu.mp3");
             bgMusic.setLooping(true);
             bgMusic.play();
         }

@@ -114,7 +114,7 @@ public class Fade implements Screen {
                     manager.load("Interfaces/SOUND/SOUNDDecoration.png", Texture.class);
                     break;
                 case LEVEL0:
-                    manager.load("MUSIC/GoBackMusicLevel0.mp3", Music.class);
+                    manager.load("MUSIC/GoBackMusicMainMenu.mp3", Music.class);
                     manager.load("INTRO/INTROBackground.png", Texture.class);
                     manager.load("INTRO/INTROBoat.png", Texture.class);
                     manager.load("INTRO/INTROOar.png", Texture.class);
@@ -135,6 +135,7 @@ public class Fade implements Screen {
                     manager.load("BOSS/IGUANA/BOSSIguanaBody.png",Texture.class);
                     manager.load("BOSS/IGUANA/BOSSIguanaBackLeg.png",Texture.class);
                     manager.load("BOSS/IGUANA/BOSSIguanaFrontLeg.png",Texture.class);
+                    manager.load("MUSIC/GoBackMusicLevel1.mp3", Music.class);
                     break;
                 case LEVEL2:
 
@@ -152,6 +153,10 @@ public class Fade implements Screen {
 
                     break;
                 case ARCADE:
+                    manager.load("INTRO/INTROBackground.png", Texture.class);
+                    manager.load("HARBOR/GoBackHARBOR0.png", Texture.class);
+                    manager.load("MOUNTAINS/GoBackMOUNTAINS0.png", Texture.class); //Level2
+                    //manager.load(".png", Texture.class); //Level3
                     manager.load("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png", Texture.class);
                     manager.load("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrbEyes.png", Texture.class);
                     manager.load("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrb.png", Texture.class);

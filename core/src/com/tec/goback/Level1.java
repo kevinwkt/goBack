@@ -92,6 +92,7 @@ public class Level1 extends Frame {
     private final float DISTANCE_ORB_SOPHIE = 40;
 
     Preferences pref = Gdx.app.getPreferences("getLevel");
+    Preferences soundPreferences = Gdx.app.getPreferences("My Preferences");
 
     public Level1(App app) {
         super(app, WIDTH_MAP,HEIGHT_MAP);
@@ -109,6 +110,15 @@ public class Level1 extends Frame {
 
         Gdx.input.setCatchBackKey(true);
         Gdx.input.setInputProcessor(new Input());
+        musicInit();
+    }
+
+    private void musicInit() {
+        if(soundPreferences.getBoolean("soundOn")) {
+            bgMusic = aManager.get("MUSIC/GoBackMusicLevel1.mp3");
+            bgMusic.setLooping(true);
+            bgMusic.play();
+        }
     }
 
     private void textureInit() {
@@ -187,10 +197,10 @@ public class Level1 extends Frame {
     }
 
     private void changeScreen() {
-        pref.putInteger("level",2);
+        pref.putBoolean("boss",true);
         pref.flush();
         app.setScreen(new Fade(app, LoaderState.ARCADE));
-        //bgMusic.stop();
+        bgMusic.stop();
         this.dispose();
     }
 
@@ -408,7 +418,7 @@ public class Level1 extends Frame {
             camera.unproject(v);
 
             if(sophie.getMovementState()==Sophie.MovementState.STILL_LEFT||sophie.getMovementState()==Sophie.MovementState.STILL_RIGHT) {
-                if(sophie.sprite.getX() - v.x < -522 && v.y < 135){
+                if(camera.position.x - v.x < -522 && v.y < 135){
                     state = GameState.PAUSED;
                 }else{
                     if(!dialogueOn){

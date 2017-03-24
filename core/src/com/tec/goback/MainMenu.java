@@ -79,9 +79,12 @@ public class MainMenu implements Screen {
     @Override
     public void show() {
         //    -----------------------  TO GET INTO LEVEL 0 TEMPORAL OMG
-        pref.putInteger("level",1);
-        pref.flush();
-
+        /*pref.putInteger("level",0);
+        pref.flush();*/
+        if(pref.getInteger("level")==0){
+            pref.getBoolean("boss",false);
+            pref.flush();
+        }
         cameraInit();
         textureInit();
         objectInit();
@@ -214,7 +217,7 @@ public class MainMenu implements Screen {
             }
         });
         /*
-        if(pref.getInteger("level")>1&&pref.getBoolean("boss")) {
+        if(pref.getInteger("level")>=1&&pref.getBoolean("boss")) {
             arcadeBtnImg.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
