@@ -18,7 +18,7 @@ public class ArcadeSophie {
     private Body body;
     private PolygonShape shape;
     private Sprite sprite;
-    private float life;
+    private float life = 100;
     private int color = 1;
 
     public ArcadeSophie(World world, Texture tx){
@@ -47,8 +47,8 @@ public class ArcadeSophie {
         //shape of girl
         shape = new PolygonShape();
         shape.setAsBox(
-                ArcadeValues.pxToMeters(sprite.getHeight())-0.1f,
-                ArcadeValues.pxToMeters(sprite.getWidth())-0.1f
+                ArcadeValues.pxToMeters(sprite.getHeight()),
+                ArcadeValues.pxToMeters(sprite.getWidth())
         );
 
         FixtureDef fixtureDef = new FixtureDef();
@@ -82,7 +82,7 @@ public class ArcadeSophie {
                 ArcadeValues.metersToPx(body.getPosition().x),
                 ArcadeValues.metersToPx(body.getPosition().y)
         );
-        sprite.setColor(1.0f, 1.0f, 1.0f, life);
+        sprite.setColor(1.0f, 1.0f, 1.0f, life/100f);
 
         sprite.draw(batch);
     }

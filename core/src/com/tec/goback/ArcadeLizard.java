@@ -24,7 +24,7 @@ class ArcadeLizard extends Enemy {
 
     public ArcadeLizard(World world, int type, int leftOrRight, Animation tx) {
         super(world,type,leftOrRight,tx);
-        SPEED=0.4f;
+        SPEED=2f;
         timeframe=0;
     }
 
@@ -35,7 +35,7 @@ class ArcadeLizard extends Enemy {
 
         //lizard
         shape = new PolygonShape();
-        shape.setAsBox(ArcadeValues.pxToMeters(241f), ArcadeValues.pxToMeters(77f));
+        shape.setAsBox(ArcadeValues.pxToMeters(241f-50), ArcadeValues.pxToMeters(77f-20));
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.density = density;
