@@ -21,8 +21,9 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import java.util.ArrayList;
+import com.badlogic.gdx.graphics.g2d.Animation;
 //
 
 
@@ -67,6 +68,22 @@ class Arcade extends Frame{
     private Texture pelletyellow;
     private Texture pelletblue;
     private Texture pelletred;
+    private Texture lizard;
+    private Texture goo;
+    private Texture skull;
+    private Texture spike;
+
+    private Animation<TextureRegion> lizardAnimation;
+    private Animation<TextureRegion> gooAnimation;
+    private Animation<TextureRegion> skullRedAnimation;
+    private Animation<TextureRegion> skullBlueAnimation;
+    private Animation<TextureRegion> skullYellowAnimation;
+
+    private float timerchangeframelizard;
+    private float timerchangeframegoo;
+    private float timerchangeframeskullred;
+    private float timerchangeframeskullblue;
+    private float timerchangeframeskullyellow;
 
     private Sprite orby;
     private Sprite orbb;
@@ -75,7 +92,7 @@ class Arcade extends Frame{
     private static final float WIDTH_MAP = 1280;
     private static final float HEIGHT_MAP = 720;
 
-
+    Input input;
 
     public Arcade(App app) {
         super(app, WIDTH_MAP,HEIGHT_MAP);
@@ -89,7 +106,8 @@ class Arcade extends Frame{
         worldInit();
         sophieInit();
         wallsInit();
-        Gdx.input.setInputProcessor(new Input());
+        input = new Input();
+        Gdx.input.setInputProcessor(input);
         Gdx.input.setCatchBackKey(true); //Not important
 
 
@@ -134,6 +152,36 @@ class Arcade extends Frame{
                 pelletred = aManager.get("PELLET/ATAQUERedPellet.png");
                 break;
         }
+
+        lizard=new Texture("MINIONS/LIZARD/MINIONYellowLizard.png");
+        goo=new Texture("MINIONS/GOO/MINIONYellowGoo.png");
+        skull=new Texture("SKULL/MINIONSkulls.png");
+        spike=new Texture("MINIONS/SPIKE/MINIONYellowSpike00.png");
+
+        TextureRegion texturaCompleta = new TextureRegion(lizard);
+        TextureRegion[][] texturaPersonaje = texturaCompleta.split(241,77);
+        lizardAnimation = new Animation(0.18f, texturaPersonaje[0][0], texturaPersonaje[0][1]);
+        lizardAnimation.setPlayMode(Animation.PlayMode.LOOP);
+
+        texturaCompleta=new TextureRegion(goo);
+        texturaPersonaje=texturaCompleta.split(118,125);
+        gooAnimation = new Animation(0.18f, texturaPersonaje[0][0], texturaPersonaje[0][1]);
+        gooAnimation.setPlayMode(Animation.PlayMode.LOOP);
+
+        texturaCompleta=new TextureRegion(skull);
+        texturaPersonaje=texturaCompleta.split(128,242);
+        skullBlueAnimation = new Animation(0.18f, texturaPersonaje[0][0], texturaPersonaje[0][1]);
+        skullRedAnimation = new Animation(0.18f, texturaPersonaje[0][2], texturaPersonaje[0][3]);
+        skullYellowAnimation = new Animation(0.18f, texturaPersonaje[0][4], texturaPersonaje[0][5]);
+        skullBlueAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        skullRedAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        skullYellowAnimation.setPlayMode(Animation.PlayMode.LOOP);
+
+        timerchangeframegoo = 0;
+        timerchangeframelizard=0;
+        timerchangeframeskullblue=0;
+        timerchangeframeskullred=0;
+        timerchangeframeskullyellow=0;
     }
 
     private void worldInit(){
@@ -252,19 +300,22 @@ class Arcade extends Frame{
     public void render(float delta) {
         batch.setProjectionMatrix(super.camera.combined);
         cls();
+
         batch.begin();
+
         drawShit();
+        batch.draw(pauseButton,camera.position.x+HALFW-pauseButton.getWidth(),camera.position.y-HALFH);
 
-        //TODO DO THE PAUSE LOL
-        // if (state!=GameState.PAUSED) {
-
-        stepper(delta);
-        spawnMonsters(delta);
-
-
-        // }
-
-        batch.end();
+        if (state==GameState.PAUSED) {
+            Gdx.input.setInputProcessor(pauseStage);
+            batch.end();
+            pauseStage.draw();
+        }else{
+            Gdx.input.setInputProcessor(input);
+            stepper(delta);
+            spawnMonsters(delta);
+            batch.end();
+        }
     }
 
     private void spawnMonsters(float delta){
@@ -385,7 +436,9 @@ class Arcade extends Frame{
 
     //WTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTF
     @Override
-    public void resize(int width, int height) {}
+    public void resize(int width, int height) {
+        view.update(width, height);
+    }
     @Override
     public void pause() {}
 
@@ -421,10 +474,10 @@ class Arcade extends Frame{
         public boolean touchDown(int screenX, int screenY, int pointer, int button) {
             v.set(screenX,screenY,0);
             camera.unproject(v);
-            //Gdx.app.log("x: ", screenX + " ");
-            //Gdx.app.log("y: ", screenY + " ");
+            //Gdx.app.log("x: ", v.x + " ");
+            //Gdx.app.log("y: ", v.y + " ");
             //Gdx.app.log("color: ", currentColor +" ");
-            
+
             //TODO CHECK FOR BUTTON
             //TODO COOLDOWN FOR SHOOTING
             if (!true){//not true temporary
@@ -456,7 +509,9 @@ class Arcade extends Frame{
                         break;
                 }
             }
-            else {//if we're not switching orbes
+            else if(v.x > 1172 && v.y < 135){
+                state = GameState.PAUSED;
+            }else{//if we're not switching orbes
                 float angle = MathUtils.atan2(
                         v.y - ArcadeValues.pelletOriginY,
                         v.x - ArcadeValues.pelletOriginX
@@ -472,7 +527,7 @@ class Arcade extends Frame{
                         new OrbAttack(world, 3, angle, pelletred);
                         break;
                 }
-            
+
             }
 
 
