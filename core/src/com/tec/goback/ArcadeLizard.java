@@ -10,22 +10,24 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
 /**
  * Created by kevin on 3/20/2017.
  */
 
+/*
 class ArcadeLizard extends Enemy {
 
-    private PolygonShape shape;
+private PolygonShape shape;
     private int rightLeft;
-    private static float SPEED = 0.4;
+    private static float SPEED = 0.4f;
     private Body body;
 
     public ArcadeLizard(World world,int fromWhere, Texture tx) {
-        super();
-        this.rightLeft = type;
+        super(world, );
+        this.rightLeft = fromWhere;
     }
 
     private void fixturer(float density, float restitution) {
@@ -62,4 +64,5 @@ class ArcadeLizard extends Enemy {
 
 
 }
+    */
 

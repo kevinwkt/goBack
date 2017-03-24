@@ -7,10 +7,18 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -39,7 +47,7 @@ public abstract class Enemy{
     private CircleShape shape;
     private Sprite sprite;
 
-    public Enemy(World world, int type, float angle, Texture tx,float startX,float startY) {
+    public Enemy(World world, int type, float angle, Texture tx, float startX, float startY) {
         this.sprite = new Sprite(tx);
         this.color = type;
 
@@ -61,7 +69,7 @@ public abstract class Enemy{
     }
 
     public Enemy(World world, int type, int leftOrRight, Animation tx) {
-        this.sprite = new Sprite(tx);
+        //this.sprite = new Sprite(tx);
         this.color = type;
         this.leftright=leftOrRight;
 
@@ -79,8 +87,29 @@ public abstract class Enemy{
         body.setUserData(this);
     }
 
-    public void draw(SpriteBatch batch) {
-        sprite.draw(batch);
+    private void fixturer(float density, float restitution) {
+        //neumann preventive shit
+        for (Fixture fix : body.getFixtureList()) {
+            body.destroyFixture(fix);
+        }
+
+        //shape of pellet
+        shape = new CircleShape();
+
+        shape.setRadius(
+                ArcadeValues.pxToMeters((sprite.getWidth() * sprite.getScaleX()/2f))
+        );//sprite translated to meters
+
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.density = density;
+        fixtureDef.restitution = restitution;
+        fixtureDef.shape = shape;
+        fixtureDef.friction = 0;
+
+        fixtureDef.filter.categoryBits = ArcadeValues.pelletCat; //its category
+        fixtureDef.filter.maskBits = ArcadeValues.pelletMask; //or of its category with colliding categories
+
+        body.createFixture(fixtureDef);
     }
 
     private float getDamage(){

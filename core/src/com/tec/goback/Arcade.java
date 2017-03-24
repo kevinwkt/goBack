@@ -37,9 +37,12 @@ class Arcade extends Frame{
     private float fstep;
 
 
-    private float betweenSpawns = (1f/60f)/ArcadeValues.initalFrequency;
-    private float factor = 1f/ArcadeValues.initialFactor;
+    private float betweenSpawns = ArcadeValues.initalFrequency;
+    private float factor = ArcadeValues.initialFactor;
     private float elapsed = 0;
+    private float elapsed2 = 0;
+    private boolean flag = true;
+
     //CURRENT COLOR ORB
     private orbColor currentColor = orbColor.YELLOW;
 
@@ -72,6 +75,8 @@ class Arcade extends Frame{
     private static final float WIDTH_MAP = 1280;
     private static final float HEIGHT_MAP = 720;
 
+
+
     public Arcade(App app) {
         super(app, WIDTH_MAP,HEIGHT_MAP);
     }
@@ -86,6 +91,9 @@ class Arcade extends Frame{
         wallsInit();
         Gdx.input.setInputProcessor(new Input());
         Gdx.input.setCatchBackKey(true); //Not important
+
+
+        pelletblue = aManager.get("PELLET/ATAQUEBluePellet.png");
     }
 
     private void textureInit() {
@@ -261,14 +269,27 @@ class Arcade extends Frame{
 
     private void spawnMonsters(float delta){
         elapsed += delta;
+        elapsed2 += delta;
         if(elapsed > betweenSpawns){
             spawnSomething();
             elapsed = 0;
-            betweenSpawns *= factor;
+        }
+        if(elapsed2 > 1) {
+            betweenSpawns -= factor;
+            elapsed2 = 0;
         }
     }
 
     private void spawnSomething(){
+
+
+        if(flag) {
+            new OrbAttack(world, 2, MathUtils.PI / 4, pelletblue);
+            flag = false;
+        }else{
+            new OrbAttack(world, 2, 3*MathUtils.PI / 4, pelletblue);
+            flag = true;
+        }
 
     }
 

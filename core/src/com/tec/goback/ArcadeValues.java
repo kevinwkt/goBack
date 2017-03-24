@@ -5,8 +5,8 @@ package com.tec.goback;
  */
 
 class ArcadeValues {
-    static final float initalFrequency = 40f; //spawns per minute
-    static final float initialFactor = 1.7f; // growth
+    static final float initalFrequency = 2; //seconds between spawns
+    static final float initialFactor = 0.02f; // decreas
 
     static final float pelletOriginX = 640;
     static final float pelletOriginY = 226;
