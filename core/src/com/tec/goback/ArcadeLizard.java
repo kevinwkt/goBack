@@ -35,7 +35,7 @@ class ArcadeLizard extends Enemy {
 
         //lizard
         shape = new PolygonShape();
-        shape.setAsBox(ArcadeValues.pxToMeters(241f-50), ArcadeValues.pxToMeters(77f-20));
+        shape.setAsBox(ArcadeValues.pxToMeters(227f), ArcadeValues.pxToMeters(67f));
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.density = density;
