@@ -13,10 +13,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
-/**
- * Created by kevin on 3/20/2017.
- */
-
+/*
 class ArcadeGoo extends Enemy {
 
     private PolygonShape shape;
@@ -55,3 +52,4 @@ class ArcadeGoo extends Enemy {
     }
 }
 
+*/

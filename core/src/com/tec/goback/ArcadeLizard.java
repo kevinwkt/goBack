@@ -24,7 +24,7 @@ class ArcadeLizard extends Enemy {
 
     public ArcadeLizard(World world, int type, int leftOrRight, Animation tx) {
         super(world,type,leftOrRight,tx);
-        SPEED=0.4f;
+        SPEED=2f;
         timeframe=0;
     }
 
@@ -35,7 +35,7 @@ class ArcadeLizard extends Enemy {
 
         //lizard
         shape = new PolygonShape();
-        shape.setAsBox(ArcadeValues.pxToMeters(241f), ArcadeValues.pxToMeters(77f));
+        shape.setAsBox(ArcadeValues.pxToMeters(227f), ArcadeValues.pxToMeters(67f));
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.density = density;
@@ -52,7 +52,7 @@ class ArcadeLizard extends Enemy {
     void draw(SpriteBatch batch) {
         timeframe +=Gdx.graphics.getDeltaTime();
         region=an.getKeyFrame(timeframe);
-        batch.draw(region, ArcadeValues.metersToPx(body.getPosition().x), ArcadeValues.metersToPx(body.getPosition().y));
+        batch.draw(region, ArcadeValues.metersToPx(body.getPosition().x)-120, ArcadeValues.metersToPx(body.getPosition().y)-39);
     }
 
     private void waitGo(){

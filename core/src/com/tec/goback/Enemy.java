@@ -82,15 +82,15 @@ public abstract class Enemy{
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         if(leftRight==1) {
             //bodyDef.position.set(ArcadeValues.pxToMeters(1280+120), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
-            bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
+            bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX+500), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
             body = world.createBody(bodyDef);
-            fixturer(0.1f, 0.7f);
+            fixturer(0f, 0f);
             body.setBullet(true);
-            body.setLinearVelocity(-SPEED, 0);
+            body.setLinearVelocity(-3, 0f);
         }
         if(leftRight==0) {
             //bodyDef.position.set(ArcadeValues.pxToMeters(-120), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
-            bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
+            bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX-500), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
             body = world.createBody(bodyDef);
             fixturer(0.1f, 0.7f);
             body.setBullet(true);
