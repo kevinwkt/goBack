@@ -40,14 +40,16 @@ public abstract class Enemy{
     protected static float hp;
     protected static float dmg;
     protected static int color;
-    protected static float SPEED;
-    protected static int leftRight;
+    protected float SPEED;
+    protected int leftRight;
+
+    protected Animation<TextureRegion> an;
 
     protected TextureRegion region;
 
-    private Body body;
-    private CircleShape shape;
-    private Sprite sprite;
+    protected Body body;
+    protected CircleShape shape;
+    protected Sprite sprite;
 
     public Enemy(World world, int type, float angle, Texture tx, float startX, float startY) {
         this.sprite = new Sprite(tx);
@@ -70,7 +72,7 @@ public abstract class Enemy{
     }
 
     public Enemy(World world, int type, int leftOrRight, Animation tx) {
-        //this.sprite = new Sprite(tx);
+        this.an=tx;
         this.color = type;
         this.leftRight=leftOrRight;
 
@@ -94,27 +96,27 @@ public abstract class Enemy{
         body.setUserData(this);
     }
 
-    private abstract void fixturer(float density, float restitution) {}
+    abstract void fixturer(float density, float restitution);
 
-    private float getDamage(){
+    public float getDamage(){
         return dmg;
     }
 
-    private int getColor(){
+    public int getColor(){
         return color;
     }
 
     public int getRightLeft(){
-        return rightLeft;
+        return leftRight;
     }
 
-    private boolean getHurtDie(float damage){
+    public boolean getHurtDie(float damage){
         hp-=damage;
         if(hp<=0) return true;
         else return false;
     }
 
-    public abstract void draw() {}
+    abstract void draw(SpriteBatch batch,float delta);
 }
 
 

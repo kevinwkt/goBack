@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
 /**
@@ -19,16 +20,14 @@ import com.badlogic.gdx.physics.box2d.World;
 class ArcadeGoo extends Enemy {
 
     private PolygonShape shape;
-    private int rightLeft;
-    private static float SPEED = 0.4;
+    private static float SPEED = 0.4f;
     private Body body;
 
-    public ArcadeLizard(World world,int fromWhere, Texture tx) {
-        super();
-        this.rightLeft = type;
+    public ArcadeGoo(World world, int type, float angle, Texture tx, float startX, float startY) {
+        super(world,type,angle,tx,startX,startY);
     }
 
-    private void fixturer(float density, float restitution) {
+    void fixturer(float density, float restitution) {
 
         //neumann preventive shit
         for (Fixture fix : body.getFixtureList()) {body.destroyFixture(fix);}
@@ -49,17 +48,10 @@ class ArcadeGoo extends Enemy {
         body.createFixture(fixtureDef);
     }
 
-    public void draw(SpriteBatch batch) {
-        sprite.setCenter(ArcadeValues.metersToPx(body.getPosition().x), ArcadeValues.metersToPx(body.getPosition().y));
-        sprite.draw(batch);
+    void draw(SpriteBatch batch,float delta) {
+        delta +=Gdx.graphics.getDeltaTime();
+        region=an.getKeyFrame(delta);
+        batch.draw(region, ArcadeValues.metersToPx(body.getPosition().x), ArcadeValues.metersToPx(body.getPosition().y));
     }
-
-    public int getRightLeft(){
-        return rightLeft;
-    }
-
-
-
-
 }
 
