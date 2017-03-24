@@ -272,9 +272,12 @@ public abstract class Frame implements Screen {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     app.setScreen(new Fade(app, LoaderState.MAINMENU));
-                    if(bgMusic.isPlaying()){
-                        bgMusic.pause();
+                    if(bgMusic != null){
+                        if(bgMusic.isPlaying()){
+                            bgMusic.pause();
+                        }
                     }
+
                 }
             });
 
