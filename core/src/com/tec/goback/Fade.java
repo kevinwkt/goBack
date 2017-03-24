@@ -131,6 +131,10 @@ public class Fade implements Screen {
                     manager.load("SOPHIE/DIALOGUESophieConcern.png", Texture.class);
                     manager.load("SOPHIE/DIALOGUESophieNormal.png", Texture.class);
                     manager.load("SOPHIE/DIALOGUESophieSurprise.png", Texture.class);
+                    manager.load("CLUES/Newspaper/CLUESNewspaper.png",Texture.class);
+                    manager.load("BOSS/IGUANA/BOSSIguanaBody.png",Texture.class);
+                    manager.load("BOSS/IGUANA/BOSSIguanaBackLeg.png",Texture.class);
+                    manager.load("BOSS/IGUANA/BOSSIguanaFrontLeg.png",Texture.class);
                     break;
                 case LEVEL2:
 

@@ -22,6 +22,17 @@ public class Level1 extends Frame {
     private Sophie sophie;
     private Texture sophieTexture;
 
+    private Boolean bossMode = false;
+
+    // lizard
+    private Sprite lizardSpr;
+    private Sprite lizardArmSpr;
+    private Sprite lizardLegSpr;
+    private float lizardYPosition = 850; // 850
+    private float lizardAcceleration = 5;
+    private boolean rotateLeftArm = true;
+    private float lizardXPosition = 3200;
+
     // newspaper
     private Sprite newspaperSpr;
 
@@ -47,7 +58,7 @@ public class Level1 extends Frame {
     private Dialogue dialogue;
     private boolean dialogueOn = false;
     private float dialogueTime = 0;
-    private int dialogueSprite = 1;
+    private int dialogueSprite = 1; // 1
 
     private Texture oldmanEyesClosed;
     private Texture oldmanStand;
@@ -79,6 +90,8 @@ public class Level1 extends Frame {
     public static final float HEIGHT_MAP = 720;
 
     private final float DISTANCE_ORB_SOPHIE = 40;
+
+    Preferences pref = Gdx.app.getPreferences("getLevel");
 
     public Level1(App app) {
         super(app, WIDTH_MAP,HEIGHT_MAP);
@@ -122,6 +135,9 @@ public class Level1 extends Frame {
 
         yellowOrb = new Sprite((Texture)aManager.get("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTYellowOrb.png"));
         newspaperSpr = new Sprite((Texture)aManager.get("CLUES/Newspaper/CLUESNewspaper.png"));
+        lizardSpr = new Sprite((Texture)aManager.get("BOSS/IGUANA/BOSSIguanaBody.png"));
+        lizardArmSpr = new Sprite((Texture)aManager.get("BOSS/IGUANA/BOSSIguanaFrontLeg.png"));
+        lizardLegSpr = new Sprite((Texture)aManager.get("BOSS/IGUANA/BOSSIguanaBackLeg.png"));
 
         //Background
         background = new Texture("HARBOR/GoBackHARBORPanoramic.png");
@@ -150,8 +166,6 @@ public class Level1 extends Frame {
 
         yellowOrb.draw(batch);
 
-        //pauseSprite.draw(batch);
-
         if (state==GameState.PAUSED) {
             pauseStage.draw();
             Gdx.input.setInputProcessor(pauseStage);
@@ -161,7 +175,10 @@ public class Level1 extends Frame {
         moveOrb(delta);
         checkOrbCollision();
         ckeckOldManCollision(delta);
-        checkNewsPaperCollicson();
+        checkNewsPaperCollision();
+        if(bossMode){
+            drawLizard(delta);
+        }
 
         updateCamera();
 
@@ -169,17 +186,59 @@ public class Level1 extends Frame {
 
     }
 
-    private void checkNewsPaperCollicson() {
+    private void changeScreen() {
+        pref.putInteger("level",2);
+        pref.flush();
+        app.setScreen(new Fade(app, LoaderState.ARCADE));
+        //bgMusic.stop();
+        this.dispose();
+    }
+
+    private void drawLizard(float delta) {
+        if(lizardYPosition > 255){
+            lizardYPosition -= delta * lizardAcceleration;
+            lizardAcceleration += 9.5;
+        }else{
+            lizardAcceleration += .5;
+            if(lizardAcceleration > 870){
+                lizardXPosition += delta * 100;
+
+                if(lizardXPosition > 3790){
+                    changeScreen();
+                }
+            }
+        }
+
+        lizardSpr.setPosition(lizardXPosition,lizardYPosition);
+        lizardSpr.draw(batch);
+        lizardLegSpr.setPosition(lizardXPosition+500,lizardYPosition-250);
+        lizardLegSpr.draw(batch);
+        lizardArmSpr.setPosition(lizardXPosition + 170,lizardYPosition-110);
+        lizardArmSpr.draw(batch);
+        lizardArmSpr.setOrigin(209,238);
+        if (rotateLeftArm) {
+            lizardArmSpr.rotate((float) 0.5);
+        } else {
+            lizardArmSpr.rotate((float) -0.5);
+        }
+        if (lizardArmSpr.getRotation() > 5) {
+            rotateLeftArm = false;
+        } else if (lizardArmSpr.getRotation() < -20) {
+            rotateLeftArm = true;
+        }
+    }
+
+    private void checkNewsPaperCollision() {
         if(sophie.sprite.getBoundingRectangle().contains(newspaperSpr.getX(),newspaperSpr.getY())){
-            RIGHT_LIMIT = 2900;
-            Gdx.app.log("concha","de la lora");
+            RIGHT_LIMIT = 3025;
+            bossMode = true;
             dialogueOn = true;
         }
     }
 
     private void drawNewspaper(Batch batch) {
         if(dialogueSprite > 4){
-            newspaperSpr.setPosition(3050,220);
+            newspaperSpr.setPosition(3090,220);
             newspaperSpr.draw(batch);
         }
     }
@@ -206,7 +265,7 @@ public class Level1 extends Frame {
                     break;
             }
 
-            if(dialogueTime > 2.5){
+            if(dialogueTime > 2.5){ // 2.5
                 dialogueSprite += 1;
                 dialogueTime = 0;
                 if(dialogueSprite >= 4){
@@ -246,7 +305,7 @@ public class Level1 extends Frame {
         }
 
         if(!foundOrb){
-            orbXPosition += delta * 100;
+            orbXPosition += delta * 100; // 100
 
         }else{
             orbXPosition = yellowOrb.getX();
@@ -285,7 +344,19 @@ public class Level1 extends Frame {
 
     @Override
     public void dispose() {
-
+        aManager.unload("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTYellowOrb.png");
+        aManager.unload("OLDMAN/STILL/OLDMANStill00.png");
+        aManager.unload("OLDMAN/STILL/OLDMANStill01.png");
+        aManager.unload("OLDMAN/STILL/OLDMANStill02.png");
+        aManager.unload("OLDMAN/STILL/OLDMANStill03.png");
+        aManager.unload("SOPHIE/DIALOGUESophieBlink.png");
+        aManager.unload("SOPHIE/DIALOGUESophieConcern.png");
+        aManager.unload("SOPHIE/DIALOGUESophieNormal.png");
+        aManager.unload("SOPHIE/DIALOGUESophieSurprise.png");
+        aManager.unload("CLUES/Newspaper/CLUESNewspaper.png");
+        aManager.unload("BOSS/IGUANA/BOSSIguanaBody.png");
+        aManager.unload("BOSS/IGUANA/BOSSIguanaBackLeg.png");
+        aManager.unload("BOSS/IGUANA/BOSSIguanaFrontLeg.png");
     }
 
     private void updateCamera() {
