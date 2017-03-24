@@ -54,9 +54,8 @@ public abstract class Enemy{
         fixturer(0.1f, 0.7f);
         body.setBullet(true);
 
-        body.setLinearVelocity(MathUtils.cos(angle) * SPEED,
-                MathUtils.sin(angle) * SPEED);
-        // body.setLinearVelocity(1,1);
+        body.setLinearVelocity(MathUtils.cos(angle) * SPEED, MathUtils.sin(angle) * SPEED);
+
         body.setUserData(this);
     }
 
