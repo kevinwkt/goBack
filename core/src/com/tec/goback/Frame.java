@@ -99,7 +99,7 @@ public abstract class Frame implements Screen {
         frameStage = new Stage(view, batch);
         pauseStage = new Pause(view, batch, app);
 
-        pauseButton = aManager.get("Interfaces/GAMEPLAY/CONSTANT/GoBackCONSTPause.png");
+        pauseButton = aManager.get("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTPause.png");
 
 
         //pass the Stage
