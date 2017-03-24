@@ -52,7 +52,7 @@ class ArcadeLizard extends Enemy {
     void draw(SpriteBatch batch) {
         timeframe +=Gdx.graphics.getDeltaTime();
         region=an.getKeyFrame(timeframe);
-        batch.draw(region, ArcadeValues.metersToPx(body.getPosition().x), ArcadeValues.metersToPx(body.getPosition().y));
+        batch.draw(region, ArcadeValues.metersToPx(body.getPosition().x)-120, ArcadeValues.metersToPx(body.getPosition().y)-39);
     }
 
     private void waitGo(){

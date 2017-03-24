@@ -47,8 +47,8 @@ public class ArcadeSophie {
         //shape of girl
         shape = new PolygonShape();
         shape.setAsBox(
-                ArcadeValues.pxToMeters(sprite.getHeight()),
-                ArcadeValues.pxToMeters(sprite.getWidth())
+                ArcadeValues.pxToMeters(sprite.getWidth()),
+                ArcadeValues.pxToMeters(sprite.getHeight())
         );
 
         FixtureDef fixtureDef = new FixtureDef();
