@@ -303,7 +303,7 @@ class Arcade extends Frame{
 
         batch.begin();
 
-        drawShit();
+        drawShit(delta);
         batch.draw(pauseButton,camera.position.x+HALFW-pauseButton.getWidth(),camera.position.y-HALFH);
 
         if (state==GameState.PAUSED) {
@@ -332,16 +332,84 @@ class Arcade extends Frame{
     }
 
     private void spawnSomething(){
-
-
-        if(flag) {
-            new OrbAttack(world, 2, MathUtils.PI / 4, pelletblue);
-            flag = false;
-        }else{
-            new OrbAttack(world, 2, 3*MathUtils.PI / 4, pelletblue);
-            flag = true;
+        float r = MathUtils.random();
+        int color  = calcColor();
+        if(r >= 0.0f && r < 0.25f){//lizard
+            switch (color){
+                case(1):
+                    new ArcadeLizard(world, color, 1, lizardAnimation);
+                    break;
+                case(2):
+                    new ArcadeLizard(world, color, 1, lizardAnimation);
+                    break;
+                case(3):
+                    new ArcadeLizard(world, color, 1, lizardAnimation);
+                    break;
+            }
         }
+        if(r >= 0.25f && r < 0.5f){//spike
+            switch (color){
+                case(1):
+                    new ArcadeLizard(world, color, 1, lizardAnimation);
+                    break;
+                case(2):
+                    new ArcadeLizard(world, color, 1, lizardAnimation);
+                    break;
+                case(3):
+                    new ArcadeLizard(world, color, 1, lizardAnimation);
+                    break;
+            }
+        }
+        if(r >= 0.5f && r < 0.75f){//goo
+            switch (color){
+                case(1):
+                    new ArcadeLizard(world, color, 1, lizardAnimation);
+                    break;
+                case(2):
+                    new ArcadeLizard(world, color, 1, lizardAnimation);
+                    break;
+                case(3):
+                    new ArcadeLizard(world, color, 1, lizardAnimation);
+                    break;
+            }
+        }
+        if(r >= 0.75f && r <= 1.0f){//skull
+            switch (color){
+                case(1):
+                    new ArcadeLizard(world, color, 1, lizardAnimation);
+                    break;
+                case(2):
+                    new ArcadeLizard(world, color, 1, lizardAnimation);
+                    break;
+                case(3):
+                    new ArcadeLizard(world, color, 1, lizardAnimation);
+                    break;
+            }
+        }
+    }
 
+    private int calcColor(){
+        float r = MathUtils.random();
+        switch (d){
+            case(1):
+                if(r >= 0.0f && r < 0.8f) return 1;
+                if(r >= 0.8f && r < 0.9f) return 2;
+                if(r >= 0.9f && r <= 1f) return 3;
+                break;
+            case(2):
+                if(r >= 0.0f && r < 0.4f) return 1;
+                if(r >= 0.4f && r < 0.8f) return 2;
+                if(r >= 0.8f && r <= 1f) return 3;
+                break;
+            case(3):
+                if(r >= 0.0f && r < 0.4f) return 1;
+                if(r >= 0.4f && r < 0.8f) return 2;
+                if(r >= 0.8f && r <= 1f) return 3;
+                break;
+            default:
+                return 1;
+        }
+        return 1;
     }
 
     private void stepper(float delta){
@@ -363,7 +431,7 @@ class Arcade extends Frame{
 
     }
 
-    private void drawShit(){
+    private void drawShit(float delta){
         batch.draw(background,-2560,0);
         Array<Body> squirts = new Array<Body>();
         world.getBodies(squirts);
@@ -374,6 +442,8 @@ class Arcade extends Frame{
                 ((OrbAttack)obj).draw(batch);
             }else if(obj instanceof ArcadeSophie){
                 ((ArcadeSophie)obj).draw(batch);
+            }else if(obj instanceof ArcadeLizard){
+                ((ArcadeLizard)obj).draw(batch, delta);
             }
             //TODO DRAW ALL OF THE REMAINING ENEMIES LIKE ABOVE
         }
