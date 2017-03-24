@@ -153,6 +153,7 @@ public class Fade implements Screen {
 
                     break;
                 case ARCADE:
+                    manager.load("MUSIC/GoBackMusicArcade.mp3", Music.class);
                     manager.load("INTRO/INTROBackground.png", Texture.class);
                     manager.load("HARBOR/GoBackHARBOR0.png", Texture.class);
                     manager.load("MOUNTAINS/GoBackMOUNTAINS0.png", Texture.class); //Level2

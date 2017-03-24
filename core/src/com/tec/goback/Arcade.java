@@ -2,6 +2,7 @@ package com.tec.goback;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
@@ -96,6 +97,8 @@ class Arcade extends Frame{
     private float dialoguetime = 0.0f;
     private Input input;
 
+    Preferences soundPreferences = Gdx.app.getPreferences("My Preferences");
+
     public Arcade(App app) {
         super(app, WIDTH_MAP,HEIGHT_MAP);
     }
@@ -115,6 +118,15 @@ class Arcade extends Frame{
 
 
         pelletblue = aManager.get("PELLET/ATAQUEBluePellet.png");
+        musicInit();
+    }
+
+    private void musicInit() {
+        bgMusic = aManager.get("MUSIC/GoBackMusicArcade.mp3");
+        if(soundPreferences.getBoolean("soundOn")) {
+            bgMusic.setLooping(true);
+            bgMusic.play();
+        }
     }
 
     private void textureInit() {
@@ -551,7 +563,10 @@ class Arcade extends Frame{
     public void hide() {}
 
     @Override
-    public void dispose() {}
+    public void dispose() {
+        
+
+    }
 //WTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTF
 
 
