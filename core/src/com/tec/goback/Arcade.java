@@ -35,6 +35,14 @@ class Arcade extends Frame{
     private Array<Body> deadThings;
     private ArrayList<Body> wall = new ArrayList<Body>();
     private float fstep;
+
+
+    private float betweenSpawns = ArcadeValues.initalFrequency;
+    private float factor = ArcadeValues.initialFactor;
+    private float elapsed = 0;
+    private float elapsed2 = 0;
+    private boolean flag = true;
+
     //CURRENT COLOR ORB
     private orbColor currentColor = orbColor.YELLOW;
 
@@ -67,6 +75,8 @@ class Arcade extends Frame{
     private static final float WIDTH_MAP = 1280;
     private static final float HEIGHT_MAP = 720;
 
+
+
     public Arcade(App app) {
         super(app, WIDTH_MAP,HEIGHT_MAP);
     }
@@ -81,6 +91,9 @@ class Arcade extends Frame{
         wallsInit();
         Gdx.input.setInputProcessor(new Input());
         Gdx.input.setCatchBackKey(true); //Not important
+
+
+        pelletblue = aManager.get("PELLET/ATAQUEBluePellet.png");
     }
 
     private void textureInit() {
@@ -138,12 +151,12 @@ class Arcade extends Frame{
                 //pellets die no matter who they collide with
                 if(ob1 instanceof OrbAttack){
                     deadThings.add(contact.getFixtureA().getBody());
-                    //Gdx.app.log("array", deadThings.toString());
+                    //Gdx.app.log("DESTRUC", deadThings.size+"");
                 }
 
                 if(ob2 instanceof OrbAttack){
                      deadThings.add(contact.getFixtureB().getBody());
-                    //Gdx.app.log("array", deadThings.toString());
+                    //Gdx.app.log("DESTRUC", deadThings.size+"");
                 }
 
                     //If sophie got hit
@@ -243,13 +256,43 @@ class Arcade extends Frame{
         drawShit();
 
         //TODO DO THE PAUSE LOL
-        // if (state==GameState.PAUSED) {
-        // }
-        stepper(delta);
+        // if (state!=GameState.PAUSED) {
 
+        stepper(delta);
+        spawnMonsters(delta);
+
+
+        // }
 
         batch.end();
     }
+
+    private void spawnMonsters(float delta){
+        elapsed += delta;
+        elapsed2 += delta;
+        if(elapsed > betweenSpawns){
+            spawnSomething();
+            elapsed = 0;
+        }
+        if(elapsed2 > 1) {
+            betweenSpawns -= factor;
+            elapsed2 = 0;
+        }
+    }
+
+    private void spawnSomething(){
+
+
+        if(flag) {
+            new OrbAttack(world, 2, MathUtils.PI / 4, pelletblue);
+            flag = false;
+        }else{
+            new OrbAttack(world, 2, 3*MathUtils.PI / 4, pelletblue);
+            flag = true;
+        }
+
+    }
+
     private void stepper(float delta){
         //much steps
         fstep += delta;
@@ -268,6 +311,7 @@ class Arcade extends Frame{
         deadThings.clear();
 
     }
+
     private void drawShit(){
         batch.draw(background,-2560,0);
         Array<Body> squirts = new Array<Body>();
@@ -377,11 +421,12 @@ class Arcade extends Frame{
         public boolean touchDown(int screenX, int screenY, int pointer, int button) {
             v.set(screenX,screenY,0);
             camera.unproject(v);
-            Gdx.app.log("x: ", screenX + " ");
-            Gdx.app.log("y: ", screenY + " ");
-            Gdx.app.log("color: ", currentColor +" ");
+            //Gdx.app.log("x: ", screenX + " ");
+            //Gdx.app.log("y: ", screenY + " ");
+            //Gdx.app.log("color: ", currentColor +" ");
             
             //TODO CHECK FOR BUTTON
+            //TODO COOLDOWN FOR SHOOTING
             if (!true){//not true temporary
                 switch (d) {
                     case 1:

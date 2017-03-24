@@ -5,6 +5,9 @@ package com.tec.goback;
  */
 
 class ArcadeValues {
+    static final float initalFrequency = 2; //seconds between spawns
+    static final float initialFactor = 0.02f; // decreas
+
     static final float pelletOriginX = 640;
     static final float pelletOriginY = 226;
     static final float meterspelletOriginX = pelletOriginX/100;
@@ -29,7 +32,6 @@ class ArcadeValues {
     static final short pelletMask = enemyCat | wallCat;
     static final short sophieMask = enemyCat;
     static final short enemyMask= pelletCat | sophieCat;
-
 
     static float pxToMeters(float n){
         return n/100;
