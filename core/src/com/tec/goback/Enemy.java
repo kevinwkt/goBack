@@ -85,14 +85,12 @@ public abstract class Enemy{
             bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX+800), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY+50));
             body = world.createBody(bodyDef);
             fixturer(0f, 0f);
-            body.setBullet(true);
         }
         if(leftRight==0) {
             //bodyDef.position.set(ArcadeValues.pxToMeters(-120), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
             bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX-800), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY+50));
             body = world.createBody(bodyDef);
             fixturer(0.1f, 0.7f);
-            body.setBullet(true);
         }
 
         //DONT FORGET TO body.setLinearVelocity(SPEED,0f); FOR EACH ENEMY
