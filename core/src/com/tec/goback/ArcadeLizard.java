@@ -21,13 +21,10 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 class ArcadeLizard extends Enemy {
 
     private PolygonShape shape;
-    private int rightLeft;
-    private static float SPEED = 0.4f;
-    private Body body;
 
     public ArcadeLizard(World world, int type, int leftOrRight, Animation tx) {
         super(world,type,leftOrRight,tx);
-        leftRight = leftOrRight;
+        SPEED=0.4f;
     }
 
     void fixturer(float density, float restitution) {

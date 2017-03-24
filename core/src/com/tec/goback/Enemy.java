@@ -37,9 +37,9 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public abstract class Enemy{
 
-    protected static float hp;
-    protected static float dmg;
-    protected static int color;
+    protected float hp;
+    protected float dmg;
+    protected int color;
     protected float SPEED;
     protected int leftRight;
 
