@@ -43,6 +43,8 @@ public abstract class Enemy{
     protected float SPEED;
     protected int leftRight;
 
+    protected float timeframe;
+
     protected Animation<TextureRegion> an;
 
     protected TextureRegion region;
@@ -79,14 +81,16 @@ public abstract class Enemy{
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         if(leftRight==1) {
-            bodyDef.position.set(ArcadeValues.pxToMeters(1280+120), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
+            //bodyDef.position.set(ArcadeValues.pxToMeters(1280+120), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
+            bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
             body = world.createBody(bodyDef);
             fixturer(0.1f, 0.7f);
             body.setBullet(true);
             body.setLinearVelocity(-SPEED, 0);
         }
         if(leftRight==0) {
-            bodyDef.position.set(ArcadeValues.pxToMeters(-120), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
+            //bodyDef.position.set(ArcadeValues.pxToMeters(-120), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
+            bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
             body = world.createBody(bodyDef);
             fixturer(0.1f, 0.7f);
             body.setBullet(true);
@@ -110,13 +114,13 @@ public abstract class Enemy{
         return leftRight;
     }
 
-    public boolean getHurtDie(float damage){
+    public boolean getHurtDie(float damage,int color){
         hp-=damage;
         if(hp<=0) return true;
         else return false;
     }
 
-    abstract void draw(SpriteBatch batch,float delta);
+    abstract void draw(SpriteBatch batch);
 }
 
 

@@ -25,6 +25,7 @@ class ArcadeLizard extends Enemy {
     public ArcadeLizard(World world, int type, int leftOrRight, Animation tx) {
         super(world,type,leftOrRight,tx);
         SPEED=0.4f;
+        timeframe=0;
     }
 
     void fixturer(float density, float restitution) {
@@ -48,9 +49,9 @@ class ArcadeLizard extends Enemy {
         body.createFixture(fixtureDef);
     }
 
-    void draw(SpriteBatch batch,float delta) {
-        delta +=Gdx.graphics.getDeltaTime();
-        region=an.getKeyFrame(delta);
+    void draw(SpriteBatch batch) {
+        timeframe +=Gdx.graphics.getDeltaTime();
+        region=an.getKeyFrame(timeframe);
         batch.draw(region, ArcadeValues.metersToPx(body.getPosition().x), ArcadeValues.metersToPx(body.getPosition().y));
     }
 
