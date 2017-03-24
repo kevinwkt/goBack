@@ -92,7 +92,7 @@ class Arcade extends Frame{
     private static final float WIDTH_MAP = 1280;
     private static final float HEIGHT_MAP = 720;
 
-
+    Input input;
 
     public Arcade(App app) {
         super(app, WIDTH_MAP,HEIGHT_MAP);
@@ -106,7 +106,8 @@ class Arcade extends Frame{
         worldInit();
         sophieInit();
         wallsInit();
-        Gdx.input.setInputProcessor(new Input());
+        input = new Input();
+        Gdx.input.setInputProcessor(input);
         Gdx.input.setCatchBackKey(true); //Not important
 
 
@@ -152,7 +153,7 @@ class Arcade extends Frame{
                 break;
         }
 
-        lizard=new Texture("MINIONS/LIZARD/MINIONYellowGoo.png");
+        lizard=new Texture("MINIONS/LIZARD/MINIONYellowLizard.png");
         goo=new Texture("MINIONS/GOO/MINIONYellowGoo.png");
         skull=new Texture("SKULL/MINIONSkulls.png");
         spike=new Texture("MINIONS/SPIKE/MINIONYellowSpike00.png");
@@ -299,19 +300,22 @@ class Arcade extends Frame{
     public void render(float delta) {
         batch.setProjectionMatrix(super.camera.combined);
         cls();
+
         batch.begin();
+
         drawShit();
+        batch.draw(pauseButton,camera.position.x+HALFW-pauseButton.getWidth(),camera.position.y-HALFH);
 
-        //TODO DO THE PAUSE LOL
-        // if (state!=GameState.PAUSED) {
-
-        stepper(delta);
-        spawnMonsters(delta);
-
-
-        // }
-
-        batch.end();
+        if (state==GameState.PAUSED) {
+            Gdx.input.setInputProcessor(pauseStage);
+            batch.end();
+            pauseStage.draw();
+        }else{
+            Gdx.input.setInputProcessor(input);
+            stepper(delta);
+            spawnMonsters(delta);
+            batch.end();
+        }
     }
 
     private void spawnMonsters(float delta){
@@ -432,7 +436,9 @@ class Arcade extends Frame{
 
     //WTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTF
     @Override
-    public void resize(int width, int height) {}
+    public void resize(int width, int height) {
+        view.update(width, height);
+    }
     @Override
     public void pause() {}
 
@@ -468,10 +474,10 @@ class Arcade extends Frame{
         public boolean touchDown(int screenX, int screenY, int pointer, int button) {
             v.set(screenX,screenY,0);
             camera.unproject(v);
-            //Gdx.app.log("x: ", screenX + " ");
-            //Gdx.app.log("y: ", screenY + " ");
+            //Gdx.app.log("x: ", v.x + " ");
+            //Gdx.app.log("y: ", v.y + " ");
             //Gdx.app.log("color: ", currentColor +" ");
-            
+
             //TODO CHECK FOR BUTTON
             //TODO COOLDOWN FOR SHOOTING
             if (!true){//not true temporary
@@ -503,7 +509,9 @@ class Arcade extends Frame{
                         break;
                 }
             }
-            else {//if we're not switching orbes
+            else if(v.x > 1172 && v.y < 135){
+                state = GameState.PAUSED;
+            }else{//if we're not switching orbes
                 float angle = MathUtils.atan2(
                         v.y - ArcadeValues.pelletOriginY,
                         v.x - ArcadeValues.pelletOriginX
@@ -519,7 +527,7 @@ class Arcade extends Frame{
                         new OrbAttack(world, 3, angle, pelletred);
                         break;
                 }
-            
+
             }
 
 

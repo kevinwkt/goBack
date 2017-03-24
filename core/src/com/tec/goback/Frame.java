@@ -29,7 +29,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public abstract class Frame implements Screen {
     //Main app class
-    private final App app;
+    protected final App app;
 
 
     Preferences pref=Gdx.app.getPreferences("getLevel");
