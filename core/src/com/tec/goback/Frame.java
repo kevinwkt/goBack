@@ -272,6 +272,9 @@ public abstract class Frame implements Screen {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     app.setScreen(new Fade(app, LoaderState.MAINMENU));
+                    if(bgMusic.isPlaying()){
+                        bgMusic.pause();
+                    }
                 }
             });
 
@@ -305,6 +308,7 @@ public abstract class Frame implements Screen {
                         prefes.putBoolean("soundOn",false);
                     }else{
                         prefes.putBoolean("soundOn",true);
+
                     }
                     prefes.flush();
                     changeSoundTexture();
