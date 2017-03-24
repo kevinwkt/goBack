@@ -12,19 +12,19 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.graphics.g2d.Animation;
 
 /**
  * Created by kevin on 3/20/2017.
  */
 
-class ArcadeLizard extends Enemy {
+class ArcadeGoo extends Enemy {
 
     private PolygonShape shape;
+    private static float SPEED = 0.4f;
+    private Body body;
 
-    public ArcadeLizard(World world, int type, int leftOrRight, Animation tx) {
-        super(world,type,leftOrRight,tx);
-        SPEED=0.4f;
+    public ArcadeGoo(World world, int type, float angle, Texture tx, float startX, float startY) {
+        super(world,type,angle,tx,startX,startY);
     }
 
     void fixturer(float density, float restitution) {
@@ -34,7 +34,7 @@ class ArcadeLizard extends Enemy {
 
         //lizard
         shape = new PolygonShape();
-        shape.setAsBox(ArcadeValues.pxToMeters(241f), ArcadeValues.pxToMeters(77f));
+        shape.setAsBox(ArcadeValues.pxToMeters(sprite.getHeight()), ArcadeValues.pxToMeters(sprite.getWidth()));
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.density = density;
@@ -42,8 +42,8 @@ class ArcadeLizard extends Enemy {
         fixtureDef.shape = shape;
         fixtureDef.friction = 0;
 
-        fixtureDef.filter.categoryBits = ArcadeValues.enemyCat; //its category
-        fixtureDef.filter.maskBits = ArcadeValues.enemyMask; //or of its category with colliding categories
+        fixtureDef.filter.categoryBits = ArcadeValues.pelletCat; //its category
+        fixtureDef.filter.maskBits = ArcadeValues.pelletMask; //or of its category with colliding categories
 
         body.createFixture(fixtureDef);
     }
@@ -53,10 +53,5 @@ class ArcadeLizard extends Enemy {
         region=an.getKeyFrame(delta);
         batch.draw(region, ArcadeValues.metersToPx(body.getPosition().x), ArcadeValues.metersToPx(body.getPosition().y));
     }
-
-    private void waitGo(){
-
-    }
-
 }
 

@@ -37,15 +37,19 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public abstract class Enemy{
 
-    protected static float hp;
-    protected static float dmg;
-    protected static int color;
-    protected static float SPEED;
-    protected static int leftright;
+    protected float hp;
+    protected float dmg;
+    protected int color;
+    protected float SPEED;
+    protected int leftRight;
 
-    private Body body;
-    private CircleShape shape;
-    private Sprite sprite;
+    protected Animation<TextureRegion> an;
+
+    protected TextureRegion region;
+
+    protected Body body;
+    protected CircleShape shape;
+    protected Sprite sprite;
 
     public Enemy(World world, int type, float angle, Texture tx, float startX, float startY) {
         this.sprite = new Sprite(tx);
@@ -62,77 +66,57 @@ public abstract class Enemy{
         fixturer(0.1f, 0.7f);
         body.setBullet(true);
 
-        body.setLinearVelocity(MathUtils.cos(angle) * SPEED,
-                MathUtils.sin(angle) * SPEED);
-        // body.setLinearVelocity(1,1);
+        body.setLinearVelocity(MathUtils.cos(angle) * SPEED, MathUtils.sin(angle) * SPEED);
+
         body.setUserData(this);
     }
 
     public Enemy(World world, int type, int leftOrRight, Animation tx) {
-        //this.sprite = new Sprite(tx);
+        this.an=tx;
         this.color = type;
-        this.leftright=leftOrRight;
+        this.leftRight=leftOrRight;
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        if(leftright==1) bodyDef.position.set(ArcadeValues.pxToMeters(1280+120), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
-        if(leftright==0) bodyDef.position.set(ArcadeValues.pxToMeters(-120), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
-
-        body = world.createBody(bodyDef);
-        fixturer(0.1f, 0.7f);
-        body.setBullet(true);
-
-        body.setLinearVelocity(SPEED, 0);
+        if(leftRight==1) {
+            bodyDef.position.set(ArcadeValues.pxToMeters(1280+120), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
+            body = world.createBody(bodyDef);
+            fixturer(0.1f, 0.7f);
+            body.setBullet(true);
+            body.setLinearVelocity(-SPEED, 0);
+        }
+        if(leftRight==0) {
+            bodyDef.position.set(ArcadeValues.pxToMeters(-120), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
+            body = world.createBody(bodyDef);
+            fixturer(0.1f, 0.7f);
+            body.setBullet(true);
+            body.setLinearVelocity(SPEED, 0);
+        }
 
         body.setUserData(this);
     }
 
-    private void fixturer(float density, float restitution) {
-        //neumann preventive shit
-        for (Fixture fix : body.getFixtureList()) {
-            body.destroyFixture(fix);
-        }
+    abstract void fixturer(float density, float restitution);
 
-        //shape of pellet
-        shape = new CircleShape();
-
-        shape.setRadius(
-                ArcadeValues.pxToMeters((sprite.getWidth() * sprite.getScaleX()/2f))
-        );//sprite translated to meters
-
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.density = density;
-        fixtureDef.restitution = restitution;
-        fixtureDef.shape = shape;
-        fixtureDef.friction = 0;
-
-        fixtureDef.filter.categoryBits = ArcadeValues.pelletCat; //its category
-        fixtureDef.filter.maskBits = ArcadeValues.pelletMask; //or of its category with colliding categories
-
-        body.createFixture(fixtureDef);
-    }
-
-    private float getDamage(){
+    public float getDamage(){
         return dmg;
     }
 
-    private int getColor(){
+    public int getColor(){
         return color;
     }
 
-    private boolean getHurtDie(float damage){
+    public int getRightLeft(){
+        return leftRight;
+    }
+
+    public boolean getHurtDie(float damage){
         hp-=damage;
         if(hp<=0) return true;
         else return false;
     }
 
-    public void draw(SpriteBatch batch) {
-        sprite.setPosition(
-                ArcadeValues.metersToPx(body.getPosition().x),
-                ArcadeValues.metersToPx(body.getPosition().y)
-        );
-        sprite.draw(batch);
-    }
+    abstract void draw(SpriteBatch batch,float delta);
 }
 
 
