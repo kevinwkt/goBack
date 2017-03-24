@@ -60,7 +60,7 @@ class OrbAttack extends Squirt {
         shape = new CircleShape();
 
         shape.setRadius(
-                ArcadeValues.pxToMeters((sprite.getWidth() * sprite.getScaleX()/2f))
+                ArcadeValues.pxToMeters((sprite.getWidth()/2f))
         );//sprite translated to meters
 
         FixtureDef fixtureDef = new FixtureDef();
