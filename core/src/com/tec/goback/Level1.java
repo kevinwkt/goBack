@@ -160,10 +160,11 @@ public class Level1 extends Frame {
     @Override
     public void render(float delta) {
         cls();
-        if(soundPreferences.getBoolean("soundOn"))
+        /*if(soundPreferences.getBoolean("soundOn"))
             bgMusic.play();
-        else
-            bgMusic.stop();
+        /*else
+            bgMusic.pause();*/
+
         batch.setProjectionMatrix(super.camera.combined);
         batch.begin();
 
