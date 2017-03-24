@@ -17,17 +17,16 @@ import com.badlogic.gdx.physics.box2d.World;
  * Created by kevin on 3/20/2017.
  */
 
-/*
 class ArcadeLizard extends Enemy {
 
-private PolygonShape shape;
+    private PolygonShape shape;
     private int rightLeft;
     private static float SPEED = 0.4f;
     private Body body;
 
-    public ArcadeLizard(World world,int fromWhere, Texture tx) {
-        super(world, );
-        this.rightLeft = fromWhere;
+    public ArcadeLizard(World world, int type, int leftOrRight, Animation tx) {
+        super(World world, int type, int leftOrRight, Animation tx);
+        leftRight = leftOrRight;
     }
 
     private void fixturer(float density, float restitution) {
@@ -37,7 +36,7 @@ private PolygonShape shape;
 
         //lizard
         shape = new PolygonShape();
-        shape.setAsBox(ArcadeValues.pxToMeters(sprite.getHeight()), ArcadeValues.pxToMeters(sprite.getWidth()));
+        shape.setAsBox(ArcadeValues.pxToMeters(ArcadeValues.pxToMeters(241), ArcadeValues.pxToMeters(77));
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.density = density;
@@ -45,24 +44,17 @@ private PolygonShape shape;
         fixtureDef.shape = shape;
         fixtureDef.friction = 0;
 
-        fixtureDef.filter.categoryBits = ArcadeValues.pelletCat; //its category
-        fixtureDef.filter.maskBits = ArcadeValues.pelletMask; //or of its category with colliding categories
+        fixtureDef.filter.categoryBits = ArcadeValues.enemyCat; //its category
+        fixtureDef.filter.maskBits = ArcadeValues.enemyMask; //or of its category with colliding categories
 
         body.createFixture(fixtureDef);
     }
 
-    public void draw(SpriteBatch batch) {
-        sprite.setCenter(ArcadeValues.metersToPx(body.getPosition().x), ArcadeValues.metersToPx(body.getPosition().y));
-        sprite.draw(batch);
+    public void draw(SpriteBatch batch,float delta) {
+        delta +=Gdx.graphics.getDeltaTime();
+        region=tx.getKeyFrame(delta);
+        batch.draw(region, ArcadeValues.metersToPx(body.getPosition().x), ArcadeValues.metersToPx(body.getPosition().y));
     }
-
-    public int getRightLeft(){
-        return rightLeft;
-    }
-
-
-
 
 }
-    */
 

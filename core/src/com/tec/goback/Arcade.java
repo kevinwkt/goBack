@@ -67,6 +67,22 @@ class Arcade extends Frame{
     private Texture pelletyellow;
     private Texture pelletblue;
     private Texture pelletred;
+    private Texture lizard;
+    private Texture goo;
+    private Texture skull;
+    private Texture spike;
+
+    private Animation<TextureRegion> lizardAnimation;
+    private Animation<TextureRegion> gooAnimation;
+    private Animation<TextureRegion> skullRedAnimation;
+    private Animation<TextureRegion> skullBlueAnimation;
+    private Animation<TextureRegion> skullYellowAnimation;
+
+    private float timerchangeframelizard;
+    private float timerchangeframegoo;
+    private float timerchangeframeskullred;
+    private float timerchangeframeskullblue;
+    private float timerchangeframeskullyellow;
 
     private Sprite orby;
     private Sprite orbb;
@@ -134,6 +150,36 @@ class Arcade extends Frame{
                 pelletred = aManager.get("PELLET/ATAQUERedPellet.png");
                 break;
         }
+
+        lizard=new Texture("MINIONS/LIZARD/MINIONYellowGoo.png");
+        goo=new Texture("MINIONS/GOO/MINIONYellowGoo.png");
+        skull=new Texture("SKULL/MINIONSkulls.png");
+        spike=new Texture("MINIONS/SPIKE/MINIONYellowSpike00.png");
+
+        TextureRegion texturaCompleta = new TextureRegion(lizard);
+        TextureRegion[][] texturaPersonaje = texturaCompleta.split(241,77);
+        lizardAnimation = new Animation(0.18f, texturaPersonaje[0][0], texturaPersonaje[0][1]);
+        lizardAnimation.setPlayMode(Animation.PlayMode.LOOP);
+
+        texturaCompleta=new TextureRegion(goo);
+        texturaPersonaje=texturaCompleta.split(118,125);
+        gooAnimation = new Animation(0.18f, texturaPersonaje[0][0], texturaPersonaje[0][1]);
+        gooAnimation.setPlayMode(Animation.PlayMode.LOOP);
+
+        texturaCompleta=new TextureRegion(skull);
+        texturaPersonaje=texturaCompleta.split(128,242);
+        skullBlueAnimation = new Animation(0.18f, texturaPersonaje[0][0], texturaPersonaje[0][1]);
+        skullRedAnimation = new Animation(0.18f, texturaPersonaje[0][2], texturaPersonaje[0][3]);
+        skullYellowAnimation = new Animation(0.18f, texturaPersonaje[0][4], texturaPersonaje[0][5]);
+        skullBlueAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        skullRedAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        skullYellowAnimation.setPlayMode(Animation.PlayMode.LOOP);
+
+        timerchangeframegoo = 0;
+        timerchangeframelizard=0;
+        timerchangeframeskullblue=0;
+        timerchangeframeskullred=0;
+        timerchangeframeskullyellow=0;
     }
 
     private void worldInit(){
