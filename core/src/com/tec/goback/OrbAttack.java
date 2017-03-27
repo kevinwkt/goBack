@@ -12,6 +12,8 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 
+import java.util.Iterator;
+
 /**
  * Created by kevin on 3/20/2017.
  */
@@ -23,6 +25,7 @@ class OrbAttack extends Squirt {
     private Body body;
     private CircleShape shape;
     private Sprite sprite;
+    private boolean hit;
 
     protected float dmg=20;
 
@@ -43,7 +46,7 @@ class OrbAttack extends Squirt {
 
         body = world.createBody(bodyDef);
         fixturer(0.1f, 0.7f);
-        body.setBullet(true);
+        //body.setBullet(true);
 
 
         body.setLinearVelocity(MathUtils.cos(angle) * SPEED,
@@ -54,9 +57,15 @@ class OrbAttack extends Squirt {
 
     private void fixturer(float density, float restitution) {
         //neumann preventive shit
-        for (Fixture fix : body.getFixtureList()) {
-            body.destroyFixture(fix);
+        //for (Fixture fix : body.getFixtureList()) body.destroyFixture(fix);
+
+        /*
+        Iterator<Fixture> it = body.getFixtureList().iterator();
+        while(it.hasNext()){
+            body.destroyFixture(it.next());
         }
+        */
+
 
         //shape of pellet
         shape = new CircleShape();
@@ -88,5 +97,6 @@ class OrbAttack extends Squirt {
     public int getColor(){
         return color;
     }
+
 }
 

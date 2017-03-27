@@ -68,11 +68,11 @@ public class ArcadeSophie {
     }
 
     public boolean getHurtDie(int type, float damage){
-        if(color == type){
-            life -= damage;
-        }else{
-            life -= damage * 2;
-        }
+//        if(color == type){
+//            life -= damage;
+//        }else{
+//            life -= damage * 2;
+//        }
         return life <= 0.0f ? true : false;
     }
 

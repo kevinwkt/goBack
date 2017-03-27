@@ -23,7 +23,13 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
 import com.badlogic.gdx.graphics.g2d.Animation;
+
+import javax.management.monitor.GaugeMonitor;
 //
 
 
@@ -33,7 +39,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 class Arcade extends Frame{
 
     private World world;
-    private Array<Body> deadThings;
+    private HashSet<Body> deadThings;
     private ArrayList<Body> wall = new ArrayList<Body>();
     private float fstep;
     private float cooldown;
@@ -185,7 +191,7 @@ class Arcade extends Frame{
     private void worldInit(){
         world = new World(Vector2.Zero, true);
         fstep = 0f;
-        deadThings = new Array<Body>();
+        deadThings = new HashSet<Body>();
 
         world.setContactListener(new ContactListener() {
             @Override
@@ -281,10 +287,20 @@ class Arcade extends Frame{
     }
 
     private void makeWallFixture(Body b, float x, float y){
-        //neumann preventive shit 
+        //neumann preventive shit
+        /*
         for (Fixture f : b.getFixtureList()){
             b.destroyFixture(f);
         }
+        */
+
+        /*
+        Iterator<Fixture> it = b.getFixtureList().iterator();
+        while(it.hasNext()){
+            b.destroyFixture(it.next());
+        }
+        */
+
 
         FixtureDef f = new FixtureDef();
 
@@ -351,19 +367,19 @@ class Arcade extends Frame{
         float lr =MathUtils.random();
         int color  = calcColor();
         if(r >= 0.0f && r < 0.8f){//lizard (0.25)
+            Gdx.app.log("Enemy", " spawned");
             switch (color){
                 case(1):
                     if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
-                    else new ArcadeLizard(world, color, 0, lizardAnimation);
+                    else        new ArcadeLizard(world, color, 0, lizardAnimation);
                     break;
                 case(2):
                     if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
-                    else new ArcadeLizard(world, color, 0, lizardAnimation);
+                    else        new ArcadeLizard(world, color, 0, lizardAnimation);
                     break;
                 case(3):
                     if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
-                    else new ArcadeLizard(world, color, 0, lizardAnimation);
-                    break;
+                    else        new ArcadeLizard(world, color, 0, lizardAnimation);
             }
         }
         /*
@@ -443,22 +459,48 @@ class Arcade extends Frame{
     }
 
     private void stepper(float delta){
-        //much steps
-        fstep += delta;
-        while(fstep > 1/120f){
-            world.step(1/120F, 8, 3);
-            fstep -= 1/120f;
-        }
+        // /*
 
-        //clean dead thinfs
+        Gdx.app.log("Bodies: "+world.getBodyCount(), ", Fixtures: "+world.getFixtureCount());
+
+        // */
+
+
+        //much steps
+        world.step(1/60f, 6, 2);
+
+        //clean dead things
+        for (Body b: deadThings) {
+            Gdx.app.log("Body"+b,"");
+        }
         for(Body b: deadThings){
-            for(Fixture f: b.getFixtureList()){
-                b.destroyFixture(f);
+            while(b.getFixtureList().size > 0){
+                b.destroyFixture(b.getFixtureList().get(0));
             }
             world.destroyBody(b);
         }
         deadThings.clear();
-        cooldown += delta;
+
+
+//        fstep += delta;
+//        while(fstep > 1/120f){
+//            world.step(1/120F, 8, 3);
+//
+//            //clean dead things
+//            for(Body b: deadThings){
+//                while(b.getFixtureList().size > 0){
+//                    b.destroyFixture(b.getFixtureList().get(0));
+//                }
+//                world.destroyBody(b);
+//            }
+//            deadThings.clear();
+//
+//
+//            fstep -= 1/120f;
+//        }
+//
+//
+//        cooldown += delta;
 
     }
 
@@ -582,7 +624,7 @@ class Arcade extends Frame{
 
             //TODO CHECK FOR BUTTON
             //TODO COOLDOWN FOR SHOOTING
-            if (!true){                                     //if hit orb
+            if (!true && state == GameState.PLAYING){                                     //if hit orb
                 switch (d) {
                     case 1:
                         break;
@@ -618,8 +660,9 @@ class Arcade extends Frame{
             }
             else if(v.x > 1172 && v.y < 135){               //if hit pause
                 state = GameState.PAUSED;
-            }else{//if we're not switching orbs
-                if(cooldown > 0.2f) {
+
+            }else if(state == GameState.PLAYING){//if we're not switching orbs
+                if(cooldown > 0.2f || true) {
                     float angle = MathUtils.atan2(
                             v.y - ArcadeValues.pelletOriginY,
                             v.x - ArcadeValues.pelletOriginX

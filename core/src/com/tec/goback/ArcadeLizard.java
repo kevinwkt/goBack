@@ -14,6 +14,8 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.graphics.g2d.Animation;
 
+import java.util.Iterator;
+
 /**
  * Created by kevin on 3/20/2017.
  */
@@ -39,7 +41,15 @@ class ArcadeLizard extends Enemy {
     void fixturer(float density, float restitution) {
 
         //neumann preventive shit
-        for (Fixture fix : body.getFixtureList()) {body.destroyFixture(fix);}
+        //for (Fixture fix : body.getFixtureList()) {body.destroyFixture(fix);}
+
+        /*
+        Iterator<Fixture> it = body.getFixtureList().iterator();
+        while(it.hasNext()){
+            body.dest
+            oyFixture(it.next());
+        }
+        */
 
         //lizard
         shape = new PolygonShape();
