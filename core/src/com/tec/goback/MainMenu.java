@@ -218,7 +218,7 @@ public class MainMenu implements Screen {
                 menu.dispose();
             }
         });
-        /*
+        /* ////PARA QUE ROMAN CHEQUE ARCADE
         if(pref.getInteger("level")>=1&&pref.getBoolean("boss")) {
             arcadeBtnImg.addListener(new ClickListener() {
                 @Override
