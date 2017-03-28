@@ -17,7 +17,7 @@ import com.badlogic.gdx.math.Vector3;
  * Created by sergiohernandezjr on 18/03/17.
  * Con ayuda de DON PABLO
  */
-public class Level1 extends Frame {
+class Level1 extends Frame {
 
     private Sophie sophie;
     private Texture sophieTexture;

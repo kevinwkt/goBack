@@ -23,14 +23,13 @@ class OrbAttack extends Squirt {
     private int color;
     private static float SPEED = 4;
     private Body body;
-    private CircleShape shape;
     private Sprite sprite;
-    private boolean hit;
 
     protected float dmg=20;
 
-    public OrbAttack(World world, int type, float angle, Texture tx) {
-        this.sprite = new Sprite(tx);
+    OrbAttack(World world, int type, float angle, Texture tx) {
+        Texture t = tx;
+        sprite = new Sprite(t);
         sprite.setCenter(
                 ArcadeValues.pelletOriginX,
                 ArcadeValues.pelletOriginY
@@ -46,7 +45,7 @@ class OrbAttack extends Squirt {
 
         body = world.createBody(bodyDef);
         fixturer(0.1f, 0.7f);
-        //body.setBullet(true);
+        body.setBullet(true);
 
 
         body.setLinearVelocity(MathUtils.cos(angle) * SPEED,
@@ -68,7 +67,7 @@ class OrbAttack extends Squirt {
 
 
         //shape of pellet
-        shape = new CircleShape();
+        CircleShape shape = new CircleShape();
 
         shape.setRadius(
                 ArcadeValues.pxToMeters(0.05f)

@@ -35,7 +35,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * Con ayuda de DON PABLO
  */
 
-public abstract class Enemy{
+abstract class Enemy{
 
     protected float hp;
     protected float dmg;

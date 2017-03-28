@@ -26,7 +26,7 @@ import sun.applet.Main;
  * Created b1y pablo on 16/02/17.
  */
 
-public class SoundSettings implements Screen{
+class SoundSettings implements Screen{
 
     private final App app;
     private AssetManager aManager;

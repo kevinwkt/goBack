@@ -24,7 +24,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * Created by pablo on 18/03/17.
  */
 
-public class Level0 implements Screen {
+class Level0 implements Screen {
 
 
     Preferences pref = Gdx.app.getPreferences("getLevel");

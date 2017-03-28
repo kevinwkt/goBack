@@ -13,7 +13,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * Created by gerry on 3/19/17.
  */
 
-public class Dialogue {
+class Dialogue {
     private BitmapFont font;
     private AssetManager aManager;
 

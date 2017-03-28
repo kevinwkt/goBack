@@ -26,12 +26,12 @@ import sun.applet.Main;
 /**
  * Created by gerry on 2/18/17.
  */
-public class MainMenu implements Screen {
+class MainMenu implements Screen {
 
     //Main app class
     private final App app;
 
-    Preferences pref=Gdx.app.getPreferences("getLevel");
+    private Preferences pref = Gdx.app.getPreferences("getLevel");
 
     //Screen sizes
     public static final float WIDTH = 1280;
@@ -218,6 +218,7 @@ public class MainMenu implements Screen {
                 menu.dispose();
             }
         });
+
         /* ////PARA QUE ROMAN CHEQUE ARCADE
         if(pref.getInteger("level")>=1&&pref.getBoolean("boss")) {
             arcadeBtnImg.addListener(new ClickListener() {
@@ -281,7 +282,7 @@ public class MainMenu implements Screen {
         aManager.unload("HARBOR/GoBackHARBOR0.png");
         aManager.unload("MOUNTAINS/GoBackMOUNTAINS0.png"); //Level2
         //aManager.unload(".png"); //Level3
-        aManager.unload("Interfaces/MENU/ABOUT.png");
+        //aManager.unload("Interfaces/MENU/ABOUT.png");
         aManager.unload("Interfaces/MENU/ARCADE.png");
         aManager.unload("Interfaces/MENU/SOUND.png");
         aManager.unload("Interfaces/MENU/STORY.png");

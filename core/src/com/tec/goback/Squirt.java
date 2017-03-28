@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector3;
  * Representa un elemento gráfico del juego
  */
 
-public class Squirt
+class Squirt
 {
     protected Sprite sprite;    // Imagen
 

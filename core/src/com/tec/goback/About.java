@@ -23,7 +23,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * Created by sergiohernandezjr on 16/02/17.
  */
 
-public class About implements Screen {
+class About implements Screen {
     //Main app class
     private final App app;
     private AssetManager aManager;

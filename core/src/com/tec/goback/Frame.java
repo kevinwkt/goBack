@@ -28,7 +28,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * Con ayuda de DON PABLO
  */
 
-public abstract class Frame implements Screen {
+abstract class Frame implements Screen {
     //Main app class
     protected final App app;
 

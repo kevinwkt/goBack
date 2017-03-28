@@ -14,7 +14,7 @@ import com.badlogic.gdx.physics.box2d.World;
 /**
  * Created by gerry on 3/22/17.
  */
-public class ArcadeSophie {
+class ArcadeSophie {
     private Body body;
     private PolygonShape shape;
     private Sprite sprite;
