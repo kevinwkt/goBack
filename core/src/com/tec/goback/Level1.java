@@ -60,17 +60,6 @@ class Level1 extends Frame {
     private float dialogueTime = 0;
     private int dialogueSprite = 1; // 1
 
-    private Texture oldmanEyesClosed;
-    private Texture oldmanStand;
-    private Texture oldmanNod;
-    private Texture oldmanEyesOpened;
-
-    private Texture sophieBlink;
-    private Texture sophieConcerned;
-    private Texture sophieNormal;
-    private Texture sophieSurprised;
-
-
     private Sprite oldmanEyesClosedSpr;
     private Sprite oldmanStandSpr;
     private Sprite oldmanNodSpr;
@@ -80,6 +69,11 @@ class Level1 extends Frame {
     private Sprite sophieNormalSpr;
     private Sprite sophieSurprisedSpr;
 
+    private Sprite oldManNormalSpr;
+    private Sprite oldManBlinkSpr;
+
+
+    //cnstnt
     public static final float LEFT_LIMIT = 980;
     public static float RIGHT_LIMIT = 3700;
 
@@ -93,7 +87,7 @@ class Level1 extends Frame {
 
 
 
-    public Level1(App app) {
+    Level1(App app) {
         super(app, WIDTH_MAP,HEIGHT_MAP);
     }
 
@@ -122,27 +116,27 @@ class Level1 extends Frame {
     }
 
     private void textureInit() {
+        //girl
         sophieTexture = new Texture("Squirts/Sophie/SOPHIEWalk.png");
         sophie = new Sophie(sophieTexture, 100,100);
 
-        sophieBlink = aManager.get("SOPHIE/DIALOGUESophieBlink.png");
-        sophieConcerned = aManager.get("SOPHIE/DIALOGUESophieConcern.png");
-        sophieNormal = aManager.get("SOPHIE/DIALOGUESophieNormal.png");
-        sophieSurprised = aManager.get("SOPHIE/DIALOGUESophieSurprise.png");
-        oldmanEyesClosed = aManager.get("OLDMAN/STILL/OLDMANStill00.png");
-        oldmanStand = aManager.get("OLDMAN/STILL/OLDMANStill01.png");
-        oldmanNod = aManager.get("OLDMAN/STILL/OLDMANStill02.png");
-        oldmanEyesOpened = aManager.get("OLDMAN/STILL/OLDMANStill03.png");
+        //dialogues
 
-        oldmanEyesClosedSpr = new Sprite(oldmanEyesClosed);
-        oldmanStandSpr = new Sprite(oldmanStand);
-        oldmanNodSpr = new Sprite(oldmanNod);
-        oldmanEyesOpenedSpr = new Sprite(oldmanEyesOpened);
-        sophieBlinkSpr = new Sprite(sophieBlink);
-        sophieConcernedSpr = new Sprite(sophieConcerned);
-        sophieNormalSpr = new Sprite(sophieNormal);
-        sophieSurprisedSpr = new Sprite(sophieSurprised);
+        oldManNormalSpr = new Sprite((Texture)aManager.get("OLDMAN/DIALOGUEOldManNormal.png", Texture.class));
+        oldManBlinkSpr = new Sprite((Texture)aManager.get("OLDMAN/DIALOGUEOldManBlink.png", Texture.class));
 
+
+        oldmanEyesClosedSpr = new Sprite((Texture)aManager.get("OLDMAN/STILL/OLDMANStill00.png"));
+        oldmanStandSpr = new Sprite((Texture)aManager.get("OLDMAN/STILL/OLDMANStill01.png"));
+        oldmanNodSpr = new Sprite((Texture)aManager.get("OLDMAN/STILL/OLDMANStill02.png"));
+        oldmanEyesOpenedSpr = new Sprite((Texture)aManager.get("OLDMAN/STILL/OLDMANStill03.png"));
+
+        sophieBlinkSpr = new Sprite((Texture)aManager.get("SOPHIE/DIALOGUESophieBlink.png"));
+        sophieConcernedSpr = new Sprite((Texture) aManager.get("SOPHIE/DIALOGUESophieConcern.png"));
+        sophieNormalSpr = new Sprite((Texture)aManager.get("SOPHIE/DIALOGUESophieNormal.png"));
+        sophieSurprisedSpr = new Sprite((Texture)aManager.get("SOPHIE/DIALOGUESophieSurprise.png"));
+
+        //level
         yellowOrb = new Sprite((Texture)aManager.get("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTYellowOrb.png"));
         newspaperSpr = new Sprite((Texture)aManager.get("CLUES/Newspaper/CLUESNewspaper.png"));
         lizardSpr = new Sprite((Texture)aManager.get("BOSS/IGUANA/BOSSIguanaBody.png"));
@@ -151,20 +145,20 @@ class Level1 extends Frame {
 
         //Background
         background = new Texture("HARBOR/GoBackHARBORPanoramic.png");
+
     }
 
     private void objectInit() {
         batch = new SpriteBatch();
-
         yellowOrb.setPosition(orbXPosition,orbYPosition);
         dialogue = new Dialogue(aManager);
         oldmanEyesOpenedSpr.setPosition(900,220);
-
     }
 
     @Override
     public void render(float delta) {
         cls();
+
 
         if(soundPreferences.getBoolean("soundOn")){
             if(bgMusic!= null){
@@ -281,24 +275,25 @@ class Level1 extends Frame {
         if(sophie.sprite.getBoundingRectangle().contains(oldmanEyesOpenedSpr.getX()+(sophie.sprite.getWidth()/2 + 7), oldmanEyesOpenedSpr.getY()) && dialogueSprite <= 4){
             dialogueTime += delta;
             dialogueOn = true;
+
             switch (dialogueSprite){
                 case 1:
-                    dialogue.makeText(batch, "He’s taking me back…. He’s taking me back….. He surely is taking me back You! It’s been a long long time. The boat will be coming back soon,  I hope what I have is enough. Will you be going back, too?", oldmanStandSpr, sophieNormalSpr, true, camera.position.x/2-oldmanEyesOpenedSpr.getWidth());
+                    dialogue.makeText(batch, "He's taking me back…. He's taking me back….. He surely is taking me back You! It's been a long long time. The boat will be coming back soon,  I hope what I have is enough. Will you be going back, too?", oldManNormalSpr, sophieNormalSpr, false, camera.position.x);
                     break;
                 case 2:
-                    dialogue.makeText(batch, "I don’t know… Where am I…?", oldmanStandSpr, sophieNormalSpr, true, camera.position.x/2-oldmanEyesOpenedSpr.getWidth());
+                    dialogue.makeText(batch, "I dont know… Where am I…?", oldManNormalSpr, sophieNormalSpr, true, camera.position.x);
                     break;
                 case 3:
-                    dialogue.makeText(batch, "You sweet girl, it really is a shame. I’ve done some terrible things, but I guess I can help somebody for a change. Take this, it will help you on your journey.", oldmanStandSpr, sophieNormalSpr, false,camera.position.x/2-oldmanEyesOpenedSpr.getWidth());
+                    dialogue.makeText(batch, "You sweet girl, it really is a shame. I've done some terrible things, but I guess I can help somebody for a change. Take this, it will help you on your journey.", oldManNormalSpr, sophieNormalSpr, false,camera.position.x);
                     break;
                 case 4:
-                    dialogue.makeText(batch, "You need to pay to ride the boat, to go back. \n I used one too, but I’m going back and they can’t come on board.", oldmanNodSpr, sophieNormalSpr, false,camera.position.x/2-oldmanEyesOpenedSpr.getWidth());
+                    dialogue.makeText(batch, "You need to pay to ride the boat, to go back. \n I used one too, but I'm going back and they can't come on board.", oldManNormalSpr, sophieNormalSpr, false,camera.position.x);
                     break;
                 default:
                     break;
             }
 
-            if(dialogueTime > 2.5){ // 2.5
+            if(dialogueTime > 3.5){ // 2.5
                 dialogueSprite += 1;
                 dialogueTime = 0;
                 if(dialogueSprite >= 4){
@@ -361,19 +356,13 @@ class Level1 extends Frame {
     }
 
     @Override
-    public void pause() {
-
-    }
+    public void pause() {}
 
     @Override
-    public void resume() {
-
-    }
+    public void resume() {}
 
     @Override
-    public void hide() {
-
-    }
+    public void hide() {}
 
     @Override
     public void dispose() {

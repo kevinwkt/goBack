@@ -9,73 +9,74 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-/**
- * Created by gerry on 3/19/17.
- */
-
 class Dialogue {
     private BitmapFont font;
-    private AssetManager aManager;
+    //private AssetManager aManager; TODO ASSET MANAGER
 
-    public static final float WIDTH = 1280;
-    public static final float HEIGHT = 720;
-    public static final float HALFW = WIDTH/2;
-    public static final float HALFH = HEIGHT/2;
+    private static final float WIDTH = 1280;
+    private static final float HALFW = WIDTH/2;
+
 
     private Texture sheetTexture;
 
 
-    public Dialogue(AssetManager aManager) {
-        this.aManager = aManager;
+    Dialogue(AssetManager aManager) {
+        //this.aManager = aManager;
         font = new BitmapFont(Gdx.files.internal("fira.fnt"));
         sheetTexture = aManager.get("CONSTANT/CONSTDialogueBox.png");
     }
 
-    public void makeText(SpriteBatch batch, String msj, float offset){
+    void makeText(SpriteBatch batch, String msj, float cameraCenter){
 
         GlyphLayout glyph = new GlyphLayout();
 
-        batch.draw(sheetTexture, HALFW-sheetTexture.getWidth()/2 + offset, 0);
+        batch.draw(sheetTexture, cameraCenter-sheetTexture.getWidth()/2, 0);
 
         glyph.setText(font, msj, Color.BLACK, 710.0F, 30, true);
-        font.draw(batch ,glyph,HALFW-sheetTexture.getWidth()/2+185 + offset, sheetTexture.getHeight()-115);
+        font.draw(batch ,glyph, cameraCenter - sheetTexture.getWidth()/2 + 185, sheetTexture.getHeight()-115);
     }
 
-    public void makeText(SpriteBatch batch, String msj, Sprite left, float offset){
+
+    void makeText(SpriteBatch batch, String msj, Sprite left, float cameraCenter){
 
         GlyphLayout glyph = new GlyphLayout();
 
 
 
-        left.setPosition(0,0); //corregir offset
+        left.setPosition(cameraCenter-HALFW,0);
         left.draw(batch);
-        batch.draw(sheetTexture, HALFW-sheetTexture.getWidth()/2 + offset, 0);
+
+        batch.draw(sheetTexture, HALFW-sheetTexture.getWidth()/2 + cameraCenter, 0);
 
         glyph.setText(font, msj, Color.BLACK, 710.0F, 30, true);
-        font.draw(batch ,glyph,HALFW-sheetTexture.getWidth()/2+185 + offset, sheetTexture.getHeight()-115);
+        font.draw(batch ,glyph,HALFW-sheetTexture.getWidth()/2+185 + cameraCenter, sheetTexture.getHeight()-115);
     }
 
-    public void makeText(SpriteBatch batch, String msj, Sprite left, Sprite right, boolean rightTalks, float offset){
+
+    void makeText(SpriteBatch batch, String msj, Sprite left, Sprite right, boolean rightTalks, float cameraCenter){
 
         GlyphLayout glyph = new GlyphLayout();
 
 
 
-        left.setPosition(0 ,0); // corregir offset
-        right.setPosition(0 , WIDTH-right.getWidth()); // corregir offset
+        left.setPosition(cameraCenter-HALFW ,0);
+        right.setPosition(cameraCenter+HALFW-right.getWidth() , 0);
 
         if(rightTalks){
             left.setColor(1F, 1F, 1F, 0.6F);
+            right.setColor(1F, 1F, 1F, 1.0F);
         }else{
             right.setColor(1F, 1F, 1F, 0.6F);
+            left.setColor(1F, 1F, 1F, 1.0F);
         }
+
         right.draw(batch);
         left.draw(batch);
 
-        batch.draw(sheetTexture, HALFW-sheetTexture.getWidth()/2 + offset, 0);
+        batch.draw(sheetTexture, cameraCenter-sheetTexture.getWidth()/2, 0);
 
         glyph.setText(font, msj, Color.BLACK, 710.0F, 30, true);
-        font.draw(batch ,glyph,HALFW-sheetTexture.getWidth()/2+185 + offset, sheetTexture.getHeight()-115);
+        font.draw(batch ,glyph, cameraCenter - sheetTexture.getWidth()/2 + 185, sheetTexture.getHeight()-115);
     }
 
 }

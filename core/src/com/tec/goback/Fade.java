@@ -127,6 +127,10 @@ class Fade implements Screen {
                     manager.load("OLDMAN/STILL/OLDMANStill01.png", Texture.class);
                     manager.load("OLDMAN/STILL/OLDMANStill02.png", Texture.class);
                     manager.load("OLDMAN/STILL/OLDMANStill03.png", Texture.class);
+
+                    manager.load("OLDMAN/DIALOGUEOldManBlink.png", Texture.class);
+                    manager.load("OLDMAN/DIALOGUEOldManNormal.png", Texture.class);
+
                     manager.load("SOPHIE/DIALOGUESophieBlink.png", Texture.class);
                     manager.load("SOPHIE/DIALOGUESophieConcern.png", Texture.class);
                     manager.load("SOPHIE/DIALOGUESophieNormal.png", Texture.class);

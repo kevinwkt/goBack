@@ -356,7 +356,7 @@ class Arcade extends Frame{
         }else{
             dialoguetime += delta;
             if(dialoguetime < 2.5f) {
-                dialogue.makeText(batch, "This dream overwhelmed you", 0);
+                dialogue.makeText(batch, "This dream overwhelmed you", camera.position.x);
                 batch.end();
             }else{
                 app.setScreen(new Fade(app, LoaderState.ARCADE));
