@@ -83,6 +83,7 @@ class OrbAttack extends Squirt {
         fixtureDef.filter.maskBits = ArcadeValues.pelletMask; //or of its category with colliding categories
 
         body.createFixture(fixtureDef);
+        shape.dispose();
     }
 
     public void draw(SpriteBatch batch) {
