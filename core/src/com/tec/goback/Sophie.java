@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  * Created by kevin on 3/19/2017.
  */
 
-public class Sophie extends Squirt
+class Sophie extends Squirt
 {
     private final float vx = 4;      // Horizontal Velocity
 

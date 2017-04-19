@@ -18,7 +18,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  *
  * Created by gerry on 3/18/17.
  */
-public class Fade implements Screen {
+class Fade implements Screen {
     private final App app; //Main app class
 
     //Screen sizes
@@ -127,6 +127,10 @@ public class Fade implements Screen {
                     manager.load("OLDMAN/STILL/OLDMANStill01.png", Texture.class);
                     manager.load("OLDMAN/STILL/OLDMANStill02.png", Texture.class);
                     manager.load("OLDMAN/STILL/OLDMANStill03.png", Texture.class);
+
+                    manager.load("OLDMAN/DIALOGUEOldManBlink.png", Texture.class);
+                    manager.load("OLDMAN/DIALOGUEOldManNormal.png", Texture.class);
+
                     manager.load("SOPHIE/DIALOGUESophieBlink.png", Texture.class);
                     manager.load("SOPHIE/DIALOGUESophieConcern.png", Texture.class);
                     manager.load("SOPHIE/DIALOGUESophieNormal.png", Texture.class);
@@ -153,9 +157,9 @@ public class Fade implements Screen {
 
                     break;
                 case ARCADE:
-                    manager.load("INTRO/INTROBackground.png", Texture.class);
+                    manager.load("MUSIC/GoBackMusicArcade.mp3", Music.class);
                     manager.load("HARBOR/GoBackHARBOR0.png", Texture.class);
-                    manager.load("MOUNTAINS/GoBackMOUNTAINS0.png", Texture.class); //Level2
+                    //manager.load("MOUNTAINS/GoBackMOUNTAINS0.png", Texture.class); //Level2
                     //manager.load(".png", Texture.class); //Level3
                     manager.load("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png", Texture.class);
                     manager.load("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrbEyes.png", Texture.class);

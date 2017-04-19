@@ -4,7 +4,7 @@ package com.tec.goback;
  * Created by pablo on 18/03/17.
  */
 
-public enum LoaderState {
+enum LoaderState {
     ABOUT,
     MAINMENU,
     PAUSE,

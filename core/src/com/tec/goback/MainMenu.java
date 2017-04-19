@@ -26,12 +26,12 @@ import sun.applet.Main;
 /**
  * Created by gerry on 2/18/17.
  */
-public class MainMenu implements Screen {
+class MainMenu implements Screen {
 
     //Main app class
     private final App app;
 
-    Preferences pref=Gdx.app.getPreferences("getLevel");
+    private Preferences pref = Gdx.app.getPreferences("getLevel");
 
     //Screen sizes
     public static final float WIDTH = 1280;
@@ -68,7 +68,7 @@ public class MainMenu implements Screen {
     private MainMenu menu = this;
 
     // Música
-    private Music bgMusic;  // Sonidos largos
+    private Music bgMusic;
 
     //Constructor recieves main App class (implements Game)
     public MainMenu(App app) {
@@ -78,9 +78,11 @@ public class MainMenu implements Screen {
 
     @Override
     public void show() {
-        //    -----------------------  TO GET INTO LEVEL 0 TEMPORAL OMG
-        /*pref.putInteger("level",0);
-        pref.flush();*/
+        //     -----------------------  TO GET INTO LEVEL 0 TEMPORAL OMG
+         /*
+        pref.putInteger("level",0);
+        pref.flush();
+        */
         if(pref.getInteger("level")==0){
             pref.getBoolean("boss",false);
             pref.flush();
@@ -94,6 +96,8 @@ public class MainMenu implements Screen {
     private void musicInit() {
         bgMusic = aManager.get("MUSIC/GoBackMusicMainMenu.mp3");
         bgMusic.setLooping(true);
+        bgMusic.play();
+        bgMusic.setVolume(1);
     }
 
     private void cameraInit() {
@@ -216,7 +220,8 @@ public class MainMenu implements Screen {
                 menu.dispose();
             }
         });
-        /*
+
+        /* ////PARA QUE ROMAN CHEQUE ARCADE
         if(pref.getInteger("level")>=1&&pref.getBoolean("boss")) {
             arcadeBtnImg.addListener(new ClickListener() {
                 @Override
@@ -279,7 +284,7 @@ public class MainMenu implements Screen {
         aManager.unload("HARBOR/GoBackHARBOR0.png");
         aManager.unload("MOUNTAINS/GoBackMOUNTAINS0.png"); //Level2
         //aManager.unload(".png"); //Level3
-        aManager.unload("Interfaces/MENU/ABOUT.png");
+        //aManager.unload("Interfaces/MENU/ABOUT.png");
         aManager.unload("Interfaces/MENU/ARCADE.png");
         aManager.unload("Interfaces/MENU/SOUND.png");
         aManager.unload("Interfaces/MENU/STORY.png");

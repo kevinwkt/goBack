@@ -2,6 +2,7 @@ package com.tec.goback;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
@@ -23,26 +24,33 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
 import com.badlogic.gdx.graphics.g2d.Animation;
+
+import javax.management.monitor.GaugeMonitor;
 //
 
 
 /**
  * Created by gerry on 2/18/17.
  */
+
+
 class Arcade extends Frame{
 
     private World world;
-    private Array<Body> deadThings;
+    private HashSet<Body> deadThings;
     private ArrayList<Body> wall = new ArrayList<Body>();
     private float fstep;
-
+    private float cooldown;
 
     private float betweenSpawns = ArcadeValues.initalFrequency;
     private float factor = ArcadeValues.initialFactor;
     private float elapsed = 0;
     private float elapsed2 = 0;
-    private boolean flag = true;
 
     //CURRENT COLOR ORB
     private orbColor currentColor = orbColor.YELLOW;
@@ -79,11 +87,13 @@ class Arcade extends Frame{
     private Animation<TextureRegion> skullBlueAnimation;
     private Animation<TextureRegion> skullYellowAnimation;
 
+    /*
     private float timerchangeframelizard;
     private float timerchangeframegoo;
     private float timerchangeframeskullred;
     private float timerchangeframeskullblue;
     private float timerchangeframeskullyellow;
+    */
 
     private Sprite orby;
     private Sprite orbb;
@@ -92,7 +102,11 @@ class Arcade extends Frame{
     private static final float WIDTH_MAP = 1280;
     private static final float HEIGHT_MAP = 720;
 
+    private Dialogue dialogue;
+    private float dialoguetime = 0.0f;
     private Input input;
+
+    private Preferences soundPreferences = Gdx.app.getPreferences("My Preferences");
 
     public Arcade(App app) {
         super(app, WIDTH_MAP,HEIGHT_MAP);
@@ -107,11 +121,21 @@ class Arcade extends Frame{
         sophieInit();
         wallsInit();
         input = new Input();
+        dialogue = new Dialogue(aManager);
         Gdx.input.setInputProcessor(input);
         Gdx.input.setCatchBackKey(true); //Not important
 
 
         pelletblue = aManager.get("PELLET/ATAQUEBluePellet.png");
+        musicInit();
+    }
+
+    private void musicInit() {
+        bgMusic = aManager.get("MUSIC/GoBackMusicArcade.mp3");
+        if(soundPreferences.getBoolean("soundOn")) {
+            bgMusic.setLooping(true);
+            bgMusic.play();
+        }
     }
 
     private void textureInit() {
@@ -182,7 +206,7 @@ class Arcade extends Frame{
     private void worldInit(){
         world = new World(Vector2.Zero, true);
         fstep = 0f;
-        deadThings = new Array<Body>();
+        deadThings = new HashSet<Body>();
 
         world.setContactListener(new ContactListener() {
             @Override
@@ -218,7 +242,7 @@ class Arcade extends Frame{
                         }
                         deadThings.add(contact.getFixtureA().getBody());
                     }
-                    Gdx.app.log("sophie", "wash it");
+                    //Gdx.app.log("sophie", "wash it");
 
                 }else{//If some bad guy got hit
 
@@ -230,7 +254,7 @@ class Arcade extends Frame{
                         if (((Enemy)ob2).getHurtDie(((OrbAttack)ob1).getColor(), 20f))
                             deadThings.add(contact.getFixtureB().getBody());
                     }
-                    Gdx.app.log("enemy", "was hit");
+                    //Gdx.app.log("enemy", "was hit");
                 }
 
             }
@@ -278,10 +302,20 @@ class Arcade extends Frame{
     }
 
     private void makeWallFixture(Body b, float x, float y){
-        //neumann preventive shit 
+        //neumann preventive shit
+        /*
         for (Fixture f : b.getFixtureList()){
             b.destroyFixture(f);
         }
+        */
+
+        /*
+        Iterator<Fixture> it = b.getFixtureList().iterator();
+        while(it.hasNext()){
+            b.destroyFixture(it.next());
+        }
+        */
+
 
         FixtureDef f = new FixtureDef();
 
@@ -301,6 +335,7 @@ class Arcade extends Frame{
 
     @Override
     public void render(float delta) {
+        Gdx.app.log(""+d,"");
         batch.setProjectionMatrix(super.camera.combined);
         cls();
 
@@ -313,11 +348,20 @@ class Arcade extends Frame{
             Gdx.input.setInputProcessor(pauseStage);
             batch.end();
             pauseStage.draw();
-        }else{
+        }else if(state != GameState.LOST){
             Gdx.input.setInputProcessor(input);
             stepper(delta);
             spawnMonsters(delta);
             batch.end();
+        }else{
+            dialoguetime += delta;
+            if(dialoguetime < 2.5f) {
+                dialogue.makeText(batch, "This dream overwhelmed you", camera.position.x);
+                batch.end();
+            }else{
+                app.setScreen(new Fade(app, LoaderState.ARCADE));
+            }
+
         }
     }
 
@@ -338,22 +382,23 @@ class Arcade extends Frame{
         float r = MathUtils.random();
         float lr =MathUtils.random();
         int color  = calcColor();
-        if(r >= 0.0f && r < 0.25f){//lizard
+        if(r >= 0.0f && r < 0.8f){//lizard (0.25)
+            //Gdx.app.log("Enemy", " spawned");
             switch (color){
                 case(1):
                     if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
-                    else new ArcadeLizard(world, color, 0, lizardAnimation);
+                    else        new ArcadeLizard(world, color, 0, lizardAnimation);
                     break;
                 case(2):
                     if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
-                    else new ArcadeLizard(world, color, 0, lizardAnimation);
+                    else        new ArcadeLizard(world, color, 0, lizardAnimation);
                     break;
                 case(3):
                     if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
-                    else new ArcadeLizard(world, color, 0, lizardAnimation);
-                    break;
+                    else        new ArcadeLizard(world, color, 0, lizardAnimation);
             }
         }
+        /*
         if(r >= 0.25f && r < 0.5f){//spike
             switch (color){
                 case(1):
@@ -402,6 +447,7 @@ class Arcade extends Frame{
                     break;
             }
         }
+        */
     }
 
     private int calcColor(){
@@ -429,21 +475,45 @@ class Arcade extends Frame{
     }
 
     private void stepper(float delta){
-        //much steps
-        fstep += delta;
-        while(fstep > 1/120f){
-            world.step(1/120F, 8, 3);
-            fstep -= 1/120f;
-        }
+        // /*
 
-        //clean dead thinfs
+        //Gdx.app.log("Bodies: "+world.getBodyCount(), ", Fixtures: "+world.getFixtureCount());
+
+        // */
+
+
+        //much steps
+        world.step(1/60f, 6, 2);
+
+        //clean dead things
         for(Body b: deadThings){
-            for(Fixture f: b.getFixtureList()){
-                b.destroyFixture(f);
+            while(b.getFixtureList().size > 0){
+                b.destroyFixture(b.getFixtureList().get(0));
             }
             world.destroyBody(b);
         }
         deadThings.clear();
+
+
+//        fstep += delta;
+//        while(fstep > 1/120f){
+//            world.step(1/120F, 8, 3);
+//
+//            //clean dead things
+//            for(Body b: deadThings){
+//                while(b.getFixtureList().size > 0){
+//                    b.destroyFixture(b.getFixtureList().get(0));
+//                }
+//                world.destroyBody(b);
+//            }
+//            deadThings.clear();
+//
+//
+//            fstep -= 1/120f;
+//        }
+//
+//
+//        cooldown += delta;
 
     }
 
@@ -519,12 +589,12 @@ class Arcade extends Frame{
         }
     }
 
-
-    //WTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTF
     @Override
     public void resize(int width, int height) {
         view.update(width, height);
     }
+
+//WTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTF
     @Override
     public void pause() {}
 
@@ -536,7 +606,7 @@ class Arcade extends Frame{
 
     @Override
     public void dispose() {}
-    //WTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTF
+//WTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTF
 
 
     private class Input implements InputProcessor {
@@ -557,7 +627,8 @@ class Arcade extends Frame{
         }
 
         @Override
-        public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        public boolean touchDown(int screenX, int screenY, int pointer, int button)
+        {
             v.set(screenX,screenY,0);
             camera.unproject(v);
             //Gdx.app.log("x: ", v.x + " ");
@@ -566,7 +637,7 @@ class Arcade extends Frame{
 
             //TODO CHECK FOR BUTTON
             //TODO COOLDOWN FOR SHOOTING
-            if (!true){                                     //if hit orb
+            if (!true && state == GameState.PLAYING){//if hit orb
                 switch (d) {
                     case 1:
                         break;
@@ -602,21 +673,25 @@ class Arcade extends Frame{
             }
             else if(v.x > 1172 && v.y < 135){               //if hit pause
                 state = GameState.PAUSED;
-            }else{                                          //if we're not switching orbs
-                float angle = MathUtils.atan2(
-                        v.y - ArcadeValues.pelletOriginY,
-                        v.x - ArcadeValues.pelletOriginX
-                );
-                switch(currentColor){
-                    case YELLOW:
-                        new OrbAttack(world, 1, angle, pelletyellow);
-                        break;
-                    case BLUE:
-                        new OrbAttack(world, 2, angle, pelletblue);
-                        break;
-                    case RED:
-                        new OrbAttack(world, 3, angle, pelletred);
-                        break;
+
+            }else if(state == GameState.PLAYING){//if we're not switching orbs
+                if(cooldown > 0.2f || true){
+                    float angle = MathUtils.atan2(
+                            v.y - ArcadeValues.pelletOriginY,
+                            v.x - ArcadeValues.pelletOriginX
+                    );
+                    switch (currentColor) {
+                        case YELLOW:
+                            new OrbAttack(world, 1, angle, pelletyellow);
+                            break;
+                        case BLUE:
+                            new OrbAttack(world, 2, angle, pelletblue);
+                            break;
+                        case RED:
+                            new OrbAttack(world, 3, angle, pelletred);
+                            break;
+                    }
+                    cooldown = 0.0f;
                 }
 
             }

@@ -24,7 +24,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * Created by pablo on 18/03/17.
  */
 
-public class Level0 implements Screen {
+class Level0 implements Screen {
 
 
     Preferences pref = Gdx.app.getPreferences("getLevel");
@@ -89,8 +89,9 @@ public class Level0 implements Screen {
     }
 
     private void musicInit() {
+        bgMusic = aManager.get("MUSIC/GoBackMusicMainMenu.mp3");
         if(soundPreferences.getBoolean("soundOn")) {
-            bgMusic = aManager.get("MUSIC/GoBackMusicMainMenu.mp3");
+
             bgMusic.setLooping(true);
             bgMusic.play();
         }

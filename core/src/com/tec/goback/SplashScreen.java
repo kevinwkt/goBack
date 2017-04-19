@@ -15,7 +15,7 @@ import com.tec.goback.LoaderState;
  * SplashScreen
  */
 
-public class SplashScreen implements Screen
+class SplashScreen implements Screen
 {
 
     private final App app; //Main app class

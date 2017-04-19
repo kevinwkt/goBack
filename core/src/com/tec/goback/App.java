@@ -20,9 +20,10 @@ public class App extends Game {
 	public void create () {
 		setScreen(new SplashScreen(this));
 		aManager.load("HARBOR/GoBackHARBOR0.png", Texture.class);
-		aManager.load("Interfaces/GAMEPLAY/CONSTANT/GoBackCONSTPause.png", Texture.class);
+		aManager.load("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTPause.png", Texture.class);
 		aManager.load("Interfaces/PAUSE/PAUSEBottomDisplay.png", Texture.class);
 		aManager.load("Interfaces/PAUSE/PAUSEMapList.png", Texture.class);
+		aManager.load("Interfaces/PAUSE/PAUSEStats.png", Texture.class);
 		aManager.load("Interfaces/PAUSE/PAUSEQuit.png", Texture.class);
 		aManager.load("Interfaces/PAUSE/PAUSETopDisplay.png", Texture.class);
 		aManager.load("Interfaces/PAUSE/PAUSEback.png", Texture.class);

@@ -12,6 +12,8 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 
+import java.util.Iterator;
+
 /**
  * Created by kevin on 3/20/2017.
  */
@@ -21,13 +23,13 @@ class OrbAttack extends Squirt {
     private int color;
     private static float SPEED = 4;
     private Body body;
-    private CircleShape shape;
     private Sprite sprite;
 
     protected float dmg=20;
 
-    public OrbAttack(World world, int type, float angle, Texture tx) {
-        this.sprite = new Sprite(tx);
+    OrbAttack(World world, int type, float angle, Texture tx) {
+        Texture t = tx;
+        sprite = new Sprite(t);
         sprite.setCenter(
                 ArcadeValues.pelletOriginX,
                 ArcadeValues.pelletOriginY
@@ -54,12 +56,18 @@ class OrbAttack extends Squirt {
 
     private void fixturer(float density, float restitution) {
         //neumann preventive shit
-        for (Fixture fix : body.getFixtureList()) {
-            body.destroyFixture(fix);
+        //for (Fixture fix : body.getFixtureList()) body.destroyFixture(fix);
+
+        /*
+        Iterator<Fixture> it = body.getFixtureList().iterator();
+        while(it.hasNext()){
+            body.destroyFixture(it.next());
         }
+        */
+
 
         //shape of pellet
-        shape = new CircleShape();
+        CircleShape shape = new CircleShape();
 
         shape.setRadius(
                 ArcadeValues.pxToMeters(0.05f)
@@ -75,6 +83,7 @@ class OrbAttack extends Squirt {
         fixtureDef.filter.maskBits = ArcadeValues.pelletMask; //or of its category with colliding categories
 
         body.createFixture(fixtureDef);
+        shape.dispose();
     }
 
     public void draw(SpriteBatch batch) {
@@ -88,5 +97,6 @@ class OrbAttack extends Squirt {
     public int getColor(){
         return color;
     }
+
 }
 

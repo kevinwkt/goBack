@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -27,7 +28,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * Con ayuda de DON PABLO
  */
 
-public abstract class Frame implements Screen {
+abstract class Frame implements Screen {
     //Main app class
     protected final App app;
 
@@ -69,6 +70,9 @@ public abstract class Frame implements Screen {
     // pause button
     protected Sprite pauseSprite;
 
+    //Music
+    protected Music bgMusic;
+
     public Frame(App app, float WIDTH_MAP, float HEIGHT_MAP) {
         this.app = app;
         aManager= app.getAssetManager();
@@ -95,7 +99,7 @@ public abstract class Frame implements Screen {
         frameStage = new Stage(view, batch);
         pauseStage = new Pause(view, batch, app);
 
-        pauseButton = aManager.get("Interfaces/GAMEPLAY/CONSTANT/GoBackCONSTPause.png");
+        pauseButton = aManager.get("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTPause.png");
 
 
         //pass the Stage
@@ -268,6 +272,12 @@ public abstract class Frame implements Screen {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     app.setScreen(new Fade(app, LoaderState.MAINMENU));
+                    if(bgMusic != null){
+                        if(bgMusic.isPlaying()){
+                            bgMusic.pause();
+                        }
+                    }
+
                 }
             });
 
@@ -299,9 +309,9 @@ public abstract class Frame implements Screen {
                 public void clicked(InputEvent event, float x, float y) {
                     if(prefes.getBoolean("soundOn")){
                         prefes.putBoolean("soundOn",false);
-
                     }else{
                         prefes.putBoolean("soundOn",true);
+
                     }
                     prefes.flush();
                     changeSoundTexture();
