@@ -24,6 +24,17 @@ public class App extends Game {
 		aManager.load("Interfaces/PAUSE/PAUSEBottomDisplay.png", Texture.class);
 		aManager.load("Interfaces/PAUSE/PAUSEMapList.png", Texture.class);
 		aManager.load("Interfaces/PAUSE/PAUSEStats.png", Texture.class);
+		//Stats
+		aManager.load("Interfaces/STATS/STATSback.png", Texture.class);
+		aManager.load("Interfaces/STATS/STATSBlueOrb.png", Texture.class);
+		aManager.load("Interfaces/STATS/STATSBlueOrbArrow.png", Texture.class);
+		aManager.load("Interfaces/STATS/STATSRedOrb.png", Texture.class);
+		aManager.load("Interfaces/STATS/STATSRedOrbArrow.png", Texture.class);
+		aManager.load("Interfaces/STATS/STATSYellowOrb.png", Texture.class);
+		aManager.load("Interfaces/STATS/STATSYellowOrbArrow.png", Texture.class);
+		aManager.load("Interfaces/STATS/STATSSophie.png", Texture.class);
+		aManager.load("Interfaces/STATS/STATSSophieArrow.png", Texture.class);
+		///
 		aManager.load("Interfaces/PAUSE/PAUSEQuit.png", Texture.class);
 		aManager.load("Interfaces/PAUSE/PAUSETopDisplay.png", Texture.class);
 		aManager.load("Interfaces/PAUSE/PAUSEback.png", Texture.class);
