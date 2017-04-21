@@ -7,6 +7,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -104,7 +105,9 @@ class Arcade extends Frame{
     private static final float HEIGHT_MAP = 720;
 
     private Dialogue dialogue;
+    private GlyphLayout glyph = new GlyphLayout();
     private float dialoguetime = 0.0f;
+
     private Input input;
 
     private Preferences soundPreferences = Gdx.app.getPreferences("My Preferences");
@@ -391,9 +394,12 @@ class Arcade extends Frame{
 
         );
         */
+
+        float score = hit + 10*(hit/shot) + 10*(hit*(match/hit));
+        Gdx.app.log("Score was:", ""+score);
         dialoguetime += delta;
         if(dialoguetime < 2.5f) {
-            dialogue.makeText(batch, "This dream overwhelmed you", camera.position.x);
+            dialogue.makeText(glyph, batch, "This dream overwhelmed you", camera.position.x);
             batch.end();
         }else{
             app.setScreen(new Fade(app, LoaderState.ARCADE));
@@ -422,7 +428,7 @@ class Arcade extends Frame{
         float r = MathUtils.random();
         float lr =MathUtils.random();
         int color  = calcColor();
-        if(r >= 0.0f && r < 0.8f){//lizard (0.25)
+        if(r >= 0.0f && r < 0.5f){//lizard (0.25)
             //Gdx.app.log("Enemy", " spawned");
             switch (color){
                 case(1):
@@ -455,22 +461,17 @@ class Arcade extends Frame{
                     break;
             }
         }
-        if(r >= 0.5f && r < 0.75f){//goo
-            switch (color){
-                case(1):
-                    if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
-                    else new ArcadeLizard(world, color, 0, lizardAnimation);
-                    break;
-                case(2):
-                    if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
-                    else new ArcadeLizard(world, color, 0, lizardAnimation);
-                    break;
-                case(3):
-                    if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
-                    else new ArcadeLizard(world, color, 0, lizardAnimation);
-                    break;
-            }
+        */
+        if(r >= 0.5f && r <= 1f){//goo
+            double a = lr * Math.PI;
+            double x = ArcadeValues.pelletOriginX + ArcadeValues.highOnPot * Math.cos(a);
+            double y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * Math.sin(a);
+
+            
+
         }
+
+        /*
         if(r >= 0.75f && r <= 1.0f){//skull
             switch (color){
                 case(1):
@@ -647,7 +648,6 @@ class Arcade extends Frame{
     @Override
     public void dispose() {}
 //WTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTF
-
     private class Input implements InputProcessor {
         private Vector3 v = new Vector3();
         @Override
@@ -664,7 +664,6 @@ class Arcade extends Frame{
         public boolean keyTyped(char character) {
             return false;
         }
-
         @Override
         public boolean touchDown(int screenX, int screenY, int pointer, int button)
         {

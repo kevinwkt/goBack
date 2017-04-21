@@ -9,6 +9,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
@@ -85,6 +86,8 @@ class Level1 extends Frame {
 
     private final float DISTANCE_ORB_SOPHIE = 40;
 
+    //dialogue
+    private GlyphLayout glyph = new GlyphLayout();
 
 
     Level1(App app) {
@@ -285,16 +288,16 @@ class Level1 extends Frame {
 
             switch (dialogueSprite){
                 case 1:
-                    dialogue.makeText(batch, "He's taking me back…. He's taking me back….. He surely is taking me back You! It's been a long long time. The boat will be coming back soon,  I hope what I have is enough. Will you be going back, too?", oldManNormalSpr, sophieNormalSpr, false, camera.position.x);
+                    dialogue.makeText(glyph, batch, "He's taking me back…. He's taking me back….. He surely is taking me back You! It's been a long long time. The boat will be coming back soon,  I hope what I have is enough. Will you be going back, too?", oldManNormalSpr, sophieNormalSpr, false, camera.position.x);
                     break;
                 case 2:
-                    dialogue.makeText(batch, "I dont know… Where am I…?", oldManNormalSpr, sophieNormalSpr, true, camera.position.x);
+                    dialogue.makeText(glyph, batch, "I dont know… Where am I…?", oldManNormalSpr, sophieNormalSpr, true, camera.position.x);
                     break;
                 case 3:
-                    dialogue.makeText(batch, "You sweet girl, it really is a shame. I've done some terrible things, but I guess I can help somebody for a change. Take this, it will help you on your journey.", oldManNormalSpr, sophieNormalSpr, false,camera.position.x);
+                    dialogue.makeText(glyph, batch, "You sweet girl, it really is a shame. I've done some terrible things, but I guess I can help somebody for a change. Take this, it will help you on your journey.", oldManNormalSpr, sophieNormalSpr, false,camera.position.x);
                     break;
                 case 4:
-                    dialogue.makeText(batch, "You need to pay to ride the boat, to go back. \n I used one too, but I'm going back and they can't come on board.", oldManNormalSpr, sophieNormalSpr, false,camera.position.x);
+                    dialogue.makeText(glyph, batch, "You need to pay to ride the boat, to go back. \n I used one too, but I'm going back and they can't come on board.", oldManNormalSpr, sophieNormalSpr, false,camera.position.x);
                     break;
                 default:
                     break;
