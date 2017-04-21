@@ -9,6 +9,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -71,6 +72,7 @@ class Level0 implements Screen {
 
     //textboxes
     private Dialogue dialogue;
+    private GlyphLayout glyph = new GlyphLayout();
 
     private Music bgMusic;
 
@@ -159,7 +161,7 @@ class Level0 implements Screen {
             changeScreen(boatSprite);
         }
         if(boatSprite.getX() > 300 && boatSprite.getX() < 1100){
-            dialogue.makeText(batch, "We only come to sleep.\nWe only come to dream.", charonSprite0, 0);
+            dialogue.makeText(glyph, batch, "We only come to sleep.\nWe only come to dream.", charonSprite0, 0);
         }
 
         batch.end();

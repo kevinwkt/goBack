@@ -5,7 +5,6 @@ package com.tec.goback;
  */
 
 class ArcadeValues {
-
     static final float initalFrequency = 2; //seconds between spawns
     static final float initialFactor = 0.02f; // decreas
 
@@ -20,6 +19,8 @@ class ArcadeValues {
     static final float attackDamage = 20f;
 
     //positioning
+    static final double highOnPot = java.lang.Math.sqrt( 640F*640F + 448F*448F);
+
     static final float pelletOriginX = 640;
     static final float pelletOriginY = 272;
     static final float meterspelletOriginX = pelletOriginX/100;
@@ -43,7 +44,7 @@ class ArcadeValues {
     static final short sophieCat = 8;
     static final short orbCat = 16;
 
-    static final short wallMask = pelletCat | enemyCat;
+    static final short wallMask = pelletCat;
     static final short pelletMask = enemyCat | wallCat ;
     static final short sophieMask = 0;
     static final short enemyMask = pelletCat | orbCat;
