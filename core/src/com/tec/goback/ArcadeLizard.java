@@ -22,12 +22,11 @@ import java.util.Iterator;
 
 class ArcadeLizard extends Enemy {
 
-    private PolygonShape shape;
     private int walkCounter;
     private int walkLimit;
     private boolean walkCond=true;
 
-    public ArcadeLizard(World world, int type, int leftOrRight, Animation tx) {
+    ArcadeLizard(World world, int type, int leftOrRight, Animation tx) {
         super(world,type,leftOrRight,tx);
         SPEED=1f;
         if(leftOrRight==1) body.setLinearVelocity(-SPEED, 0f);
@@ -35,7 +34,7 @@ class ArcadeLizard extends Enemy {
         timeframe=0;
         walkCounter=0;
         dmg=15f;
-        hp=80;
+        hp = 80f;
     }
 
     void fixturer(float density, float restitution) {
@@ -52,7 +51,7 @@ class ArcadeLizard extends Enemy {
         */
 
         //lizard
-        shape = new PolygonShape();
+        PolygonShape shape = new PolygonShape();
         shape.setAsBox(ArcadeValues.pxToMeters(100f), ArcadeValues.pxToMeters(35f));
 
         FixtureDef fixtureDef = new FixtureDef();

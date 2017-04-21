@@ -5,23 +5,20 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
-/**
+/*
  * Created by gerry on 3/22/17.
  */
 class ArcadeSophie {
     private Body body;
-    private PolygonShape shape;
     private Sprite sprite;
     private float life = 100;
     private int color = 1;
 
-    public ArcadeSophie(World world, Texture tx){
+    ArcadeSophie(World world, Texture tx){
         this.sprite = new Sprite(tx);
         sprite.setCenter(ArcadeValues.pelletOriginX-100, ArcadeValues.pelletOriginY);
 
@@ -29,7 +26,7 @@ class ArcadeSophie {
         bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.set(
                 ArcadeValues.meterspelletOriginX-1,
-                ArcadeValues.meterspelletOriginY+0.95f
+                ArcadeValues.meterspelletOriginY+(ArcadeValues.pxToMeters(tx.getHeight()/3))
         );
         body = world.createBody(bodyDef);
         fixturer(0.1f, 0.7f);
@@ -38,14 +35,13 @@ class ArcadeSophie {
     }
 
     private void fixturer(float density, float restitution) {
-
-        //neumann preventive shit
-        for (Fixture fix : body.getFixtureList()) {
-            body.destroyFixture(fix);
-        }
+//        //neumann preventive shit
+//        for (Fixture fix : body.getFixt ureList()) {
+//            body.destroyFixture(fix);
+//        }
 
         //shape of girl
-        shape = new PolygonShape();
+        PolygonShape shape = new PolygonShape();
         shape.setAsBox(
                 ArcadeValues.pxToMeters(sprite.getWidth()),
                 ArcadeValues.pxToMeters(sprite.getHeight())
@@ -57,26 +53,22 @@ class ArcadeSophie {
         fixtureDef.shape = shape;
         fixtureDef.friction = 0;
 
-        fixtureDef.filter.categoryBits = ArcadeValues.sophieCat; //its category
+        fixtureDef.filter.categoryBits = 0; //its category
         fixtureDef.filter.maskBits = ArcadeValues.sophieMask; //or of its category with colliding categories
 
         body.createFixture(fixtureDef);
     }
 
-    public void setColor(int color){
-        this.color = color;
-    }
-
-    public boolean getHurtDie(int type, float damage){
+    boolean getHurtDie(int type, float damage){
         if(color == type){
             life -= damage;
         }else{
             life -= damage * 2;
         }
-        return life <= 0.0f ? true : false;
+        return life <= 0.0f;
     }
 
-    public void draw(SpriteBatch batch) {
+    void draw(SpriteBatch batch) {
 
         sprite.setCenter(
                 ArcadeValues.metersToPx(body.getPosition().x),
@@ -85,5 +77,9 @@ class ArcadeSophie {
         sprite.setColor(1.0f, 1.0f, 1.0f, life/100f);
 
         sprite.draw(batch);
+    }
+
+    void setColor(int color){
+        this.color = color;
     }
 }
