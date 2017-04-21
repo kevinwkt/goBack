@@ -23,6 +23,7 @@ public class App extends Game {
 		aManager.load("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTPause.png", Texture.class);
 		aManager.load("Interfaces/PAUSE/PAUSEBottomDisplay.png", Texture.class);
 		aManager.load("Interfaces/PAUSE/PAUSEMapList.png", Texture.class);
+		aManager.load("Interfaces/PAUSE/PAUSEStats.png", Texture.class);
 		aManager.load("Interfaces/PAUSE/PAUSEQuit.png", Texture.class);
 		aManager.load("Interfaces/PAUSE/PAUSETopDisplay.png", Texture.class);
 		aManager.load("Interfaces/PAUSE/PAUSEback.png", Texture.class);
