@@ -42,7 +42,7 @@ abstract class Enemy{
     protected int color;
     protected float SPEED;
     protected int leftRight;
-    protected int angle;
+    protected float angle;
     protected float x,y;
 
     protected float timeframe;
@@ -55,7 +55,8 @@ abstract class Enemy{
     protected CircleShape shape;
     protected Sprite sprite;
 
-    Enemy(World world, int type, float startX, float startY, Animation tx) {
+    Enemy(World world, int type, float angle, float startX, float startY, Animation tx) {
+        this.angle=angle;
         this.an=tx;
         this.color = type;
         this.x=startX;
