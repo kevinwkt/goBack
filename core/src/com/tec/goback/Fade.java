@@ -142,7 +142,7 @@ class Fade implements Screen {
                     manager.load("MUSIC/GoBackMusicLevel1.mp3", Music.class);
                     break;
                 case LEVEL2:
-
+                    manager.load("MOUNTAINS/GoBackMOUNTAINSPanoramic.png",Texture.class);
                     break;
                 case LEVEL3:
 
@@ -159,7 +159,7 @@ class Fade implements Screen {
                 case ARCADE:
                     manager.load("MUSIC/GoBackMusicArcade.mp3", Music.class);
                     manager.load("HARBOR/GoBackHARBOR0.png", Texture.class);
-                    //manager.load("MOUNTAINS/GoBackMOUNTAINS0.png", Texture.class); //Level2
+                    manager.load("MOUNTAINS/GoBackMOUNTAINS0.png", Texture.class); //Level2
                     //manager.load(".png", Texture.class); //Level3
                     manager.load("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png", Texture.class);
                     manager.load("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrbEyes.png", Texture.class);
@@ -197,7 +197,7 @@ class Fade implements Screen {
                     app.setScreen(new Level1(app));
                     break;
                 case LEVEL2:
-
+                    app.setScreen(new Level2(app));
                     break;
                 case LEVEL3:
 

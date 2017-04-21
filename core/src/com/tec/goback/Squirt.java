@@ -32,4 +32,6 @@ class Squirt
     public void draw(SpriteBatch batch) {
         sprite.draw(batch);
     }
+
 }
+
