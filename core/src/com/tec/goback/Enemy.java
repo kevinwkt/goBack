@@ -53,7 +53,7 @@ abstract class Enemy{
     protected CircleShape shape;
     protected Sprite sprite;
 
-    public Enemy(World world, int type, float angle, Texture tx, float startX, float startY) {
+    Enemy(World world, int type, float angle, Texture tx, float startX, float startY) {
         this.sprite = new Sprite(tx);
         this.color = type;
 
@@ -73,7 +73,7 @@ abstract class Enemy{
         body.setUserData(this);
     }
 
-    public Enemy(World world, int type, int leftOrRight, Animation tx) {
+    Enemy(World world, int type, int leftOrRight, Animation tx) {
         this.an=tx;
         this.color = type;
         this.leftRight=leftOrRight;
@@ -82,13 +82,13 @@ abstract class Enemy{
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         if(leftRight==1) {
             //bodyDef.position.set(ArcadeValues.pxToMeters(1280+120), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
-            bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX+800), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY+50));
+            bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX+800), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
             body = world.createBody(bodyDef);
             fixturer(0f, 0f);
         }
         if(leftRight==0) {
             //bodyDef.position.set(ArcadeValues.pxToMeters(-120), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
-            bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX-800), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY+50));
+            bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX-800), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
             body = world.createBody(bodyDef);
             fixturer(0.1f, 0.7f);
         }
@@ -99,25 +99,26 @@ abstract class Enemy{
 
     abstract void fixturer(float density, float restitution);
 
-    public float getDamage(){
+    float getDamage(){
         return dmg;
     }
 
-    public int getColor(){
+    int getColor(){
         return color;
     }
 
-    public int getRightLeft(){
+    int getRightLeft(){
         return leftRight;
     }
 
-    public boolean getHurtDie(int color, float damage){
-        if(color == this.color){
-            hp -= damage*2;
-        }else{
-            hp -= damage;
-        }
-        return hp <= 0.0f ? true : false;
+    boolean getHurtDie(int color, float damage){
+        Gdx.app.log("Attack color"+color,  "Enemy color"+this.color);
+        //
+        float prevhp = hp;
+        //
+        hp -= color != this.color ? damage : (damage * 2);
+        Gdx.app.log("Damage done: "+(prevhp-hp), " remaining hp="+hp);
+        return hp <= 0.0f;
     }
 
     abstract void draw(SpriteBatch batch);

@@ -16,7 +16,6 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -25,32 +24,31 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 
-import javax.management.monitor.GaugeMonitor;
-//
-
-
-/**
+/*
  * Created by gerry on 2/18/17.
  */
 
 
+@SuppressWarnings("ConstantConditions")
 class Arcade extends Frame{
 
     private World world;
     private HashSet<Body> deadThings;
     private ArrayList<Body> wall = new ArrayList<Body>();
-    private float fstep;
     private float cooldown;
 
     private float betweenSpawns = ArcadeValues.initalFrequency;
     private float factor = ArcadeValues.initialFactor;
+
     private float elapsed = 0;
     private float elapsed2 = 0;
+
+    private float shot = 0;
+    private float hit = 0;
+    private float match = 0;
 
     //CURRENT COLOR ORB
     private orbColor currentColor = orbColor.YELLOW;
@@ -64,18 +62,24 @@ class Arcade extends Frame{
 
     //Textures
     private Texture background; //Background
-    
-    private ArcadeSophie sophie;
 
+    private Texture sophieTx;
+    private Sprite sophie;
+
+    //orbes
+    private boolean died = false;
+    private ArcadeOrb[] orbs = new ArcadeOrb[3];
+    private Texture orbRed;
+    private Texture orbBlue;
+    private Texture orbYellow;
     private Texture eyesred;
     private Texture eyesblue;
     private Texture eyesyellow;
-    private Texture orbred;
-    private Texture orbblue;
-    private Texture orbyellow;
-    private Texture pelletyellow;
-    private Texture pelletblue;
-    private Texture pelletred;
+
+    private Texture pelletYellow;
+    private Texture pelletBlue;
+    private Texture pelletRed;
+
     private Texture lizard;
     private Texture goo;
     private Texture skull;
@@ -95,9 +99,6 @@ class Arcade extends Frame{
     private float timerchangeframeskullyellow;
     */
 
-    private Sprite orby;
-    private Sprite orbb;
-    private Sprite orbr;
 
     private static final float WIDTH_MAP = 1280;
     private static final float HEIGHT_MAP = 720;
@@ -108,17 +109,18 @@ class Arcade extends Frame{
 
     private Preferences soundPreferences = Gdx.app.getPreferences("My Preferences");
 
-    public Arcade(App app) {
+    Arcade(App app) {
         super(app, WIDTH_MAP,HEIGHT_MAP);
     }
 
     @Override
     public void show() {
-        d = pref.getInteger("level");
+        //d = pref.getInteger("level");
+        d = 3;
         super.show();
         textureInit();
         worldInit();
-        sophieInit();
+        allyInit();
         wallsInit();
         input = new Input();
         dialogue = new Dialogue(aManager);
@@ -126,7 +128,7 @@ class Arcade extends Frame{
         Gdx.input.setCatchBackKey(true); //Not important
 
 
-        pelletblue = aManager.get("PELLET/ATAQUEBluePellet.png");
+        pelletBlue = aManager.get("PELLET/ATAQUEBluePellet.png");
         musicInit();
     }
 
@@ -139,41 +141,39 @@ class Arcade extends Frame{
     }
 
     private void textureInit() {
-        background = new Texture("HARBOR/GoBackHARBORPanoramic.png"); //switch
-
         switch (d){
             case 1:
-                orbyellow= new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png");
+                orbYellow = new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png");
                 eyesyellow= new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrbEyes.png");
-                orby = new Sprite(orbyellow);
 
-                pelletyellow = aManager.get("PELLET/ATAQUEYellowPellet.png");
+                pelletYellow = aManager.get("PELLET/ATAQUEYellowPellet.png");
+
+                background = new Texture("HARBOR/GoBackHARBORPanoramic.png"); //switch
                 break;
             case 2:
-                orbyellow= new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png");
+                orbYellow = new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png");
                 eyesyellow= new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrbEyes.png");
-                orbblue= new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrb.png");
+                orbBlue = new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrb.png");
                 eyesblue= new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrbEyes.png");
-                orby=new Sprite(orbyellow);
-                orbb=new Sprite(orbblue);
 
-                pelletyellow = aManager.get("PELLET/ATAQUEYellowPellet.png");
-                pelletblue = aManager.get("PELLET/ATAQUEBluePellet.png");
+                pelletYellow = aManager.get("PELLET/ATAQUEYellowPellet.png");
+                pelletBlue = aManager.get("PELLET/ATAQUEBluePellet.png");
+
+                background = new Texture("HARBOR/GoBackHARBORPanoramic.png"); //switch
                 break;
             case 3:
-                orbyellow = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png");
+                orbYellow = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png");
                 eyesyellow = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrbEyes.png");
-                orbblue = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrb.png");
+                orbBlue = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrb.png");
                 eyesblue = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrbEyes.png");
-                orbred = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADERedOrb.png");
+                orbRed = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADERedOrb.png");
                 eyesred = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADERedOrbEyes.png");
-                orby = new Sprite(orbyellow);
-                orbb = new Sprite(orbblue);
-                orbr = new Sprite(orbred);
 
-                pelletyellow = aManager.get("PELLET/ATAQUEYellowPellet.png");
-                pelletblue = aManager.get("PELLET/ATAQUEBluePellet.png");
-                pelletred = aManager.get("PELLET/ATAQUERedPellet.png");
+                pelletYellow = aManager.get("PELLET/ATAQUEYellowPellet.png");
+                pelletBlue = aManager.get("PELLET/ATAQUEBluePellet.png");
+                pelletRed = aManager.get("PELLET/ATAQUERedPellet.png");
+
+                background = new Texture("HARBOR/GoBackHARBORPanoramic.png"); //switch
                 break;
         }
 
@@ -203,78 +203,19 @@ class Arcade extends Frame{
 
     }
 
-    private void worldInit(){
-        world = new World(Vector2.Zero, true);
-        fstep = 0f;
-        deadThings = new HashSet<Body>();
-
-        world.setContactListener(new ContactListener() {
-            @Override
-            public void beginContact(Contact contact) {
-                //check who the fuck is colliding and update deadThings for deletion
-                Object ob1 = contact.getFixtureA().getBody().getUserData();
-                Object ob2 = contact.getFixtureB().getBody().getUserData();
-
-                //pellets die no matter who they collide with
-                if(ob1 instanceof OrbAttack){
-                    deadThings.add(contact.getFixtureA().getBody());
-                    //Gdx.app.log("DESTRUC", deadThings.size+"");
-                }
-
-                if(ob2 instanceof OrbAttack){
-                     deadThings.add(contact.getFixtureB().getBody());
-                    //Gdx.app.log("DESTRUC", deadThings.size+"");
-                }
-
-                    //If sophie got hit
-                if(ob1 instanceof ArcadeSophie || ob2 instanceof ArcadeSophie) {
-                    if (ob1 instanceof ArcadeSophie) {
-                        if (((ArcadeSophie)ob1).getHurtDie(((Enemy)ob2).getColor(), ((Enemy)ob2).getDamage())){
-                            state = GameState.LOST;
-                            deadThings.add(contact.getFixtureA().getBody());
-                        }
-                        deadThings.add(contact.getFixtureB().getBody());
-                    }
-                    if (ob2 instanceof ArcadeSophie) {
-                        if (((ArcadeSophie)ob2).getHurtDie(((Enemy)ob1).getColor(), ((Enemy)ob2).getDamage())){
-                            state = GameState.LOST;
-                            deadThings.add(contact.getFixtureB().getBody());
-                        }
-                        deadThings.add(contact.getFixtureA().getBody());
-                    }
-                    //Gdx.app.log("sophie", "wash it");
-
-                }else{//If some bad guy got hit
-
-                    if (ob1 instanceof Enemy) {
-                        if ( ((Enemy)ob1).getHurtDie( ((OrbAttack)ob2).getColor(), 20f) )
-                            deadThings.add(contact.getFixtureA().getBody());
-                    }
-                    if (ob2 instanceof Enemy) {
-                        if (((Enemy)ob2).getHurtDie(((OrbAttack)ob1).getColor(), 20f))
-                            deadThings.add(contact.getFixtureB().getBody());
-                    }
-                    //Gdx.app.log("enemy", "was hit");
-                }
-
-            }
-
-            @Override
-            public void endContact(Contact contact) {}
-
-            @Override
-            public void preSolve(Contact contact, Manifold oldManifold) {}
-
-            @Override
-            public void postSolve(Contact contact, ContactImpulse impulse) {}
-        });
-
-    }
-
-    private void sophieInit(){
-        Texture sophieTx = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADESophie.png");
-        sophie = new ArcadeSophie(world, sophieTx);
-        sophie.setColor(1);
+    private void allyInit(){
+        orbs[0] = new ArcadeYellowOrb(world, orbYellow, 0, true, 100);
+        switch(d){
+            case 2:
+                orbs[1] = new ArcadeBlueOrb(world, orbBlue, 1, false, 100);
+                orbs[2] = null;
+                break;
+            case 3:
+                orbs[1] = new ArcadeBlueOrb(world, orbBlue, 1, false, 100);
+                orbs[2] = new ArcadeRedOrb(world, orbRed, 2, false, 100);
+        }
+        sophieTx = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADESophie.png");
+        sophie = new Sprite(sophieTx);
     }
 
     private void wallsInit(){
@@ -328,10 +269,82 @@ class Arcade extends Frame{
         b.createFixture(f);
     }
 
-    private void cls() {
-        Gdx.gl.glClearColor(0,0,0,1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-    }
+    private void worldInit(){
+        world = new World(Vector2.Zero, true);
+        //fstep = 0f;
+        deadThings = new HashSet<Body>();
+
+        world.setContactListener(new ContactListener() {
+            @Override
+            public void beginContact(Contact contact) {
+                //check who the fuck is colliding and update deadThings for deletion
+                Object ob1 = contact.getFixtureA().getBody().getUserData();
+                Object ob2 = contact.getFixtureB().getBody().getUserData();
+
+                //pellets die no matter who they collide with
+                if(ob1 instanceof OrbAttack){
+                    deadThings.add(contact.getFixtureA().getBody());
+                    //Gdx.app.log("DESTRUC", deadThings.size+"");
+                }
+                if(ob2 instanceof OrbAttack){
+                    deadThings.add(contact.getFixtureB().getBody());
+                    //Gdx.app.log("DESTRUC", deadThings.size+"");
+                }
+
+
+
+                if(ob1 instanceof ArcadeOrb || ob2 instanceof ArcadeOrb) {//If we got hit
+                    if (ob1 instanceof ArcadeOrb) {
+                        if (((ArcadeOrb)ob1).getHurtDie(((Enemy)ob2).getColor(), ((Enemy)ob2).getDamage())){
+                            deadThings.add(contact.getFixtureA().getBody());
+                            orbs[ ((ArcadeOrb)ob1).getColor()-1 ] = null;
+                            died = true;
+                        }
+                        deadThings.add(contact.getFixtureB().getBody());
+                    }
+                    if (ob2 instanceof ArcadeOrb) {
+                        if (((ArcadeOrb)ob2).getHurtDie(((Enemy)ob1).getColor(), ((Enemy)ob1).getDamage())){
+                            deadThings.add(contact.getFixtureB().getBody());
+                            orbs[((ArcadeOrb)ob2).getColor()-1] = null;
+                            died = true;
+                        }
+                        deadThings.add(contact.getFixtureA().getBody());
+                    }
+
+                }else{//If some bad guy got hit
+                    if (ob1 instanceof Enemy) {
+                        if ( ((Enemy)ob1).getHurtDie( ((OrbAttack)ob2).getColor(), ((OrbAttack)ob2).getDamage()) ) {
+                            //Gdx.app.log("LACONCHA", ""+((OrbAttack) ob2).getColor());
+                            hit++;
+                            if (((Enemy) ob1).getColor() == ((OrbAttack) ob2).getColor()) match++;
+                            deadThings.add(contact.getFixtureA().getBody());
+                        }
+                    }
+                    if (ob2 instanceof Enemy) {
+                        if (((Enemy)ob2).getHurtDie(((OrbAttack)ob1).getColor(), ((OrbAttack)ob1).getDamage()) ) {
+                            //Gdx.app.log("LACONCHA", ""+((OrbAttack) ob1).getColor());
+                            hit++;
+                            if (((OrbAttack) ob1).getColor() == ((Enemy) ob2).getColor()) match++;
+                            deadThings.add(contact.getFixtureB().getBody());
+                        }
+                    }
+
+                    //Gdx.app.log("enemy", "was hit");
+                }
+
+            }
+
+            @Override
+            public void endContact(Contact contact) {}
+
+            @Override
+            public void preSolve(Contact contact, Manifold oldManifold) {}
+
+            @Override
+            public void postSolve(Contact contact, ContactImpulse impulse) {}
+        });
+
+    }//         <------COLLISION EVENT HERE
 
     @Override
     public void render(float delta) {
@@ -344,6 +357,13 @@ class Arcade extends Frame{
         drawShit();
         batch.draw(pauseButton,camera.position.x+HALFW-pauseButton.getWidth(),camera.position.y-HALFH);
 
+        boolean flag = false;
+        for(ArcadeOrb orb : orbs) {
+            if (orb != null) flag = true;
+        }
+
+        if(!flag) state = GameState.LOST;
+
         if (state==GameState.PAUSED) {
             Gdx.input.setInputProcessor(pauseStage);
             batch.end();
@@ -352,17 +372,37 @@ class Arcade extends Frame{
             Gdx.input.setInputProcessor(input);
             stepper(delta);
             spawnMonsters(delta);
+            if(died){
+                swapOrbes();
+                died = false;
+            }
             batch.end();
         }else{
-            dialoguetime += delta;
-            if(dialoguetime < 2.5f) {
-                dialogue.makeText(batch, "This dream overwhelmed you", camera.position.x);
-                batch.end();
-            }else{
-                app.setScreen(new Fade(app, LoaderState.ARCADE));
-            }
-
+            loose(delta);
         }
+    }
+
+    private void loose(float delta){
+        //Calc score
+        /*
+        preference.write(
+
+        hit + 10*(hit/shot) + 10*(hit*(match/hit))
+
+        );
+        */
+        dialoguetime += delta;
+        if(dialoguetime < 2.5f) {
+            dialogue.makeText(batch, "This dream overwhelmed you", camera.position.x);
+            batch.end();
+        }else{
+            app.setScreen(new Fade(app, LoaderState.ARCADE));
+        }
+    }
+
+    private void cls() {
+        Gdx.gl.glClearColor(0,0,0,1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
     private void spawnMonsters(float delta){
@@ -494,8 +534,8 @@ class Arcade extends Frame{
         }
         deadThings.clear();
 
-
-//        fstep += delta;
+        cooldown += delta;
+        //        fstep += delta;
 //        while(fstep > 1/120f){
 //            world.step(1/120F, 8, 3);
 //
@@ -511,83 +551,86 @@ class Arcade extends Frame{
 //
 //            fstep -= 1/120f;
 //        }
-//
-//
-//        cooldown += delta;
 
     }
 
     private void drawShit(){
         batch.draw(background,-2560,0);
+        sophie.setColor(1.0f,1.0f,1.0f,0.8f);
+        sophie.setPosition(ArcadeValues.pelletOriginX-100
+                , ArcadeValues.pelletOriginY-27);
+        sophie.draw(batch);
+
+        //B2D bodies
         Array<Body> squirts = new Array<Body>();
         world.getBodies(squirts);
         Object obj;
         for(Body b: squirts){
             obj = b.getUserData();
-            if(obj instanceof OrbAttack){
-                ((OrbAttack)obj).draw(batch);
-            }else if(obj instanceof ArcadeSophie){
-                ((ArcadeSophie)obj).draw(batch);
+            if(obj instanceof OrbAttack) {
+                ((OrbAttack) obj).draw(batch);
+            }else if(obj instanceof ArcadeOrb){
+                ((ArcadeOrb)obj).draw(batch);
             }else if(obj instanceof ArcadeLizard){
                 ((ArcadeLizard)obj).draw(batch);
             }
-            //TODO DRAW ALL OF THE REMAINING ENEMIES LIKE ABOVE
         }
-        drawOrbes();
     }
 
-    private void drawOrbes(){
-        //coords are temporary
-        //TODO good coords
-        switch (d){
-            case 1:
-                orby.setPosition(ArcadeValues.pelletOriginX-135,ArcadeValues.pelletOriginY-125);
-                orby.draw(batch);
-                batch.draw(eyesyellow,ArcadeValues.pelletOriginX,ArcadeValues.pelletOriginY);
-                break;
-            case 2:
-                orby.setPosition(ArcadeValues.pelletOriginX,ArcadeValues.pelletOriginY);
-                orbb.setPosition(ArcadeValues.pelletOriginX,ArcadeValues.pelletOriginY);
-                batch.draw(eyesblue,ArcadeValues.pelletOriginX,ArcadeValues.pelletOriginY);
-                batch.draw(eyesyellow,ArcadeValues.pelletOriginX,ArcadeValues.pelletOriginY);
-                orby.draw(batch);
-                orbb.draw(batch);
-                switch (currentColor){
-                    case YELLOW:
-                        orbb.setColor(0.5F, 0.5F, 0.5F, 0.6F);
-                        break;
-                    case BLUE:
-                        orby.setColor(0.5F, 0.5F, 0.5F, 0.6F);
-                        break;
+    private void swapOrbes(){
+        if(d > 1) {
+            Integer[] places = new Integer[3];
+            Float[] lives = new Float[3];
+            int n = 0;
+            for(int i = 0; i < orbs.length; i++){
+                if(orbs[i] != null){
+                    places[i] = orbs[i].getPlace();
+                    lives[i] = orbs[i].getLife();
+                    deadThings.add(orbs[i].getBody());
+                    orbs[i] = null;
+                    n++;
+
+                }else{
+                    places[i] = null;
+                    lives[i] = null;
                 }
-                break;
-            case 3:
-                orby.draw(batch);
-                orby.setPosition(0,0);
-                batch.draw(eyesyellow,0,0);
-                orbb.draw(batch);
-                orbb.setPosition(0,0);
-                batch.draw(eyesblue,0,0);
-                orbr.draw(batch);
-                orbr.setPosition(0,0);
-                batch.draw(eyesred,0,0);
-                switch (currentColor){
-                    case YELLOW:
-                        orbb.setColor(0.5F, 0.5F, 0.5F, 0.6F);
-                        orbr.setColor(0.5F, 0.5F, 0.5F, 0.6F);
-                        break;
-                    case BLUE:
-                        orby.setColor(0.5F, 0.5F, 0.5F, 0.6F);
-                        orbr.setColor(0.5F, 0.5F, 0.5F, 0.6F);
-                        break;
-                    case RED:
-                        orby.setColor(0.5F, 0.5F, 0.5F, 0.6F);
-                        orbb.setColor(0.5F, 0.5F, 0.5F, 0.6F);
-                        break;
+
+            }
+
+            for(int i = 0; i < places.length; i++){
+                if(places[i] != null){
+                    switch(i){
+                        case 0:
+                            orbs[i] = new ArcadeYellowOrb(  world, orbYellow, (places[i]+1)%n,  ((places[i]+1)%n)==0,  lives[0]);
+                            break;
+                        case 1:
+                            orbs[i] = new ArcadeBlueOrb(    world, orbBlue, (places[i]+1)%n,  ((places[i]+1)%n)==0,    lives[1]);
+                            break;
+                        case 2:
+                            orbs[i] = new ArcadeRedOrb(     world, orbRed, (places[i]+1)%n,  ((places[i]+1)%n)==0,    lives[2]);
+                    }
                 }
-                break;
+            }
+            for(int i = 0; i < 3; i++){
+                if(orbs[i] != null){
+                    if(orbs[i].getPlace() == 0) {
+                        switch (orbs[i].getColor() - 1) {
+                            case 0:
+                                currentColor = orbColor.YELLOW;
+                                break;
+                            case 1:
+                                currentColor = orbColor.BLUE;
+                                break;
+                            case 2:
+                                currentColor = orbColor.RED;
+                        }
+                    }
+                }
+            }
         }
+
     }
+
 
     @Override
     public void resize(int width, int height) {
@@ -597,17 +640,13 @@ class Arcade extends Frame{
 //WTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTF
     @Override
     public void pause() {}
-
     @Override
     public void resume() {}
-
     @Override
     public void hide() {}
-
     @Override
     public void dispose() {}
 //WTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTF
-
 
     private class Input implements InputProcessor {
         private Vector3 v = new Vector3();
@@ -631,72 +670,41 @@ class Arcade extends Frame{
         {
             v.set(screenX,screenY,0);
             camera.unproject(v);
-            //Gdx.app.log("x: ", v.x + " ");
-            //Gdx.app.log("y: ", v.y + " ");
-            //Gdx.app.log("color: ", currentColor +" ");
 
-            //TODO CHECK FOR BUTTON
-            //TODO COOLDOWN FOR SHOOTING
-            if (!true && state == GameState.PLAYING){//if hit orb
-                switch (d) {
-                    case 1:
-                        break;
-                    case 2:
-                        switch (currentColor) {
-                            case BLUE:
-                                sophie.setColor(1);
-                                currentColor=orbColor.YELLOW;
-                                break;
-                            case YELLOW:
-                                sophie.setColor(2);
-                                currentColor=orbColor.BLUE;
-                                break;
-                        }
-                        break;
-                    case 3:
-                        switch (currentColor) {
-                            case BLUE:
-                                sophie.setColor(3);
-                                currentColor=orbColor.RED;
-                                break;
-                            case YELLOW:
-                                sophie.setColor(2);
-                                currentColor=orbColor.BLUE;
-                                break;
-                            case RED:
-                                sophie.setColor(1);
-                                currentColor=orbColor.YELLOW;
-                                break;
-                        }
-                        break;
-                }
-            }
-            else if(v.x > 1172 && v.y < 135){               //if hit pause
+            if(//if hit orb
+                        (v.x > ArcadeValues.pelletOriginX-60 && v.x < ArcadeValues.pelletOriginX+60)
+                    &&  (v.y > ArcadeValues.pelletOriginY-60 && v.y < ArcadeValues.pelletOriginY+60)
+                    &&  state == GameState.PLAYING
+            )
+            {
+                swapOrbes();
+            }else if(v.x > 1172 && v.y < 135){//if hit pause
                 state = GameState.PAUSED;
-
-            }else if(state == GameState.PLAYING){//if we're not switching orbs
-                if(cooldown > 0.2f || true){
+            }else if(state == GameState.PLAYING){//if we're not switching orbs we shooting
+                if(cooldown > 0.2f){
                     float angle = MathUtils.atan2(
                             v.y - ArcadeValues.pelletOriginY,
                             v.x - ArcadeValues.pelletOriginX
                     );
                     switch (currentColor) {
                         case YELLOW:
-                            new OrbAttack(world, 1, angle, pelletyellow);
+                            new OrbAttack(world, 1, angle, pelletYellow);
+                            //Gdx.app.log("1", "");
                             break;
                         case BLUE:
-                            new OrbAttack(world, 2, angle, pelletblue);
+                            new OrbAttack(world, 2, angle, pelletBlue);
+                            //Gdx.app.log("2", "");
                             break;
                         case RED:
-                            new OrbAttack(world, 3, angle, pelletred);
+                            new OrbAttack(world, 3, angle, pelletRed);
+                            //Gdx.app.log("3", "");
                             break;
                     }
                     cooldown = 0.0f;
                 }
 
             }
-
-
+            shot ++;
             return true;
         }
 
@@ -721,9 +729,9 @@ class Arcade extends Frame{
         }
     }
 
-    public enum orbColor {
-        RED,
+    private enum orbColor {
+        YELLOW,
         BLUE,
-        YELLOW
+        RED
     }
 }

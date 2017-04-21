@@ -21,20 +21,16 @@ import java.util.Iterator;
 class OrbAttack extends Squirt {
 
     private int color;
-    private static float SPEED = 4;
     private Body body;
     private Sprite sprite;
 
-    protected float dmg=20;
-
-    OrbAttack(World world, int type, float angle, Texture tx) {
-        Texture t = tx;
-        sprite = new Sprite(t);
+    OrbAttack(World world, int color, float angle, Texture tx) {
+        sprite = new Sprite(tx);
         sprite.setCenter(
                 ArcadeValues.pelletOriginX,
                 ArcadeValues.pelletOriginY
         );
-        this.color = type;
+        this.color = color;
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -48,6 +44,7 @@ class OrbAttack extends Squirt {
         body.setBullet(true);
 
 
+        float SPEED = 4;
         body.setLinearVelocity(MathUtils.cos(angle) * SPEED,
                 MathUtils.sin(angle) * SPEED);
         // body.setLinearVelocity(1,1);
@@ -94,7 +91,9 @@ class OrbAttack extends Squirt {
         sprite.draw(batch);
     }
 
-    public int getColor(){
+    float getDamage(){ return ArcadeValues.attackDamage;}
+
+    int getColor(){
         return color;
     }
 
