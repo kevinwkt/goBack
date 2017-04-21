@@ -180,34 +180,41 @@ class Level1 extends Frame {
             laMegaConcha++;
         }
 
-
         batch.setProjectionMatrix(super.camera.combined);
         batch.begin();
 
-        batch.draw(background,0,0);
-        drawNewspaper(batch);
-        sophie.draw(batch);
 
-        batch.draw(pauseButton,camera.position.x+HALFW-pauseButton.getWidth(),camera.position.y-HALFH);
-        sophie.update();
-
-        yellowOrb.draw(batch);
-
-        if (state==GameState.PAUSED) {
+        if(state == GameState.STATS){
+            statsStage.draw();
+            Gdx.input.setInputProcessor(inputMultiplexer);
+        }else if (state==GameState.PAUSED) {
             pauseStage.draw();
             Gdx.input.setInputProcessor(pauseStage);
         }else if(state==GameState.PLAYING){
+            batch.draw(background,0,0);
+
+
+            drawNewspaper(batch);
+            sophie.draw(batch);
+
+            batch.draw(pauseButton,camera.position.x+HALFW-pauseButton.getWidth(),camera.position.y-HALFH);
+            sophie.update();
+
+            yellowOrb.draw(batch);
+
             Gdx.input.setInputProcessor(new Input());
-        }
-        moveOrb(delta);
-        checkOrbCollision();
-        ckeckOldManCollision(delta);
-        checkNewsPaperCollision();
-        if(bossMode){
-            drawLizard(delta);
+
+            moveOrb(delta);
+            checkOrbCollision();
+            ckeckOldManCollision(delta);
+            checkNewsPaperCollision();
+            if(bossMode){
+                drawLizard(delta);
+            }
+
+            updateCamera();
         }
 
-        updateCamera();
 
         batch.end();
 
