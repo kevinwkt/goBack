@@ -29,6 +29,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
 /**
  * Created by sergiohernandezjr on 16/02/17.
@@ -61,6 +62,27 @@ abstract class Enemy{
         this.color = type;
         this.x=startX;
         this.y=startY;
+
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        if(x>0) {
+            leftRight=1;
+        }else leftRight=0;
+        bodyDef.position.set(ArcadeValues.pxToMeters(x), ArcadeValues.pxToMeters(y));
+        body = world.createBody(bodyDef);
+        fixturer(0.1f, 0.7f);
+
+        body.setUserData(this);
+    }
+
+    Enemy(World world, int type, float angle, float startX, float startY, Texture tx) {
+        this.angle=angle;
+        this.sprite=new Sprite(tx);
+        this.color = type;
+        this.x=startX;
+        this.y=startY;
+        if(x>ArcadeValues.pelletOriginX) sprite.rotate(270+angle);
+        else sprite.rotate(angle-90);
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
