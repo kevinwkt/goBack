@@ -462,12 +462,19 @@ class Arcade extends Frame{
             }
         }
         */
-        if(r >= 0.0f && r <= 0.5f){//goo
+        if(r >= 0.0f && r <= 0.25f){//goo
             double a = lr * Math.PI;
             double x = ArcadeValues.pelletOriginX + ArcadeValues.highOnPot * Math.cos(a);
             double y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * Math.sin(a);
             Gdx.app.log("new goo at "+x, "spawned at angle"+ (float)a*MathUtils.radiansToDegrees);
             new ArcadeGoo(world, 1, (float)a, (float)x, (float)y, gooAnimation);
+
+        }
+        if(r >= 0.25f && r <= 0.50f){//skull
+            double a = lr * Math.PI;
+            double x = ArcadeValues.pelletOriginX + ArcadeValues.highOnPot * Math.cos(a);
+            double y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * Math.sin(a);
+            new ArcadeSkull(world, 1, (float)a, (float)x, (float)y, skullYellowAnimation);
 
         }
 
@@ -576,7 +583,9 @@ class Arcade extends Frame{
                 ((ArcadeLizard)obj).draw(batch);
             }else if(obj instanceof ArcadeGoo){
             ((ArcadeGoo)obj).draw(batch);
-        }
+            }else if(obj instanceof ArcadeSkull){
+                ((ArcadeSkull)obj).draw(batch);
+            }
         }
     }
 
