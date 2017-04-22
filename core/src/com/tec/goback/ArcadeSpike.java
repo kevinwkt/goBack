@@ -2,7 +2,6 @@ package com.tec.goback;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -15,8 +14,6 @@ import com.badlogic.gdx.physics.box2d.World;
 
 class ArcadeSpike extends Enemy {
     private PolygonShape shape;
-    private int walkCounter;
-    private int walkLimit;
     private boolean walkCond=true;
     private float totalFlyx;
     private float totalFlyy;
@@ -32,7 +29,6 @@ class ArcadeSpike extends Enemy {
         body.setLinearVelocity(SPEED * MathUtils.cos((float) myA), SPEED * MathUtils.sin((float)myA));
 
         timeframe = 0;
-        walkCounter=0;
         dmg=15f;
         hp=80;
 
@@ -59,6 +55,5 @@ class ArcadeSpike extends Enemy {
         timeframe += Gdx.graphics.getDeltaTime();
         if(Math.abs(ArcadeValues.pelletOriginX-body.getPosition().x)<totalFlyx&&Math.abs(ArcadeValues.pelletOriginY-body.getPosition().y)<totalFlyy) body.setLinearVelocity(2*SPEED * MathUtils.cos((float) myA), 2*SPEED * MathUtils.sin((float)myA));
         batch.draw(sprite, ArcadeValues.metersToPx(body.getPosition().x)-120, ArcadeValues.metersToPx(body.getPosition().y)-39);
-        walkCounter++;
     }
 }
