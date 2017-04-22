@@ -22,8 +22,8 @@ class ArcadeGoo extends Enemy {
         super(world,type,angle,spawnx,spawny,tx);
         SPEED=0.5f;
         //VELOCITIES
-        if(x>0) body.setLinearVelocity(-MathUtils.cos(90-angle) * SPEED, -MathUtils.sin(90-angle) * SPEED);
-        else body.setLinearVelocity(MathUtils.cos(180-angle) * SPEED, -MathUtils.sin(180-angle) * SPEED);
+        if(x>0) body.setLinearVelocity(-MathUtils.cos((90-angle)*MathUtils.degreesToRadians) * SPEED, -MathUtils.sin((90-angle)*MathUtils.degreesToRadians) * SPEED);
+        else body.setLinearVelocity(MathUtils.cos((180-angle)*MathUtils.degreesToRadians) * SPEED, -MathUtils.sin((180-angle)*MathUtils.degreesToRadians) * SPEED);
         timeframe=0;
         walkCounter=0;
         dmg=15f;
