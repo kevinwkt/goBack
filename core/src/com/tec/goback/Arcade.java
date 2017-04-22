@@ -428,7 +428,7 @@ class Arcade extends Frame{
         float r = MathUtils.random();
         float lr =MathUtils.random();
         int color  = calcColor();
-        if(r >= 0.0f && r < 0.5f){//lizard (0.25)
+        if(r >= 0.5f && r < 1f){//lizard (0.25)
             //Gdx.app.log("Enemy", " spawned");
             switch (color){
                 case(1):
@@ -462,12 +462,12 @@ class Arcade extends Frame{
             }
         }
         */
-        if(r >= 0.5f && r <= 1f){//goo
+        if(r >= 0.0f && r <= 0.5f){//goo
             double a = lr * Math.PI;
             double x = ArcadeValues.pelletOriginX + ArcadeValues.highOnPot * Math.cos(a);
             double y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * Math.sin(a);
-
-            
+            Gdx.app.log("new goo at "+x, "spawned at angle"+ (float)a*MathUtils.radiansToDegrees);
+            new ArcadeGoo(world, 1, (float)a, (float)x, (float)y, gooAnimation);
 
         }
 
@@ -574,7 +574,9 @@ class Arcade extends Frame{
                 ((ArcadeOrb)obj).draw(batch);
             }else if(obj instanceof ArcadeLizard){
                 ((ArcadeLizard)obj).draw(batch);
-            }
+            }else if(obj instanceof ArcadeGoo){
+            ((ArcadeGoo)obj).draw(batch);
+        }
         }
     }
 
