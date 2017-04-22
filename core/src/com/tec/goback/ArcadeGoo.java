@@ -22,7 +22,7 @@ class ArcadeGoo extends Enemy {
         super(world,type,angle,spawnx,spawny,tx);
         SPEED=0.5f;
         //VELOCITIES
-        if(x>0) body.setLinearVelocity(-MathUtils.cos((90-super.angle)*MathUtils.degreesToRadians) * SPEED, -MathUtils.sin((90-super.angle)*MathUtils.degreesToRadians) * SPEED);
+        if(ArcadeValues.pelletOriginX>0) body.setLinearVelocity(-MathUtils.cos((90-super.angle)*MathUtils.degreesToRadians) * SPEED, -MathUtils.sin((90-super.angle)*MathUtils.degreesToRadians) * SPEED);
         else body.setLinearVelocity(MathUtils.cos((180-super.angle)*MathUtils.degreesToRadians) * SPEED, -MathUtils.sin((180-super.angle)*MathUtils.degreesToRadians) * SPEED);
         timeframe=0;
         walkCounter=0;
