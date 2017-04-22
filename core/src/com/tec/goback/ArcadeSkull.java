@@ -21,10 +21,12 @@ class ArcadeSkull extends Enemy {
     public ArcadeSkull(World world, int type, float angle,float spawnx,float spawny, Animation tx) {
         super(world,type,angle,spawnx,spawny,tx);
         SPEED=0.5f;
+
         //VELOCITIES
-        if(x>0) body.setLinearVelocity(-MathUtils.cos((90-super.angle)*MathUtils.degreesToRadians) * SPEED, -MathUtils.sin((90-super.angle)*MathUtils.degreesToRadians) * SPEED);
-        else body.setLinearVelocity(MathUtils.cos((180-super.angle)*MathUtils.degreesToRadians) * SPEED, -MathUtils.sin((180-super.angle)*MathUtils.degreesToRadians) * SPEED);
-        timeframe=0;
+        double myA =  angle + Math.PI;
+        body.setLinearVelocity(SPEED * MathUtils.cos((float) myA), SPEED * MathUtils.sin((float)myA));
+
+        timeframe = 0;
         walkCounter=0;
         dmg=15f;
         hp=80;
