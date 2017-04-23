@@ -41,8 +41,10 @@ class Arcade extends Frame{
     private ArrayList<Body> wall = new ArrayList<Body>();
     private float cooldown;
 
+    private boolean bosssFight;
     private float betweenSpawns = ArcadeValues.initalFrequency;
     private float factor = ArcadeValues.initialFactor;
+    private float stDiff = 0.2f;
 
     private float elapsed = 0;
     private float elapsed2 = 0;
@@ -119,7 +121,8 @@ class Arcade extends Frame{
     @Override
     public void show() {
         //d = pref.getInteger("level");
-        d = 3;
+        d = 2;
+        bosssFight = true;
         super.show();
         textureInit();
         worldInit();
@@ -425,103 +428,126 @@ class Arcade extends Frame{
     }
 
     private void spawnSomething(){
-        float r = MathUtils.random();
-        float lr =MathUtils.random();
-        int color  = calcColor();
-        if(r >= 0.5f && r < 1f){//lizard (0.25)
-            //Gdx.app.log("Enemy", " spawned");
-            switch (color){
-                case(1):
-                    if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
-                    else        new ArcadeLizard(world, color, 0, lizardAnimation);
-                    break;
-                case(2):
-                    if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
-                    else        new ArcadeLizard(world, color, 0, lizardAnimation);
-                    break;
-                case(3):
-                    if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
-                    else        new ArcadeLizard(world, color, 0, lizardAnimation);
-            }
-        }
-        /*
-        if(r >= 0.25f && r < 0.5f){//spike
-            switch (color){
-                case(1):
-                    if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
-                    else new ArcadeLizard(world, color, 0, lizardAnimation);
-                    break;
-                case(2):
-                    if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
-                    else new ArcadeLizard(world, color, 0, lizardAnimation);
-                    break;
-                case(3):
-                    if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
-                    else new ArcadeLizard(world, color, 0, lizardAnimation);
-                    break;
-            }
-        }
-        */
-        if(r >= 0.0f && r <= 0.25f){//goo
+
+        float e1 = (float)(1 - 0.5*(0.005*hit + 0.2));
+        float e0 = (float)(1 - (0.005*hit + 0.2));
+        double p = Math.random();
+        double lr = Math.random();
+
+        if(0 <= p && p <e0/2){ //skull
             double a = lr * Math.PI;
             double x = ArcadeValues.pelletOriginX + ArcadeValues.highOnPot * Math.cos(a);
             double y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * Math.sin(a);
-            Gdx.app.log("new goo at "+x, "spawned at angle"+ (float)a*MathUtils.radiansToDegrees);
-            new ArcadeGoo(world, 1, (float)a, (float)x, (float)y, gooAnimation);
-
-        }
-        if(r >= 0.25f && r <= 0.50f){//skull
-            double a = lr * Math.PI;
-            double x = ArcadeValues.pelletOriginX + ArcadeValues.highOnPot * Math.cos(a);
-            double y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * Math.sin(a);
-            new ArcadeSkull(world, 1, (float)a, (float)x, (float)y, skullYellowAnimation);
-
-        }
-
-        /*
-        if(r >= 0.75f && r <= 1.0f){//skull
-            switch (color){
-                case(1):
-                    if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
-                    else new ArcadeLizard(world, color, 0, lizardAnimation);
+            switch(calcColor()){
+                case 1:
+                    new ArcadeSkull(world, 1, (float)a, (float)x, (float)y, skullYellowAnimation);
+                    Gdx.app.log("Spawn", "Yellow Skull");
                     break;
-                case(2):
-                    if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
-                    else new ArcadeLizard(world, color, 0, lizardAnimation);
+                case 2:
+                    new ArcadeSkull(world, 2, (float)a, (float)x, (float)y, skullBlueAnimation);
+                    Gdx.app.log("Spawn", "Blue Skull");
                     break;
-                case(3):
-                    if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
-                    else new ArcadeLizard(world, color, 0, lizardAnimation);
+                case 3:
+                    new ArcadeSkull(world, 3, (float)a, (float)x, (float)y, skullRedAnimation);
+                    Gdx.app.log("Spawn", "Red Skull");
                     break;
             }
         }
-        */
+        if(e0/2 <= p && p <e0){ //goo
+            double a = lr * Math.PI;
+            double x = ArcadeValues.pelletOriginX + ArcadeValues.highOnPot * Math.cos(a);
+            double y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * Math.sin(a);
+            switch(calcColor()){
+                case 1:
+                    new ArcadeGoo(world, 1, (float)a, (float)x, (float)y, gooAnimation);
+                    Gdx.app.log("Spawn", "Yellow Goo");
+                    break;
+                case 2:
+                    new ArcadeGoo(world, 2, (float)a, (float)x, (float)y, gooAnimation);
+                    Gdx.app.log("Spawn", "Blue Goo");
+                    break;
+                case 3:
+                    new ArcadeGoo(world, 3, (float)a, (float)x, (float)y, gooAnimation);
+                    Gdx.app.log("Spawn", "Red Goo");
+                    break;
+            }
+        }
+        if(e0 <= p && p < e1){ //lizard
+            switch(calcColor()){
+                case 1: //Lizard
+                    new ArcadeLizard(world, 1, lr > 0.5 ? 0 : 1, lizardAnimation);
+                    break;
+                case 2: //Jaguar
+                    new ArcadeLizard(world, 2, lr > 0.5 ? 0 : 1, lizardAnimation);
+                    break;
+                case 3: //Bat
+                    new ArcadeLizard(world, 3, lr > 0.5 ? 0 : 1, lizardAnimation);
+                    break;
+            }
+        }
+        if(e1 <= p && p < e1+(1-e1)/3){ //spike
+            double a = lr * Math.PI;
+            double x = ArcadeValues.pelletOriginX + ArcadeValues.highOnPot * Math.cos(a);
+            double y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * Math.sin(a);
+            new ArcadeSpike(world, 1, (float)a, (float)x, (float)y, spike);
+        }
+        if(e1+(1-e1)/3 <= p && p < e1+(2*(1-e1)/3)){//meteor
+            double a = lr * Math.PI;
+            double x = ArcadeValues.pelletOriginX + ArcadeValues.highOnPot * Math.cos(a);
+            double y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * Math.sin(a);
+            new ArcadeSpike(world, 1, (float)a, (float)x, (float)y, spike);
+        }
+        if(e1+(2*(1-e1)/3) <= p && p <= 1){//arrow
+            double a = lr * Math.PI;
+            double x = ArcadeValues.pelletOriginX + ArcadeValues.highOnPot * Math.cos(a);
+            double y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * Math.sin(a);
+            new ArcadeSpike(world, 1, (float)a, (float)x, (float)y, spike);
+        }
+
+
     }
 
     private int calcColor(){
         float r = MathUtils.random();
-        switch (d){
-            case(1):
-                if(r >= 0.0f && r < 0.8f) return 1;
-                if(r >= 0.8f && r < 0.9f) return 2;
-                if(r >= 0.9f && r <= 1f) return 3;
-                break;
-            case(2):
-                if(r >= 0.0f && r < 0.4f) return 1;
-                if(r >= 0.4f && r < 0.8f) return 2;
-                if(r >= 0.8f && r <= 1f) return 3;
-                break;
-            case(3):
-                if(r >= 0.0f && r < 0.4f) return 1;
-                if(r >= 0.4f && r < 0.8f) return 2;
-                if(r >= 0.8f && r <= 1f) return 3;
-                break;
-            default:
-                return 1;
+        if(bosssFight) {
+            switch (d) {
+                case (1):
+                    return d;
+                case (2):
+                    if (r >= 0.0f && r < 0.5f) return 1;
+                    if (r >= 0.5f && r < 1f) return 2;
+                    break;
+                case (3):
+                    if (r >= 0.0f && r < 0.4f) return 1;
+                    if (r >= 0.4f && r < 0.8f) return 2;
+                    if (r >= 0.8f && r <= 1f) return 3;
+                    break;
+                default:
+                    return 1;
+            }
+        }else{
+            switch (d) {
+                case (1):
+                    if (r >= 0.0f && r < 0.8f) return 1;
+                    if (r >= 0.8f && r < 0.9f) return 2;
+                    if (r >= 0.9f && r <= 1f) return 3;
+                    break;
+                case (2):
+                    if (r >= 0.0f && r < 0.4f) return 1;
+                    if (r >= 0.4f && r < 0.8f) return 2;
+                    if (r >= 0.8f && r <= 1f) return 3;
+                    break;
+                case (3):
+                    if (r >= 0.0f && r < 0.4f) return 1;
+                    if (r >= 0.4f && r < 0.8f) return 2;
+                    if (r >= 0.8f && r <= 1f) return 3;
+                    break;
+                default:
+                    return 1;
+            }
         }
         return 1;
-    }
-
+i
     private void stepper(float delta){
         // /*
 
@@ -585,6 +611,8 @@ class Arcade extends Frame{
             ((ArcadeGoo)obj).draw(batch);
             }else if(obj instanceof ArcadeSkull){
                 ((ArcadeSkull)obj).draw(batch);
+            }else if(obj instanceof ArcadeSpike){
+            ((ArcadeSpike)obj).draw(batch);
             }
         }
     }
