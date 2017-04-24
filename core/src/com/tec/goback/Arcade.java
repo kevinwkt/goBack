@@ -89,7 +89,9 @@ class Arcade extends Frame{
     private Texture spike;
 
     private Animation<TextureRegion> lizardAnimation;
-    private Animation<TextureRegion> gooAnimation;
+    private Animation<TextureRegion> yellowGooAnimation;
+    private Animation<TextureRegion> blueGooAnimation;
+    private Animation<TextureRegion> redGooAnimation;
     private Animation<TextureRegion> skullRedAnimation;
     private Animation<TextureRegion> skullBlueAnimation;
     private Animation<TextureRegion> skullYellowAnimation;
@@ -184,7 +186,7 @@ class Arcade extends Frame{
         }
 
         lizard=new Texture("MINIONS/LIZARD/MINIONYellowLizard.png");
-        goo=new Texture("MINIONS/GOO/MINIONYellowGoo.png");
+        goo=new Texture("MINIONS/GOO/MINIONAnimation.png");
         skull=new Texture("SKULL/MINIONSkulls.png");
         spike=new Texture("MINIONS/SPIKE/MINIONYellowSpike00.png");
 
@@ -194,9 +196,13 @@ class Arcade extends Frame{
         lizardAnimation.setPlayMode(Animation.PlayMode.LOOP);
 
         texturaCompleta=new TextureRegion(goo);
-        texturaPersonaje=texturaCompleta.split(118,125);
-        gooAnimation = new Animation(0.18f, texturaPersonaje[0][0], texturaPersonaje[0][1]);
-        gooAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        texturaPersonaje=texturaCompleta.split(75,150);
+        yellowGooAnimation = new Animation(0.18f, texturaPersonaje[0][0], texturaPersonaje[0][1]);
+        yellowGooAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        redGooAnimation = new Animation(0.18f, texturaPersonaje[0][2], texturaPersonaje[0][3]);
+        redGooAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        blueGooAnimation = new Animation(0.18f, texturaPersonaje[0][4], texturaPersonaje[0][5]);
+        blueGooAnimation.setPlayMode(Animation.PlayMode.LOOP);
 
         texturaCompleta=new TextureRegion(skull);
         texturaPersonaje=texturaCompleta.split(128,242);
@@ -534,15 +540,15 @@ class Arcade extends Frame{
             double y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * Math.sin(a);
             switch(calcColor()){
                 case 1:
-                    new ArcadeGoo(world, 1, (float)a, (float)x, (float)y, gooAnimation);
+                    new ArcadeGoo(world, 1, (float)a, (float)x, (float)y, yellowGooAnimation);
                     Gdx.app.log("Spawn", "Yellow Goo");
                     break;
                 case 2:
-                    new ArcadeGoo(world, 2, (float)a, (float)x, (float)y, gooAnimation);
+                    new ArcadeGoo(world, 2, (float)a, (float)x, (float)y, blueGooAnimation);
                     Gdx.app.log("Spawn", "Blue Goo");
                     break;
                 case 3:
-                    new ArcadeGoo(world, 3, (float)a, (float)x, (float)y, gooAnimation);
+                    new ArcadeGoo(world, 3, (float)a, (float)x, (float)y, redGooAnimation);
                     Gdx.app.log("Spawn", "Red Goo");
                     break;
             }
