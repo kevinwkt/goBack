@@ -41,7 +41,7 @@ class Arcade extends Frame{
     private ArrayList<Body> wall = new ArrayList<Body>();
     private float cooldown;
 
-    private boolean bosssFight;
+    private boolean bosssFight, bossActive = false;
     private float betweenSpawns = ArcadeValues.initalFrequency;
     private float factor = ArcadeValues.initialFactor;
     private float stDiff = 0.2f;
@@ -121,7 +121,7 @@ class Arcade extends Frame{
     @Override
     public void show() {
         //d = pref.getInteger("level");
-        d = 2;
+        d = 3;
         bosssFight = true;
         super.show();
         textureInit();
@@ -354,27 +354,26 @@ class Arcade extends Frame{
 
     @Override
     public void render(float delta) {
-        Gdx.app.log(""+d,"");
         batch.setProjectionMatrix(super.camera.combined);
         cls();
-
         batch.begin();
 
         drawShit();
         batch.draw(pauseButton,camera.position.x+HALFW-pauseButton.getWidth(),camera.position.y-HALFH);
 
+        //If all orbes died
         boolean flag = false;
         for(ArcadeOrb orb : orbs) {
             if (orb != null) flag = true;
         }
-
         if(!flag) state = GameState.LOST;
+        //
 
-        if (state==GameState.PAUSED) {
+        if (state==GameState.PAUSED) { //Draw pause menu
             Gdx.input.setInputProcessor(pauseStage);
             batch.end();
             pauseStage.draw();
-        }else if(state != GameState.LOST){
+        }else if(state != GameState.LOST){ //TODO RETURN TO SAVE OR MAIN MENU
             Gdx.input.setInputProcessor(input);
             stepper(delta);
             spawnMonsters(delta);
@@ -386,6 +385,82 @@ class Arcade extends Frame{
         }else{
             loose(delta);
         }
+    }
+
+    private void drawShit(){
+        batch.draw(background,-2560,0);
+        sophie.setColor(1.0f,1.0f,1.0f,0.8f);
+        sophie.setPosition(ArcadeValues.pelletOriginX-100
+                , ArcadeValues.pelletOriginY-27);
+        sophie.draw(batch);
+
+        if(bossActive){
+            //TODO DRAW BOSS
+        }
+        drawBodies();
+    }
+
+    private void drawBodies(){
+        //B2D bodies
+        Array<Body> squirts = new Array<Body>();
+        world.getBodies(squirts);
+        Object obj;
+        for(Body b: squirts){
+            obj = b.getUserData();
+            if(obj instanceof OrbAttack) {
+                ((OrbAttack) obj).draw(batch);
+            }else if(obj instanceof ArcadeOrb){
+                ((ArcadeOrb)obj).draw(batch);
+            }else if(obj instanceof ArcadeLizard){
+                ((ArcadeLizard)obj).draw(batch);
+            }else if(obj instanceof ArcadeGoo){
+                ((ArcadeGoo)obj).draw(batch);
+            }else if(obj instanceof ArcadeSkull){
+                ((ArcadeSkull)obj).draw(batch);
+            }else if(obj instanceof ArcadeSpike){
+                ((ArcadeSpike)obj).draw(batch);
+            }
+        }
+    }
+
+    private void stepper(float delta){
+        // /*
+
+        //Gdx.app.log("Bodies: "+world.getBodyCount(), ", Fixtures: "+world.getFixtureCount());
+
+        // */
+
+
+        //much steps
+        world.step(1/60f, 6, 2);
+
+        //clean dead things
+        for(Body b: deadThings){
+            while(b.getFixtureList().size > 0){
+                b.destroyFixture(b.getFixtureList().get(0));
+            }
+            world.destroyBody(b);
+        }
+        deadThings.clear();
+
+        cooldown += delta;
+        //        fstep += delta;
+//        while(fstep > 1/120f){
+//            world.step(1/120F, 8, 3);
+//
+//            //clean dead things
+//            for(Body b: deadThings){
+//                while(b.getFixtureList().size > 0){
+//                    b.destroyFixture(b.getFixtureList().get(0));
+//                }
+//                world.destroyBody(b);
+//            }
+//            deadThings.clear();
+//
+//
+//            fstep -= 1/120f;
+//        }
+
     }
 
     private void loose(float delta){
@@ -507,9 +582,9 @@ class Arcade extends Frame{
 
     }
 
-    private int calcColor(){
+    private int calcColor() {
         float r = MathUtils.random();
-        if(bosssFight) {
+        if (bosssFight) {
             switch (d) {
                 case (1):
                     return d;
@@ -525,7 +600,7 @@ class Arcade extends Frame{
                 default:
                     return 1;
             }
-        }else{
+        } else {
             switch (d) {
                 case (1):
                     if (r >= 0.0f && r < 0.8f) return 1;
@@ -547,74 +622,6 @@ class Arcade extends Frame{
             }
         }
         return 1;
-i
-    private void stepper(float delta){
-        // /*
-
-        //Gdx.app.log("Bodies: "+world.getBodyCount(), ", Fixtures: "+world.getFixtureCount());
-
-        // */
-
-
-        //much steps
-        world.step(1/60f, 6, 2);
-
-        //clean dead things
-        for(Body b: deadThings){
-            while(b.getFixtureList().size > 0){
-                b.destroyFixture(b.getFixtureList().get(0));
-            }
-            world.destroyBody(b);
-        }
-        deadThings.clear();
-
-        cooldown += delta;
-        //        fstep += delta;
-//        while(fstep > 1/120f){
-//            world.step(1/120F, 8, 3);
-//
-//            //clean dead things
-//            for(Body b: deadThings){
-//                while(b.getFixtureList().size > 0){
-//                    b.destroyFixture(b.getFixtureList().get(0));
-//                }
-//                world.destroyBody(b);
-//            }
-//            deadThings.clear();
-//
-//
-//            fstep -= 1/120f;
-//        }
-
-    }
-
-    private void drawShit(){
-        batch.draw(background,-2560,0);
-        sophie.setColor(1.0f,1.0f,1.0f,0.8f);
-        sophie.setPosition(ArcadeValues.pelletOriginX-100
-                , ArcadeValues.pelletOriginY-27);
-        sophie.draw(batch);
-
-        //B2D bodies
-        Array<Body> squirts = new Array<Body>();
-        world.getBodies(squirts);
-        Object obj;
-        for(Body b: squirts){
-            obj = b.getUserData();
-            if(obj instanceof OrbAttack) {
-                ((OrbAttack) obj).draw(batch);
-            }else if(obj instanceof ArcadeOrb){
-                ((ArcadeOrb)obj).draw(batch);
-            }else if(obj instanceof ArcadeLizard){
-                ((ArcadeLizard)obj).draw(batch);
-            }else if(obj instanceof ArcadeGoo){
-            ((ArcadeGoo)obj).draw(batch);
-            }else if(obj instanceof ArcadeSkull){
-                ((ArcadeSkull)obj).draw(batch);
-            }else if(obj instanceof ArcadeSpike){
-            ((ArcadeSpike)obj).draw(batch);
-            }
-        }
     }
 
     private void swapOrbes(){
@@ -670,7 +677,6 @@ i
         }
 
     }
-
 
     @Override
     public void resize(int width, int height) {
