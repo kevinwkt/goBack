@@ -125,9 +125,9 @@ abstract class Enemy{
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(ArcadeValues.pxToMeters(
+        bodyDef.position.set(
                 ArcadeValues.pxToMeters(x),
-                ArcadeValues.pxToMeters(y//CONSTANT)
+                ArcadeValues.pxToMeters(ArcadeValues.meteorSpawn)
                 );
         body = world.createBody(bodyDef);
         fixturer(0f, 0f);
