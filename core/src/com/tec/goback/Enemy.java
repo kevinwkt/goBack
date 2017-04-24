@@ -121,6 +121,23 @@ abstract class Enemy{
 
     }
 
+    Enemy(World world, float x, Texture tx) {
+        this.sprite= new Sprite(tx);
+        this.color = 2;
+
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(ArcadeValues.pxToMeters(
+                ArcadeValues.pxToMeters(x),
+                ArcadeValues.pxToMeters(y//CONSTANT)
+                );
+        body = world.createBody(bodyDef);
+        fixturer(0f, 0f);
+        body.setLinearVelocity(0.0f, 0.5f);
+        body.setUserData(this);
+
+    }
+
     abstract void fixturer(float density, float restitution);
 
     float getDamage(){
