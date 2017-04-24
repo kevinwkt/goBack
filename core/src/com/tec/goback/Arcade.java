@@ -6,14 +6,17 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
@@ -123,6 +126,7 @@ class Arcade extends Frame{
     @Override
     public void show() {
         //d = pref.getInteger("level");
+        debugRenderer=new Box2DDebugRenderer();
         d = 3;
         bosssFight = true;
         super.show();
@@ -139,6 +143,11 @@ class Arcade extends Frame{
         pelletBlue = aManager.get("PELLET/ATAQUEBluePellet.png");
         musicInit();
     }
+
+    Box2DDebugRenderer debugRenderer;
+    Matrix4 debugMatrix;
+
+
 
     private void musicInit() {
         bgMusic = aManager.get("MUSIC/GoBackMusicArcade.mp3");
@@ -360,10 +369,10 @@ class Arcade extends Frame{
 
     @Override
     public void render(float delta) {
-        batch.setProjectionMatrix(super.camera.combined);
+        debugMatrix=new Matrix4(super.camera.combined);
+        debugMatrix.scale(100, 100, 1f);
         cls();
         batch.begin();
-
         drawShit();
         batch.draw(pauseButton,camera.position.x+HALFW-pauseButton.getWidth(),camera.position.y-HALFH);
 
@@ -391,6 +400,10 @@ class Arcade extends Frame{
         }else{
             loose(delta);
         }
+        batch.begin();
+        batch.setProjectionMatrix(super.camera.combined);
+        debugRenderer.render(world, debugMatrix);
+        batch.end();
     }
 
     private void drawShit(){

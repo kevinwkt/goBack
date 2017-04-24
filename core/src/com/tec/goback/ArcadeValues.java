@@ -21,7 +21,7 @@ class ArcadeValues {
     //positioning
     static final double highOnPot = java.lang.Math.sqrt( 640F*640F + 448F*448F);
 
-    static final float pelletOriginX = 650;
+    static final float pelletOriginX = 640;
     static final float pelletOriginY = 272;
     static final float meterspelletOriginX = pelletOriginX/100;
     static final float meterspelletOriginY = pelletOriginY/100;

@@ -36,7 +36,7 @@ class ArcadeGoo extends Enemy {
     void fixturer(float density, float restitution) {
         //lizard
         shape = new PolygonShape();
-        shape.setAsBox(ArcadeValues.pxToMeters(100f), ArcadeValues.pxToMeters(35f));
+        shape.setAsBox(ArcadeValues.pxToMeters(75f), ArcadeValues.pxToMeters(150f));
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.density = density;
