@@ -81,8 +81,6 @@ abstract class Enemy{
         this.color = type;
         this.x=startX;
         this.y=startY;
-        if(x>ArcadeValues.pelletOriginX) sprite.rotate(270+angle);
-        else sprite.rotate(angle-90);
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -105,13 +103,13 @@ abstract class Enemy{
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         if(leftRight==1) {
             //bodyDef.position.set(ArcadeValues.pxToMeters(1280+120), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
-            bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX+800), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY+50));
+            bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX+800), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
             body = world.createBody(bodyDef);
             fixturer(0f, 0f);
         }
         if(leftRight==0) {
             //bodyDef.position.set(ArcadeValues.pxToMeters(-120), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
-            bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX-800), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY+50));
+            bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX-800), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
             body = world.createBody(bodyDef);
             fixturer(0.1f, 0.7f);
         }

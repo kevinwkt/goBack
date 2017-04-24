@@ -14,16 +14,14 @@ import com.badlogic.gdx.physics.box2d.World;
 
 class ArcadeSpike extends Enemy {
     private PolygonShape shape;
-    private boolean walkCond=true;
-    private float totalFlyx;
-    private float totalFlyy;
     private double myA;
+    private int walkCounter;
+    private float walkLimit;
+    private boolean walking=true;
 
     public ArcadeSpike(World world, int type, float angle,float spawnx,float spawny, Texture tx) {
-        super(world,type,angle,spawnx,spawny,tx);
-        SPEED=0.5f;
-        totalFlyx=ArcadeValues.meterspelletOriginX/2;
-        totalFlyy=(72-ArcadeValues.meterspelletOriginY)/2;
+        super(world,type,(angle*MathUtils.radiansToDegrees),spawnx,spawny,tx);
+        SPEED=0.4f;
         //VELOCITIES
         myA =  angle + Math.PI;
         body.setLinearVelocity(SPEED * MathUtils.cos((float) myA), SPEED * MathUtils.sin((float)myA));
@@ -31,13 +29,15 @@ class ArcadeSpike extends Enemy {
         timeframe = 0;
         dmg=15f;
         hp=80;
+        walkCounter=0;
+        walkLimit=ArcadeValues.meterspelletOriginX/2;
 
     }
 
     void fixturer(float density, float restitution) {
         //lizard
         shape = new PolygonShape();
-        shape.setAsBox(ArcadeValues.pxToMeters(50f), ArcadeValues.pxToMeters(35f));
+        shape.setAsBox(ArcadeValues.pxToMeters(49f), ArcadeValues.pxToMeters(130f));
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.density = density;
@@ -53,7 +53,19 @@ class ArcadeSpike extends Enemy {
 
     void draw(SpriteBatch batch) {
         timeframe += Gdx.graphics.getDeltaTime();
-        if(Math.abs(ArcadeValues.pelletOriginX-body.getPosition().x)<totalFlyx&&Math.abs(ArcadeValues.pelletOriginY-body.getPosition().y)<totalFlyy) body.setLinearVelocity(2*SPEED * MathUtils.cos((float) myA), 2*SPEED * MathUtils.sin((float)myA));
-        batch.draw(sprite, ArcadeValues.metersToPx(body.getPosition().x)-120, ArcadeValues.metersToPx(body.getPosition().y)-39);
+        if(walkCounter>walkLimit+500&&walking) {
+            body.setLinearVelocity(-SPEED * MathUtils.cos((float) myA), -SPEED * MathUtils.sin((float)myA));
+            Gdx.app.log("Spawn", "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+            walking=false;
+        }else if(!walking&&walkCounter>walkLimit+570){
+            body.setLinearVelocity(SPEED*8f * MathUtils.cos((float) myA), SPEED*8f * MathUtils.sin((float)myA));
+        }
+        if(leftRight==1) {
+            batch.draw(sprite, ArcadeValues.metersToPx(body.getPosition().x)-120, ArcadeValues.metersToPx(body.getPosition().y)-39,24.5f,65f,49f,130f,1f,1f,angle+270);
+        }
+        if(leftRight==0) {
+            batch.draw(sprite, ArcadeValues.metersToPx(body.getPosition().x)-120, ArcadeValues.metersToPx(body.getPosition().y)-39,24.5f,65f,49f,130f,1f,1f,angle-90);
+        }
+        walkCounter++;
     }
 }
