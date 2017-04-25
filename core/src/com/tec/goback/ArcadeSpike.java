@@ -25,7 +25,6 @@ class ArcadeSpike extends Enemy {
         //VELOCITIES
         myA =  angle + Math.PI;
         body.setLinearVelocity(SPEED * MathUtils.cos((float) myA), SPEED * MathUtils.sin((float)myA));
-
         timeframe = 0;
         dmg=15f;
         hp=80;
@@ -36,8 +35,6 @@ class ArcadeSpike extends Enemy {
 
     void fixturer(float density, float restitution) {
         //lizard
-        shape = new PolygonShape();
-        shape.setAsBox(ArcadeValues.pxToMeters(49f), ArcadeValues.pxToMeters(130f));
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.density = density;
@@ -48,7 +45,13 @@ class ArcadeSpike extends Enemy {
         fixtureDef.filter.categoryBits = ArcadeValues.enemyCat; //its category
         fixtureDef.filter.maskBits = ArcadeValues.enemyMask; //or of its category with colliding categories
 
-        body.createFixture(fixtureDef);
+        loader.attachFixture(body,"spk",fixtureDef,0.5f);
+        if(leftRight==1) {
+            body.setTransform(body.getPosition(),angle-140);
+        }
+        if(leftRight==0) {
+            body.setTransform(body.getPosition(),angle);
+        }
     }
 
     void draw(SpriteBatch batch) {
@@ -61,7 +64,7 @@ class ArcadeSpike extends Enemy {
             body.setLinearVelocity(SPEED*8f * MathUtils.cos((float) myA), SPEED*8f * MathUtils.sin((float)myA));
         }
         if(leftRight==1) {
-            batch.draw(sprite, ArcadeValues.metersToPx(body.getPosition().x)-120, ArcadeValues.metersToPx(body.getPosition().y)-39,24.5f,65f,49f,130f,1f,1f,angle+270);
+            batch.draw(sprite, ArcadeValues.metersToPx(body.getPosition().x)-120, ArcadeValues.metersToPx(body.getPosition().y-10)-39,24.5f,65f,49f,130f,1f,1f,angle+270);
         }
         if(leftRight==0) {
             batch.draw(sprite, ArcadeValues.metersToPx(body.getPosition().x)-120, ArcadeValues.metersToPx(body.getPosition().y)-39,24.5f,65f,49f,130f,1f,1f,angle-90);

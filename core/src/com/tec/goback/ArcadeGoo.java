@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
@@ -13,7 +14,7 @@ import com.badlogic.gdx.physics.box2d.World;
  **/
 
 class ArcadeGoo extends Enemy {
-    private PolygonShape shape;
+    private CircleShape shape;
     private int walkCounter;
     private int walkLimit;
     private boolean walkCond=true;
@@ -35,8 +36,8 @@ class ArcadeGoo extends Enemy {
 
     void fixturer(float density, float restitution) {
         //lizard
-        shape = new PolygonShape();
-        shape.setAsBox(ArcadeValues.pxToMeters(75f), ArcadeValues.pxToMeters(150f));
+        shape = new CircleShape();
+        shape.setRadius(ArcadeValues.pxToMeters(30f));
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.density = density;
@@ -55,10 +56,10 @@ class ArcadeGoo extends Enemy {
         region=an.getKeyFrame(timeframe);
 
         if(leftRight==1) {
-            batch.draw(region, ArcadeValues.metersToPx(body.getPosition().x)-120, ArcadeValues.metersToPx(body.getPosition().y)-39,37.5f,75f,75f,150f,1f,1f,(angle*MathUtils.radiansToDegrees)+270+45);
+            batch.draw(region, ArcadeValues.metersToPx(body.getPosition().x)-27, ArcadeValues.metersToPx(body.getPosition().y)-15,39f,39f,75f,150f,1f,1f,(angle*MathUtils.radiansToDegrees)+270+45);
         }
         if(leftRight==0) {
-            batch.draw(region, ArcadeValues.metersToPx(body.getPosition().x)-120, ArcadeValues.metersToPx(body.getPosition().y)-39,37.5f,75f,75f,150f,1f,1f,angle*MathUtils.radiansToDegrees-90+-45);
+            batch.draw(region, ArcadeValues.metersToPx(body.getPosition().x)-27, ArcadeValues.metersToPx(body.getPosition().y)-15,39f,39f,75f,150f,1f,1f,angle*MathUtils.radiansToDegrees-90+-45);
         }
         walkCounter++;
     }

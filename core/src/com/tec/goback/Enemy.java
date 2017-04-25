@@ -56,6 +56,8 @@ abstract class Enemy{
     protected CircleShape shape;
     protected Sprite sprite;
 
+    protected BodyEditorLoader loader = new BodyEditorLoader(Gdx.files.internal("Physicshit.json"));
+
     Enemy(World world, int type, float angle, float startX, float startY, Animation tx) {
         this.angle=angle;
         this.an=tx;
