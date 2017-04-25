@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.utils.TimeUtils;
 
 /*
  * Created by gerry on 2/18/17.
@@ -38,6 +39,9 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 
 @SuppressWarnings("ConstantConditions")
 class Arcade extends Frame{
+
+    //B2D bodies
+    private Array<Body> squirts = new Array<Body>();
 
     private World world;
     private HashSet<Body> deadThings;
@@ -123,6 +127,7 @@ class Arcade extends Frame{
 
     Box2DDebugRenderer debugRenderer;
     Matrix4 debugMatrix;
+
 
 
     Arcade(App app) {
@@ -427,8 +432,7 @@ class Arcade extends Frame{
     }
 
     private void drawBodies(){
-        //B2D bodies
-        Array<Body> squirts = new Array<Body>();
+        long time = TimeUtils.nanoTime();
         world.getBodies(squirts);
         Object obj;
         for(Body b: squirts){
@@ -449,6 +453,14 @@ class Arcade extends Frame{
                 ((ArcadeMeteor)obj).draw(batch);
             }
         }
+        squirts.clear();
+        /*
+        before/after creating array in the method
+        t0 = 3500000
+        t1 = 2000000
+         */
+        time = TimeUtils.nanoTime()-time;
+        Gdx.app.log("Time was:", ""+time);
     }
 
     private void stepper(float delta){
@@ -536,13 +548,13 @@ class Arcade extends Frame{
         float e1 = (float)(1 - 0.5*(0.005*hit + 0.2));
         float e0 = (float)(1 - (0.005*hit + 0.2));
 
-        double p = Math.random();
-        double lr = Math.random();
+        float p = MathUtils.random();
+        float lr = MathUtils.random();
 
         if(0 <= p && p < e0/2){ //skull
-            double a = lr * Math.PI;
-            double x = ArcadeValues.pelletOriginX + ArcadeValues.highOnPot * Math.cos(a);
-            double y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * Math.sin(a);
+            float a = lr * MathUtils.PI;
+            float x = ArcadeValues.pelletOriginX + ArcadeValues.highOnPot * MathUtils.cos(a);
+            float y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * MathUtils.sin(a);
             switch(calcColor()){
                 case 1:
                     new ArcadeSkull(world, 1, (float)a, (float)x, (float)y, skullYellowAnimation);
@@ -560,9 +572,9 @@ class Arcade extends Frame{
         }
         if(e0/2 <= p && p <e0){ //goo
             Gdx.app.log("Goo", "to Spawn");
-            double a = lr * Math.PI;
-            double x = ArcadeValues.pelletOriginX + ArcadeValues.highOnPot * Math.cos(a);
-            double y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * Math.sin(a);
+            float a = lr * MathUtils.PI;
+            float x = ArcadeValues.pelletOriginX + ArcadeValues.highOnPot * MathUtils.cos(a);
+            float y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * MathUtils.sin(a);
             switch(calcColor()){
                 case 1:
                     new ArcadeGoo(world, 1, (float)a, (float)x, (float)y, yellowGooAnimation);
@@ -592,9 +604,9 @@ class Arcade extends Frame{
             }
         }
         if(e1 <= p && p < e1+(1-e1)/3){ //spike
-            double a = lr * Math.PI;
-            double x = ArcadeValues.pelletOriginX + ArcadeValues.highOnPot * Math.cos(a);
-            double y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * Math.sin(a);
+            float a = lr * MathUtils.PI;
+            float x = ArcadeValues.pelletOriginX + ArcadeValues.highOnPot * MathUtils.cos(a);
+            float y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * MathUtils.sin(a);
             new ArcadeSpike(world, 1, (float)a, (float)x, (float)y, spike);
         }
         if(e1+(1-e1)/3 <= p && p < e1+(2*(1-e1))/3){//meteor
@@ -602,9 +614,9 @@ class Arcade extends Frame{
             new ArcadeMeteor(world, (float)(100+1080*lr), meteor);
         }
         if(e1+((2*(1-e1))/3) <= p && p <= 1){//arrow
-            double a = lr * Math.PI;
-            double x = ArcadeValues.pelletOriginX + ArcadeValues.highOnPot * Math.cos(a);
-            double y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * Math.sin(a);
+            float a = lr * MathUtils.PI;
+            float x = ArcadeValues.pelletOriginX + ArcadeValues.highOnPot * MathUtils.cos(a);
+            float y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * MathUtils.sin(a);
             new ArcadeSpike(world, 1, (float)a, (float)x, (float)y, spike);
         }
 

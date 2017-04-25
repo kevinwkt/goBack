@@ -19,7 +19,7 @@ class ArcadeValues {
     static final float attackDamage = 20f;
 
     //positioning
-    static final double highOnPot = java.lang.Math.sqrt( 640F*640F + 448F*448F);
+    static float highOnPot = (float)java.lang.Math.sqrt( 640F*640F + 448F*448F);
 
     static final float pelletOriginX = 640;
     static final float pelletOriginY = 272;

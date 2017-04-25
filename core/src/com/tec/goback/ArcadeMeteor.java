@@ -37,8 +37,8 @@ class ArcadeMeteor extends Enemy {
     @Override
     void draw(SpriteBatch batch) {
         sprite.setPosition(
-                ArcadeValues.metersToPx(body.getPosition().x),
-                ArcadeValues.metersToPx(body.getPosition().y)
+                ArcadeValues.metersToPx(body.getPosition().x-40),
+                ArcadeValues.metersToPx(body.getPosition().y-40)
         );
         sprite.draw(batch);
     }
