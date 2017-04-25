@@ -28,6 +28,8 @@ class ArcadeValues {
     static final float places[] = {meterspelletOriginX, meterspelletOriginX -1, meterspelletOriginX + 1};
     static final float radius[] = {83f/200f, 48f/200f, 57f/200f};
 
+    static final float meteorSpawn = 800f;
+
     //lizard settings
     static final float rightLizardOriginX=0;
     static final float rightLizardOriginY=0;
