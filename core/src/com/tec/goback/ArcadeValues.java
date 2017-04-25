@@ -29,6 +29,11 @@ class ArcadeValues {
     static final float radius[] = {83f/200f, 48f/200f, 57f/200f};
 
     static final float meteorSpawn = 800f;
+    static final float meteorVelocity = -0.5f;
+    static final float meteorRadius = 40f;
+
+
+
 
     //lizard settings
     static final float rightLizardOriginX=0;

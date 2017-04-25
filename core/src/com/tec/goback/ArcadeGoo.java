@@ -19,7 +19,7 @@ class ArcadeGoo extends Enemy {
     private int walkLimit;
     private boolean walkCond=true;
 
-    public ArcadeGoo(World world, int type, float angle,float spawnx,float spawny, Animation tx) {
+    ArcadeGoo(World world, int type, float angle,float spawnx,float spawny, Animation tx) {
         super(world,type,angle,spawnx,spawny,tx);
         SPEED=0.5f;
 

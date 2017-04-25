@@ -90,6 +90,8 @@ class Arcade extends Frame{
     private Texture goo;
     private Texture skull;
     private Texture spike;
+    private Texture meteor;
+
 
     private Animation<TextureRegion> lizardAnimation;
     private Animation<TextureRegion> yellowGooAnimation;
@@ -119,6 +121,10 @@ class Arcade extends Frame{
 
     private Preferences soundPreferences = Gdx.app.getPreferences("My Preferences");
 
+    Box2DDebugRenderer debugRenderer;
+    Matrix4 debugMatrix;
+
+
     Arcade(App app) {
         super(app, WIDTH_MAP,HEIGHT_MAP);
     }
@@ -143,11 +149,6 @@ class Arcade extends Frame{
         pelletBlue = aManager.get("PELLET/ATAQUEBluePellet.png");
         musicInit();
     }
-
-    Box2DDebugRenderer debugRenderer;
-    Matrix4 debugMatrix;
-
-
 
     private void musicInit() {
         bgMusic = aManager.get("MUSIC/GoBackMusicArcade.mp3");
@@ -194,10 +195,14 @@ class Arcade extends Frame{
                 break;
         }
 
+
+        //TODO USE ASSET MANAGER LAZY KOREAN
         lizard=new Texture("MINIONS/LIZARD/MINIONYellowLizard.png");
         goo=new Texture("MINIONS/GOO/MINIONAnimation.png");
         skull=new Texture("SKULL/MINIONSkulls.png");
         spike=new Texture("MINIONS/SPIKE/MINIONYellowSpike00.png");
+        //LIKE SO
+        meteor = aManager.get("MINIONS/METEOR/MINIONMeteor00.png");
 
         TextureRegion texturaCompleta = new TextureRegion(lizard);
         TextureRegion[][] texturaPersonaje = texturaCompleta.split(227,65);
@@ -334,6 +339,7 @@ class Arcade extends Frame{
 
                 }else{//If some bad guy got hit
                     if (ob1 instanceof Enemy) {
+                        Gdx.app.log("Enemy Color:"+((Enemy) ob1).getColor(), "PelletColor"+((OrbAttack)ob2).getColor());
                         if ( ((Enemy)ob1).getHurtDie( ((OrbAttack)ob2).getColor(), ((OrbAttack)ob2).getDamage()) ) {
                             //Gdx.app.log("LACONCHA", ""+((OrbAttack) ob2).getColor());
                             hit++;
@@ -342,6 +348,7 @@ class Arcade extends Frame{
                         }
                     }
                     if (ob2 instanceof Enemy) {
+                        Gdx.app.log("Enemy Color:"+((Enemy) ob2).getColor(), "PelletColor"+((OrbAttack)ob1).getColor());
                         if (((Enemy)ob2).getHurtDie(((OrbAttack)ob1).getColor(), ((OrbAttack)ob1).getDamage()) ) {
                             //Gdx.app.log("LACONCHA", ""+((OrbAttack) ob1).getColor());
                             hit++;
@@ -367,7 +374,7 @@ class Arcade extends Frame{
 
     }//         <------COLLISION EVENT HERE
 
-    @Override
+    @Override//TODO GET DEBUG SHIT ORGANIZED
     public void render(float delta) {
         debugMatrix=new Matrix4(super.camera.combined);
         debugMatrix.scale(100, 100, 1f);
@@ -438,6 +445,8 @@ class Arcade extends Frame{
                 ((ArcadeSkull)obj).draw(batch);
             }else if(obj instanceof ArcadeSpike){
                 ((ArcadeSpike)obj).draw(batch);
+            }else if(obj instanceof ArcadeMeteor){
+                ((ArcadeMeteor)obj).draw(batch);
             }
         }
     }
@@ -509,6 +518,7 @@ class Arcade extends Frame{
     }
 
     private void spawnMonsters(float delta){
+        //TODO MAKE STEPS
         elapsed += delta;
         elapsed2 += delta;
         if(elapsed > betweenSpawns){
@@ -522,9 +532,10 @@ class Arcade extends Frame{
     }
 
     private void spawnSomething(){
-
+        //TODO TUNE DIFFICULTY INCREASE
         float e1 = (float)(1 - 0.5*(0.005*hit + 0.2));
         float e0 = (float)(1 - (0.005*hit + 0.2));
+
         double p = Math.random();
         double lr = Math.random();
 
@@ -585,11 +596,9 @@ class Arcade extends Frame{
             double y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * Math.sin(a);
             new ArcadeSpike(world, 1, (float)a, (float)x, (float)y, spike);
         }
-        if(e1+(1-e1)/3 <= p && p < e1+(2*(1-e1)/3)){//meteor
-            double a = lr * Math.PI;
-            double x = ArcadeValues.pelletOriginX + ArcadeValues.highOnPot * Math.cos(a);
-            double y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * Math.sin(a);
-            new ArcadeSpike(world, 1, (float)a, (float)x, (float)y, spike);
+        if(e1+(1-e1)/3 <= p && p < e1+(2*(1-e1))/3){//meteor
+            Gdx.app.log("Meteor", "Spawn");
+            new ArcadeMeteor(world, (float)(100+1080*lr), meteor);
         }
         if(e1+(2*(1-e1)/3) <= p && p <= 1){//arrow
             double a = lr * Math.PI;

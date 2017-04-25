@@ -133,7 +133,7 @@ abstract class Enemy{
                 );
         body = world.createBody(bodyDef);
         fixturer(0f, 0f);
-        body.setLinearVelocity(0.0f, 0.5f);
+        body.setLinearVelocity(0.0f, ArcadeValues.meteorVelocity);
         body.setUserData(this);
 
     }

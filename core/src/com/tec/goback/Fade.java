@@ -170,6 +170,7 @@ class Fade implements Screen {
                     manager.load("PELLET/ATAQUEYellowPellet.png", Texture.class);
                     manager.load("PELLET/ATAQUERedPellet.png", Texture.class);
                     manager.load("PELLET/ATAQUEBluePellet.png", Texture.class);
+                    manager.load("MINIONS/METEOR/MINIONMeteor00.png", Texture.class);
                     break;
             }
     }
