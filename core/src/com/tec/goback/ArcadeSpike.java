@@ -47,10 +47,10 @@ class ArcadeSpike extends Enemy {
 
         loader.attachFixture(body,"spk",fixtureDef,0.5f);
         if(leftRight==1) {
-            body.setTransform(body.getPosition(),angle-140);
+            body.setTransform(body.getPosition(),angle+270);
         }
         if(leftRight==0) {
-            body.setTransform(body.getPosition(),angle);
+            body.setTransform(body.getPosition(),angle-90);
         }
     }
 
@@ -64,7 +64,7 @@ class ArcadeSpike extends Enemy {
             body.setLinearVelocity(SPEED*8f * MathUtils.cos((float) myA), SPEED*8f * MathUtils.sin((float)myA));
         }
         if(leftRight==1) {
-            batch.draw(sprite, ArcadeValues.metersToPx(body.getPosition().x)-120, ArcadeValues.metersToPx(body.getPosition().y-10)-39,24.5f,65f,49f,130f,1f,1f,angle+270);
+            batch.draw(sprite, ArcadeValues.metersToPx(body.getPosition().x)-120, ArcadeValues.metersToPx(body.getPosition().y)-39,24.5f,65f,49f,130f,1f,1f,angle+270);
         }
         if(leftRight==0) {
             batch.draw(sprite, ArcadeValues.metersToPx(body.getPosition().x)-120, ArcadeValues.metersToPx(body.getPosition().y)-39,24.5f,65f,49f,130f,1f,1f,angle-90);

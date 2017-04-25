@@ -35,8 +35,6 @@ class ArcadeSkull extends Enemy {
 
     void fixturer(float density, float restitution) {
         //lizard
-        shape = new PolygonShape();
-        shape.setAsBox(ArcadeValues.pxToMeters(100f), ArcadeValues.pxToMeters(35f));
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.density = density;
@@ -47,13 +45,13 @@ class ArcadeSkull extends Enemy {
         fixtureDef.filter.categoryBits = ArcadeValues.enemyCat; //its category
         fixtureDef.filter.maskBits = ArcadeValues.enemyMask; //or of its category with colliding categories
 
-        body.createFixture(fixtureDef);
+        loader.attachFixture(body,"skll",fixtureDef,1f);
     }
 
     void draw(SpriteBatch batch) {
         timeframe += Gdx.graphics.getDeltaTime();
         region=an.getKeyFrame(timeframe);
-        batch.draw(region, ArcadeValues.metersToPx(body.getPosition().x)-120, ArcadeValues.metersToPx(body.getPosition().y)-39);
+        batch.draw(region, ArcadeValues.metersToPx(body.getPosition().x)-15, ArcadeValues.metersToPx(body.getPosition().y)-10);
         walkCounter++;
     }
 }

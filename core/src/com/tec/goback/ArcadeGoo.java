@@ -56,10 +56,10 @@ class ArcadeGoo extends Enemy {
         region=an.getKeyFrame(timeframe);
 
         if(leftRight==1) {
-            batch.draw(region, ArcadeValues.metersToPx(body.getPosition().x)-27, ArcadeValues.metersToPx(body.getPosition().y)-15,39f,39f,75f,150f,1f,1f,(angle*MathUtils.radiansToDegrees)+270+45);
+            batch.draw(region, ArcadeValues.metersToPx(body.getPosition().x)-37, ArcadeValues.metersToPx(body.getPosition().y)-35,39f,39f,75f,150f,1f,1f,angle*MathUtils.radiansToDegrees+270);
         }
         if(leftRight==0) {
-            batch.draw(region, ArcadeValues.metersToPx(body.getPosition().x)-27, ArcadeValues.metersToPx(body.getPosition().y)-15,39f,39f,75f,150f,1f,1f,angle*MathUtils.radiansToDegrees-90+-45);
+            batch.draw(region, ArcadeValues.metersToPx(body.getPosition().x)-37, ArcadeValues.metersToPx(body.getPosition().y)-35,39f,39f,75f,150f,1f,1f,angle*MathUtils.radiansToDegrees-90);
         }
         walkCounter++;
     }
