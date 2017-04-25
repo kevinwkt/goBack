@@ -134,7 +134,7 @@ class Arcade extends Frame{
         //d = pref.getInteger("level");
         debugRenderer=new Box2DDebugRenderer();
         d = 3;
-        bosssFight = true;
+        bosssFight = false;
         super.show();
         textureInit();
         worldInit();
@@ -539,7 +539,7 @@ class Arcade extends Frame{
         double p = Math.random();
         double lr = Math.random();
 
-        if(0 <= p && p <e0/2){ //skull
+        if(0 <= p && p < e0/2){ //skull
             double a = lr * Math.PI;
             double x = ArcadeValues.pelletOriginX + ArcadeValues.highOnPot * Math.cos(a);
             double y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * Math.sin(a);
@@ -559,6 +559,7 @@ class Arcade extends Frame{
             }
         }
         if(e0/2 <= p && p <e0){ //goo
+            Gdx.app.log("Goo", "to Spawn");
             double a = lr * Math.PI;
             double x = ArcadeValues.pelletOriginX + ArcadeValues.highOnPot * Math.cos(a);
             double y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * Math.sin(a);
@@ -600,7 +601,7 @@ class Arcade extends Frame{
             Gdx.app.log("Meteor", "Spawn");
             new ArcadeMeteor(world, (float)(100+1080*lr), meteor);
         }
-        if(e1+(2*(1-e1)/3) <= p && p <= 1){//arrow
+        if(e1+((2*(1-e1))/3) <= p && p <= 1){//arrow
             double a = lr * Math.PI;
             double x = ArcadeValues.pelletOriginX + ArcadeValues.highOnPot * Math.cos(a);
             double y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * Math.sin(a);
@@ -621,14 +622,14 @@ class Arcade extends Frame{
                     if (r >= 0.5f && r < 1f) return 2;
                     break;
                 case (3):
-                    if (r >= 0.0f && r < 0.4f) return 1;
-                    if (r >= 0.4f && r < 0.8f) return 2;
-                    if (r >= 0.8f && r <= 1f) return 3;
+                    if (r >= 0.0f && r < 0.33f) return 1;
+                    if (r >= 0.33f && r < 0.66f) return 2;
+                    if (r >= 0.66f && r <= 1f) return 3;
                     break;
                 default:
                     return 1;
             }
-        } else {
+        }else{
             switch (d) {
                 case (1):
                     if (r >= 0.0f && r < 0.8f) return 1;
@@ -641,9 +642,9 @@ class Arcade extends Frame{
                     if (r >= 0.8f && r <= 1f) return 3;
                     break;
                 case (3):
-                    if (r >= 0.0f && r < 0.4f) return 1;
-                    if (r >= 0.4f && r < 0.8f) return 2;
-                    if (r >= 0.8f && r <= 1f) return 3;
+                    if (r >= 0.0f && r < 0.33f) return 1;
+                    if (r >= 0.33f && r < 0.66f) return 2;
+                    if (r >= 0.66f && r <= 1f) return 3;
                     break;
                 default:
                     return 1;

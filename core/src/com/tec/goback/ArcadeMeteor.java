@@ -40,5 +40,6 @@ class ArcadeMeteor extends Enemy {
                 ArcadeValues.metersToPx(body.getPosition().x),
                 ArcadeValues.metersToPx(body.getPosition().y)
         );
+        sprite.draw(batch);
     }
 }
