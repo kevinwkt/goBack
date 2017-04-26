@@ -7,9 +7,11 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -20,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
@@ -68,7 +71,7 @@ abstract class Frame implements Screen {
     //Auxiliary screens
     protected Pause pauseStage;
     protected Stats statsStage;
-    protected StatsInput statsInput;
+    protected InputProcessor statsInput;
     protected InputMultiplexer inputMultiplexer;
 
     //Gamestate
@@ -115,7 +118,138 @@ abstract class Frame implements Screen {
         pauseButton = aManager.get("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTPause.png");
 
         statsStage = new Stats(view, batch, app);
-        statsInput = new StatsInput();
+        statsInput = new SimpleDirectionGestureDetector(new SimpleDirectionGestureDetector.DirectionListener() {
+            @Override
+            public void onLeft() {
+                switch (pref.getInteger("level")){
+                    case 0:
+                        break;
+                    case 1:
+                        switch (stateStats){
+                            case YELLOW:
+                                //Do nothing
+                                break;
+                            default:
+                                //SOPHIE, Go to YELLOW
+                                statsStage.yellowOrbGroup.setZIndex(1);
+                                stateStats=StatsState.YELLOW;
+                                break;
+                        }
+                        break;
+                    case 2:
+                        switch (stateStats){
+                            case BLUE:
+                                //Do SHIT
+                                break;
+                            case YELLOW:
+                                //YELLOW ORB, Go to BLUE
+                                statsStage.blueOrbGroup.setZIndex(2);
+                                stateStats=StatsState.BLUE;
+                                break;
+                            default:
+                                //SOPHIE, Go to YELLOW ORB
+                                statsStage.yellowOrbGroup.setZIndex(2);
+                                stateStats=StatsState.YELLOW;
+                                break;
+                        }
+                        break;
+                    case 3:
+                    default:
+                        switch (stateStats){
+                            case RED:
+                                //Do SHIT
+                                break;
+                            case BLUE:
+                                //BLUE ORB, Go to RED
+                                statsStage.redOrbGroup.setZIndex(3);
+                                stateStats=StatsState.RED;
+                                break;
+                            case YELLOW:
+                                //YELLOW ORB, Go to BLUE
+                                statsStage.blueOrbGroup.setZIndex(3);
+                                stateStats=StatsState.BLUE;
+                                break;
+                            default:
+                                //SOPHIE, Go to YELLOW ORB
+                                statsStage.yellowOrbGroup.setZIndex(3);
+                                stateStats=StatsState.YELLOW;
+                                break;
+                        }
+                        break;
+                }
+            }
+
+            @Override
+            public void onRight() {
+                switch (pref.getInteger("level")){
+                    case 0:
+                        break;
+                    case 1:
+                        switch (stateStats){
+                            case SOPHIE:
+                                //Do SHIT
+                                break;
+                            default:
+                                //YELLOW ORB, Go to SOPHIE
+                                statsStage.sophieGroup.setZIndex(1);
+                                stateStats=StatsState.SOPHIE;
+                                break;
+                        }
+                        break;
+                    case 2:
+                        switch (stateStats){
+                            case SOPHIE:
+                                //Do SHIT
+                                break;
+                            case YELLOW:
+                                //YELLOW ORB, Go to SOPHIE
+                                statsStage.sophieGroup.setZIndex(2);
+                                stateStats=StatsState.SOPHIE;
+                                break;
+                            default:
+                                //BLUE ORB, Go to YELLOW ORB
+                                statsStage.yellowOrbGroup.setZIndex(2);
+                                stateStats=StatsState.YELLOW;
+                                break;
+                        }
+                        break;
+                    case 3:
+                    default:
+                        switch (stateStats){
+                            case SOPHIE:
+                                //Do SHIT
+                                break;
+                            case YELLOW:
+                                //YELLOW ORB, Go to SOPHIE
+                                statsStage.sophieGroup.setZIndex(3);
+                                stateStats=StatsState.SOPHIE;
+                                break;
+                            case BLUE:
+                                //BLUE ORB, Go to YELLOW ORB
+                                statsStage.yellowOrbGroup.setZIndex(3);
+                                stateStats=StatsState.YELLOW;
+                                break;
+                            default:
+                                //RED ORB, Go to BLUE ORB
+                                statsStage.blueOrbGroup.setZIndex(3);
+                                stateStats=StatsState.BLUE;
+                                break;
+                        }
+                        break;
+                }
+            }
+
+            @Override
+            public void onUp() {
+
+            }
+
+            @Override
+            public void onDown() {
+
+            }
+        });
+
         inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(statsStage);
         inputMultiplexer.addProcessor(statsInput);
@@ -129,6 +263,13 @@ abstract class Frame implements Screen {
 
 
     public class Stats extends Stage{
+        private final int[] LIFE_COST_ARR = {0,150,300,600,900,1800};
+        private final int[] LIFE_COST_SOPHIE_ARR = {0,1,2,3,4,5};
+        private final float[] LIFE_ARR = {100f,125f,150f,175f,200f,250f};
+
+        private final int[] ATK_COST_ARR = {0,300,600,1200,2400,4800};
+        private final float[] ATK_ARR = {20f,25f,35f,50f,70f,100f};
+
         private AssetManager aManager;
         private final App app;
 
@@ -168,16 +309,36 @@ abstract class Frame implements Screen {
         final int H_BUTTON_ATK = 285;
         final int H_BUTTON_SPATK = 150;
 
-        float xSophie;
-        float ySophie;
-        float xYellow;
-        float yYellow;
-        float xBlue;
-        float yBlue;
-        float xRed;
-        float yRed;
+        float xSophie = 0;
+        float ySophie = 0;
+        float xYellow = 0;
+        float yYellow = 0;
+        float xBlue = 0;
+        float yBlue = 0;
+        float xRed = 0;
+        float yRed = 0;
 
         private Texture backBton;
+
+        //LABELS
+        Preferences statsPrefs = Gdx.app.getPreferences("STATS");
+        Label yellowLifeLbl;
+        Label yellowAtkLbl;
+        Label yellowXPLbl;
+        Label yellowSpAtkLbl;
+
+        Label blueLifeLbl;
+        Label blueAtkLbl;
+        Label blueXPLbl;
+        Label blueSpAtkLbl;
+
+        Label redLifeLbl;
+        Label redAtkLbl;
+        Label redXPLbl;
+        Label redSpAtkLbl;
+
+        Label sophieCoins;
+        Label nextUp;
 
 
         public Stats(Viewport view, SpriteBatch batch, App app){
@@ -239,232 +400,283 @@ abstract class Frame implements Screen {
 
             ///INITIALIZE PANELS
             //Draw stats panels
-            sophiePanelImg = new Image(sophiePanel);
             yellowOrbPanelImg = new Image(yellowOrbPanel);
             blueOrbPanelImg = new Image(blueOrbPanel);
             redOrbPanelImg = new Image(redOrbPanel);
 
+            
+
+            //Declare LabelStyle and fonts for XP and cost texts
+            BitmapFont smallFont = new BitmapFont(Gdx.files.internal("fira.fnt"));
+            BitmapFont largeFont = new BitmapFont(Gdx.files.internal("fira.fnt"));
+            largeFont.getData().setScale(2f);
+            smallFont.getData().setScale(1f);
+
+            Label.LabelStyle lblStySophie = new Label.LabelStyle(smallFont, new Color (1f, 1f, 1f, 1f));
+
+            Label.LabelStyle lblStyYellowXP = new Label.LabelStyle(largeFont, new Color (1f, 0.8666666667f, 0.007843137255f, 1f));
+            Label.LabelStyle lblStyYellow = new Label.LabelStyle(smallFont, new Color (1f, 0.8666666667f, 0.007843137255f, 1f));
+
+            Label.LabelStyle lblStyBlueXP = new Label.LabelStyle(largeFont, new Color (0.2039215686f, 0.8352941176f, 0.9529411765f, 1f));            
+            Label.LabelStyle lblStyBlue = new Label.LabelStyle(smallFont, new Color (0.2039215686f, 0.8352941176f, 0.9529411765f, 1f));
+
+            Label.LabelStyle lblStyRedXP = new Label.LabelStyle(largeFont, new Color (1f, 0.1803921569f, 0.09803921569f, 1f));
+            Label.LabelStyle lblStyRed = new Label.LabelStyle(smallFont, new Color (1f, 0.1803921569f, 0.09803921569f, 1f));
+
             //STATS BUTTONS
             //SOPHIE
+            sophiePanelImg = new Image(sophiePanel);
+
             TextureRegionDrawable sophieArrowTrd = new TextureRegionDrawable(new TextureRegion(sophieArrow));
             ImageButton sophieLife = new ImageButton(sophieArrowTrd);
-            sophieLife.addListener(new ClickListener(){
-                //Upgrade Life Sophie
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    Gdx.app.log("SOPHIE UPGRADE", "LIFE");
-                }
-            });
+            if (statsPrefs.getInteger("SophieLifeStg")>LIFE_COST_SOPHIE_ARR.length-1) {//No XP to buy or already full
+                sophieLife.setColor(1f, 1f, 1f, 0.5f);
+            }else{
+                if(statsPrefs.getInteger("Coins")<LIFE_COST_SOPHIE_ARR[statsPrefs.getInteger("SophieLifeStg")+1])
+                    sophieLife.setColor(1f, 1f, 1f, 0.5f);
+            }
+
+            sophieCoins = new Label(Integer.toString(statsPrefs.getInteger("Coins")),lblStySophie);
+            Label obsidian = new Label(Integer.toString(statsPrefs.getInteger("Obsidian")),lblStySophie);
+            Label quartz = new Label(Integer.toString(statsPrefs.getInteger("Quartz")),lblStySophie);
+
+            if(statsPrefs.getInteger("SophieLifeStg")<LIFE_COST_SOPHIE_ARR.length-1)
+                nextUp = new Label(Integer.toString(LIFE_COST_SOPHIE_ARR[statsPrefs.getInteger("SophieLifeStg")+1]),lblStySophie);
+            else{
+                nextUp = new Label("MAX",lblStySophie);
+            }
+
+            sophieLife.addListener(new UpgradeButtons(StatsState.SOPHIE, 1, sophieLife));
 
             sophieGroup = new Group();
             sophieGroup.addActor(sophiePanelImg);
             sophieGroup.addActor(sophieLife);
+            sophieGroup.addActor(sophieCoins);
+            sophieGroup.addActor(obsidian);
+            sophieGroup.addActor(quartz);
+            sophieGroup.addActor(nextUp);
 
             sophiePanelImg.setZIndex(0);
             sophieLife.setZIndex(1);
+            sophieCoins.setZIndex(2);
+            obsidian.setZIndex(3);
+            quartz.setZIndex(4);
+            nextUp.setZIndex(5);
 
             //Yellow Orb
             TextureRegionDrawable yellowOrbArrowTrd = new TextureRegionDrawable(new TextureRegion(yellowOrbArrow));
             ImageButton yellowOrbLife = new ImageButton(yellowOrbArrowTrd);
+            if (statsPrefs.getInteger("YellowLifeStg")>LIFE_COST_ARR.length-1) {//No XP to buy or already full
+                yellowOrbLife.setColor(1f, 1f, 1f, 0.5f);
+            }else{
+                if(statsPrefs.getInteger("XP")<LIFE_COST_ARR[statsPrefs.getInteger("YellowLifeStg")+1])
+                    yellowOrbLife.setColor(1f, 1f, 1f, 0.5f);
+            }
+
             ImageButton yellowOrbAtk = new ImageButton(yellowOrbArrowTrd);
-            ImageButton yellowOrbSpAtk = new ImageButton(yellowOrbArrowTrd);
-            yellowOrbLife.addListener(new ClickListener(){
-                //Upgrade Life Yellow Orb
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    Gdx.app.log("YELLOW ORB UPGRADE", "LIFE");
-                }
-            });
+            if (statsPrefs.getInteger("YellowLifeStg")>LIFE_COST_ARR.length-1) {//No XP to buy or already full
+                yellowOrbAtk.setColor(1f, 1f, 1f, 0.5f);
+            }else{
+                if(statsPrefs.getInteger("XP")<LIFE_COST_ARR[statsPrefs.getInteger("YellowLifeStg")+1])
+                    yellowOrbAtk.setColor(1f, 1f, 1f, 0.5f);
+            }
+            //ImageButton yellowOrbSpAtk = new ImageButton(yellowOrbArrowTrd);
 
-            yellowOrbAtk.addListener(new ClickListener(){
-                //Upgrade Atk Yellow Orb
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    Gdx.app.log("YELLOW ORB UPGRADE", "ATK");
-                }
-            });
+            yellowXPLbl = new Label(Integer.toString(statsPrefs.getInteger("XP")),lblStyYellowXP);
+            yellowXPLbl.setOrigin(yellowXPLbl.getWidth()/2, yellowXPLbl.getHeight()/2);
 
-            yellowOrbSpAtk.addListener(new ClickListener(){
-                //Upgrade Sp Atk Yellow Orb
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    Gdx.app.log("YELLOW ORB UPGRADE", "SP ATK");
-                }
-            });
+            if(statsPrefs.getInteger("YellowLifeStg")<LIFE_COST_ARR.length-1){
+                yellowLifeLbl = new Label(Integer.toString(LIFE_COST_ARR[statsPrefs.getInteger("YellowLifeStg")+1]),lblStyYellow);
+            }else{
+                yellowLifeLbl = new Label("MAX",lblStyYellow);
+            }
+            yellowLifeLbl.setOrigin(yellowLifeLbl.getWidth()/2, yellowLifeLbl.getHeight()/2);
+
+            if(statsPrefs.getInteger("YellowAtkStg")<ATK_COST_ARR.length-1){
+                yellowAtkLbl = new Label(Integer.toString(ATK_COST_ARR[statsPrefs.getInteger("YellowAtkStg")+1]),lblStyYellow);
+            }else{
+                yellowAtkLbl = new Label("MAX",lblStyYellow);
+            }
+            yellowAtkLbl.setOrigin(yellowAtkLbl.getWidth()/2, yellowAtkLbl.getHeight()/2);
+
+            yellowOrbLife.addListener(new UpgradeButtons(StatsState.YELLOW, 1, yellowOrbLife));
+            yellowOrbAtk.addListener(new UpgradeButtons(StatsState.YELLOW, 2, yellowOrbAtk));
+            //yellowOrbSpAtk.addListener(new UpgradeButtons(StatsState.YELLOW, 3));
 
             yellowOrbGroup = new Group();
             yellowOrbGroup.addActor(yellowOrbPanelImg);
             yellowOrbGroup.addActor(yellowOrbLife);
             yellowOrbGroup.addActor(yellowOrbAtk);
-            yellowOrbGroup.addActor(yellowOrbSpAtk);
+            //yellowOrbGroup.addActor(yellowOrbSpAtk);
+            yellowOrbGroup.addActor(yellowLifeLbl);
+            yellowOrbGroup.addActor(yellowAtkLbl);
+            yellowOrbGroup.addActor(yellowXPLbl);
 
             yellowOrbPanelImg.setZIndex(0);
             yellowOrbLife.setZIndex(1);
             yellowOrbAtk.setZIndex(2);
-            yellowOrbSpAtk.setZIndex(3);
+            //yellowOrbSpAtk.setZIndex(3);
+            yellowLifeLbl.setZIndex(4);
+            yellowAtkLbl.setZIndex(5);
+            yellowXPLbl.setZIndex(6);
 
             //Blue Orb
             TextureRegionDrawable blueOrbArrowTrd = new TextureRegionDrawable(new TextureRegion(blueOrbArrow));
             ImageButton blueOrbLife = new ImageButton(blueOrbArrowTrd);
+            if (statsPrefs.getInteger("BlueLifeStg")>LIFE_COST_ARR.length-1) {//No XP to buy or already full
+                blueOrbLife.setColor(1f, 1f, 1f, 0.5f);
+            }else{
+                if(statsPrefs.getInteger("XP")<LIFE_COST_ARR[statsPrefs.getInteger("BlueLifeStg")+1])
+                    blueOrbLife.setColor(1f, 1f, 1f, 0.5f);
+            }
+
             ImageButton blueOrbAtk = new ImageButton(blueOrbArrowTrd);
-            ImageButton blueOrbSpAtk = new ImageButton(blueOrbArrowTrd);
+            if (statsPrefs.getInteger("BlueLifeStg")>LIFE_COST_ARR.length-1) {//No XP to buy or already full
+                blueOrbAtk.setColor(1f, 1f, 1f, 0.5f);
+            }else{
+                if(statsPrefs.getInteger("XP")<LIFE_COST_ARR[statsPrefs.getInteger("BlueLifeStg")+1])
+                    blueOrbAtk.setColor(1f, 1f, 1f, 0.5f);
+            }
+            //ImageButton blueOrbSpAtk = new ImageButton(blueOrbArrowTrd);
 
-            blueOrbLife.addListener(new ClickListener(){
-                //Upgrade Life Blue Orb
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    Gdx.app.log("BLUE ORB UPGRADE", "LIFE");
-                }
-            });
+            blueXPLbl = new Label(Integer.toString(statsPrefs.getInteger("XP")),lblStyBlueXP);
+            blueXPLbl.setOrigin(blueXPLbl.getWidth()/2, blueXPLbl.getHeight()/2);
 
-            blueOrbAtk.addListener(new ClickListener(){
-                //Upgrade Atk Blue Orb
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    Gdx.app.log("BLUE ORB UPGRADE", "ATK");
-                }
-            });
+            if(statsPrefs.getInteger("BlueLifeStg")<LIFE_COST_ARR.length-1){
+                blueLifeLbl = new Label(Integer.toString(LIFE_COST_ARR[statsPrefs.getInteger("BlueLifeStg")+1]),lblStyBlue);
+            }else{
+                blueLifeLbl = new Label("MAX",lblStyBlue);
+            }
+            blueLifeLbl.setOrigin(blueLifeLbl.getWidth()/2, blueLifeLbl.getHeight()/2);
 
-            blueOrbSpAtk.addListener(new ClickListener(){
-                //Upgrade Sp Atk Blue Orb
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    Gdx.app.log("BLUE ORB UPGRADE", "SP ATK");
-                }
-            });
+            if(statsPrefs.getInteger("BlueAtkStg")<ATK_COST_ARR.length-1){
+                blueAtkLbl = new Label(Integer.toString(ATK_COST_ARR[statsPrefs.getInteger("BlueAtkStg")+1]),lblStyBlue);
+            }else{
+                blueAtkLbl = new Label("MAX",lblStyBlue);
+            }
+            blueAtkLbl.setOrigin(blueAtkLbl.getWidth()/2, blueAtkLbl.getHeight()/2);
+
+            blueOrbLife.addListener(new UpgradeButtons(StatsState.BLUE, 1, blueOrbLife));
+            blueOrbAtk.addListener(new UpgradeButtons(StatsState.BLUE, 2, blueOrbAtk));
+            //blueOrbSpAtk.addListener(new UpgradeButtons(StatsState.BLUE, 3));
 
             blueOrbGroup = new Group();
             blueOrbGroup.addActor(blueOrbPanelImg);
             blueOrbGroup.addActor(blueOrbLife);
             blueOrbGroup.addActor(blueOrbAtk);
-            blueOrbGroup.addActor(blueOrbSpAtk);
+            //blueOrbGroup.addActor(blueOrbSpAtk);
+            blueOrbGroup.addActor(blueLifeLbl);
+            blueOrbGroup.addActor(blueAtkLbl);
+            blueOrbGroup.addActor(blueXPLbl);
 
             blueOrbPanelImg.setZIndex(0);
             blueOrbLife.setZIndex(1);
             blueOrbAtk.setZIndex(2);
-            blueOrbSpAtk.setZIndex(3);
+            //blueOrbSpAtk.setZIndex(3);
+            blueLifeLbl.setZIndex(4);
+            blueAtkLbl.setZIndex(5);
+            blueXPLbl.setZIndex(6);
 
             //Red Orb
             TextureRegionDrawable redOrbArrowTrd = new TextureRegionDrawable(new TextureRegion(redOrbArrow));
             ImageButton redOrbLife = new ImageButton(redOrbArrowTrd);
+            if (statsPrefs.getInteger("RedLifeStg")>LIFE_COST_ARR.length-1) {//No XP to buy or already full
+                redOrbLife.setColor(1f, 1f, 1f, 0.5f);
+            }else{
+                if(statsPrefs.getInteger("XP")<LIFE_COST_ARR[statsPrefs.getInteger("RedLifeStg")+1])
+                    redOrbLife.setColor(1f, 1f, 1f, 0.5f);
+            }
+
             ImageButton redOrbAtk = new ImageButton(redOrbArrowTrd);
-            ImageButton redOrbSpAtk = new ImageButton(redOrbArrowTrd);
+            if (statsPrefs.getInteger("RedLifeStg")>LIFE_COST_ARR.length-1) {//No XP to buy or already full
+                redOrbAtk.setColor(1f, 1f, 1f, 0.5f);
+            }else{
+                if(statsPrefs.getInteger("XP")<LIFE_COST_ARR[statsPrefs.getInteger("RedLifeStg")+1])
+                    redOrbAtk.setColor(1f, 1f, 1f, 0.5f);
+            }
+            /*ImageButton redOrbSpAtk = new ImageButton(redOrbArrowTrd);
+            if (statsPrefs.getInteger("RedLifeStg")>LIFE_COST_ARR.length-1) {//No XP to buy or already full
+                redOrbLife.setColor(1f, 1f, 1f, 0.5f);
+            }else{
+                if(statsPrefs.getInteger("XP")<LIFE_COST_ARR[statsPrefs.getInteger("RedLifeStg")+1])
+                    redOrbLife.setColor(1f, 1f, 1f, 0.5f);
+            }*/
 
-            redOrbLife.addListener(new ClickListener(){
-                //Upgrade Life Red Orb
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    Gdx.app.log("RED ORB UPGRADE", "LIFE");
-                }
-            });
+            redXPLbl = new Label(Integer.toString(statsPrefs.getInteger("XP")),lblStyRedXP);
+            redXPLbl.setOrigin(redXPLbl.getWidth()/2, redXPLbl.getHeight()/2);
 
-            redOrbAtk.addListener(new ClickListener(){
-                //Upgrade Atk Red Orb
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    Gdx.app.log("RED ORB UPGRADE", "ATK");
-                }
-            });
+            if(statsPrefs.getInteger("RedLifeStg")<LIFE_COST_ARR.length-1){
+                redLifeLbl = new Label(Integer.toString(LIFE_COST_ARR[statsPrefs.getInteger("RedLifeStg")+1]),lblStyRed);
+            }else{
+                redLifeLbl = new Label("MAX",lblStyRed);
+            }
+            redLifeLbl.setOrigin(redLifeLbl.getWidth()/2, redLifeLbl.getHeight()/2);
 
-            redOrbSpAtk.addListener(new ClickListener(){
-                //Upgrade Sp Atk Red Orb
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    Gdx.app.log("RED ORB UPGRADE", "SP ATK");
-                }
-            });
+            if(statsPrefs.getInteger("RedAtkStg")<ATK_COST_ARR.length-1){
+                redAtkLbl = new Label(Integer.toString(ATK_COST_ARR[statsPrefs.getInteger("RedAtkStg")+1]),lblStyRed);
+            }else{
+                redAtkLbl = new Label("MAX",lblStyRed);
+            }
+            redAtkLbl.setOrigin(redAtkLbl.getWidth()/2, redAtkLbl.getHeight()/2);
+
+            redOrbLife.addListener(new UpgradeButtons(StatsState.RED, 1, redOrbLife));
+            redOrbAtk.addListener(new UpgradeButtons(StatsState.RED, 2, redOrbAtk));
+            //redOrbSpAtk.addListener(new UpgradeButtons(StatsState.RED, 3));
 
             redOrbGroup = new Group();
             redOrbGroup.addActor(redOrbPanelImg);
             redOrbGroup.addActor(redOrbLife);
             redOrbGroup.addActor(redOrbAtk);
-            redOrbGroup.addActor(redOrbSpAtk);
+            //redOrbGroup.addActor(redOrbSpAtk);
+            redOrbGroup.addActor(redLifeLbl);
+            redOrbGroup.addActor(redAtkLbl);
+            redOrbGroup.addActor(redXPLbl);
 
             redOrbPanelImg.setZIndex(0);
             redOrbLife.setZIndex(1);
             redOrbAtk.setZIndex(2);
-            redOrbSpAtk.setZIndex(3);
+            //redOrbSpAtk.setZIndex(3);
+            redLifeLbl.setZIndex(4);
+            redAtkLbl.setZIndex(5);
+            redXPLbl.setZIndex(6);
 
-
+            //////////
 
             Group groupPanels = new Group();
 
-            pref.putInteger("level", 3);
+            //pref.putInteger("level", 3);
 
             switch(pref.getInteger("level")){
                 case 0:
                     //SOPHIE
                     xSophie = HALFW-(sophiePanelImg.getWidth()/2);
-                    ySophie = HALFH-sophiePanelImg.getHeight()/2;
-                    sophiePanelImg.setPosition(xSophie, ySophie);
-                    sophieLife.setPosition(xSophie+W_BUTTON_SOPHIE, ySophie+H_BUTTON_LIFE);
+                    groupPanels.addActor(sophieGroup);
 
-                    groupPanels.addActor(sophiePanelImg);
                     stateStats=StatsState.SOPHIE;
                     break;
                 case 1:
                     //YELLOW ORB
                     xYellow = HALFW-(yellowOrbPanelImg.getWidth()/2)-H_PANEL_GAP;
-                    yYellow = HALFH-yellowOrbPanelImg.getHeight()/2;
-
-                    yellowOrbPanelImg.setPosition(xYellow, yYellow);
-                    yellowOrbLife.setPosition(xYellow+W_BUTTONS,yYellow+H_BUTTON_LIFE);
-                    yellowOrbAtk.setPosition(xYellow+W_BUTTONS,yYellow+H_BUTTON_ATK);
-                    yellowOrbSpAtk.setPosition(xYellow+W_BUTTONS,yYellow+H_BUTTON_SPATK);
-
                     groupPanels.addActor(yellowOrbGroup);
 
                     //SOPHIE
                     xSophie = HALFW-(sophiePanelImg.getWidth()/2)+H_PANEL_GAP;
-                    ySophie = HALFH-sophiePanelImg.getHeight()/2;
-
-                    sophiePanelImg.setPosition(xSophie, ySophie);
-                    sophieLife.setPosition(xSophie+W_BUTTON_SOPHIE,ySophie+H_BUTTON_LIFE);
-
                     groupPanels.addActor(sophieGroup);
-
-                    //////
-                    sophieGroup.setZIndex(0);
-                    yellowOrbGroup.setZIndex(1);
 
                     stateStats=StatsState.YELLOW;
                     break;
                 case 2:
                     //BLUE ORB
                     xBlue = HALFW-(blueOrbPanelImg.getWidth()/2)-PANEL_GAP;
-                    yBlue = HALFH-blueOrbPanelImg.getHeight()/2;
-
-                    blueOrbPanelImg.setPosition(xBlue, yBlue);
-                    blueOrbLife.setPosition(xBlue+W_BUTTONS,yBlue+H_BUTTON_LIFE);
-                    blueOrbAtk.setPosition(xBlue+W_BUTTONS,yBlue+H_BUTTON_ATK);
-                    blueOrbSpAtk.setPosition(xBlue+W_BUTTONS,yBlue+H_BUTTON_SPATK);
-
                     groupPanels.addActor(blueOrbGroup);
 
                     //YELLOW ORB
                     xYellow = HALFW-(yellowOrbPanelImg.getWidth()/2);
-                    yYellow = HALFH-yellowOrbPanelImg.getHeight()/2;
-
-                    yellowOrbPanelImg.setPosition(xYellow, yYellow);
-                    yellowOrbLife.setPosition(xYellow+W_BUTTONS,yYellow+H_BUTTON_LIFE);
-                    yellowOrbAtk.setPosition(xYellow+W_BUTTONS,yYellow+H_BUTTON_ATK);
-                    yellowOrbSpAtk.setPosition(xYellow+W_BUTTONS,yYellow+H_BUTTON_SPATK);
-
                     groupPanels.addActor(yellowOrbGroup);
 
                     //SOPHIE
                     xSophie = HALFW-(sophiePanelImg.getWidth()/2)+PANEL_GAP;
-                    ySophie = HALFH-sophiePanelImg.getHeight()/2;
-
-                    sophieLife.setPosition(xSophie+W_BUTTON_SOPHIE,ySophie+H_BUTTON_LIFE);
-                    sophiePanelImg.setPosition(xSophie, ySophie);
-
                     groupPanels.addActor(sophieGroup);
-
-                    //////
-                    sophieGroup.setZIndex(0);
-                    yellowOrbGroup.setZIndex(1);
-                    blueOrbGroup.setZIndex(2);
 
                     stateStats=StatsState.BLUE;
                     break;
@@ -472,227 +684,196 @@ abstract class Frame implements Screen {
                 default:
                     //RED ORB
                     xRed = HALFW-(redOrbPanelImg.getWidth()/2)-(PANEL_GAP+H_PANEL_GAP);
-                    yRed = HALFH-redOrbPanelImg.getHeight()/2;
-
-                    redOrbPanelImg.setPosition(xRed, yRed);
-                    redOrbLife.setPosition(xRed+W_BUTTONS,yRed+H_BUTTON_LIFE);
-                    redOrbAtk.setPosition(xRed+W_BUTTONS,yRed+H_BUTTON_ATK);
-                    redOrbSpAtk.setPosition(xRed+W_BUTTONS,yRed+H_BUTTON_SPATK);
-
                     groupPanels.addActor(redOrbGroup);
 
                     //BLUE ORB
                     xBlue = HALFW-(blueOrbPanelImg.getWidth()/2)-H_PANEL_GAP;
-                    yBlue = HALFH-blueOrbPanelImg.getHeight()/2;
-
-                    blueOrbPanelImg.setPosition(xBlue, yBlue);
-                    blueOrbLife.setPosition(xBlue+W_BUTTONS,yBlue+H_BUTTON_LIFE);
-                    blueOrbAtk.setPosition(xBlue+W_BUTTONS,yBlue+H_BUTTON_ATK);
-                    blueOrbSpAtk.setPosition(xBlue+W_BUTTONS,yBlue+H_BUTTON_SPATK);
-
                     groupPanels.addActor(blueOrbGroup);
 
                     //YELLOW ORB
                     xYellow = HALFW-(yellowOrbPanelImg.getWidth()/2)+H_PANEL_GAP;
-                    yYellow = HALFH-yellowOrbPanelImg.getHeight()/2;
-
-                    yellowOrbPanelImg.setPosition(xYellow, yYellow);
-                    yellowOrbLife.setPosition(xYellow+W_BUTTONS,yYellow+H_BUTTON_LIFE);
-                    yellowOrbAtk.setPosition(xYellow+W_BUTTONS,yYellow+H_BUTTON_ATK);
-                    yellowOrbSpAtk.setPosition(xYellow+W_BUTTONS,yYellow+H_BUTTON_SPATK);
-
                     groupPanels.addActor(yellowOrbGroup);
 
                     //SOPHIE
                     xSophie = HALFW-(sophiePanelImg.getWidth()/2)+(PANEL_GAP+H_PANEL_GAP);
-                    ySophie = HALFH-sophiePanelImg.getHeight()/2;
-
-                    sophieLife.setPosition(xSophie+W_BUTTON_SOPHIE,ySophie+H_BUTTON_LIFE);
-                    sophiePanelImg.setPosition(xSophie, ySophie);
-
                     groupPanels.addActor(sophieGroup);
-
-                    //////
-                    sophieGroup.setZIndex(0);
-                    yellowOrbGroup.setZIndex(1);
-                    blueOrbGroup.setZIndex(2);
-                    redOrbGroup.setZIndex(3);
 
                     stateStats=StatsState.RED;
                     break;
             }
 
-            //pref.putInteger("level", 1);
+            //////DEFINE DRAW ORDER
+            sophieGroup.setZIndex(0);
+            yellowOrbGroup.setZIndex(1);
+            blueOrbGroup.setZIndex(2);
+            redOrbGroup.setZIndex(3);
+
+
+            //DEFINE POSITIONS
+            ySophie = HALFH-sophiePanelImg.getHeight()/2;
+            yYellow = HALFH-yellowOrbPanelImg.getHeight()/2;
+            yBlue = HALFH-blueOrbPanelImg.getHeight()/2;
+            yRed = HALFH-redOrbPanelImg.getHeight()/2;
+
+            sophieLife.setPosition(xSophie+W_BUTTON_SOPHIE,ySophie+H_BUTTON_LIFE);
+            sophiePanelImg.setPosition(xSophie, ySophie);
+            nextUp.setPosition(xSophie+460,ySophie+460);
+            quartz.setPosition(xSophie+142,ySophie+172);
+            obsidian.setPosition(xSophie+142,ySophie+310);
+            sophieCoins.setPosition(xSophie+456,ySophie+172);
+
+            yellowOrbPanelImg.setPosition(xYellow, yYellow);
+            yellowOrbLife.setPosition(xYellow+W_BUTTONS,yYellow+H_BUTTON_LIFE);
+            yellowOrbAtk.setPosition(xYellow+W_BUTTONS,yYellow+H_BUTTON_ATK);
+            //yellowOrbSpAtk.setPosition(xYellow+W_BUTTONS,yYellow+H_BUTTON_SPATK);
+            yellowLifeLbl.setPosition(yellowOrbLife.getX()+yellowOrbLife.getWidth()+30, yellowOrbLife.getY()+25);
+            yellowAtkLbl.setPosition(yellowOrbAtk.getX()+yellowOrbAtk.getWidth()+30, yellowOrbAtk.getY()+19);
+            yellowXPLbl.setPosition(xYellow+135,yYellow+395);
+
+            blueOrbPanelImg.setPosition(xBlue, yBlue);
+            blueOrbLife.setPosition(xBlue+W_BUTTONS,yBlue+H_BUTTON_LIFE);
+            blueOrbAtk.setPosition(xBlue+W_BUTTONS,yBlue+H_BUTTON_ATK);
+            //blueOrbSpAtk.setPosition(xBlue+W_BUTTONS,yBlue+H_BUTTON_SPATK);
+            blueLifeLbl.setPosition(blueOrbLife.getX()+blueOrbLife.getWidth()+30, blueOrbLife.getY()+25);
+            blueAtkLbl.setPosition(blueOrbAtk.getX()+blueOrbAtk.getWidth()+30, blueOrbAtk.getY()+19);
+            blueXPLbl.setPosition(xBlue+95,yBlue+440);
+
+            redOrbPanelImg.setPosition(xRed, yRed);
+            redOrbLife.setPosition(xRed+W_BUTTONS,yRed+H_BUTTON_LIFE);
+            redOrbAtk.setPosition(xRed+W_BUTTONS,yRed+H_BUTTON_ATK);
+            //redOrbSpAtk.setPosition(xRed+W_BUTTONS,yRed+H_BUTTON_SPATK);
+            redLifeLbl.setPosition(redOrbLife.getX()+redOrbLife.getWidth()+30, redOrbLife.getY()+25);
+            redAtkLbl.setPosition(redOrbAtk.getX()+redOrbAtk.getWidth()+30, redOrbAtk.getY()+19);
+            redXPLbl.setPosition(xRed+120,yRed+420);
 
             this.addActor(groupPanels);
+
+            statsPrefs.flush();
         }
 
-    }
+        class UpgradeButtons extends ClickListener{
+            int[] cost;
+            float[] upgradeArr;
+            String prefStr;
+            String stageStr;
+            String upgradeStr;
 
-    private class StatsInput implements InputProcessor {
-        private Vector3 v = new Vector3();
-        @Override
-        public boolean keyDown(int keycode) {
-            return false;
-        }
+            Label label;
 
-        @Override
-        public boolean keyUp(int keycode) {
-            return false;
-        }
+            StatsState color;
 
-        @Override
-        public boolean keyTyped(char character) {
-            return false;
-        }
+            ImageButton button;
 
+            public UpgradeButtons(StatsState color, int upgrade, ImageButton button){
+                super();
 
-
-        @Override
-        public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-            v.set(screenX,screenY,0);
-            camera.unproject(v);
-            v.set(v.x-camera.position.x+HALFW, v.y, 0);
-
-            if(v.x>HALFW){
-                switch (pref.getInteger("level")){
-                    case 0:
-                        break;
-                    case 1:
-                        switch (stateStats){
-                            case SOPHIE:
-                                //Do SHIT
-                                break;
-                            default:
-                                //YELLOW ORB, Go to SOPHIE
-                                statsStage.sophieGroup.setZIndex(1);
-                                stateStats=StatsState.SOPHIE;
-                                break;
-                        }
-                        break;
-                    case 2:
-                        switch (stateStats){
-                            case SOPHIE:
-                                //Do SHIT
-                                break;
-                            case YELLOW:
-                                //YELLOW ORB, Go to SOPHIE
-                                statsStage.sophieGroup.setZIndex(2);
-                                stateStats=StatsState.SOPHIE;
-                                break;
-                            default:
-                                //BLUE ORB, Go to YELLOW ORB
-                                statsStage.yellowOrbGroup.setZIndex(2);
-                                stateStats=StatsState.YELLOW;
-                                break;
-                        }
-                        break;
-                    case 3:
-                    default:
-                        switch (stateStats){
-                            case SOPHIE:
-                                //Do SHIT
-                                break;
-                            case YELLOW:
-                                //YELLOW ORB, Go to SOPHIE
-                                statsStage.sophieGroup.setZIndex(3);
-                                stateStats=StatsState.SOPHIE;
-                                break;
-                            case BLUE:
-                                //BLUE ORB, Go to YELLOW ORB
-                                statsStage.yellowOrbGroup.setZIndex(3);
-                                stateStats=StatsState.YELLOW;
-                                break;
-                            default:
-                                //RED ORB, Go to BLUE ORB
-                                statsStage.blueOrbGroup.setZIndex(3);
-                                stateStats=StatsState.BLUE;
-                                break;
-                        }
-                        break;
+                if (color==StatsState.YELLOW) {
+                    upgradeStr = "Yellow";
+                    if (upgrade==1) {
+                        upgradeStr += "Life";
+                        label = yellowLifeLbl;
+                    }else if(upgrade==2){
+                        upgradeStr += "Atk";
+                        label = yellowAtkLbl;
+                    }else{
+                        upgradeStr += "SpAtk";
+                        label = yellowSpAtkLbl;
+                    }
+                }else if (color==StatsState.BLUE) {
+                    upgradeStr = "Blue";
+                    if (upgrade==1) {
+                        upgradeStr += "Life";
+                        label = blueLifeLbl;
+                    }else if(upgrade==2){
+                        upgradeStr += "Atk";
+                        label = blueAtkLbl;
+                    }else{
+                        upgradeStr += "SpAtk";
+                        label = blueSpAtkLbl;
+                    }
+                }else if (color==StatsState.RED){
+                    upgradeStr = "Red";
+                    if (upgrade==1) {
+                        upgradeStr += "Life";
+                        label = redLifeLbl;
+                    }else if(upgrade==2){
+                        upgradeStr += "Atk";
+                        label = redAtkLbl;
+                    }else{
+                        upgradeStr += "SpAtk";
+                        label = redSpAtkLbl;
+                    }
+                }else{
+                    upgradeStr = "SophieLife";
+                    label = nextUp;
                 }
-            }else{
-                switch (pref.getInteger("level")){
-                    case 0:
-                        break;
-                    case 1:
-                        switch (stateStats){
-                            case YELLOW:
-                                //Do nothing
-                                break;
-                            default:
-                                //SOPHIE, Go to YELLOW
-                                statsStage.yellowOrbGroup.setZIndex(1);
-                                stateStats=StatsState.YELLOW;
-                                break;
-                        }
-                        break;
-                    case 2:
-                        switch (stateStats){
-                            case BLUE:
-                                //Do SHIT
-                                break;
-                            case YELLOW:
-                                //YELLOW ORB, Go to BLUE
-                                statsStage.blueOrbGroup.setZIndex(2);
-                                stateStats=StatsState.BLUE;
-                                break;
-                            default:
-                                //SOPHIE, Go to YELLOW ORB
-                                statsStage.yellowOrbGroup.setZIndex(2);
-                                stateStats=StatsState.YELLOW;
-                                break;
-                        }
-                        break;
-                    case 3:
-                    default:
-                        switch (stateStats){
-                            case RED:
-                                //Do SHIT
-                                break;
-                            case BLUE:
-                                //BLUE ORB, Go to RED
-                                statsStage.redOrbGroup.setZIndex(3);
-                                stateStats=StatsState.RED;
-                                break;
-                            case YELLOW:
-                                //YELLOW ORB, Go to BLUE
-                                statsStage.blueOrbGroup.setZIndex(3);
-                                stateStats=StatsState.BLUE;
-                                break;
-                            default:
-                                //SOPHIE, Go to YELLOW ORB
-                                statsStage.yellowOrbGroup.setZIndex(3);
-                                stateStats=StatsState.YELLOW;
-                                break;
-                        }
-                        break;
+
+                stageStr = upgradeStr + "Stg";
+
+                if(color==StatsState.SOPHIE){
+                    cost = LIFE_COST_SOPHIE_ARR;
+                    upgradeArr = LIFE_ARR;
+                }else if(upgrade==1){
+                    cost = LIFE_COST_ARR;
+                    upgradeArr = LIFE_ARR;
+                }else if(upgrade==2){
+                    cost = ATK_COST_ARR;
+                    upgradeArr = ATK_ARR;
+                }else{ //Checking
+                    cost = ATK_COST_ARR; //Checking
+                    upgradeArr = ATK_ARR;
                 }
+
+                if(color==StatsState.SOPHIE){
+                    prefStr = "Coins";
+                }else{
+                    prefStr = "XP";
+                }
+
+                this.color = color;
+                this.button = button;
+
             }
-            /*Gdx.app.log("current state", stateStats+"");
 
-            for (int i = 0; i<statsStage.getActors().size;i++)
-                Gdx.app.log("current actors", statsStage.getActors().get(i).toString() + " " + statsStage.getActors().get(i).getZIndex());*/
-            return true;
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                //HAY UPDATES DISPONIBLES
+                if(statsPrefs.getInteger(stageStr)<cost.length-1){
+                    if(statsPrefs.getInteger(prefStr)>=cost[statsPrefs.getInteger(stageStr)+1]){ //TIENES XP
+                        //Actualizar preferencias
+                        statsPrefs.putInteger(stageStr, statsPrefs.getInteger(stageStr)+1);
+                        statsPrefs.putFloat(upgradeStr, upgradeArr[statsPrefs.getInteger(stageStr)]);
+
+                        //Actualizar Banners
+                        if(statsPrefs.getInteger(stageStr)<cost.length-1){
+                            label.setText(Integer.toString(cost[statsPrefs.getInteger(stageStr)+1]));
+                        }else{
+                            label.setText("MAX");
+                        }
+
+                        statsPrefs.putInteger(prefStr, statsPrefs.getInteger(prefStr)-cost[statsPrefs.getInteger(stageStr)]);
+
+                        if (color==StatsState.SOPHIE) {
+                            sophieCoins.setText(Integer.toString(statsPrefs.getInteger(prefStr)));
+                        }else{
+                            yellowXPLbl.setText(Integer.toString(statsPrefs.getInteger(prefStr)));
+                            blueXPLbl.setText(Integer.toString(statsPrefs.getInteger(prefStr)));
+                            redXPLbl.setText(Integer.toString(statsPrefs.getInteger(prefStr)));
+                        }
+
+                        if(statsPrefs.getInteger(stageStr)>=cost.length-1){
+                            button.setColor(1f, 1f, 1f, 0.5f);
+                        }else{
+                            if(statsPrefs.getInteger(prefStr)<cost[statsPrefs.getInteger(stageStr)+1])
+                                button.setColor(1f, 1f, 1f, 0.5f);
+                        }
+                    }
+                }
+
+                statsPrefs.flush();
+            }
         }
 
-        @Override
-        public boolean touchUp(int screenX, int screenY, int pointer, int button) {return false;}
-
-        @Override
-        public boolean touchDragged(int screenX, int screenY, int pointer) {
-            return false;
-        }
-
-        @Override
-        public boolean mouseMoved(int screenX, int screenY) {
-            return false;
-        }
-
-        @Override
-        public boolean scrolled(int amount) {
-            return false;
-        }
     }
 
     public class Pause extends Stage {
