@@ -29,7 +29,7 @@ class Level2 extends Frame {
     // Sophie
     //private Sophie sophie;
     private Texture sophieTexture;
-    //boolean sophieInitFlag = true;
+    boolean sophieInitFlag = true;
 
     private ArcadeSophie sophie;
 
@@ -39,6 +39,9 @@ class Level2 extends Frame {
     //map
     public static final float WIDTH_MAP = 3840;
     public static final float HEIGHT_MAP = 720;
+
+    protected static final float LEFT_LIMIT = 20;
+    protected static float RIGHT_LIMIT = 3650;
 
     // preferences
     Preferences pref = Gdx.app.getPreferences("getLevel");
@@ -93,6 +96,8 @@ class Level2 extends Frame {
         );
 
         sophie = new ArcadeSophie(world,sophieTexture);
+
+
     }
 
     private void textureInit() {
@@ -112,11 +117,27 @@ class Level2 extends Frame {
         batch.setProjectionMatrix(super.camera.combined);
         batch.begin();
 
-        batch.draw(background,0,0);
-        updateCamera();
-        sophieInitialMove();
-        sophie.draw(batch);
-        stepper(delta);
+
+
+        if(state == GameState.PLAYING){
+            batch.draw(background,0,0);
+            batch.draw(pauseButton,camera.position.x+HALFW-pauseButton.getWidth(),camera.position.y-HALFH);
+
+            if(sophieInitFlag) {
+                sophieInitialMove();
+            }
+            sophie.update();
+            sophie.draw(batch);
+            stepper(delta);
+            updateCamera();
+
+        }else if(state == GameState.PAUSED){
+            Gdx.app.log("Game status","Paused");
+
+        }
+
+
+
         batch.end();
     }
 
@@ -138,9 +159,10 @@ class Level2 extends Frame {
     private void sophieInitialMove() {
 
         if(sophie.getX() < 250){
-            sophie.setMovementState(Sophie.MovementState.MOVE_RIGHT);
+            sophie.setMovementState(ArcadeSophie.MovementState.MOVE_RIGHT);
         }else{
-            sophie.setMovementState(Sophie.MovementState.STILL_RIGHT);
+            sophieInitFlag = false;
+            sophie.setMovementState(ArcadeSophie.MovementState.STILL_RIGHT);
         }
 
     }
@@ -215,20 +237,15 @@ class Level2 extends Frame {
         public boolean touchDown(int screenX, int screenY, int pointer, int button) {
             v.set(screenX,screenY,0);
             camera.unproject(v);
+            if(camera.position.x - v.x < -522 && v.y < 135){
+                state = GameState.PAUSED;
+            }
+            if(sophie.getMovementState()==ArcadeSophie.MovementState.STILL_LEFT||sophie.getMovementState()==ArcadeSophie.MovementState.STILL_RIGHT) {
+                if (v.x >= camera.position.x) {
+                    sophie.setMovementState(ArcadeSophie.MovementState.MOVE_RIGHT);
 
-            if(sophie.getMovementState()==Sophie.MovementState.STILL_LEFT||sophie.getMovementState()==Sophie.MovementState.STILL_RIGHT) {
-                if(camera.position.x - v.x < -522 && v.y < 135){
-                    state = GameState.PAUSED;
-                }else{
-                    //if(!dialogueOn){
-                        if (v.x >= camera.position.x) {
-                            sophie.setMovementState(Sophie.MovementState.MOVE_RIGHT);
-
-                        } else {
-                            sophie.setMovementState(Sophie.MovementState.MOVE_LEFT);
-                        }
-                    //}
-
+                } else {
+                    sophie.setMovementState(ArcadeSophie.MovementState.MOVE_LEFT);
                 }
             }
             return true;
@@ -236,10 +253,10 @@ class Level2 extends Frame {
 
         @Override
         public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-            if(sophie.getMovementState()==Sophie.MovementState.MOVE_LEFT)
-                sophie.setMovementState(Sophie.MovementState.STILL_LEFT);
-            else if(sophie.getMovementState() == Sophie.MovementState.MOVE_RIGHT)
-                sophie.setMovementState(Sophie.MovementState.STILL_RIGHT);
+            if(sophie.getMovementState()==ArcadeSophie.MovementState.MOVE_LEFT)
+                sophie.setMovementState(ArcadeSophie.MovementState.STILL_LEFT);
+            else if(sophie.getMovementState() == ArcadeSophie.MovementState.MOVE_RIGHT)
+                sophie.setMovementState(ArcadeSophie.MovementState.STILL_RIGHT);
             return true;
         }
 
