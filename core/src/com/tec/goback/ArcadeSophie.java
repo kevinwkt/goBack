@@ -1,6 +1,7 @@
 package com.tec.goback;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -29,7 +30,9 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
     private float timerchangeframewalk;
     private float timerchangeframedie;
     private float timerchangeframewake;
-    private Sophie.MovementState currentstate = Sophie.MovementState.STILL_RIGHT; //STILL_RIGHT
+    private ArcadeSophie.MovementState currentstate = ArcadeSophie.MovementState.STILL_RIGHT; //STILL_RIGHT
+
+    private Preferences pref=Gdx.app.getPreferences("getLevel");
 
 
     ArcadeSophie(World world, Texture tx){
@@ -73,7 +76,7 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
 
         sprite = new Sprite(texturaPersonaje[0][0]);
 
-        sprite.setCenter(ArcadeValues.pelletOriginX-100,ArcadeValues.pelletOriginY);
+        sprite.setCenter(ArcadeValues.pelletOriginX-500,ArcadeValues.pelletOriginY);
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -125,16 +128,18 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
             case MOVE_LEFT:
                 timerchangeframewalk += Gdx.graphics.getDeltaTime();
                 region = walking.getKeyFrame(timerchangeframewalk);
-                /*if (currentstate== Sophie.MovementState.MOVE_LEFT) {
+                if (currentstate== ArcadeSophie.MovementState.MOVE_LEFT) {
                     if (!region.isFlipX()) {
                         region.flip(true,false);
                     }
+                    //body.setLinearVelocity(-1.5f, 0f);
                 } else {
                     if (region.isFlipX()) {
                         region.flip(true,false);
                     }
-                }*/
-                body.setLinearVelocity(1.5f, 0f);
+                    //body.setLinearVelocity(1.5f, 0f);
+                }
+
                 sprite.setCenter(
                         ArcadeValues.metersToPx(body.getPosition().x),
                         ArcadeValues.metersToPx(body.getPosition().y)
@@ -146,6 +151,18 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
                 body.setLinearVelocity(0f, 0f);
                 timerchangeframestandby += Gdx.graphics.getDeltaTime();
                 region = standby.getKeyFrame(timerchangeframestandby);
+
+                if (currentstate== ArcadeSophie.MovementState.STILL_LEFT) {
+                    if (!region.isFlipX()) {
+                        region.flip(true,false);
+                    }
+
+                } else {
+                    if (region.isFlipX()) {
+                        region.flip(true,false);
+                    }
+
+                }
                 sprite.setCenter(
                         ArcadeValues.metersToPx(body.getPosition().x),
                         ArcadeValues.metersToPx(body.getPosition().y)
@@ -158,16 +175,70 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
 
     }
 
+    public void update(){
+        switch (currentstate){
+            case MOVE_RIGHT:
+            case MOVE_LEFT:
+                moveHorizontal();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void moveHorizontal() {
+        // go right
+        if(currentstate == MovementState.MOVE_RIGHT){
+            switch (pref.getInteger("level")){
+                case 2:
+                    if(this.getX() <= Level2.RIGHT_LIMIT){
+                        body.setLinearVelocity(1.5f, 0f);
+                        //body.setLinearVelocity(5f, 0f);
+                    }else{
+                        body.setLinearVelocity(0f, 0f);
+                    }
+                    break;
+                case 3:
+                    break;
+                default:
+                    break;
+
+            }
+
+        }
+
+        // go left
+        if(currentstate == MovementState.MOVE_LEFT){
+            switch (pref.getInteger("level")){
+                case 2:
+                    if (this.getX() >= Level2.LEFT_LIMIT) {
+                        body.setLinearVelocity(-1.5f, 0f);
+                        //body.setLinearVelocity(-5f, 0f);
+                    }else{
+                        body.setLinearVelocity(0f, 0f);
+                    }
+                    break;
+                case 3:
+                    break;
+                default:
+                    break;
+            }
+
+        }
+
+    }
+
+
     void setColor(int color){
         this.color = color;
     }
 
-    public Sophie.MovementState getMovementState() {
+    public ArcadeSophie.MovementState getMovementState() {
         return currentstate;
     }
 
     // Modificador de estadoMovimiento
-    public void setMovementState(Sophie.MovementState ms) {
+    public void setMovementState(ArcadeSophie.MovementState ms) {
         this.currentstate = ms;
     }
 
