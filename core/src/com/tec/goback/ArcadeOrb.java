@@ -45,14 +45,16 @@ abstract class ArcadeOrb{
     }
 
     private void fixturer(float density, float restitution) {
-        CircleShape shape = new CircleShape();
-        shape.setRadius(ArcadeValues.pxToMeters(radius+10));
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.density = density;
         fixtureDef.restitution = restitution;
-        fixtureDef.shape = shape;
         fixtureDef.friction = 0;
+
+        CircleShape shape = new CircleShape();
+        shape.setRadius(ArcadeValues.pxToMeters(radius+10));
+        fixtureDef.shape = shape;
+
 
         fixtureDef.filter.categoryBits = ArcadeValues.orbCat;
         fixtureDef.filter.maskBits = active ? ArcadeValues.enemyCat : 0;

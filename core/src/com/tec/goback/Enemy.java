@@ -29,6 +29,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+//import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
 /**
  * Created by sergiohernandezjr on 16/02/17.
@@ -42,6 +43,8 @@ abstract class Enemy{
     protected int color;
     protected float SPEED;
     protected int leftRight;
+    protected float angle;
+    protected float x,y;
 
     protected float timeframe;
 
@@ -53,22 +56,42 @@ abstract class Enemy{
     protected CircleShape shape;
     protected Sprite sprite;
 
-    Enemy(World world, int type, float angle, Texture tx, float startX, float startY) {
-        this.sprite = new Sprite(tx);
+    protected BodyEditorLoader loader = new BodyEditorLoader(Gdx.files.internal("Physicshit.json"));
+
+    Enemy(World world, int type, float angle, float startX, float startY, Animation tx) {
+        this.angle=angle;
+        this.an=tx;
         this.color = type;
+        this.x=startX;
+        this.y=startY;
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(
-                ArcadeValues.pxToMeters(startX),
-                ArcadeValues.pxToMeters(startY)
-        );
-
+        if(x>0) {
+            leftRight=1;
+        }else leftRight=0;
+        bodyDef.position.set(ArcadeValues.pxToMeters(x), ArcadeValues.pxToMeters(y));
         body = world.createBody(bodyDef);
         fixturer(0.1f, 0.7f);
-        body.setBullet(true);
 
-        body.setLinearVelocity(MathUtils.cos(angle) * SPEED, MathUtils.sin(angle) * SPEED);
+        body.setUserData(this);
+    }
+
+    Enemy(World world, int type, float angle, float startX, float startY, Texture tx) {
+        this.angle=angle;
+        this.sprite=new Sprite(tx);
+        this.color = type;
+        this.x=startX;
+        this.y=startY;
+
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        if(x>0) {
+            leftRight=1;
+        }else leftRight=0;
+        bodyDef.position.set(ArcadeValues.pxToMeters(x), ArcadeValues.pxToMeters(y));
+        body = world.createBody(bodyDef);
+        fixturer(0.1f, 0.7f);
 
         body.setUserData(this);
     }
@@ -95,6 +118,24 @@ abstract class Enemy{
 
         //DONT FORGET TO body.setLinearVelocity(SPEED,0f); FOR EACH ENEMY
         body.setUserData(this);
+
+    }
+
+    Enemy(World world, float x, Texture tx) {
+        this.sprite= new Sprite(tx);
+        this.color = 2;
+
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(
+                ArcadeValues.pxToMeters(x),
+                ArcadeValues.pxToMeters(ArcadeValues.meteorSpawn)
+                );
+        body = world.createBody(bodyDef);
+        fixturer(0f, 0f);
+        body.setLinearVelocity(0.0f, ArcadeValues.meteorVelocity);
+        body.setUserData(this);
+
     }
 
     abstract void fixturer(float density, float restitution);
@@ -123,5 +164,3 @@ abstract class Enemy{
 
     abstract void draw(SpriteBatch batch);
 }
-
-

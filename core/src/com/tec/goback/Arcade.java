@@ -6,13 +6,17 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
@@ -26,6 +30,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.utils.TimeUtils;
 
 /*
  * Created by gerry on 2/18/17.
@@ -35,13 +40,18 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 @SuppressWarnings("ConstantConditions")
 class Arcade extends Frame{
 
+    //B2D bodies
+    private Array<Body> squirts = new Array<Body>();
+
     private World world;
     private HashSet<Body> deadThings;
     private ArrayList<Body> wall = new ArrayList<Body>();
     private float cooldown;
 
+    private boolean bosssFight, bossActive = false;
     private float betweenSpawns = ArcadeValues.initalFrequency;
     private float factor = ArcadeValues.initialFactor;
+    private float stDiff = 0.2f;
 
     private float elapsed = 0;
     private float elapsed2 = 0;
@@ -84,9 +94,13 @@ class Arcade extends Frame{
     private Texture goo;
     private Texture skull;
     private Texture spike;
+    private Texture meteor;
+
 
     private Animation<TextureRegion> lizardAnimation;
-    private Animation<TextureRegion> gooAnimation;
+    private Animation<TextureRegion> yellowGooAnimation;
+    private Animation<TextureRegion> blueGooAnimation;
+    private Animation<TextureRegion> redGooAnimation;
     private Animation<TextureRegion> skullRedAnimation;
     private Animation<TextureRegion> skullBlueAnimation;
     private Animation<TextureRegion> skullYellowAnimation;
@@ -104,10 +118,17 @@ class Arcade extends Frame{
     private static final float HEIGHT_MAP = 720;
 
     private Dialogue dialogue;
+    private GlyphLayout glyph = new GlyphLayout();
     private float dialoguetime = 0.0f;
+
     private Input input;
 
     private Preferences soundPreferences = Gdx.app.getPreferences("My Preferences");
+
+    Box2DDebugRenderer debugRenderer;
+    Matrix4 debugMatrix;
+
+
 
     Arcade(App app) {
         super(app, WIDTH_MAP,HEIGHT_MAP);
@@ -116,7 +137,9 @@ class Arcade extends Frame{
     @Override
     public void show() {
         //d = pref.getInteger("level");
+        debugRenderer=new Box2DDebugRenderer();
         d = 3;
+        bosssFight = false;
         super.show();
         textureInit();
         worldInit();
@@ -177,10 +200,14 @@ class Arcade extends Frame{
                 break;
         }
 
+
+        //TODO USE ASSET MANAGER LAZY KOREAN
         lizard=new Texture("MINIONS/LIZARD/MINIONYellowLizard.png");
-        goo=new Texture("MINIONS/GOO/MINIONYellowGoo.png");
+        goo=new Texture("MINIONS/GOO/MINIONAnimation.png");
         skull=new Texture("SKULL/MINIONSkulls.png");
         spike=new Texture("MINIONS/SPIKE/MINIONYellowSpike00.png");
+        //LIKE SO
+        meteor = aManager.get("MINIONS/METEOR/MINIONMeteor00.png");
 
         TextureRegion texturaCompleta = new TextureRegion(lizard);
         TextureRegion[][] texturaPersonaje = texturaCompleta.split(227,65);
@@ -188,9 +215,13 @@ class Arcade extends Frame{
         lizardAnimation.setPlayMode(Animation.PlayMode.LOOP);
 
         texturaCompleta=new TextureRegion(goo);
-        texturaPersonaje=texturaCompleta.split(118,125);
-        gooAnimation = new Animation(0.18f, texturaPersonaje[0][0], texturaPersonaje[0][1]);
-        gooAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        texturaPersonaje=texturaCompleta.split(75,150);
+        yellowGooAnimation = new Animation(0.18f, texturaPersonaje[0][0], texturaPersonaje[0][1]);
+        yellowGooAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        redGooAnimation = new Animation(0.18f, texturaPersonaje[0][2], texturaPersonaje[0][3]);
+        redGooAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        blueGooAnimation = new Animation(0.18f, texturaPersonaje[0][4], texturaPersonaje[0][5]);
+        blueGooAnimation.setPlayMode(Animation.PlayMode.LOOP);
 
         texturaCompleta=new TextureRegion(skull);
         texturaPersonaje=texturaCompleta.split(128,242);
@@ -313,6 +344,7 @@ class Arcade extends Frame{
 
                 }else{//If some bad guy got hit
                     if (ob1 instanceof Enemy) {
+                        Gdx.app.log("Enemy Color:"+((Enemy) ob1).getColor(), "PelletColor"+((OrbAttack)ob2).getColor());
                         if ( ((Enemy)ob1).getHurtDie( ((OrbAttack)ob2).getColor(), ((OrbAttack)ob2).getDamage()) ) {
                             //Gdx.app.log("LACONCHA", ""+((OrbAttack) ob2).getColor());
                             hit++;
@@ -321,6 +353,7 @@ class Arcade extends Frame{
                         }
                     }
                     if (ob2 instanceof Enemy) {
+                        Gdx.app.log("Enemy Color:"+((Enemy) ob2).getColor(), "PelletColor"+((OrbAttack)ob1).getColor());
                         if (((Enemy)ob2).getHurtDie(((OrbAttack)ob1).getColor(), ((OrbAttack)ob1).getDamage()) ) {
                             //Gdx.app.log("LACONCHA", ""+((OrbAttack) ob1).getColor());
                             hit++;
@@ -346,29 +379,28 @@ class Arcade extends Frame{
 
     }//         <------COLLISION EVENT HERE
 
-    @Override
+    @Override//TODO GET DEBUG SHIT ORGANIZED
     public void render(float delta) {
-        Gdx.app.log(""+d,"");
-        batch.setProjectionMatrix(super.camera.combined);
+        debugMatrix=new Matrix4(super.camera.combined);
+        debugMatrix.scale(100, 100, 1f);
         cls();
-
         batch.begin();
-
         drawShit();
         batch.draw(pauseButton,camera.position.x+HALFW-pauseButton.getWidth(),camera.position.y-HALFH);
 
+        //If all orbes died
         boolean flag = false;
         for(ArcadeOrb orb : orbs) {
             if (orb != null) flag = true;
         }
-
         if(!flag) state = GameState.LOST;
+        //
 
-        if (state==GameState.PAUSED) {
+        if (state==GameState.PAUSED) { //Draw pause menu
             Gdx.input.setInputProcessor(pauseStage);
             batch.end();
             pauseStage.draw();
-        }else if(state != GameState.LOST){
+        }else if(state != GameState.LOST){ //TODO RETURN TO SAVE OR MAIN MENU
             Gdx.input.setInputProcessor(input);
             stepper(delta);
             spawnMonsters(delta);
@@ -380,138 +412,55 @@ class Arcade extends Frame{
         }else{
             loose(delta);
         }
+        batch.begin();
+        batch.setProjectionMatrix(super.camera.combined);
+        debugRenderer.render(world, debugMatrix);
+        batch.end();
     }
 
-    private void loose(float delta){
-        //Calc score
+    private void drawShit(){
+        batch.draw(background,-2560,0);
+        sophie.setColor(1.0f,1.0f,1.0f,0.8f);
+        sophie.setPosition(ArcadeValues.pelletOriginX-100
+                , ArcadeValues.pelletOriginY-27);
+        sophie.draw(batch);
+
+        if(bossActive){
+            //TODO DRAW BOSS
+        }
+        drawBodies();
+    }
+
+    private void drawBodies(){
+        long time = TimeUtils.nanoTime();
+        world.getBodies(squirts);
+        Object obj;
+        for(Body b: squirts){
+            obj = b.getUserData();
+            if(obj instanceof OrbAttack) {
+                ((OrbAttack) obj).draw(batch);
+            }else if(obj instanceof ArcadeOrb){
+                ((ArcadeOrb)obj).draw(batch);
+            }else if(obj instanceof ArcadeLizard){
+                ((ArcadeLizard)obj).draw(batch);
+            }else if(obj instanceof ArcadeGoo){
+                ((ArcadeGoo)obj).draw(batch);
+            }else if(obj instanceof ArcadeSkull){
+                ((ArcadeSkull)obj).draw(batch);
+            }else if(obj instanceof ArcadeSpike){
+                ((ArcadeSpike)obj).draw(batch);
+            }else if(obj instanceof ArcadeMeteor){
+                ((ArcadeMeteor)obj).draw(batch);
+            }
+        }
+        squirts.clear();
         /*
-        preference.write(
-
-        hit + 10*(hit/shot) + 10*(hit*(match/hit))
-
-        );
-        */
-        dialoguetime += delta;
-        if(dialoguetime < 2.5f) {
-            dialogue.makeText(batch, "This dream overwhelmed you", camera.position.x);
-            batch.end();
-        }else{
-            app.setScreen(new Fade(app, LoaderState.ARCADE));
-        }
-    }
-
-    private void cls() {
-        Gdx.gl.glClearColor(0,0,0,1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-    }
-
-    private void spawnMonsters(float delta){
-        elapsed += delta;
-        elapsed2 += delta;
-        if(elapsed > betweenSpawns){
-            spawnSomething();
-            elapsed = 0;
-        }
-        if(elapsed2 > 1) {
-            betweenSpawns -= factor;
-            elapsed2 = 0;
-        }
-    }
-
-    private void spawnSomething(){
-        float r = MathUtils.random();
-        float lr =MathUtils.random();
-        int color  = calcColor();
-        if(r >= 0.0f && r < 0.8f){//lizard (0.25)
-            //Gdx.app.log("Enemy", " spawned");
-            switch (color){
-                case(1):
-                    if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
-                    else        new ArcadeLizard(world, color, 0, lizardAnimation);
-                    break;
-                case(2):
-                    if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
-                    else        new ArcadeLizard(world, color, 0, lizardAnimation);
-                    break;
-                case(3):
-                    if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
-                    else        new ArcadeLizard(world, color, 0, lizardAnimation);
-            }
-        }
-        /*
-        if(r >= 0.25f && r < 0.5f){//spike
-            switch (color){
-                case(1):
-                    if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
-                    else new ArcadeLizard(world, color, 0, lizardAnimation);
-                    break;
-                case(2):
-                    if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
-                    else new ArcadeLizard(world, color, 0, lizardAnimation);
-                    break;
-                case(3):
-                    if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
-                    else new ArcadeLizard(world, color, 0, lizardAnimation);
-                    break;
-            }
-        }
-        if(r >= 0.5f && r < 0.75f){//goo
-            switch (color){
-                case(1):
-                    if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
-                    else new ArcadeLizard(world, color, 0, lizardAnimation);
-                    break;
-                case(2):
-                    if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
-                    else new ArcadeLizard(world, color, 0, lizardAnimation);
-                    break;
-                case(3):
-                    if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
-                    else new ArcadeLizard(world, color, 0, lizardAnimation);
-                    break;
-            }
-        }
-        if(r >= 0.75f && r <= 1.0f){//skull
-            switch (color){
-                case(1):
-                    if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
-                    else new ArcadeLizard(world, color, 0, lizardAnimation);
-                    break;
-                case(2):
-                    if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
-                    else new ArcadeLizard(world, color, 0, lizardAnimation);
-                    break;
-                case(3):
-                    if(lr>=0.5) new ArcadeLizard(world, color, 1, lizardAnimation);
-                    else new ArcadeLizard(world, color, 0, lizardAnimation);
-                    break;
-            }
-        }
-        */
-    }
-
-    private int calcColor(){
-        float r = MathUtils.random();
-        switch (d){
-            case(1):
-                if(r >= 0.0f && r < 0.8f) return 1;
-                if(r >= 0.8f && r < 0.9f) return 2;
-                if(r >= 0.9f && r <= 1f) return 3;
-                break;
-            case(2):
-                if(r >= 0.0f && r < 0.4f) return 1;
-                if(r >= 0.4f && r < 0.8f) return 2;
-                if(r >= 0.8f && r <= 1f) return 3;
-                break;
-            case(3):
-                if(r >= 0.0f && r < 0.4f) return 1;
-                if(r >= 0.4f && r < 0.8f) return 2;
-                if(r >= 0.8f && r <= 1f) return 3;
-                break;
-            default:
-                return 1;
-        }
-        return 1;
+        before/after creating array in the method
+        t0 = 3500000
+        t1 = 2000000
+         */
+        time = TimeUtils.nanoTime()-time;
+        Gdx.app.log("Time was:", ""+time);
     }
 
     private void stepper(float delta){
@@ -554,27 +503,166 @@ class Arcade extends Frame{
 
     }
 
-    private void drawShit(){
-        batch.draw(background,-2560,0);
-        sophie.setColor(1.0f,1.0f,1.0f,0.8f);
-        sophie.setPosition(ArcadeValues.pelletOriginX-100
-                , ArcadeValues.pelletOriginY-27);
-        sophie.draw(batch);
+    private void loose(float delta){
+        //Calc score
+        /*
+        preference.write(
 
-        //B2D bodies
-        Array<Body> squirts = new Array<Body>();
-        world.getBodies(squirts);
-        Object obj;
-        for(Body b: squirts){
-            obj = b.getUserData();
-            if(obj instanceof OrbAttack) {
-                ((OrbAttack) obj).draw(batch);
-            }else if(obj instanceof ArcadeOrb){
-                ((ArcadeOrb)obj).draw(batch);
-            }else if(obj instanceof ArcadeLizard){
-                ((ArcadeLizard)obj).draw(batch);
+        hit + 10*(hit/shot) + 10*(hit*(match/hit))
+
+        );
+        */
+
+        float score = hit + 10*(hit/shot) + 10*(hit*(match/hit));
+        Gdx.app.log("Score was:", ""+score);
+        dialoguetime += delta;
+        if(dialoguetime < 2.5f) {
+            dialogue.makeText(glyph, batch, "This dream overwhelmed you", camera.position.x);
+            batch.end();
+        }else{
+            app.setScreen(new Fade(app, LoaderState.ARCADE));
+        }
+    }
+
+    private void cls() {
+        Gdx.gl.glClearColor(0,0,0,1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+    }
+
+    private void spawnMonsters(float delta){
+        //TODO MAKE STEPS
+        elapsed += delta;
+        elapsed2 += delta;
+        if(elapsed > betweenSpawns){
+            spawnSomething();
+            elapsed = 0;
+        }
+        if(elapsed2 > 1) {
+            betweenSpawns -= factor;
+            elapsed2 = 0;
+        }
+    }
+
+    private void spawnSomething(){
+        //TODO TUNE DIFFICULTY INCREASE
+        float e1 = (float)(1 - 0.5*(0.005*hit + 0.2));
+        float e0 = (float)(1 - (0.005*hit + 0.2));
+
+        float p = MathUtils.random();
+        float lr = MathUtils.random();
+
+        if(0 <= p && p < e0/2){ //skull
+            float a = lr * MathUtils.PI;
+            float x = ArcadeValues.pelletOriginX + ArcadeValues.highOnPot * MathUtils.cos(a);
+            float y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * MathUtils.sin(a);
+            switch(calcColor()){
+                case 1:
+                    new ArcadeSkull(world, 1, (float)a, (float)x, (float)y, skullYellowAnimation);
+                    Gdx.app.log("Spawn", "Yellow Skull");
+                    break;
+                case 2:
+                    new ArcadeSkull(world, 2, (float)a, (float)x, (float)y, skullBlueAnimation);
+                    Gdx.app.log("Spawn", "Blue Skull");
+                    break;
+                case 3:
+                    new ArcadeSkull(world, 3, (float)a, (float)x, (float)y, skullRedAnimation);
+                    Gdx.app.log("Spawn", "Red Skull");
+                    break;
             }
         }
+        if(e0/2 <= p && p <e0){ //goo
+            Gdx.app.log("Goo", "to Spawn");
+            float a = lr * MathUtils.PI;
+            float x = ArcadeValues.pelletOriginX + ArcadeValues.highOnPot * MathUtils.cos(a);
+            float y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * MathUtils.sin(a);
+            switch(calcColor()){
+                case 1:
+                    new ArcadeGoo(world, 1, (float)a, (float)x, (float)y, yellowGooAnimation);
+                    Gdx.app.log("Spawn", "Yellow Goo");
+                    break;
+                case 2:
+                    new ArcadeGoo(world, 2, (float)a, (float)x, (float)y, blueGooAnimation);
+                    Gdx.app.log("Spawn", "Blue Goo");
+                    break;
+                case 3:
+                    new ArcadeGoo(world, 3, (float)a, (float)x, (float)y, redGooAnimation);
+                    Gdx.app.log("Spawn", "Red Goo");
+                    break;
+            }
+        }
+        if(e0 <= p && p < e1){ //lizard
+            switch(calcColor()){
+                case 1: //Lizard
+                    new ArcadeLizard(world, 1, lr > 0.5 ? 0 : 1, lizardAnimation);
+                    break;
+                case 2: //Jaguar
+                    new ArcadeLizard(world, 2, lr > 0.5 ? 0 : 1, lizardAnimation);
+                    break;
+                case 3: //Bat
+                    new ArcadeLizard(world, 3, lr > 0.5 ? 0 : 1, lizardAnimation);
+                    break;
+            }
+        }
+        if(e1 <= p && p < e1+(1-e1)/3){ //spike
+            float a = lr * MathUtils.PI;
+            float x = ArcadeValues.pelletOriginX + ArcadeValues.highOnPot * MathUtils.cos(a);
+            float y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * MathUtils.sin(a);
+            new ArcadeSpike(world, 1, (float)a, (float)x, (float)y, spike);
+        }
+        if(e1+(1-e1)/3 <= p && p < e1+(2*(1-e1))/3){//meteor
+            Gdx.app.log("Meteor", "Spawn");
+            new ArcadeMeteor(world, (float)(100+1080*lr), meteor);
+        }
+        if(e1+((2*(1-e1))/3) <= p && p <= 1){//arrow
+            float a = lr * MathUtils.PI;
+            float x = ArcadeValues.pelletOriginX + ArcadeValues.highOnPot * MathUtils.cos(a);
+            float y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * MathUtils.sin(a);
+            new ArcadeSpike(world, 1, (float)a, (float)x, (float)y, spike);
+        }
+
+
+    }
+
+    private int calcColor() {
+        float r = MathUtils.random();
+        if (bosssFight) {
+            switch (d) {
+                case (1):
+                    return d;
+                case (2):
+                    if (r >= 0.0f && r < 0.5f) return 1;
+                    if (r >= 0.5f && r < 1f) return 2;
+                    break;
+                case (3):
+                    if (r >= 0.0f && r < 0.33f) return 1;
+                    if (r >= 0.33f && r < 0.66f) return 2;
+                    if (r >= 0.66f && r <= 1f) return 3;
+                    break;
+                default:
+                    return 1;
+            }
+        }else{
+            switch (d) {
+                case (1):
+                    if (r >= 0.0f && r < 0.8f) return 1;
+                    if (r >= 0.8f && r < 0.9f) return 2;
+                    if (r >= 0.9f && r <= 1f) return 3;
+                    break;
+                case (2):
+                    if (r >= 0.0f && r < 0.4f) return 1;
+                    if (r >= 0.4f && r < 0.8f) return 2;
+                    if (r >= 0.8f && r <= 1f) return 3;
+                    break;
+                case (3):
+                    if (r >= 0.0f && r < 0.33f) return 1;
+                    if (r >= 0.33f && r < 0.66f) return 2;
+                    if (r >= 0.66f && r <= 1f) return 3;
+                    break;
+                default:
+                    return 1;
+            }
+        }
+        return 1;
     }
 
     private void swapOrbes(){
@@ -631,7 +719,6 @@ class Arcade extends Frame{
 
     }
 
-
     @Override
     public void resize(int width, int height) {
         view.update(width, height);
@@ -647,7 +734,6 @@ class Arcade extends Frame{
     @Override
     public void dispose() {}
 //WTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTF
-
     private class Input implements InputProcessor {
         private Vector3 v = new Vector3();
         @Override
@@ -664,7 +750,6 @@ class Arcade extends Frame{
         public boolean keyTyped(char character) {
             return false;
         }
-
         @Override
         public boolean touchDown(int screenX, int screenY, int pointer, int button)
         {

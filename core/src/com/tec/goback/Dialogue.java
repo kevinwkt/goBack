@@ -21,14 +21,11 @@ class Dialogue {
 
 
     Dialogue(AssetManager aManager) {
-        //this.aManager = aManager;
         font = new BitmapFont(Gdx.files.internal("fira.fnt"));
         sheetTexture = aManager.get("CONSTANT/CONSTDialogueBox.png");
     }
 
-    void makeText(SpriteBatch batch, String msj, float cameraCenter){
-
-        GlyphLayout glyph = new GlyphLayout();
+    void makeText(GlyphLayout glyph, SpriteBatch batch, String msj, float cameraCenter){
 
         batch.draw(sheetTexture, cameraCenter-sheetTexture.getWidth()/2, 0);
 
@@ -37,11 +34,7 @@ class Dialogue {
     }
 
 
-    void makeText(SpriteBatch batch, String msj, Sprite left, float cameraCenter){
-
-        GlyphLayout glyph = new GlyphLayout();
-
-
+    void makeText(GlyphLayout glyph, SpriteBatch batch, String msj, Sprite left, float cameraCenter){
 
         left.setPosition(cameraCenter-HALFW,0);
         left.draw(batch);
@@ -53,11 +46,7 @@ class Dialogue {
     }
 
 
-    void makeText(SpriteBatch batch, String msj, Sprite left, Sprite right, boolean rightTalks, float cameraCenter){
-
-        GlyphLayout glyph = new GlyphLayout();
-
-
+    void makeText(GlyphLayout glyph, SpriteBatch batch, String msj, Sprite left, Sprite right, boolean rightTalks, float cameraCenter){
 
         left.setPosition(cameraCenter-HALFW ,0);
         right.setPosition(cameraCenter+HALFW-right.getWidth() , 0);

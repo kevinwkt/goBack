@@ -9,5 +9,6 @@ enum GameState {
     LOST,
     PAUSED,
     DIALOGUE,
-    STATS
+    STATS,
+    WON
 }

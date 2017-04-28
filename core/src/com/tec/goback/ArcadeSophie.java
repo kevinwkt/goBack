@@ -15,7 +15,7 @@ import com.badlogic.gdx.physics.box2d.World;
 /*
  * Created by gerry on 3/22/17.
  */
-class ArcadeSophie {
+class ArcadeSophie {    //TODO ADAPT FOR LEVELS
     private Body body;
     private Sprite sprite;
     private float life = 100;
