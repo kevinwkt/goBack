@@ -459,10 +459,6 @@ class Arcade extends Frame{
         sophie.setPosition(ArcadeValues.pelletOriginX-100
                 , ArcadeValues.pelletOriginY-27);
         sophie.draw(batch);
-
-        if(bossActive){
-            //TODO DRAW BOSS
-        }
         drawBodies();
     }
 
@@ -633,15 +629,15 @@ class Arcade extends Frame{
             float y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * MathUtils.sin(a);
             switch(c){
                 case 1:
-                    new ArcadeSkull(world, 1, (float)a, (float)x, (float)y, skullYellowAnimation);
+                    new ArcadeSkull(world, 1, a, x, y, skullYellowAnimation);
                     Gdx.app.log("Spawn", "Yellow Skull");
                     break;
                 case 2:
-                    new ArcadeSkull(world, 2, (float)a, (float)x, (float)y, skullBlueAnimation);
+                    new ArcadeSkull(world, 2, a, x, y, skullBlueAnimation);
                     Gdx.app.log("Spawn", "Blue Skull");
                     break;
                 case 3:
-                    new ArcadeSkull(world, 3, (float)a, (float)x, (float)y, skullRedAnimation);
+                    new ArcadeSkull(world, 3, a, x, y, skullRedAnimation);
                     Gdx.app.log("Spawn", "Red Skull");
                     break;
             }
