@@ -6,16 +6,20 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 
 import java.util.HashSet;
+import java.util.Random;
 
 /**
  * Created by sergiohernandezjr on 18/03/17.
@@ -33,8 +37,9 @@ class Level2 extends Frame {
 
     private ArcadeSophie sophie;
 
-    // background
+    // textures
     Texture background;
+    Texture meteor;
 
     //map
     public static final float WIDTH_MAP = 3840;
@@ -49,6 +54,13 @@ class Level2 extends Frame {
     Preferences pref = Gdx.app.getPreferences("getLevel");
     Preferences soundPreferences = Gdx.app.getPreferences("My Preferences");
 
+    private Box2DDebugRenderer debugRenderer;
+    private Matrix4 debugMatrix;
+
+    private Random randomMeteorPosition;
+    private Array<Body> squirts = new Array<Body>();
+    private Array<ArcadeMeteor> meteors = new Array<ArcadeMeteor>();
+
 
 
     public Level2(App app) {
@@ -61,9 +73,18 @@ class Level2 extends Frame {
         super.show();
         textureInit();
         worldInit();
+        int randomNumber;
+        for (int i = 0; i < 10; i++){
 
+            //randomMeteorPosition.nextInt(2230)+1420
+            randomNumber = randomMeteorPosition.nextInt(20);
+            Gdx.app.log("meteor random position","");
+            meteors.add(new ArcadeMeteor(world, (float)(1420+ i*100), meteor));
+        }
         Gdx.input.setCatchBackKey(true);
         Gdx.input.setInputProcessor(level2Input);
+
+        debugRenderer=new Box2DDebugRenderer();
 
 
 
@@ -106,18 +127,26 @@ class Level2 extends Frame {
         // background
         background = aManager.get("MOUNTAINS/GoBackMOUNTAINSPanoramic.png");
 
+        // meteor
+        meteor = aManager.get("MINIONS/METEOR/MINIONMeteor00.png");
+
         // sophie
-        sophieTexture = new Texture("Squirts/Sophie/SOPHIEWalk.png");
+        sophieTexture = aManager.get("Squirts/Sophie/SOPHIEWalk.png");
 
         
     }
 
     @Override
     public void render(float delta) {
+        debugMatrix = new Matrix4(super.camera.combined);
+        debugMatrix.scale(100, 100, 1f);
         cls();
 
-        batch.setProjectionMatrix(super.camera.combined);
+
+
+
         batch.begin();
+        batch.setProjectionMatrix(super.camera.combined);
 
 
 
@@ -129,23 +158,42 @@ class Level2 extends Frame {
             if(sophieInitFlag) {
                 sophieInitialMove();
             }
+            drawMeteors();
             sophie.update();
             sophie.draw(batch);
 
             updateCamera();
             Gdx.input.setInputProcessor(level2Input);
+            batch.end();
 
         }else if(state == GameState.PAUSED){
-            //pauseStage.draw();
-            Gdx.input.setInputProcessor(pauseStage);
 
+            Gdx.input.setInputProcessor(pauseStage);
+            batch.end();
+            //pauseStage.draw();
         }
 
 
         stepper(delta);
+
+        batch.begin();
+        batch.setProjectionMatrix(super.camera.combined);
+        debugRenderer.render(world, debugMatrix);
         batch.end();
     }
 
+    private void drawMeteors() {
+        // must appear at 1420
+        // random to 2230
+        for(ArcadeMeteor acm : meteors){
+            acm.draw(batch);
+        }
+
+        /*if(meteorObj.sprite.getY() < 100){
+
+        }*/
+        //Gdx.app.log("metero position",meteorObj.sprite.getY()+"");
+    }
 
 
     private void stepper(float delta){
@@ -162,7 +210,6 @@ class Level2 extends Frame {
     }
 
     private void sophieInitialMove() {
-
         if(sophie.getX() < 250){
             sophie.setMovementState(ArcadeSophie.MovementState.MOVE_RIGHT);
         }else{
@@ -200,7 +247,9 @@ class Level2 extends Frame {
 
     @Override
     public void dispose() {
-
+        aManager.unload("MINIONS/METEOR/MINIONMeteor00.png");
+        aManager.unload("MOUNTAINS/GoBackMOUNTAINSPanoramic.png");
+        aManager.unload("Squirts/Sophie/SOPHIEWalk.png");
     }
 
     public void updateCamera(){
@@ -242,9 +291,7 @@ class Level2 extends Frame {
         public boolean touchDown(int screenX, int screenY, int pointer, int button) {
             v.set(screenX,screenY,0);
             camera.unproject(v);
-            /*if(camera.position.x - v.x < -522 && v.y < 135){
-                state = GameState.PAUSED;
-            }*/
+
             if(sophie.getMovementState()==ArcadeSophie.MovementState.STILL_LEFT||sophie.getMovementState()==ArcadeSophie.MovementState.STILL_RIGHT) {
                 if(!(camera.position.x - v.x < -522 && v.y < 135)){
                     if (v.x >= camera.position.x) {
@@ -265,9 +312,9 @@ class Level2 extends Frame {
                 sophie.setMovementState(ArcadeSophie.MovementState.STILL_LEFT);
             else if(sophie.getMovementState() == ArcadeSophie.MovementState.MOVE_RIGHT)
                 sophie.setMovementState(ArcadeSophie.MovementState.STILL_RIGHT);
+            sophie.update();
 
             if(camera.position.x - v.x < -522 && v.y < 135){
-                sophie.setMovementState(ArcadeSophie.MovementState.STILL_RIGHT);
                 state = GameState.PAUSED;
 
             }
