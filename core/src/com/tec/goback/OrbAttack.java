@@ -94,4 +94,3 @@ class OrbAttack extends Squirt {
     }
 
 }
-
