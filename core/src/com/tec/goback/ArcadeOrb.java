@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
@@ -28,7 +29,7 @@ abstract class ArcadeOrb{
 
     ArcadeOrb(World world, Texture tx, int place, boolean active, float life, float radius, int color){
         this.place = place;
-        this.radius = ArcadeValues.pxToMeters(radius);
+        this.radius = radius;
         this.color = color;
         this.sprite = new Sprite(tx);
         this.active = active;
@@ -36,7 +37,7 @@ abstract class ArcadeOrb{
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(ArcadeValues.places[place], ArcadeValues.meterspelletOriginY);
+        bodyDef.position.set(ArcadeValues.places[place][0], ArcadeValues.places[place][1]);
         this.body = world.createBody(bodyDef);
         fixturer(0.1f, 0.7f);
         body.setLinearVelocity(0f, 0f);
@@ -52,7 +53,7 @@ abstract class ArcadeOrb{
         fixtureDef.friction = 0;
 
         CircleShape shape = new CircleShape();
-        shape.setRadius(ArcadeValues.pxToMeters(radius+10));
+        shape.setRadius(ArcadeValues.pxToMeters(radius));
         fixtureDef.shape = shape;
 
 
@@ -69,6 +70,7 @@ abstract class ArcadeOrb{
     }
 
     void draw(SpriteBatch batch){
+        //Offset depending on the orb
         sprite.setCenter(
                 ArcadeValues.metersToPx(body.getPosition().x),
                 ArcadeValues.metersToPx(body.getPosition().y)
@@ -76,12 +78,25 @@ abstract class ArcadeOrb{
 
         switch(((int)(life/10))){
             case 10:case 9:
+                if(active){
+                    sprite.setColor(1f, 1f, 1f, 1f);
+                }else{
+                    sprite.setColor(0.6f, 0.6f, 0.6f, 1f);
+                }
                 break;
             case 8:case 7:  //low opacity
-                sprite.setColor(0.8f, 0.8f, 0.8f, 0.8f);
+                if(active){
+                    sprite.setColor(1f, 1f, 1f, 0.8f);
+                }else{
+                    sprite.setColor(0.6f, 0.6f, 0.6f, 0.8f);
+                }
                 break;
             case 6:case 5:  //lower opacity
-                sprite.setColor(0.8f, 0.8f, 0.8f, 0.6f);
+                if(active){
+                    sprite.setColor(1f, 1f, 1f, 0.6f);
+                }else{
+                    sprite.setColor(0.6f, 0.6f, 0.6f, 0.6f);
+                }
                 break;
             case 4:case 3:  //low freq blink
                 blink(0.5f);
@@ -96,7 +111,11 @@ abstract class ArcadeOrb{
 
     private void blink(float speed){
         ac = ac <= 1.0 ? ac + Gdx.graphics.getDeltaTime() : 0;
-        sprite.setColor(1.0f,1.0f,1.0f, (float) (0.3f * Math.sin(ac * (2*Math.PI/speed)) + 0.5f));
+        if(active) {
+            sprite.setColor(1f, 1f, 1f, (0.3f * MathUtils.sin(ac * (2*MathUtils.PI /speed)) + 0.5f));
+        }else{
+            sprite.setColor(0.6f, 0.6f, 0.6f, (0.3f * MathUtils.sin(ac * (2*MathUtils.PI/speed)) + 0.5f));
+        }
     }
 
     int getPlace(){

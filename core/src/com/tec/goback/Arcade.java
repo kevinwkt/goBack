@@ -48,16 +48,17 @@ class Arcade extends Frame{
     private ArrayList<Body> wall = new ArrayList<Body>();
     private float cooldown;
 
+    private Squirt boss;
     private boolean bosssFight, bossActive = false;
     private float betweenSpawns = ArcadeValues.initalFrequency;
-    private float factor = ArcadeValues.initialFactor;
-    private float stDiff = 0.2f;
 
+    private float acumulator = 0;
     private float elapsed = 0;
-    private float elapsed2 = 0;
+    private float arcadeMultiplier = ArcadeValues.arcadeMultiplier;
 
     private float shot = 0;
     private float hit = 0;
+    private float hitCheck = 0;
     private float match = 0;
 
     //CURRENT COLOR ORB
@@ -82,9 +83,6 @@ class Arcade extends Frame{
     private Texture orbRed;
     private Texture orbBlue;
     private Texture orbYellow;
-    private Texture eyesred;
-    private Texture eyesblue;
-    private Texture eyesyellow;
 
     private Texture pelletYellow;
     private Texture pelletBlue;
@@ -96,7 +94,6 @@ class Arcade extends Frame{
     private Texture spike;
     private Texture meteor;
 
-
     private Animation<TextureRegion> lizardAnimation;
     private Animation<TextureRegion> yellowGooAnimation;
     private Animation<TextureRegion> blueGooAnimation;
@@ -105,6 +102,8 @@ class Arcade extends Frame{
     private Animation<TextureRegion> skullBlueAnimation;
     private Animation<TextureRegion> skullYellowAnimation;
 
+    private Texture bossLizard;
+    private Texture bossJaguar;
     /*
     private float timerchangeframelizard;
     private float timerchangeframegoo;
@@ -125,8 +124,8 @@ class Arcade extends Frame{
 
     private Preferences soundPreferences = Gdx.app.getPreferences("My Preferences");
 
-    Box2DDebugRenderer debugRenderer;
-    Matrix4 debugMatrix;
+    private Box2DDebugRenderer debugRenderer;
+    private Matrix4 debugMatrix;
 
 
 
@@ -138,8 +137,8 @@ class Arcade extends Frame{
     public void show() {
         //d = pref.getInteger("level");
         debugRenderer=new Box2DDebugRenderer();
-        d = 3;
-        bosssFight = false;
+        d = 1;
+        bosssFight = ArcadeValues.bossFightFlag;
         super.show();
         textureInit();
         worldInit();
@@ -167,7 +166,7 @@ class Arcade extends Frame{
         switch (d){
             case 1:
                 orbYellow = new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png");
-                eyesyellow= new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrbEyes.png");
+
 
                 pelletYellow = aManager.get("PELLET/ATAQUEYellowPellet.png");
 
@@ -175,9 +174,9 @@ class Arcade extends Frame{
                 break;
             case 2:
                 orbYellow = new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png");
-                eyesyellow= new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrbEyes.png");
+
                 orbBlue = new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrb.png");
-                eyesblue= new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrbEyes.png");
+
 
                 pelletYellow = aManager.get("PELLET/ATAQUEYellowPellet.png");
                 pelletBlue = aManager.get("PELLET/ATAQUEBluePellet.png");
@@ -186,11 +185,11 @@ class Arcade extends Frame{
                 break;
             case 3:
                 orbYellow = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png");
-                eyesyellow = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrbEyes.png");
+
                 orbBlue = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrb.png");
-                eyesblue = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrbEyes.png");
+
                 orbRed = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADERedOrb.png");
-                eyesred = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADERedOrbEyes.png");
+
 
                 pelletYellow = aManager.get("PELLET/ATAQUEYellowPellet.png");
                 pelletBlue = aManager.get("PELLET/ATAQUEBluePellet.png");
@@ -232,6 +231,9 @@ class Arcade extends Frame{
         skullRedAnimation.setPlayMode(Animation.PlayMode.LOOP);
         skullYellowAnimation.setPlayMode(Animation.PlayMode.LOOP);
 
+        sophieTx = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADESophie.png");
+        bossLizard = aManager.get("BOSS/IGUANA/BOSSIguanaBody.png");
+        bossJaguar= aManager.get("BOSS/JAGUAR/BOSSJaguarBody.png");
     }
 
     private void allyInit(){
@@ -245,8 +247,21 @@ class Arcade extends Frame{
                 orbs[1] = new ArcadeBlueOrb(world, orbBlue, 1, false, 100);
                 orbs[2] = new ArcadeRedOrb(world, orbRed, 2, false, 100);
         }
-        sophieTx = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADESophie.png");
         sophie = new Sprite(sophieTx);
+
+        if(bosssFight){
+            switch(d){
+                case 1:
+                    boss = new ArcadeBoss(world, 1, bossLizard);
+                    break;
+                case 2:
+                    boss = new ArcadeBoss(world, 2, bossLizard);
+                    break;
+                case 3:
+                    boss = new ArcadeBoss(world, 1, bossLizard);
+                    break;
+            }
+        }
     }
 
     private void wallsInit(){
@@ -344,20 +359,27 @@ class Arcade extends Frame{
 
                 }else{//If some bad guy got hit
                     if (ob1 instanceof Enemy) {
-                        Gdx.app.log("Enemy Color:"+((Enemy) ob1).getColor(), "PelletColor"+((OrbAttack)ob2).getColor());
+                        hit++;
                         if ( ((Enemy)ob1).getHurtDie( ((OrbAttack)ob2).getColor(), ((OrbAttack)ob2).getDamage()) ) {
-                            //Gdx.app.log("LACONCHA", ""+((OrbAttack) ob2).getColor());
-                            hit++;
                             if (((Enemy) ob1).getColor() == ((OrbAttack) ob2).getColor()) match++;
                             deadThings.add(contact.getFixtureA().getBody());
                         }
                     }
                     if (ob2 instanceof Enemy) {
-                        Gdx.app.log("Enemy Color:"+((Enemy) ob2).getColor(), "PelletColor"+((OrbAttack)ob1).getColor());
+                        hit++;
                         if (((Enemy)ob2).getHurtDie(((OrbAttack)ob1).getColor(), ((OrbAttack)ob1).getDamage()) ) {
-                            //Gdx.app.log("LACONCHA", ""+((OrbAttack) ob1).getColor());
-                            hit++;
                             if (((OrbAttack) ob1).getColor() == ((Enemy) ob2).getColor()) match++;
+                            deadThings.add(contact.getFixtureB().getBody());
+                        }
+                    }
+
+                    if (ob1 instanceof ArcadeBoss) {
+                        if ( ((ArcadeBoss)ob1).getHurtDie( ((OrbAttack)ob2).getColor(), ((OrbAttack)ob2).getDamage()) ) {
+                            deadThings.add(contact.getFixtureA().getBody());
+                        }
+                    }
+                    if (ob2 instanceof ArcadeBoss) {
+                        if (((ArcadeBoss)ob2).getHurtDie(((OrbAttack)ob1).getColor(), ((OrbAttack)ob1).getDamage()) ) {
                             deadThings.add(contact.getFixtureB().getBody());
                         }
                     }
@@ -381,8 +403,10 @@ class Arcade extends Frame{
 
     @Override//TODO GET DEBUG SHIT ORGANIZED
     public void render(float delta) {
-        debugMatrix=new Matrix4(super.camera.combined);
+
+        debugMatrix = new Matrix4(super.camera.combined);
         debugMatrix.scale(100, 100, 1f);
+
         cls();
         batch.begin();
         drawShit();
@@ -396,7 +420,7 @@ class Arcade extends Frame{
         if(!flag) state = GameState.LOST;
         //
 
-        if (state==GameState.PAUSED) { //Draw pause menu
+        if (state==GameState.PAUSED) {//Draw pause menu
             Gdx.input.setInputProcessor(pauseStage);
             batch.end();
             pauseStage.draw();
@@ -451,6 +475,8 @@ class Arcade extends Frame{
                 ((ArcadeSpike)obj).draw(batch);
             }else if(obj instanceof ArcadeMeteor){
                 ((ArcadeMeteor)obj).draw(batch);
+            }else if(obj instanceof ArcadeBoss){
+                ((ArcadeBoss)obj).draw(batch);
             }
         }
         squirts.clear();
@@ -459,8 +485,8 @@ class Arcade extends Frame{
         t0 = 3500000
         t1 = 2000000
          */
-        time = TimeUtils.nanoTime()-time;
-        Gdx.app.log("Time was:", ""+time);
+        //time = TimeUtils.nanoTime()-time;
+        //Gdx.app.log("Time was:", ""+time);
     }
 
     private void stepper(float delta){
@@ -505,13 +531,13 @@ class Arcade extends Frame{
 
     private void loose(float delta){
         //Calc score
-        /*
-        preference.write(
 
-        hit + 10*(hit/shot) + 10*(hit*(match/hit))
+//        if(bosssFight) {
+//            preference.write(
+//                    hit + 10 * (hit / shot) + 10 * (hit * (match / hit))
+//            );
+//        }
 
-        );
-        */
 
         float score = hit + 10*(hit/shot) + 10*(hit*(match/hit));
         Gdx.app.log("Score was:", ""+score);
@@ -520,6 +546,7 @@ class Arcade extends Frame{
             dialogue.makeText(glyph, batch, "This dream overwhelmed you", camera.position.x);
             batch.end();
         }else{
+            batch.end();
             app.setScreen(new Fade(app, LoaderState.ARCADE));
         }
     }
@@ -531,31 +558,76 @@ class Arcade extends Frame{
 
     private void spawnMonsters(float delta){
         //TODO MAKE STEPS
+        acumulator += delta;
         elapsed += delta;
-        elapsed2 += delta;
+        //betweenSpawns = 2f;
+        betweenSpawns = freq(acumulator);
         if(elapsed > betweenSpawns){
+            Gdx.app.log("time: "+acumulator, "freq: "+betweenSpawns);
             spawnSomething();
             elapsed = 0;
         }
-        if(elapsed2 > 1) {
-            betweenSpawns -= factor;
-            elapsed2 = 0;
+    }
+
+    private float freq(float time){
+        if(time >= 0 && time < ArcadeValues.stepTimes[0]){
+            return 2;
         }
+        if(time >= ArcadeValues.stepTimes[0] && time < ArcadeValues.stepTimes[1]){// goes up and ends in 1.6
+            return betweenSpawns - 0.006666666667f*arcadeMultiplier/30;
+        }
+        if(time >= ArcadeValues.stepTimes[1] && time < ArcadeValues.stepTimes[2]){// stays in 1.6
+            if(!bossActive && bosssFight) {
+                ((ArcadeBoss) boss).move();
+
+                bossActive = true;
+            }
+            return betweenSpawns;
+        }
+        if(time >= ArcadeValues.stepTimes[2] && time < ArcadeValues.stepTimes[3]){//goes up and ends in 1.2
+            if(bossActive && bosssFight){
+                ((ArcadeBoss) boss).move();
+                bossActive = false;
+            }
+            return betweenSpawns - 0.006666666667f*arcadeMultiplier/30;
+        }
+        if(time >= ArcadeValues.stepTimes[3] && time < ArcadeValues.stepTimes[4]){//stays in 1.2
+            if(!bossActive && bosssFight) {
+                ((ArcadeBoss) boss).move();
+                bossActive = true;
+            }
+            return betweenSpawns;
+        }
+        if(time >= ArcadeValues.stepTimes[4] && time < ArcadeValues.stepTimes[5]){//goes up and ends in 0.8
+            if(bossActive && bosssFight) {
+                ((ArcadeBoss) boss).move();
+                bossActive = false;
+            }
+            return betweenSpawns - 0.006666666667f*arcadeMultiplier/30;
+        }
+        if(time >= ArcadeValues.stepTimes[5] && time < ArcadeValues.stepTimes[6]){//starts in 0.8 and goes slowly
+            return betweenSpawns - 0.006666666667f*arcadeMultiplier/50;
+        }
+        return betweenSpawns;
+
     }
 
     private void spawnSomething(){
-        //TODO TUNE DIFFICULTY INCREASE
-        float e1 = (float)(1 - 0.5*(0.005*hit + 0.2));
-        float e0 = (float)(1 - (0.005*hit + 0.2));
+        Gdx.app.log("concha", "aSpawnHappened");
+
+        hitCheck = hit <= 120 ? hit : 120;
+        float e1 = (float)(1 - 0.5*(0.005*hitCheck + 0.2));
+        float e0 = (float)(1 - (0.005*hitCheck + 0.2));
 
         float p = MathUtils.random();
         float lr = MathUtils.random();
 
+        int c = calcColor();
         if(0 <= p && p < e0/2){ //skull
             float a = lr * MathUtils.PI;
             float x = ArcadeValues.pelletOriginX + ArcadeValues.highOnPot * MathUtils.cos(a);
             float y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * MathUtils.sin(a);
-            switch(calcColor()){
+            switch(c){
                 case 1:
                     new ArcadeSkull(world, 1, (float)a, (float)x, (float)y, skullYellowAnimation);
                     Gdx.app.log("Spawn", "Yellow Skull");
@@ -575,7 +647,7 @@ class Arcade extends Frame{
             float a = lr * MathUtils.PI;
             float x = ArcadeValues.pelletOriginX + ArcadeValues.highOnPot * MathUtils.cos(a);
             float y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * MathUtils.sin(a);
-            switch(calcColor()){
+            switch(c){
                 case 1:
                     new ArcadeGoo(world, 1, (float)a, (float)x, (float)y, yellowGooAnimation);
                     Gdx.app.log("Spawn", "Yellow Goo");
@@ -591,7 +663,7 @@ class Arcade extends Frame{
             }
         }
         if(e0 <= p && p < e1){ //lizard
-            switch(calcColor()){
+            switch(c){
                 case 1: //Lizard
                     new ArcadeLizard(world, 1, lr > 0.5 ? 0 : 1, lizardAnimation);
                     break;
@@ -717,6 +789,10 @@ class Arcade extends Frame{
             }
         }
 
+    }
+
+    void kill(Body b){
+        deadThings.add(b);
     }
 
     @Override
