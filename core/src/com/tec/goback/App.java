@@ -51,7 +51,7 @@ public class App extends Game {
 	private void checkStatsPref() {
 		Preferences stats=Gdx.app.getPreferences("STATS");
 
-		//stats.putInteger("XP",10000000);
+		stats.putInteger("XP",0);
 		if(stats.getFloat("SophieLife")==0){
 			stats.putFloat("SophieLife", 100f);
 			stats.putInteger("SophieLifeStg", 0);

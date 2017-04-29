@@ -52,14 +52,17 @@ class Arcade extends Frame{
     private boolean bosssFight, bossActive = false;
     private float betweenSpawns = ArcadeValues.initalFrequency;
 
+    private boolean putXp = false;
     private float acumulator = 0;
     private float elapsed = 0;
-    private float arcadeMultiplier = ArcadeValues.arcadeMultiplier;
+    private float arcadeMultiplier;
 
     private float shot = 0;
     private float hit = 0;
     private float hitCheck = 0;
     private float match = 0;
+
+    Preferences stats = Gdx.app.getPreferences("STATS");
 
     //CURRENT COLOR ORB
     private orbColor currentColor = orbColor.YELLOW;
@@ -139,6 +142,7 @@ class Arcade extends Frame{
         debugRenderer=new Box2DDebugRenderer();
         d = 1;
         bosssFight = ArcadeValues.bossFightFlag;
+        arcadeMultiplier = !bosssFight ? ArcadeValues.arcadeMultiplier : 1;
         super.show();
         textureInit();
         worldInit();
@@ -420,7 +424,11 @@ class Arcade extends Frame{
         if(!flag) state = GameState.LOST;
         //
 
-        if (state==GameState.PAUSED) {//Draw pause menu
+        if(state == GameState.STATS){
+            batch.end();
+            statsStage.draw();
+            Gdx.input.setInputProcessor(inputMultiplexer);
+        }else if (state == GameState.PAUSED) {//Draw pause menu
             Gdx.input.setInputProcessor(pauseStage);
             batch.end();
             pauseStage.draw();
@@ -530,17 +538,10 @@ class Arcade extends Frame{
     }
 
     private void loose(float delta){
-        //Calc score
-
-//        if(bosssFight) {
-//            preference.write(
-//                    hit + 10 * (hit / shot) + 10 * (hit * (match / hit))
-//            );
-//        }
-
-
-        float score = hit + 10*(hit/shot) + 10*(hit*(match/hit));
-        Gdx.app.log("Score was:", ""+score);
+        if(!putXp) {
+             stats.putInteger("XP", stats.getInteger("XP") + (int)(hit + 10 * (hit / shot) + 10 * (hit * (match / hit))));
+            putXp = true;
+        }
         dialoguetime += delta;
         if(dialoguetime < 2.5f) {
             dialogue.makeText(glyph, batch, "This dream overwhelmed you", camera.position.x);
@@ -574,7 +575,7 @@ class Arcade extends Frame{
             return 2;
         }
         if(time >= ArcadeValues.stepTimes[0] && time < ArcadeValues.stepTimes[1]){// goes up and ends in 1.6
-            return betweenSpawns - 0.006666666667f*arcadeMultiplier/30;
+            return betweenSpawns - (0.006666666667f*arcadeMultiplier)/30;
         }
         if(time >= ArcadeValues.stepTimes[1] && time < ArcadeValues.stepTimes[2]){// stays in 1.6
             if(!bossActive && bosssFight) {
@@ -589,7 +590,7 @@ class Arcade extends Frame{
                 ((ArcadeBoss) boss).move();
                 bossActive = false;
             }
-            return betweenSpawns - 0.006666666667f*arcadeMultiplier/30;
+            return betweenSpawns - (0.006666666667f*arcadeMultiplier)/30;
         }
         if(time >= ArcadeValues.stepTimes[3] && time < ArcadeValues.stepTimes[4]){//stays in 1.2
             if(!bossActive && bosssFight) {
@@ -603,10 +604,10 @@ class Arcade extends Frame{
                 ((ArcadeBoss) boss).move();
                 bossActive = false;
             }
-            return betweenSpawns - 0.006666666667f*arcadeMultiplier/30;
+            return betweenSpawns - (0.006666666667f*arcadeMultiplier)/30;
         }
         if(time >= ArcadeValues.stepTimes[5] && time < ArcadeValues.stepTimes[6]){//starts in 0.8 and goes slowly
-            return betweenSpawns - 0.006666666667f*arcadeMultiplier/50;
+            return betweenSpawns - (0.006666666667f*arcadeMultiplier)/50;
         }
         return betweenSpawns;
 
