@@ -44,9 +44,47 @@ public class App extends Game {
 		aManager.load("Interfaces/SOUND/SOUNDSound.png", Texture.class);
 		aManager.load("CONSTANT/CONSTDialogueBox.png", Texture.class);
 		aManager.load("Interfaces/GAMEPLAY/ARCADE/ARCADESophie.png", Texture.class);
+
+		checkStatsPref();
 	}
 
-    public AssetManager getAssetManager() {
+	private void checkStatsPref() {
+		Preferences stats=Gdx.app.getPreferences("STATS");
+
+		//stats.putInteger("XP",10000000);
+		if(stats.getFloat("SophieLife")==0){
+			stats.putFloat("SophieLife", 100f);
+			stats.putInteger("SophieLifeStg", 0);
+		}
+		if(stats.getFloat("YellowLife")==0){
+			stats.putFloat("YellowLife", 100f);
+			stats.putInteger("YellowLifeStg", 0);
+		}
+		if(stats.getFloat("YellowAtk")==0){
+			stats.putFloat("YellowAtk", 25f);
+			stats.putInteger("YellowLifeStg", 0);
+		}
+		if(stats.getFloat("BlueLife")==0){
+			stats.putFloat("BlueLife", 100f);
+			stats.putInteger("BlueLifeStg", 0);
+		}
+		if(stats.getFloat("BlueAtk")==0){
+			stats.putFloat("BlueAtk", 25f);
+			stats.putInteger("BlueAtkStg", 0);
+		}
+		if(stats.getFloat("RedLife")==0){
+			stats.putFloat("RedLife", 100f);
+			stats.putInteger("RedLifeStg", 0);
+		}
+		if(stats.getFloat("RedAtk")==0){
+			stats.putFloat("RedAtk", 25f);
+			stats.putInteger("RedAtkStg", 0);
+		}
+
+		stats.flush();
+	}
+
+	public AssetManager getAssetManager() {
         return aManager;
     }
 
