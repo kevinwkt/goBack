@@ -43,6 +43,8 @@ class Level2 extends Frame {
     protected static final float LEFT_LIMIT = 20;
     protected static float RIGHT_LIMIT = 3650;
 
+    private Input level2Input = new Input();
+
     // preferences
     Preferences pref = Gdx.app.getPreferences("getLevel");
     Preferences soundPreferences = Gdx.app.getPreferences("My Preferences");
@@ -61,7 +63,7 @@ class Level2 extends Frame {
         worldInit();
 
         Gdx.input.setCatchBackKey(true);
-        Gdx.input.setInputProcessor(new Input());
+        Gdx.input.setInputProcessor(level2Input);
 
 
 
@@ -120,6 +122,7 @@ class Level2 extends Frame {
 
 
         if(state == GameState.PLAYING){
+
             batch.draw(background,0,0);
             batch.draw(pauseButton,camera.position.x+HALFW-pauseButton.getWidth(),camera.position.y-HALFH);
 
@@ -128,16 +131,18 @@ class Level2 extends Frame {
             }
             sophie.update();
             sophie.draw(batch);
-            stepper(delta);
+
             updateCamera();
+            Gdx.input.setInputProcessor(level2Input);
 
         }else if(state == GameState.PAUSED){
-            Gdx.app.log("Game status","Paused");
+            //pauseStage.draw();
+            Gdx.input.setInputProcessor(pauseStage);
 
         }
 
 
-
+        stepper(delta);
         batch.end();
     }
 
@@ -237,16 +242,19 @@ class Level2 extends Frame {
         public boolean touchDown(int screenX, int screenY, int pointer, int button) {
             v.set(screenX,screenY,0);
             camera.unproject(v);
-            if(camera.position.x - v.x < -522 && v.y < 135){
+            /*if(camera.position.x - v.x < -522 && v.y < 135){
                 state = GameState.PAUSED;
-            }
+            }*/
             if(sophie.getMovementState()==ArcadeSophie.MovementState.STILL_LEFT||sophie.getMovementState()==ArcadeSophie.MovementState.STILL_RIGHT) {
-                if (v.x >= camera.position.x) {
-                    sophie.setMovementState(ArcadeSophie.MovementState.MOVE_RIGHT);
+                if(!(camera.position.x - v.x < -522 && v.y < 135)){
+                    if (v.x >= camera.position.x) {
+                        sophie.setMovementState(ArcadeSophie.MovementState.MOVE_RIGHT);
 
-                } else {
-                    sophie.setMovementState(ArcadeSophie.MovementState.MOVE_LEFT);
+                    } else {
+                        sophie.setMovementState(ArcadeSophie.MovementState.MOVE_LEFT);
+                    }
                 }
+
             }
             return true;
         }
@@ -257,6 +265,13 @@ class Level2 extends Frame {
                 sophie.setMovementState(ArcadeSophie.MovementState.STILL_LEFT);
             else if(sophie.getMovementState() == ArcadeSophie.MovementState.MOVE_RIGHT)
                 sophie.setMovementState(ArcadeSophie.MovementState.STILL_RIGHT);
+
+            if(camera.position.x - v.x < -522 && v.y < 135){
+                sophie.setMovementState(ArcadeSophie.MovementState.STILL_RIGHT);
+                state = GameState.PAUSED;
+
+            }
+
             return true;
         }
 
