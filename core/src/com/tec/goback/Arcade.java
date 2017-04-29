@@ -59,10 +59,9 @@ class Arcade extends Frame{
 
     private float shot = 0;
     private float hit = 0;
-    private float hitCheck = 0;
     private float match = 0;
 
-    Preferences stats = Gdx.app.getPreferences("STATS");
+    private Preferences stats = Gdx.app.getPreferences("STATS");
 
     //CURRENT COLOR ORB
     private orbColor currentColor = orbColor.YELLOW;
@@ -425,6 +424,10 @@ class Arcade extends Frame{
         //
 
         if(state == GameState.STATS){
+            statsStage.sophieCoins.setText(Integer.toString(statsStage.statsPrefs.getInteger("Coins")));
+            statsStage.yellowXPLbl.setText(Integer.toString(statsStage.statsPrefs.getInteger("XP")));
+            statsStage.blueXPLbl.setText(Integer.toString(statsStage.statsPrefs.getInteger("XP")));
+            statsStage.redXPLbl.setText(Integer.toString(statsStage.statsPrefs.getInteger("XP")));
             batch.end();
             statsStage.draw();
             Gdx.input.setInputProcessor(inputMultiplexer);
@@ -539,8 +542,10 @@ class Arcade extends Frame{
 
     private void loose(float delta){
         if(!putXp) {
-             stats.putInteger("XP", stats.getInteger("XP") + (int)(hit + 10 * (hit / shot) + 10 * (hit * (match / hit))));
+            stats.putInteger("XP", stats.getInteger("XP") + ((int)(hit + 10 * (hit / shot) + 10 * (hit * (match / hit))))/10);
+            stats.flush();
             putXp = true;
+            Gdx.app.log("Xp given", ":" + stats.getInteger("XP"));
         }
         dialoguetime += delta;
         if(dialoguetime < 2.5f) {
@@ -614,11 +619,9 @@ class Arcade extends Frame{
     }
 
     private void spawnSomething(){
-        Gdx.app.log("concha", "aSpawnHappened");
-
-        hitCheck = hit <= 120 ? hit : 120;
-        float e1 = (float)(1 - 0.5*(0.005*hitCheck + 0.2));
-        float e0 = (float)(1 - (0.005*hitCheck + 0.2));
+        float hitCheck = hit <= 120 ? hit : 120;
+        float e1 = (float)(1 - 0.5*(0.005* hitCheck + 0.2));
+        float e0 = (float)(1 - (0.005* hitCheck + 0.2));
 
         float p = MathUtils.random();
         float lr = MathUtils.random();
@@ -650,15 +653,15 @@ class Arcade extends Frame{
             float y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * MathUtils.sin(a);
             switch(c){
                 case 1:
-                    new ArcadeGoo(world, 1, (float)a, (float)x, (float)y, yellowGooAnimation);
+                    new ArcadeGoo(world, 1, a, x, y, yellowGooAnimation);
                     Gdx.app.log("Spawn", "Yellow Goo");
                     break;
                 case 2:
-                    new ArcadeGoo(world, 2, (float)a, (float)x, (float)y, blueGooAnimation);
+                    new ArcadeGoo(world, 2, a, x, y, blueGooAnimation);
                     Gdx.app.log("Spawn", "Blue Goo");
                     break;
                 case 3:
-                    new ArcadeGoo(world, 3, (float)a, (float)x, (float)y, redGooAnimation);
+                    new ArcadeGoo(world, 3, a, x, y, redGooAnimation);
                     Gdx.app.log("Spawn", "Red Goo");
                     break;
             }
@@ -680,17 +683,17 @@ class Arcade extends Frame{
             float a = lr * MathUtils.PI;
             float x = ArcadeValues.pelletOriginX + ArcadeValues.highOnPot * MathUtils.cos(a);
             float y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * MathUtils.sin(a);
-            new ArcadeSpike(world, 1, (float)a, (float)x, (float)y, spike);
+            new ArcadeSpike(world, 1, a, x, y, spike);
         }
         if(e1+(1-e1)/3 <= p && p < e1+(2*(1-e1))/3){//meteor
             Gdx.app.log("Meteor", "Spawn");
-            new ArcadeMeteor(world, (float)(100+1080*lr), meteor);
+            new ArcadeMeteor(world, (100+1080*lr), meteor);
         }
         if(e1+((2*(1-e1))/3) <= p && p <= 1){//arrow
             float a = lr * MathUtils.PI;
             float x = ArcadeValues.pelletOriginX + ArcadeValues.highOnPot * MathUtils.cos(a);
             float y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * MathUtils.sin(a);
-            new ArcadeSpike(world, 1, (float)a, (float)x, (float)y, spike);
+            new ArcadeSpike(world, 1, a, x, y, spike);
         }
 
 
