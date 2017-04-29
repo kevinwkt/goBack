@@ -143,6 +143,8 @@ class Fade implements Screen {
                     break;
                 case LEVEL2:
                     manager.load("MOUNTAINS/GoBackMOUNTAINSPanoramic.png",Texture.class);
+                    manager.load("MINIONS/METEOR/MINIONMeteor00.png",Texture.class);
+                    manager.load("Squirts/Sophie/SOPHIEWalk.png",Texture.class);
                     break;
                 case LEVEL3:
 
