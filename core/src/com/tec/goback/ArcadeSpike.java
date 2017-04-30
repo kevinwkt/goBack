@@ -30,7 +30,7 @@ class ArcadeSpike extends Enemy {
         hp=80;
         walkCounter=0;
         walkLimit=ArcadeValues.meterspelletOriginX/2;
-
+        sprite.setOrigin(sprite.getWidth()/2,sprite.getHeight()/2);
     }
 
     void fixturer(float density, float restitution) {
@@ -45,16 +45,20 @@ class ArcadeSpike extends Enemy {
         fixtureDef.filter.categoryBits = ArcadeValues.enemyCat; //its category
         fixtureDef.filter.maskBits = ArcadeValues.enemyMask; //or of its category with colliding categories
 
-        loader.attachFixture(body,"spk",fixtureDef,0.5f);
+        loader.attachFixture(body,"spike",fixtureDef,0.5f);
         if(leftRight==1) {
-            body.setTransform(body.getPosition(),angle+270);
+            body.setTransform(body.getPosition() ,angle*MathUtils.degreesToRadians+270*MathUtils.degreesToRadians);
         }
         if(leftRight==0) {
-            body.setTransform(body.getPosition(),angle-90);
+            body.setTransform(body.getPosition(),angle*MathUtils.degreesToRadians-90*MathUtils.degreesToRadians);
         }
     }
 
     void draw(SpriteBatch batch) {
+//        sprite.setCenter(ArcadeValues.metersToPx(body.getPosition().x),ArcadeValues.metersToPx(body.getPosition().y));
+//        sprite.setRotation(90);
+//        sprite.draw(batch);
+//    }
         timeframe += Gdx.graphics.getDeltaTime();
         if(walkCounter>walkLimit+500&&walking) {
             body.setLinearVelocity(-SPEED * MathUtils.cos((float) myA), -SPEED * MathUtils.sin((float)myA));
@@ -63,12 +67,11 @@ class ArcadeSpike extends Enemy {
         }else if(!walking&&walkCounter>walkLimit+570){
             body.setLinearVelocity(SPEED*8f * MathUtils.cos((float) myA), SPEED*8f * MathUtils.sin((float)myA));
         }
-        if(leftRight==1) {
-            batch.draw(sprite, ArcadeValues.metersToPx(body.getPosition().x)-120, ArcadeValues.metersToPx(body.getPosition().y)-39,24.5f,65f,49f,130f,1f,1f,angle+270);
-        }
-        if(leftRight==0) {
-            batch.draw(sprite, ArcadeValues.metersToPx(body.getPosition().x)-120, ArcadeValues.metersToPx(body.getPosition().y)-39,24.5f,65f,49f,130f,1f,1f,angle-90);
-        }
+        if(leftRight==1) sprite.setRotation(angle+270);//batch.draw(sprite, ArcadeValues.metersToPx(body.getPosition().x)-30, ArcadeValues.metersToPx(body.getPosition().y)-50,24.5f,65f,49f,130f,1f,1f,angle+270);
+        else sprite.setRotation(angle-90);//batch.draw(sprite, ArcadeValues.metersToPx(body.getPosition().x)-30, ArcadeValues.metersToPx(body.getPosition().y)-50,24.5f,65f,49f,130f,1f,1f,angle-90);
+        sprite.setCenter(ArcadeValues.metersToPx(body.getPosition().x), ArcadeValues.metersToPx(body.getPosition().y));
+        sprite.draw(batch);
         walkCounter++;
     }
+
 }

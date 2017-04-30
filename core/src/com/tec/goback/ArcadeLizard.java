@@ -39,21 +39,6 @@ class ArcadeLizard extends Enemy {
 
     void fixturer(float density, float restitution) {
 
-        //neumann preventive shit
-        //for (Fixture fix : body.getFixtureList()) {body.destroyFixture(fix);}
-
-        /*
-        Iterator<Fixture> it = body.getFixtureList().iterator();
-        while(it.hasNext()){
-            body.dest
-            oyFixture(it.next());
-        }
-        */
-
-        //lizard
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(ArcadeValues.pxToMeters(100f), ArcadeValues.pxToMeters(35f));
-
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.density = density;
         fixtureDef.restitution = restitution;
@@ -63,7 +48,12 @@ class ArcadeLizard extends Enemy {
         fixtureDef.filter.categoryBits = ArcadeValues.enemyCat; //its category
         fixtureDef.filter.maskBits = ArcadeValues.enemyMask; //or of its category with colliding categories
 
-        body.createFixture(fixtureDef);
+        if(leftRight==1) {
+            loader.attachFixture(body,"lizardRight",fixtureDef,2.4f);
+        }
+        if(leftRight==0) {
+            loader.attachFixture(body,"lizardLeft",fixtureDef,2.4f);
+        }
     }
 
     void draw(SpriteBatch batch) {
@@ -89,7 +79,8 @@ class ArcadeLizard extends Enemy {
             if(leftRight==1) body.setLinearVelocity(-SPEED, 0f);
             if(leftRight==0) body.setLinearVelocity(SPEED,0f);
         }
-        batch.draw(region, ArcadeValues.metersToPx(body.getPosition().x)-120, ArcadeValues.metersToPx(body.getPosition().y)-39);
+        if(leftRight==1) batch.draw(region, ArcadeValues.metersToPx(body.getPosition().x)-83, ArcadeValues.metersToPx(body.getPosition().y)-40);
+        else batch.draw(region, ArcadeValues.metersToPx(body.getPosition().x)-147, ArcadeValues.metersToPx(body.getPosition().y)-40);
         walkCounter++;
     }
 }
