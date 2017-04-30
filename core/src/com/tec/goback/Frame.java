@@ -122,7 +122,7 @@ abstract class Frame implements Screen {
         statsStage = new Stats(view, batch, app);
         statsInput = new SimpleDirectionGestureDetector(new SimpleDirectionGestureDetector.DirectionListener() {
             @Override
-            public void onLeft() {
+            public void onRight() {
                 switch (pref.getInteger("level")){
                     case 0:
                         break;
@@ -182,7 +182,7 @@ abstract class Frame implements Screen {
             }
 
             @Override
-            public void onRight() {
+            public void onLeft() {
                 switch (pref.getInteger("level")){
                     case 0:
                         break;

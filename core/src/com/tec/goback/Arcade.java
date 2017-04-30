@@ -265,22 +265,22 @@ class Arcade extends Frame{
         bd.type = BodyDef.BodyType.StaticBody;
         bd.position.set(ArcadeValues.pxToMeters(-120),0);
 
-        wall.add(world.createBody(bd)); //append to body array 
+        wall.add(world.createBody(bd)); //append to body array
         makeWallFixture(wall.get(0),100,HEIGHT_MAP);
 
         bd.position.set(ArcadeValues.pxToMeters(WIDTH_MAP+120),0);
 
-        wall.add(world.createBody(bd)); //append to body array 
+        wall.add(world.createBody(bd)); //append to body array
         makeWallFixture(wall.get(1),100,HEIGHT_MAP);
 
         bd.position.set(ArcadeValues.pxToMeters(-120),ArcadeValues.pxToMeters(-120));
 
-        wall.add(world.createBody(bd)); //append to body array 
+        wall.add(world.createBody(bd)); //append to body array
         makeWallFixture(wall.get(2),WIDTH_MAP+200,100);
 
         bd.position.set(ArcadeValues.pxToMeters(-120), ArcadeValues.pxToMeters(HEIGHT_MAP+120));
 
-        wall.add(world.createBody(bd)); //append to body array 
+        wall.add(world.createBody(bd)); //append to body array
         makeWallFixture(wall.get(3),WIDTH_MAP+200,100);
     }
 
@@ -785,7 +785,7 @@ class Arcade extends Frame{
         view.update(width, height);
     }
 
-//WTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTF
+    //WTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTF
     @Override
     public void pause() {}
     @Override
@@ -794,7 +794,7 @@ class Arcade extends Frame{
     public void hide() {}
     @Override
     public void dispose() {}
-//WTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTF
+    //WTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTF
     private class Input implements InputProcessor {
         private Vector3 v = new Vector3();
         @Override
@@ -818,10 +818,10 @@ class Arcade extends Frame{
             camera.unproject(v);
 
             if(//if hit orb
-                        (v.x > ArcadeValues.pelletOriginX-60 && v.x < ArcadeValues.pelletOriginX+60)
-                    &&  (v.y > ArcadeValues.pelletOriginY-60 && v.y < ArcadeValues.pelletOriginY+60)
-                    &&  state == GameState.PLAYING
-            )
+                    (v.x > ArcadeValues.pelletOriginX-60 && v.x < ArcadeValues.pelletOriginX+60)
+                            &&  (v.y > ArcadeValues.pelletOriginY-60 && v.y < ArcadeValues.pelletOriginY+60)
+                            &&  state == GameState.PLAYING
+                    )
             {
                 swapOrbes();
             }else if(v.x > 1172 && v.y < 135){//if hit pause

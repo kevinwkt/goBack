@@ -20,13 +20,13 @@ import java.util.Iterator;
  * Created by kevin on 3/20/2017.
  */
 
-class ArcadeJaguar extends Enemy {
+class ArcadeBat extends Enemy {
 
     private int walkCounter;
     private int walkLimit;
     private boolean walkCond=true;
 
-    ArcadeJaguar(World world, int type, int leftOrRight, Animation tx) {
+    ArcadeBat(World world, int type, int leftOrRight, Animation tx) {
         super(world,type,leftOrRight,tx);
         SPEED=1f;
         if(leftOrRight==1) body.setLinearVelocity(-SPEED, 0f);
@@ -69,14 +69,12 @@ class ArcadeJaguar extends Enemy {
             walkCounter=0;
             walkCond=false;
             body.setLinearVelocity(0f,0f);
-
         }
         if(walkCounter==walkLimit&&!walkCond) {
             walkCounter=0;
             walkCond=true;
             if(leftRight==1) body.setLinearVelocity(-SPEED, 0f);
             if(leftRight==0) body.setLinearVelocity(SPEED,0f);
-
         }
         batch.draw(region, ArcadeValues.metersToPx(body.getPosition().x)-120, ArcadeValues.metersToPx(body.getPosition().y)-39);
         walkCounter++;

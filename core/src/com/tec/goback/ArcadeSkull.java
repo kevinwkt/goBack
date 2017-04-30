@@ -51,7 +51,7 @@ class ArcadeSkull extends Enemy {
     void draw(SpriteBatch batch) {
         timeframe += Gdx.graphics.getDeltaTime();
         region=an.getKeyFrame(timeframe);
-        batch.draw(region, ArcadeValues.metersToPx(body.getPosition().x)-15, ArcadeValues.metersToPx(body.getPosition().y)-10);
+        batch.draw(region, ArcadeValues.metersToPx(body.getPosition().x)-67, ArcadeValues.metersToPx(body.getPosition().y)-54);
         walkCounter++;
     }
 }
