@@ -67,6 +67,8 @@ public class App extends Game {
 		stats.putFloat("RedLife",0);
 		stats.putFloat("RedAtk",0);
 		*/
+
+		//stats.putInteger("XP",0);
 		if(stats.getFloat("SophieLife")==0){
 			stats.putFloat("SophieLife", 100f);
 			stats.putInteger("SophieLifeStg", 0);

@@ -143,6 +143,8 @@ class Fade implements Screen {
                     break;
                 case LEVEL2:
                     manager.load("MOUNTAINS/GoBackMOUNTAINSPanoramic.png",Texture.class);
+                    manager.load("MINIONS/METEOR/MINIONMeteor00.png",Texture.class);
+                    manager.load("Squirts/Sophie/SOPHIEWalk.png",Texture.class);
                     break;
                 case LEVEL3:
 
@@ -171,6 +173,8 @@ class Fade implements Screen {
                     manager.load("PELLET/ATAQUERedPellet.png", Texture.class);
                     manager.load("PELLET/ATAQUEBluePellet.png", Texture.class);
                     manager.load("MINIONS/METEOR/MINIONMeteor00.png", Texture.class);
+                    manager.load("BOSS/IGUANA/BOSSIguanaBody.png", Texture.class);
+                    manager.load("BOSS/JAGUAR/BOSSJaguarBody.png", Texture.class);
                     break;
             }
     }
@@ -213,6 +217,7 @@ class Fade implements Screen {
 
                     break;
                 case ARCADE:
+                    ArcadeValues.bossFightFlag = false;
                     app.setScreen(new Arcade(app));
                     break;
             }

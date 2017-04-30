@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -96,8 +97,9 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
         //shape of girl
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(
-                ArcadeValues.pxToMeters(sprite.getWidth()),
-                ArcadeValues.pxToMeters(sprite.getHeight())
+                ArcadeValues.pxToMeters(sprite.getWidth())/4,
+                ArcadeValues.pxToMeters(sprite.getHeight())/2
+
         );
 
         FixtureDef fixtureDef = new FixtureDef();
@@ -148,7 +150,6 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
                 break;
             case STILL_LEFT:
             case STILL_RIGHT:
-                body.setLinearVelocity(0f, 0f);
                 timerchangeframestandby += Gdx.graphics.getDeltaTime();
                 region = standby.getKeyFrame(timerchangeframestandby);
 
@@ -181,6 +182,9 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
             case MOVE_LEFT:
                 moveHorizontal();
                 break;
+            case STILL_LEFT:
+            case STILL_RIGHT:
+                body.setLinearVelocity(0f, 0f);
             default:
                 break;
         }
@@ -192,8 +196,8 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
             switch (pref.getInteger("level")){
                 case 2:
                     if(this.getX() <= Level2.RIGHT_LIMIT){
-                        body.setLinearVelocity(1.5f, 0f);
-                        //body.setLinearVelocity(5f, 0f);
+                        //body.setLinearVelocity(1.5f, 0f);
+                        body.setLinearVelocity(5f, 0f);
                     }else{
                         body.setLinearVelocity(0f, 0f);
                     }
@@ -212,8 +216,8 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
             switch (pref.getInteger("level")){
                 case 2:
                     if (this.getX() >= Level2.LEFT_LIMIT) {
-                        body.setLinearVelocity(-1.5f, 0f);
-                        //body.setLinearVelocity(-5f, 0f);
+                        //body.setLinearVelocity(-1.5f, 0f);
+                        body.setLinearVelocity(-5f, 0f);
                     }else{
                         body.setLinearVelocity(0f, 0f);
                     }
