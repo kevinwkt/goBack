@@ -69,12 +69,14 @@ class ArcadeJaguar extends Enemy {
             walkCounter=0;
             walkCond=false;
             body.setLinearVelocity(0f,0f);
+
         }
         if(walkCounter==walkLimit&&!walkCond) {
             walkCounter=0;
             walkCond=true;
             if(leftRight==1) body.setLinearVelocity(-SPEED, 0f);
             if(leftRight==0) body.setLinearVelocity(SPEED,0f);
+
         }
         batch.draw(region, ArcadeValues.metersToPx(body.getPosition().x)-120, ArcadeValues.metersToPx(body.getPosition().y)-39);
         walkCounter++;
