@@ -147,7 +147,19 @@ class Level2 extends Frame {
 
 
 
-        if(state == GameState.PLAYING){
+        if(state == GameState.CLUE){
+            batch.end();
+            clueStage.draw();
+            Gdx.input.setInputProcessor(clueStage);
+        }else if(state == GameState.STATS){
+            batch.end();
+            statsStage.sophieCoins.setText(Integer.toString(statsStage.statsPrefs.getInteger("Coins")));
+            statsStage.yellowXPLbl.setText(Integer.toString(statsStage.statsPrefs.getInteger("XP")));
+            statsStage.blueXPLbl.setText(Integer.toString(statsStage.statsPrefs.getInteger("XP")));
+            statsStage.redXPLbl.setText(Integer.toString(statsStage.statsPrefs.getInteger("XP")));
+            statsStage.draw();
+            Gdx.input.setInputProcessor(inputMultiplexer);
+        }else if(state == GameState.PLAYING){
 
             batch.draw(background,0,0);
             batch.draw(pauseButton,camera.position.x+HALFW-pauseButton.getWidth(),camera.position.y-HALFH);
@@ -164,9 +176,9 @@ class Level2 extends Frame {
             batch.end();
 
         }else if(state == GameState.PAUSED){
-
-            Gdx.input.setInputProcessor(pauseStage);
             batch.end();
+            pauseStage.draw();
+            Gdx.input.setInputProcessor(pauseStage);
             //pauseStage.draw();
         }
 
