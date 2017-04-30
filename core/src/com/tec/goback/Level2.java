@@ -61,6 +61,8 @@ class Level2 extends Frame {
     private Array<Body> squirts = new Array<Body>();
     private Array<ArcadeMeteor> meteors = new Array<ArcadeMeteor>();
 
+    private float timeForMeteor = 0;
+
 
 
     public Level2(App app) {
@@ -167,23 +169,23 @@ class Level2 extends Frame {
             if(sophieInitFlag) {
                 sophieInitialMove();
             }
-            drawMeteors();
+            drawMeteors(delta);
             sophie.update();
             sophie.draw(batch);
 
             updateCamera();
             Gdx.input.setInputProcessor(level2Input);
+            stepper(delta);
             batch.end();
 
         }else if(state == GameState.PAUSED){
             batch.end();
-            pauseStage.draw();
-            Gdx.input.setInputProcessor(pauseStage);
             //pauseStage.draw();
+            Gdx.input.setInputProcessor(pauseStage);
         }
 
 
-        stepper(delta);
+
 
         batch.begin();
         batch.setProjectionMatrix(super.camera.combined);
@@ -191,8 +193,9 @@ class Level2 extends Frame {
         batch.end();
     }
 
-    private void drawMeteors() {
+    private void drawMeteors(float delta) {
         // must appear at 1420
+        timeForMeteor += delta;
         for(ArcadeMeteor acm : meteors){
             acm.draw(batch);
         }
@@ -318,6 +321,7 @@ class Level2 extends Frame {
             else if(sophie.getMovementState() == ArcadeSophie.MovementState.MOVE_RIGHT)
                 sophie.setMovementState(ArcadeSophie.MovementState.STILL_RIGHT);
             sophie.update();
+
 
             if(camera.position.x - v.x < -522 && v.y < 135){
                 state = GameState.PAUSED;
