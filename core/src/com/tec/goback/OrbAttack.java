@@ -92,16 +92,14 @@ class OrbAttack extends Squirt {
     float getDamage(){
         switch (color){
             case 1:
-                stats.getFloat("YellowAtk");
-                break;
+                return stats.getFloat("YellowAtk");
             case 2:
-                stats.getFloat("BlueAtk");
-                break;
+                return stats.getFloat("BlueAtk");
             case 3:
-                stats.getFloat("RedAtk");
+                return stats.getFloat("RedAtk");
+            default:
+                return 0f;
         }
-        return 0f;
-
     }
 
     int getColor(){

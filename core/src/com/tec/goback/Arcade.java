@@ -6,7 +6,6 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -131,10 +130,10 @@ class Arcade extends Frame{
     @Override
     public void show() {
         //d = pref.getInteger("level");
-        debugRenderer=new Box2DDebugRenderer();
-        d = 2;
+        debugRenderer = new Box2DDebugRenderer();
+        d = 3;
         //bossFight = ArcadeValues.bossFightFlag;
-        bossFight = true;
+        bossFight = false;
         arcadeMultiplier = !bossFight ? ArcadeValues.arcadeMultiplier : 1;
         super.show();
         textureInit();
@@ -524,10 +523,10 @@ class Arcade extends Frame{
 
     private void loose(float delta){
         if(!putXp) {
-            stats.putInteger("XP", stats.getInteger("XP") + ((int)(hit + 10 * (hit / shot) + 10 * (hit * (match / hit))))/10);
+            stats.putInteger("XP", stats.getInteger("XP") + 100);
+            //stats.putInteger("XP", stats.getInteger("XP") + ((int)(hit + 10 * (hit / shot) + 10 * (hit * (match / hit))))/10);
             stats.flush();
             putXp = true;
-            Gdx.app.log("Xp given", ":" + stats.getInteger("XP"));
         }
         dialoguetime += delta;
         if(dialoguetime < 2.5f) {
