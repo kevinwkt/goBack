@@ -79,7 +79,7 @@ class OrbAttack extends Squirt {
         shape.dispose();
     }
 
-    public void draw(SpriteBatch batch) {
+    void draw(SpriteBatch batch) {
         sprite.setPosition(
                 ArcadeValues.metersToPx(body.getPosition().x),
                 ArcadeValues.metersToPx(body.getPosition().y)

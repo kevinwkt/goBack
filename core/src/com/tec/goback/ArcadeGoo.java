@@ -13,7 +13,7 @@ import com.badlogic.gdx.physics.box2d.World;
  * Created by kevin on 4/20/2017.
  **/
 
-class ArcadeGoo extends Enemy {
+class ArcadeGoo extends Enemy{
     private CircleShape shape;
     private int walkCounter;
     private int walkLimit;

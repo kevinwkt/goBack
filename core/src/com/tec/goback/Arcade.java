@@ -48,8 +48,9 @@ class Arcade extends Frame{
     private ArrayList<Body> wall = new ArrayList<Body>();
     private float cooldown;
 
-    private Squirt boss;
-    private boolean bosssFight, bossActive = false;
+    private IArcadeBoss boss;
+    private boolean bossFight;
+    private boolean bossActive = false;
     private float betweenSpawns = ArcadeValues.initalFrequency;
 
     private boolean putXp = false;
@@ -59,10 +60,9 @@ class Arcade extends Frame{
 
     private float shot = 0;
     private float hit = 0;
-    private float hitCheck = 0;
     private float match = 0;
 
-    Preferences stats = Gdx.app.getPreferences("STATS");
+    private Preferences stats = Gdx.app.getPreferences("STATS");
 
     //CURRENT COLOR ORB
     private orbColor currentColor = orbColor.YELLOW;
@@ -107,14 +107,6 @@ class Arcade extends Frame{
 
     private Texture bossLizard;
     private Texture bossJaguar;
-    /*
-    private float timerchangeframelizard;
-    private float timerchangeframegoo;
-    private float timerchangeframeskullred;
-    private float timerchangeframeskullblue;
-    private float timerchangeframeskullyellow;
-    */
-
 
     private static final float WIDTH_MAP = 1280;
     private static final float HEIGHT_MAP = 720;
@@ -140,9 +132,10 @@ class Arcade extends Frame{
     public void show() {
         //d = pref.getInteger("level");
         debugRenderer=new Box2DDebugRenderer();
-        d = 1;
-        bosssFight = ArcadeValues.bossFightFlag;
-        arcadeMultiplier = !bosssFight ? ArcadeValues.arcadeMultiplier : 1;
+        d = 2;
+        //bossFight = ArcadeValues.bossFightFlag;
+        bossFight = true;
+        arcadeMultiplier = !bossFight ? ArcadeValues.arcadeMultiplier : 1;
         super.show();
         textureInit();
         worldInit();
@@ -253,13 +246,13 @@ class Arcade extends Frame{
         }
         sophie = new Sprite(sophieTx);
 
-        if(bosssFight){
+        if(bossFight){
             switch(d){
                 case 1:
                     boss = new ArcadeBoss(world, 1, bossLizard);
                     break;
                 case 2:
-                    boss = new ArcadeBoss(world, 2, bossLizard);
+                    boss = new ArcadeBoss(world, 2, bossJaguar);
                     break;
                 case 3:
                     boss = new ArcadeBoss(world, 1, bossLizard);
@@ -377,13 +370,13 @@ class Arcade extends Frame{
                         }
                     }
 
-                    if (ob1 instanceof ArcadeBoss) {
-                        if ( ((ArcadeBoss)ob1).getHurtDie( ((OrbAttack)ob2).getColor(), ((OrbAttack)ob2).getDamage()) ) {
+                    if (ob1 instanceof IArcadeBoss) {
+                        if ( ((IArcadeBoss)ob1).getHurtDie( ((OrbAttack)ob2).getColor(), ((OrbAttack)ob2).getDamage()) ) {
                             deadThings.add(contact.getFixtureA().getBody());
                         }
                     }
-                    if (ob2 instanceof ArcadeBoss) {
-                        if (((ArcadeBoss)ob2).getHurtDie(((OrbAttack)ob1).getColor(), ((OrbAttack)ob1).getDamage()) ) {
+                    if (ob2 instanceof IArcadeBoss) {
+                        if (((IArcadeBoss)ob2).getHurtDie(((OrbAttack)ob1).getColor(), ((OrbAttack)ob1).getDamage()) ) {
                             deadThings.add(contact.getFixtureB().getBody());
                         }
                     }
@@ -425,6 +418,10 @@ class Arcade extends Frame{
         //
 
         if(state == GameState.STATS){
+            statsStage.sophieCoins.setText(Integer.toString(statsStage.statsPrefs.getInteger("Coins")));
+            statsStage.yellowXPLbl.setText(Integer.toString(statsStage.statsPrefs.getInteger("XP")));
+            statsStage.blueXPLbl.setText(Integer.toString(statsStage.statsPrefs.getInteger("XP")));
+            statsStage.redXPLbl.setText(Integer.toString(statsStage.statsPrefs.getInteger("XP")));
             batch.end();
             statsStage.draw();
             Gdx.input.setInputProcessor(inputMultiplexer);
@@ -456,10 +453,6 @@ class Arcade extends Frame{
         sophie.setPosition(ArcadeValues.pelletOriginX-100
                 , ArcadeValues.pelletOriginY-27);
         sophie.draw(batch);
-
-        if(bossActive){
-            //TODO DRAW BOSS
-        }
         drawBodies();
     }
 
@@ -473,18 +466,10 @@ class Arcade extends Frame{
                 ((OrbAttack) obj).draw(batch);
             }else if(obj instanceof ArcadeOrb){
                 ((ArcadeOrb)obj).draw(batch);
-            }else if(obj instanceof ArcadeLizard){
-                ((ArcadeLizard)obj).draw(batch);
-            }else if(obj instanceof ArcadeGoo){
-                ((ArcadeGoo)obj).draw(batch);
-            }else if(obj instanceof ArcadeSkull){
-                ((ArcadeSkull)obj).draw(batch);
-            }else if(obj instanceof ArcadeSpike){
-                ((ArcadeSpike)obj).draw(batch);
-            }else if(obj instanceof ArcadeMeteor){
-                ((ArcadeMeteor)obj).draw(batch);
-            }else if(obj instanceof ArcadeBoss){
-                ((ArcadeBoss)obj).draw(batch);
+            }else if(obj instanceof Enemy){
+                ((Enemy)obj).draw(batch);
+            }else if(obj instanceof IArcadeBoss){
+                ((IArcadeBoss)obj).draw(batch);
             }
         }
         squirts.clear();
@@ -539,8 +524,10 @@ class Arcade extends Frame{
 
     private void loose(float delta){
         if(!putXp) {
-             stats.putInteger("XP", stats.getInteger("XP") + (int)(hit + 10 * (hit / shot) + 10 * (hit * (match / hit))));
+            stats.putInteger("XP", stats.getInteger("XP") + ((int)(hit + 10 * (hit / shot) + 10 * (hit * (match / hit))))/10);
+            stats.flush();
             putXp = true;
+            Gdx.app.log("Xp given", ":" + stats.getInteger("XP"));
         }
         dialoguetime += delta;
         if(dialoguetime < 2.5f) {
@@ -578,30 +565,30 @@ class Arcade extends Frame{
             return betweenSpawns - (0.006666666667f*arcadeMultiplier)/30;
         }
         if(time >= ArcadeValues.stepTimes[1] && time < ArcadeValues.stepTimes[2]){// stays in 1.6
-            if(!bossActive && bosssFight) {
-                ((ArcadeBoss) boss).move();
+            if(!bossActive && bossFight) {
+                (boss).move();
 
                 bossActive = true;
             }
             return betweenSpawns;
         }
         if(time >= ArcadeValues.stepTimes[2] && time < ArcadeValues.stepTimes[3]){//goes up and ends in 1.2
-            if(bossActive && bosssFight){
-                ((ArcadeBoss) boss).move();
+            if(bossActive && bossFight){
+                (boss).move();
                 bossActive = false;
             }
             return betweenSpawns - (0.006666666667f*arcadeMultiplier)/30;
         }
         if(time >= ArcadeValues.stepTimes[3] && time < ArcadeValues.stepTimes[4]){//stays in 1.2
-            if(!bossActive && bosssFight) {
-                ((ArcadeBoss) boss).move();
+            if(!bossActive && bossFight) {
+                (boss).move();
                 bossActive = true;
             }
             return betweenSpawns;
         }
         if(time >= ArcadeValues.stepTimes[4] && time < ArcadeValues.stepTimes[5]){//goes up and ends in 0.8
-            if(bossActive && bosssFight) {
-                ((ArcadeBoss) boss).move();
+            if(bossActive && bossFight) {
+                (boss).move();
                 bossActive = false;
             }
             return betweenSpawns - (0.006666666667f*arcadeMultiplier)/30;
@@ -614,11 +601,9 @@ class Arcade extends Frame{
     }
 
     private void spawnSomething(){
-        Gdx.app.log("concha", "aSpawnHappened");
-
-        hitCheck = hit <= 120 ? hit : 120;
-        float e1 = (float)(1 - 0.5*(0.005*hitCheck + 0.2));
-        float e0 = (float)(1 - (0.005*hitCheck + 0.2));
+        float hitCheck = hit <= 120 ? hit : 120;
+        float e1 = (float)(1 - 0.5*(0.005* hitCheck + 0.2));
+        float e0 = (float)(1 - (0.005* hitCheck + 0.2));
 
         float p = MathUtils.random();
         float lr = MathUtils.random();
@@ -630,15 +615,15 @@ class Arcade extends Frame{
             float y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * MathUtils.sin(a);
             switch(c){
                 case 1:
-                    new ArcadeSkull(world, 1, (float)a, (float)x, (float)y, skullYellowAnimation);
+                    new ArcadeSkull(world, 1, a, x, y, skullYellowAnimation);
                     Gdx.app.log("Spawn", "Yellow Skull");
                     break;
                 case 2:
-                    new ArcadeSkull(world, 2, (float)a, (float)x, (float)y, skullBlueAnimation);
+                    new ArcadeSkull(world, 2, a, x, y, skullBlueAnimation);
                     Gdx.app.log("Spawn", "Blue Skull");
                     break;
                 case 3:
-                    new ArcadeSkull(world, 3, (float)a, (float)x, (float)y, skullRedAnimation);
+                    new ArcadeSkull(world, 3, a, x, y, skullRedAnimation);
                     Gdx.app.log("Spawn", "Red Skull");
                     break;
             }
@@ -650,15 +635,15 @@ class Arcade extends Frame{
             float y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * MathUtils.sin(a);
             switch(c){
                 case 1:
-                    new ArcadeGoo(world, 1, (float)a, (float)x, (float)y, yellowGooAnimation);
+                    new ArcadeGoo(world, 1, a, x, y, yellowGooAnimation);
                     Gdx.app.log("Spawn", "Yellow Goo");
                     break;
                 case 2:
-                    new ArcadeGoo(world, 2, (float)a, (float)x, (float)y, blueGooAnimation);
+                    new ArcadeGoo(world, 2, a, x, y, blueGooAnimation);
                     Gdx.app.log("Spawn", "Blue Goo");
                     break;
                 case 3:
-                    new ArcadeGoo(world, 3, (float)a, (float)x, (float)y, redGooAnimation);
+                    new ArcadeGoo(world, 3, a, x, y, redGooAnimation);
                     Gdx.app.log("Spawn", "Red Goo");
                     break;
             }
@@ -680,17 +665,17 @@ class Arcade extends Frame{
             float a = lr * MathUtils.PI;
             float x = ArcadeValues.pelletOriginX + ArcadeValues.highOnPot * MathUtils.cos(a);
             float y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * MathUtils.sin(a);
-            new ArcadeSpike(world, 1, (float)a, (float)x, (float)y, spike);
+            new ArcadeSpike(world, 1, a, x, y, spike);
         }
         if(e1+(1-e1)/3 <= p && p < e1+(2*(1-e1))/3){//meteor
             Gdx.app.log("Meteor", "Spawn");
-            new ArcadeMeteor(world, (float)(100+1080*lr), meteor);
+            new ArcadeMeteor(world, (100+1080*lr), meteor);
         }
         if(e1+((2*(1-e1))/3) <= p && p <= 1){//arrow
             float a = lr * MathUtils.PI;
             float x = ArcadeValues.pelletOriginX + ArcadeValues.highOnPot * MathUtils.cos(a);
             float y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * MathUtils.sin(a);
-            new ArcadeSpike(world, 1, (float)a, (float)x, (float)y, spike);
+            new ArcadeSpike(world, 1, a, x, y, spike);
         }
 
 
@@ -698,7 +683,7 @@ class Arcade extends Frame{
 
     private int calcColor() {
         float r = MathUtils.random();
-        if (bosssFight) {
+        if (bossFight) {
             switch (d) {
                 case (1):
                     return d;
