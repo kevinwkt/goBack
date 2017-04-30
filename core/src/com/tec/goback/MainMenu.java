@@ -79,10 +79,10 @@ class MainMenu implements Screen {
     @Override
     public void show() {
         //     -----------------------  TO GET INTO LEVEL 0 TEMPORAL OMG
-         /*
-        pref.putInteger("level",0);
+
+        pref.putInteger("level",2);
         pref.flush();
-        */
+
         if(pref.getInteger("level")==0){
             pref.getBoolean("boss",false);
             pref.flush();
@@ -282,7 +282,7 @@ class MainMenu implements Screen {
     public void dispose() {
         aManager.unload("INTRO/INTROBackground.png");
         aManager.unload("HARBOR/GoBackHARBOR0.png");
-        aManager.unload("MOUNTAINS/GoBackMOUNTAINS0.png"); //Level2
+        //aManager.unload("MOUNTAINS/GoBackMOUNTAINS0.png"); //Level2
         //aManager.unload(".png"); //Level3
         //aManager.unload("Interfaces/MENU/ABOUT.png");
         aManager.unload("Interfaces/MENU/ARCADE.png");
