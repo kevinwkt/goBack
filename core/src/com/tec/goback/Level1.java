@@ -1,5 +1,6 @@
 package com.tec.goback;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Preferences;
@@ -186,8 +187,14 @@ class Level1 extends Frame {
         batch.setProjectionMatrix(super.camera.combined);
         batch.begin();
 
-
-        if(state == GameState.STATS){
+        if(state == GameState.CLUE){
+            clueStage.draw();
+            Gdx.input.setInputProcessor(clueStage);
+        }else if(state == GameState.STATS){
+            statsStage.sophieCoins.setText(Integer.toString(statsStage.statsPrefs.getInteger("Coins")));
+            statsStage.yellowXPLbl.setText(Integer.toString(statsStage.statsPrefs.getInteger("XP")));
+            statsStage.blueXPLbl.setText(Integer.toString(statsStage.statsPrefs.getInteger("XP")));
+            statsStage.redXPLbl.setText(Integer.toString(statsStage.statsPrefs.getInteger("XP")));
             statsStage.draw();
             Gdx.input.setInputProcessor(inputMultiplexer);
         }else if (state==GameState.PAUSED) {
@@ -195,7 +202,6 @@ class Level1 extends Frame {
             Gdx.input.setInputProcessor(pauseStage);
         }else if(state==GameState.PLAYING){
             batch.draw(background,0,0);
-
 
             drawNewspaper(batch);
             sophie.draw(batch);

@@ -24,6 +24,14 @@ public class App extends Game {
 		aManager.load("Interfaces/PAUSE/PAUSEBottomDisplay.png", Texture.class);
 		aManager.load("Interfaces/PAUSE/PAUSEMapList.png", Texture.class);
 		aManager.load("Interfaces/PAUSE/PAUSEStats.png", Texture.class);
+		aManager.load("CLUES/Newspaper/CLUESNewspaper.png",Texture.class);
+		aManager.load("CLUES/Newspaper/CLUESNewspaperDetail.png",Texture.class);
+		aManager.load("CLUES/Photo/CLUESPhoto.png",Texture.class);
+		aManager.load("CLUES/Photo/CLUESPhotoDetail.png",Texture.class);
+		aManager.load("CLUES/Note/CLUESNote.png",Texture.class);
+		aManager.load("CLUES/Note/CLUESNoteDetail.png",Texture.class);
+		//aManager.load("CLUES/Note/CLUESNote.png",Texture.class);
+		//aManager.load("CLUES/Note/CLUESNoteDetail.png",Texture.class);
 		//Stats
 		aManager.load("Interfaces/STATS/STATSback.png", Texture.class);
 		aManager.load("Interfaces/STATS/STATSBlueOrb.png", Texture.class);
@@ -50,8 +58,15 @@ public class App extends Game {
 
 	private void checkStatsPref() {
 		Preferences stats=Gdx.app.getPreferences("STATS");
-
-		//stats.putInteger("XP",10000000);
+		/*
+		stats.putFloat("SophieLife",0);
+		stats.putFloat("YellowLife",0);
+		stats.putFloat("YellowAtk",0);
+		stats.putFloat("BlueLife",0);
+		stats.putFloat("BlueAtk",0);
+		stats.putFloat("RedLife",0);
+		stats.putFloat("RedAtk",0);
+		*/
 		if(stats.getFloat("SophieLife")==0){
 			stats.putFloat("SophieLife", 100f);
 			stats.putInteger("SophieLifeStg", 0);
@@ -62,7 +77,7 @@ public class App extends Game {
 		}
 		if(stats.getFloat("YellowAtk")==0){
 			stats.putFloat("YellowAtk", 25f);
-			stats.putInteger("YellowLifeStg", 0);
+			stats.putInteger("YellowAtkStg", 0);
 		}
 		if(stats.getFloat("BlueLife")==0){
 			stats.putFloat("BlueLife", 100f);

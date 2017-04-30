@@ -94,7 +94,7 @@ class About implements Screen {
 
         //Cast  overlay image
         Image castImg = new Image(castOverlay);
-        castImg.setPosition(HALFW-castImg.getWidth()/2, HALFH-castImg.getHeight()/2);
+        castImg.setPosition(HALFW-castImg.getWidth()/2-100, HALFH-castImg.getHeight()/2);
         aboutScreenStage.addActor(castImg);
 
 
@@ -102,7 +102,7 @@ class About implements Screen {
         TextureRegionDrawable backBtnTrd = new TextureRegionDrawable(new TextureRegion(backButton));
         ImageButton backImgBtn = new ImageButton(backBtnTrd);
 
-        backImgBtn.setPosition(10, 10);
+        backImgBtn.setPosition(HALFW+470, 0);
         aboutScreenStage.addActor(backImgBtn);
 
         final About ab = this;

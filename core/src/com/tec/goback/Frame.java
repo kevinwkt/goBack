@@ -71,6 +71,8 @@ abstract class Frame implements Screen {
     //Auxiliary screens
     protected Pause pauseStage;
     protected Stats statsStage;
+    protected ClueDetail clueStage;
+
     protected InputProcessor statsInput;
     protected InputMultiplexer inputMultiplexer;
 
@@ -374,8 +376,6 @@ abstract class Frame implements Screen {
             sophiePanel = aManager.get("Interfaces/STATS/STATSSophie.png");
             sophieArrow = aManager.get("Interfaces/STATS/STATSSophieArrow.png");
 
-
-
             backBton = aManager.get("Interfaces/PAUSE/PAUSEback.png");
         }
 
@@ -466,7 +466,7 @@ abstract class Frame implements Screen {
             //Yellow Orb
             TextureRegionDrawable yellowOrbArrowTrd = new TextureRegionDrawable(new TextureRegion(yellowOrbArrow));
             ImageButton yellowOrbLife = new ImageButton(yellowOrbArrowTrd);
-            if (statsPrefs.getInteger("YellowLifeStg")>LIFE_COST_ARR.length-1) {//No XP to buy or already full
+            if (statsPrefs.getInteger("YellowLifeStg")>=LIFE_COST_ARR.length-1) {//No XP to buy or already full
                 yellowOrbLife.setColor(1f, 1f, 1f, 0.5f);
             }else{
                 if(statsPrefs.getInteger("XP")<LIFE_COST_ARR[statsPrefs.getInteger("YellowLifeStg")+1])
@@ -474,10 +474,10 @@ abstract class Frame implements Screen {
             }
 
             ImageButton yellowOrbAtk = new ImageButton(yellowOrbArrowTrd);
-            if (statsPrefs.getInteger("YellowLifeStg")>LIFE_COST_ARR.length-1) {//No XP to buy or already full
+            if (statsPrefs.getInteger("YellowAtkStg")>=ATK_COST_ARR.length-1) {//No XP to buy or already full
                 yellowOrbAtk.setColor(1f, 1f, 1f, 0.5f);
             }else{
-                if(statsPrefs.getInteger("XP")<LIFE_COST_ARR[statsPrefs.getInteger("YellowLifeStg")+1])
+                if(statsPrefs.getInteger("XP")<ATK_COST_ARR[statsPrefs.getInteger("YellowAtkStg")+1])
                     yellowOrbAtk.setColor(1f, 1f, 1f, 0.5f);
             }
             //ImageButton yellowOrbSpAtk = new ImageButton(yellowOrbArrowTrd);
@@ -523,7 +523,7 @@ abstract class Frame implements Screen {
             //Blue Orb
             TextureRegionDrawable blueOrbArrowTrd = new TextureRegionDrawable(new TextureRegion(blueOrbArrow));
             ImageButton blueOrbLife = new ImageButton(blueOrbArrowTrd);
-            if (statsPrefs.getInteger("BlueLifeStg")>LIFE_COST_ARR.length-1) {//No XP to buy or already full
+            if (statsPrefs.getInteger("BlueLifeStg")>=LIFE_COST_ARR.length-1) {//No XP to buy or already full
                 blueOrbLife.setColor(1f, 1f, 1f, 0.5f);
             }else{
                 if(statsPrefs.getInteger("XP")<LIFE_COST_ARR[statsPrefs.getInteger("BlueLifeStg")+1])
@@ -531,10 +531,10 @@ abstract class Frame implements Screen {
             }
 
             ImageButton blueOrbAtk = new ImageButton(blueOrbArrowTrd);
-            if (statsPrefs.getInteger("BlueLifeStg")>LIFE_COST_ARR.length-1) {//No XP to buy or already full
+            if (statsPrefs.getInteger("BlueAtkStg")>=ATK_COST_ARR.length-1) {//No XP to buy or already full
                 blueOrbAtk.setColor(1f, 1f, 1f, 0.5f);
             }else{
-                if(statsPrefs.getInteger("XP")<LIFE_COST_ARR[statsPrefs.getInteger("BlueLifeStg")+1])
+                if(statsPrefs.getInteger("XP")<ATK_COST_ARR[statsPrefs.getInteger("BlueAtkStg")+1])
                     blueOrbAtk.setColor(1f, 1f, 1f, 0.5f);
             }
             //ImageButton blueOrbSpAtk = new ImageButton(blueOrbArrowTrd);
@@ -580,7 +580,7 @@ abstract class Frame implements Screen {
             //Red Orb
             TextureRegionDrawable redOrbArrowTrd = new TextureRegionDrawable(new TextureRegion(redOrbArrow));
             ImageButton redOrbLife = new ImageButton(redOrbArrowTrd);
-            if (statsPrefs.getInteger("RedLifeStg")>LIFE_COST_ARR.length-1) {//No XP to buy or already full
+            if (statsPrefs.getInteger("RedLifeStg")>=LIFE_COST_ARR.length-1) {//No XP to buy or already full
                 redOrbLife.setColor(1f, 1f, 1f, 0.5f);
             }else{
                 if(statsPrefs.getInteger("XP")<LIFE_COST_ARR[statsPrefs.getInteger("RedLifeStg")+1])
@@ -588,10 +588,10 @@ abstract class Frame implements Screen {
             }
 
             ImageButton redOrbAtk = new ImageButton(redOrbArrowTrd);
-            if (statsPrefs.getInteger("RedLifeStg")>LIFE_COST_ARR.length-1) {//No XP to buy or already full
+            if (statsPrefs.getInteger("RedAtkStg")>=ATK_COST_ARR.length-1) {//No XP to buy or already full
                 redOrbAtk.setColor(1f, 1f, 1f, 0.5f);
             }else{
-                if(statsPrefs.getInteger("XP")<LIFE_COST_ARR[statsPrefs.getInteger("RedLifeStg")+1])
+                if(statsPrefs.getInteger("XP")<ATK_COST_ARR[statsPrefs.getInteger("RedAtkStg")+1])
                     redOrbAtk.setColor(1f, 1f, 1f, 0.5f);
             }
             /*ImageButton redOrbSpAtk = new ImageButton(redOrbArrowTrd);
@@ -873,7 +873,6 @@ abstract class Frame implements Screen {
                 statsPrefs.flush();
             }
         }
-
     }
 
     public class Pause extends Stage {
@@ -886,13 +885,6 @@ abstract class Frame implements Screen {
         public static final float HALFW = WIDTH/2;
         public static final float HALFH = HEIGHT/2;
 
-        //Camera
-        private OrthographicCamera camera;
-
-
-        //Viewport
-        private Viewport view;
-
         //Textures
         private Texture background; //Background
         private Texture bottom; //Image
@@ -903,8 +895,17 @@ abstract class Frame implements Screen {
         private Texture backBton; //Button
         private Texture musicBton;
         private Texture fxBton;
+        //CLUES
+        private Texture newspaper; //Image
+        private Texture newspaperDetail; //Image
+        private Texture photo; //Image
+        private Texture photoDetail; //Image
+        private Texture note; //Image
+        private Texture noteDetail; //Image
 
         Preferences prefes = Gdx.app.getPreferences("My Preferences");
+
+        Pause pauseStg;
 
 
         // buttons
@@ -991,6 +992,15 @@ abstract class Frame implements Screen {
             top = aManager.get("Interfaces/PAUSE/PAUSETopDisplay.png");
             backBton = aManager.get("Interfaces/PAUSE/PAUSEback.png");
 
+            newspaper = aManager.get("CLUES/Newspaper/CLUESNewspaper.png");
+            newspaperDetail = aManager.get("CLUES/Newspaper/CLUESNewspaperDetail.png");
+            photo = aManager.get("CLUES/Photo/CLUESPhoto.png");
+            photoDetail = aManager.get("CLUES/Photo/CLUESPhotoDetail.png");
+            note = aManager.get("CLUES/Note/CLUESNote.png");
+            noteDetail = aManager.get("CLUES/Note/CLUESNoteDetail.png");
+            //aManager.get("CLUES/Note/CLUESNote.png");
+            //aManager.get("CLUES/Note/CLUESNoteDetail.png");
+
             if(prefes.getBoolean("soundOn")){
                 musicBton = aManager.get("Interfaces/SOUND/SOUNDMusicON.png");
             }else{
@@ -1026,6 +1036,70 @@ abstract class Frame implements Screen {
             Image mapImg = new Image(map);
             mapImg.setPosition(HALFW-backgroundImg.getWidth()/2, HALFH-backgroundImg.getHeight()/2+220);
             this.addActor(mapImg);
+
+            ////////////ITEMS
+
+            //Newspaper
+            
+
+            TextureRegionDrawable newsBtonTrd = new TextureRegionDrawable(new TextureRegion(newspaper));
+            ImageButton newspaperBtonImg = new ImageButton(newsBtonTrd);
+
+            newspaperBtonImg.setPosition(150-newspaperBtonImg.getWidth()/2, 440-newspaperBtonImg.getHeight()/2);
+
+            newspaperBtonImg.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    clueStage = new ClueDetail(view, batch, app, pauseStg, newspaperDetail);
+                    state = GameState.CLUE;
+                }
+            });
+
+            //Phote
+            TextureRegionDrawable photoBtonTrd = new TextureRegionDrawable(new TextureRegion(photo));
+            ImageButton photoBtonImg = new ImageButton(photoBtonTrd);
+
+            photoBtonImg.setPosition(400-photoBtonImg.getWidth()/2, 440-photoBtonImg.getHeight()/2);
+
+            photoBtonImg.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    clueStage = new ClueDetail(view, batch, app, pauseStg, photoDetail);
+                    state = GameState.CLUE;
+                }
+            });
+
+            //Note
+            TextureRegionDrawable noteBtonTrd = new TextureRegionDrawable(new TextureRegion(note));
+            ImageButton noteBtonImg = new ImageButton(noteBtonTrd);
+
+            noteBtonImg.setPosition(150-noteBtonImg.getWidth()/2, 290-noteBtonImg.getHeight()/2);
+
+            noteBtonImg.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    clueStage = new ClueDetail(view, batch, app, pauseStg, noteDetail);
+                    state = GameState.CLUE;
+                }
+            });
+
+            /*switch(pref.getInteger("level")){
+                case 4:
+                    this.addActor(noteBtonImg);
+                case 3:
+                    this.addActor(photoBtonImg);
+                case 2:
+                    this.addActor(newspaperBtonImg);
+                default:
+                    break;
+            }*/
+
+            this.addActor(newspaperBtonImg);
+            this.addActor(photoBtonImg);
+            this.addActor(noteBtonImg);
+
+
+            //////////////////////
 
             //statsBtn
             TextureRegionDrawable statsBtonTrd = new TextureRegionDrawable(new TextureRegion(statsBton));
@@ -1124,12 +1198,89 @@ abstract class Frame implements Screen {
             super(view, batch);
             this.app = app;
             this.aManager = app.getAssetManager();
-
+            pauseStg = this;
             textureInit();
             objectInit();
         }
-
     }
+
+
+    public class ClueDetail extends Stage {
+        private AssetManager aManager;
+        private final App app;
+
+        //Screen sizes
+        public static final float WIDTH = 1280;
+        public static final float HEIGHT = 720;
+        public static final float HALFW = WIDTH/2;
+        public static final float HALFH = HEIGHT/2;
+
+        Pause pauseStg;
+        ClueDetail me;
+
+        // buttons
+        private Texture background;
+        private Texture backBton; //Button
+        private Texture detTex;
+
+        private void textureInit(){
+            switch(pref.getInteger("level")){
+                default:
+                case 0:
+                    background = aManager.get("INTRO/INTROBackground.png");
+                    break;
+                case 1:
+                    background = aManager.get("HARBOR/GoBackHARBOR0.png");
+                    break;
+                case 2:
+                    background = aManager.get("MOUNTAINS/GoBackMOUNTAINS0.png");
+                    break;
+            }
+
+            backBton = aManager.get("Interfaces/PAUSE/PAUSEback.png");
+        }
+
+        private void objectInit(){
+            //background hace Image
+            Image backgroundImg = new Image(background);
+            backgroundImg.setPosition(HALFW-backgroundImg.getWidth()/2, HALFH-backgroundImg.getHeight()/2);
+            this.addActor(backgroundImg);
+
+
+            //detail
+            Image detImg = new Image(detTex);
+            detImg.setPosition(HALFW-detImg.getWidth()/2, HALFH-detImg.getHeight()/2);
+            this.addActor(detImg);
+
+            //back
+            TextureRegionDrawable backBtonTrd = new TextureRegionDrawable(new TextureRegion(backBton));
+            ImageButton backBtonImg = new ImageButton(backBtonTrd);
+
+            backBtonImg.setPosition(HALFW+470, 0);
+            this.addActor(backBtonImg);
+
+            backBtonImg.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    state = GameState.PAUSED;
+                    Gdx.input.setInputProcessor(pauseStage);
+                    me.dispose();
+                }
+            });
+        }
+
+        public ClueDetail(Viewport view, SpriteBatch batch, App app, Pause pauseStg, Texture img) {
+            super(view, batch);
+            this.app = app;
+            this.aManager = app.getAssetManager();
+            this.pauseStg = pauseStg;
+            this.detTex = img;
+            this.me = this;
+            textureInit();
+            objectInit();
+        }
+    }
+
 
     enum StatsState{
         SOPHIE,
