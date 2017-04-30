@@ -7,18 +7,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 
-import java.util.Iterator;
-
-/*
- checked by kevin on 3/20/2017.
- */
-
-class ArcadeBoss extends Squirt {
+class ArcadeBoss implements IArcadeBoss{
 
     private int color;
     private boolean moving = false;
@@ -70,22 +62,21 @@ class ArcadeBoss extends Squirt {
         }
     }
 
-    void move(){
+    public void move(){
         if (body.getPosition().x > ArcadeValues.pxToMeters((ArcadeValues.WIDTH + 120))){
             body.setLinearVelocity(-1f, 0f);
         }else{
             body.setLinearVelocity(1f, 0f);
         }
-        Gdx.app.log("Boss", "should be moving at:"+body.getLinearVelocity().x);
         moving = true;
     }
 
-    boolean getHurtDie(int color, float damage){
+    public boolean getHurtDie(int color, float damage){
         life -= color != this.color ? damage : (damage * 2);
         return life <= 0.0f;
     }
 
-    public void draw(SpriteBatch batch) {
+     public void draw(SpriteBatch batch) {
         if(moving && ((body.getPosition().x > ArcadeValues.pxToMeters(ArcadeValues.WIDTH+125) && body.getLinearVelocity().x > 0) || body.getPosition().x < ArcadeValues.pxToMeters(ArcadeValues.bossX) && body.getLinearVelocity().x < 0)){
             body.setLinearVelocity(0f, 0f);
             moving = false;

@@ -232,7 +232,6 @@ class Level1 extends Frame {
     private void changeScreen() {
         pref.putBoolean("boss",true);
         pref.flush();
-        ArcadeValues.bossFightFlag = true;
         app.setScreen(new Fade(app, LoaderState.ARCADE));
         bgMusic.stop();
         this.dispose();
