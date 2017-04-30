@@ -29,9 +29,7 @@ class Squirt
                 && y>=sprite.getY() && y<=sprite.getY()+sprite.getHeight();
     }
 
-    public void draw(SpriteBatch batch) {
-        sprite.draw(batch);
-    }
+
 
 }
 
