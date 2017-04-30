@@ -16,17 +16,15 @@ class ArcadeValues {
             10, 30, 60, 80, 110, 130, 160
     };
 
-    static final float initalFrequency = 2; //seconds between spawns
+    //seconds between spawns
+    static final float initalFrequency = 2;
     static final float arcadeMultiplier = 2;
 
-    //NATURAL ORDER OF THINGS
     /*
         Yellow  1
         Blue    2
         Red     3
     */
-
-    //
     static final float attackDamage = 20f;
 
     //positioning

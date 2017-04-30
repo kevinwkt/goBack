@@ -234,15 +234,15 @@ class Arcade extends Frame{
     }
 
     private void allyInit(){
-        orbs[0] = new ArcadeYellowOrb(world, orbYellow, 0, true, 100);
+        orbs[0] = new ArcadeYellowOrb(world, orbYellow, 0, true, stats.getFloat("YellowLife"));
         switch(d){
             case 2:
-                orbs[1] = new ArcadeBlueOrb(world, orbBlue, 1, false, 100);
+                orbs[1] = new ArcadeBlueOrb(world, orbBlue, 1, false, stats.getFloat("BlueLife"));
                 orbs[2] = null;
                 break;
             case 3:
-                orbs[1] = new ArcadeBlueOrb(world, orbBlue, 1, false, 100);
-                orbs[2] = new ArcadeRedOrb(world, orbRed, 2, false, 100);
+                orbs[1] = new ArcadeBlueOrb(world, orbBlue, 1, false, stats.getFloat("BlueLife"));
+                orbs[2] = new ArcadeRedOrb(world, orbRed, 2, false, stats.getFloat("RedLife"));
         }
         sophie = new Sprite(sophieTx);
 
