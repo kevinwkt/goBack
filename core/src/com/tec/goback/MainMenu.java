@@ -82,11 +82,12 @@ class MainMenu implements Screen {
 
         pref.putInteger("level",2);
         pref.flush();
-
+        /*
         if(pref.getInteger("level")==0){
             pref.getBoolean("boss",false);
             pref.flush();
         }
+        */
         cameraInit();
         textureInit();
         objectInit();
