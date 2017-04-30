@@ -24,6 +24,14 @@ public class App extends Game {
 		aManager.load("Interfaces/PAUSE/PAUSEBottomDisplay.png", Texture.class);
 		aManager.load("Interfaces/PAUSE/PAUSEMapList.png", Texture.class);
 		aManager.load("Interfaces/PAUSE/PAUSEStats.png", Texture.class);
+		aManager.load("CLUES/Newspaper/CLUESNewspaper.png",Texture.class);
+		aManager.load("CLUES/Newspaper/CLUESNewspaperDetail.png",Texture.class);
+		aManager.load("CLUES/Photo/CLUESPhoto.png",Texture.class);
+		aManager.load("CLUES/Photo/CLUESPhotoDetail.png",Texture.class);
+		aManager.load("CLUES/Note/CLUESNote.png",Texture.class);
+		aManager.load("CLUES/Note/CLUESNoteDetail.png",Texture.class);
+		//aManager.load("CLUES/Note/CLUESNote.png",Texture.class);
+		//aManager.load("CLUES/Note/CLUESNoteDetail.png",Texture.class);
 		//Stats
 		aManager.load("Interfaces/STATS/STATSback.png", Texture.class);
 		aManager.load("Interfaces/STATS/STATSBlueOrb.png", Texture.class);
@@ -50,6 +58,15 @@ public class App extends Game {
 
 	private void checkStatsPref() {
 		Preferences stats=Gdx.app.getPreferences("STATS");
+		/*
+		stats.putFloat("SophieLife",0);
+		stats.putFloat("YellowLife",0);
+		stats.putFloat("YellowAtk",0);
+		stats.putFloat("BlueLife",0);
+		stats.putFloat("BlueAtk",0);
+		stats.putFloat("RedLife",0);
+		stats.putFloat("RedAtk",0);
+		*/
 
 		//stats.putInteger("XP",0);
 		if(stats.getFloat("SophieLife")==0){
@@ -61,15 +78,15 @@ public class App extends Game {
 			stats.putInteger("YellowLifeStg", 0);
 		}
 		if(stats.getFloat("YellowAtk")==0){
-			stats.putFloat("YellowAtk", 25f);
-			stats.putInteger("YellowLifeStg", 0);
+			stats.putFloat("YellowAtk", 20f);
+			stats.putInteger("YellowAtkStg", 0);
 		}
 		if(stats.getFloat("BlueLife")==0){
 			stats.putFloat("BlueLife", 100f);
 			stats.putInteger("BlueLifeStg", 0);
 		}
 		if(stats.getFloat("BlueAtk")==0){
-			stats.putFloat("BlueAtk", 25f);
+			stats.putFloat("BlueAtk", 20f);
 			stats.putInteger("BlueAtkStg", 0);
 		}
 		if(stats.getFloat("RedLife")==0){
@@ -77,7 +94,7 @@ public class App extends Game {
 			stats.putInteger("RedLifeStg", 0);
 		}
 		if(stats.getFloat("RedAtk")==0){
-			stats.putFloat("RedAtk", 25f);
+			stats.putFloat("RedAtk", 20f);
 			stats.putInteger("RedAtkStg", 0);
 		}
 
@@ -85,12 +102,12 @@ public class App extends Game {
 	}
 
 	public AssetManager getAssetManager() {
-        return aManager;
-    }
+		return aManager;
+	}
 
 	@Override
-    public void dispose() {
-        super.dispose();
-        aManager.clear();
-    }
+	public void dispose() {
+		super.dispose();
+		aManager.clear();
+	}
 }

@@ -153,12 +153,12 @@ abstract class Enemy{
     }
 
     boolean getHurtDie(int color, float damage){
-        Gdx.app.log("Attack color"+color,  "Enemy color"+this.color);
+        Gdx.app.log("ATTACK Attack color"+color,  "Enemy color"+this.color);
         //
         float prevhp = hp;
         //
         hp -= color != this.color ? damage : (damage * 2);
-        Gdx.app.log("Damage done: "+(prevhp-hp), " remaining hp="+hp);
+        Gdx.app.log("ATTACK -Damage done: "+(prevhp-hp), " remaining hp="+hp);
         return hp <= 0.0f;
     }
 
