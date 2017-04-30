@@ -8,6 +8,7 @@ enum GameState {
     PLAYING,
     LOST,
     PAUSED,
+    CLUE,
     DIALOGUE,
     STATS,
     WON

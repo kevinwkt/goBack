@@ -61,7 +61,7 @@ public class App extends Game {
 			stats.putInteger("YellowLifeStg", 0);
 		}
 		if(stats.getFloat("YellowAtk")==0){
-			stats.putFloat("YellowAtk", 20f);
+			stats.putFloat("YellowAtk", 25f);
 			stats.putInteger("YellowLifeStg", 0);
 		}
 		if(stats.getFloat("BlueLife")==0){
@@ -69,7 +69,7 @@ public class App extends Game {
 			stats.putInteger("BlueLifeStg", 0);
 		}
 		if(stats.getFloat("BlueAtk")==0){
-			stats.putFloat("BlueAtk", 20f);
+			stats.putFloat("BlueAtk", 25f);
 			stats.putInteger("BlueAtkStg", 0);
 		}
 		if(stats.getFloat("RedLife")==0){
@@ -77,7 +77,7 @@ public class App extends Game {
 			stats.putInteger("RedLifeStg", 0);
 		}
 		if(stats.getFloat("RedAtk")==0){
-			stats.putFloat("RedAtk", 20f);
+			stats.putFloat("RedAtk", 25f);
 			stats.putInteger("RedAtkStg", 0);
 		}
 

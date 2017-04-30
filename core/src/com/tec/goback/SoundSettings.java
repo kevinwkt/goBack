@@ -203,7 +203,7 @@ class SoundSettings implements Screen{
 
         TextureRegionDrawable backBtnPlay = new TextureRegionDrawable(new TextureRegion(backButton));
         ImageButton backBtnImg = new ImageButton(backBtnPlay);
-        backBtnImg.setPosition(10, 10);
+        backBtnImg.setPosition(HALFW+470, 0);
         soundSettingsStage.addActor(backBtnImg);
 
         backBtnImg.addListener(new ClickListener(){

@@ -57,7 +57,7 @@ class Level2 extends Frame {
     private Box2DDebugRenderer debugRenderer;
     private Matrix4 debugMatrix;
 
-    private Random randomMeteorPosition;
+    private Random randomMeteorPosition = new Random();
     private Array<Body> squirts = new Array<Body>();
     private Array<ArcadeMeteor> meteors = new Array<ArcadeMeteor>();
 
@@ -73,13 +73,10 @@ class Level2 extends Frame {
         super.show();
         textureInit();
         worldInit();
-        int randomNumber;
-        for (int i = 0; i < 10; i++){
 
-            //randomMeteorPosition.nextInt(2230)+1420
-            randomNumber = randomMeteorPosition.nextInt(20);
-            Gdx.app.log("meteor random position","");
-            meteors.add(new ArcadeMeteor(world, (float)(1420+ i*100), meteor));
+        for (int i = 0; i < 10; i++){
+            meteors.add(new ArcadeMeteor(world, (float)(randomMeteorPosition.nextInt(2230)+1420), meteor));
+            //meteors.add(new ArcadeMeteor(world, (float)(randomMeteorPosition.nextInt(1000)*i+1420), meteor));
         }
         Gdx.input.setCatchBackKey(true);
         Gdx.input.setInputProcessor(level2Input);
@@ -184,15 +181,11 @@ class Level2 extends Frame {
 
     private void drawMeteors() {
         // must appear at 1420
-        // random to 2230
         for(ArcadeMeteor acm : meteors){
             acm.draw(batch);
         }
 
-        /*if(meteorObj.sprite.getY() < 100){
 
-        }*/
-        //Gdx.app.log("metero position",meteorObj.sprite.getY()+"");
     }
 
 
