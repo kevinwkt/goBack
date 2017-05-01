@@ -112,7 +112,7 @@ class Fade implements Screen {
                     manager.load("Interfaces/SOUND/SOUNDSound.png", Texture.class);
                     manager.load("Interfaces/SOUND/SOUNDBack.png", Texture.class);
                     manager.load("Interfaces/SOUND/SOUNDDecoration.png", Texture.class);
-                    manager.load("Interfaces/SOUND/SOUNDSoundResetButton.png", Texture.class);
+                    manager.load("Interfaces/SOUND/SOUNDResetButton.png", Texture.class);
                     break;
                 case LEVEL0:
                     manager.load("MUSIC/GoBackMusicMainMenu.mp3", Music.class);
