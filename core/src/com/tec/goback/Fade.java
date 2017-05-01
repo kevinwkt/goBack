@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -33,15 +34,17 @@ class Fade implements Screen {
     private OrthographicCamera camera;
     private Viewport view;
     private SpriteBatch batch;
-
     private MainMenu menu;
 
-    public Fade(App app, LoaderState loaderState) {
+    private Sprite loadIcon;
+    private float time = 0;
+
+    Fade(App app, LoaderState loaderState) {
         this.app = app;
         this.loaderState = loaderState;
     }
 
-    public Fade(App app, LoaderState loaderState, MainMenu menu) {
+    Fade(App app, LoaderState loaderState, MainMenu menu) {
         this.app = app;
         this.loaderState = loaderState;
         this.menu = menu;
@@ -53,6 +56,8 @@ class Fade implements Screen {
         cameraInit();
         batch = new SpriteBatch();
         superLoad();
+
+        loadIcon = new Sprite(new Texture("Interfaces/GAMEPLAY/LOADING/LOADINGBigIcon.png"));
     }
 
     private void cameraInit() {
@@ -64,12 +69,13 @@ class Fade implements Screen {
 
     @Override
     public void render(float delta) {
+        time += delta;
         cls();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-
+        loadIcon.setPosition(ArcadeValues.pelletOriginX, ArcadeValues.pelletOriginY + 100*MathUtils.sin(time*5));
+        loadIcon.draw(batch);
         batch.end();
-        //Update
         goNextScreen();
     }
 

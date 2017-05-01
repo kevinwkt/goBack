@@ -180,7 +180,9 @@ class Arcade extends Frame{
                 pelletYellow = aManager.get("PELLET/ATAQUEYellowPellet.png");
                 pelletBlue = aManager.get("PELLET/ATAQUEBluePellet.png");
 
-                background = new Texture("MOUNTAINS/GoBackMOUNTAINSPanoramic.png"); //switch
+
+                background = new Texture("HARBOR/GoBackHARBORPanoramic.png");
+                //background = new Texture("MOUNTAINS/GoBackMOUNTAINSPanoramic.png"); //switch
                 break;
             case 3:
                 orbYellow = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png");
@@ -194,7 +196,8 @@ class Arcade extends Frame{
                 pelletBlue = aManager.get("PELLET/ATAQUEBluePellet.png");
                 pelletRed = aManager.get("PELLET/ATAQUERedPellet.png");
 
-                background = new Texture("HARBOR/GoBackWOODSPanoramic.png"); //switch
+                background = new Texture("HARBOR/GoBackHARBORPanoramic.png");
+                //background = new Texture("HARBOR/GoBackWOODSPanoramic.png"); //switch
                 break;
         }
 
