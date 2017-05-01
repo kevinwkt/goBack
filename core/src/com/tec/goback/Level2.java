@@ -91,7 +91,16 @@ class Level2 extends Frame {
         world.setContactListener(new ContactListener() {
              @Override
              public void beginContact(Contact contact) {
-
+                 Object ob1 = contact.getFixtureA().getBody().getUserData();
+                 Object ob2 = contact.getFixtureB().getBody().getUserData();
+                 if(ob1 instanceof ArcadeSophie || ob2 instanceof ArcadeSophie){
+                     if(ob1 instanceof ArcadeSophie){
+                         deadThings.add(contact.getFixtureB().getBody());
+                     }
+                     if(ob2 instanceof ArcadeSophie){
+                         deadThings.add(contact.getFixtureA().getBody());
+                     }
+                 }
              }
 
              @Override
@@ -175,7 +184,7 @@ class Level2 extends Frame {
 
         }else if(state == GameState.PAUSED){
             batch.end();
-            //pauseStage.draw();
+            pauseStage.draw();
             Gdx.input.setInputProcessor(pauseStage);
         }
 
@@ -192,8 +201,8 @@ class Level2 extends Frame {
         // must appear at 1420
         timeForMeteor += delta;
 
-        if(timeForMeteor >= .1){
-            new ArcadeMeteor(world, (float)(randomMeteorPosition.nextInt(2430)+1220), meteor);
+        if(timeForMeteor >= 0.5){
+            new ArcadeMeteor(world, (float)(randomMeteorPosition.nextInt(2630)+1020), meteor);
             timeForMeteor = 0;
         }
 
@@ -202,16 +211,14 @@ class Level2 extends Frame {
             meteorObj = b.getUserData();
             if( meteorObj instanceof ArcadeMeteor){
                 ((ArcadeMeteor)meteorObj).draw(batch);
-                Gdx.app.log("meteor", ((ArcadeMeteor) meteorObj).sprite.getY()+"");
-                if(((ArcadeMeteor) meteorObj).sprite.getY() <= 63){
+
+                if(((ArcadeMeteor) meteorObj).sprite.getY() <= -200){
                     deadThings.add(b);
                 }
             }
 
 
         }
-
-        Gdx.app.log("time for meteor", timeForMeteor+" - "+squirts.size);
         squirts.clear();
     }
 
