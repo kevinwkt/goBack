@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 Created by gerry on 5/1/17.
  */
 
-public class LevelEND extends Frame {
+class LevelEND extends Frame {
 
     private Input input;
     private Dialogue dialogue;
@@ -36,7 +36,7 @@ public class LevelEND extends Frame {
 
 
 
-    LevelEND(App app, float WIDTH_MAP, float HEIGHT_MAP) {
+    LevelEND(App app) {
         super(app, WIDTH_MAP, HEIGHT_MAP);
     }
 
@@ -73,6 +73,7 @@ public class LevelEND extends Frame {
     @Override
     public void render(float delta) {
         cls();
+
         batch.begin();
         if(state == GameState.PLAYING){
             bg.draw(batch);
