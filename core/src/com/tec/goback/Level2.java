@@ -199,8 +199,6 @@ class Level2 extends Frame {
         for(ArcadeMeteor acm : meteors){
             acm.draw(batch);
         }
-
-
     }
 
 
