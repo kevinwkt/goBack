@@ -79,8 +79,8 @@ class MainMenu implements Screen {
     @Override
     public void show() {
         //     -----------------------  TO GET INTO LEVEL 0 TEMPORAL OMG
-        pref.putInteger("level",2);
-        pref.flush();
+        //pref.putInteger("level",2);
+        //pref.flush();
 
         if(pref.getInteger("level")==0){
             pref.getBoolean("boss",false);
@@ -188,13 +188,13 @@ class MainMenu implements Screen {
                 switch (d){
                     case 1:
                         next = LoaderState.LEVEL1;
-                       break;
+                        break;
                     case 2:
                         next = LoaderState.LEVEL2;
                         break;
                     case 3:
                         next = LoaderState.LEVEL3;
-                       break;
+                        break;
                     case 4:
                         next = LoaderState.LEVEL3;
                         break;
