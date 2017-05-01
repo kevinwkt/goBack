@@ -210,11 +210,14 @@ class Level2 extends Frame {
 
 
         }
+<<<<<<< HEAD
         Gdx.app.log("time for meteor", timeForMeteor+" - "+squirts.size);
         squirts.clear();
 
 
 
+=======
+>>>>>>> 3de1dd7f8e01fc8a23a29a25b6958f43b37981ca
     }
 
 

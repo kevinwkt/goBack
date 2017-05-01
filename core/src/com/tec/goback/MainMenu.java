@@ -79,10 +79,9 @@ class MainMenu implements Screen {
     @Override
     public void show() {
         //     -----------------------  TO GET INTO LEVEL 0 TEMPORAL OMG
-        /*
         pref.putInteger("level",2);
         pref.flush();
-        */
+
         if(pref.getInteger("level")==0){
             pref.getBoolean("boss",false);
             pref.flush();
