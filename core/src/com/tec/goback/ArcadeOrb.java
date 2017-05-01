@@ -1,6 +1,7 @@
 package com.tec.goback;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -26,6 +27,7 @@ abstract class ArcadeOrb{
     private float radius;
     private int place;
     private int color;
+    private Preferences stats = Gdx.app.getPreferences("STATS");
 
     ArcadeOrb(World world, Texture tx, int place, boolean active, float life, float radius, int color){
         this.place = place;
@@ -76,7 +78,7 @@ abstract class ArcadeOrb{
                 ArcadeValues.metersToPx(body.getPosition().y)
         );
 
-        switch(((int)(life/10))){
+        switch(((int) (life*10/(color == 1 || color == 2 ? (color == 1 ? stats.getFloat("YellowLife") :  stats.getFloat("BlueLife") ) : stats.getFloat("RedLife") ) ) )){
             case 10:case 9:
                 if(active){
                     sprite.setColor(1f, 1f, 1f, 1f);
