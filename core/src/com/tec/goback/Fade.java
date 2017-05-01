@@ -87,20 +87,21 @@ class Fade implements Screen {
     private void superLoad(){
             switch (loaderState) {
                 case ABOUT:
-                    manager.load("INTRO/INTROBackground.png", Texture.class);
-                    manager.load("HARBOR/GoBackHARBOR0.png", Texture.class);
+                    manager.load("INTRO/INTROBackground.png", Texture.class); //Level 0
+                    manager.load("HARBOR/GoBackHARBOR0.png", Texture.class);//Level 1
                     manager.load("MOUNTAINS/GoBackMOUNTAINS0.png", Texture.class); //Level2
-                    manager.load("WOODS/WOODSPanoramic2of2.png",Texture.class); //Level3
+                    manager.load("WOODS/WOODSBeginning.png",Texture.class); //Level3
+                    manager.load("WOODS/WOODSEnding.png",Texture.class);//Level 4
                     manager.load("Interfaces/ABOUT/ABOUTCast.png", Texture.class);
                     manager.load("Interfaces/ABOUT/ABOUTBack.png", Texture.class);
                     manager.load("MUSIC/GoBackMusicMainMenu.mp3", Music.class);
                     break;
                 case MAINMENU:
-                    manager.load("INTRO/INTROBackground.png", Texture.class);
-                    manager.load("HARBOR/GoBackHARBOR0.png", Texture.class);
+                    manager.load("INTRO/INTROBackground.png", Texture.class); //Level 0
+                    manager.load("HARBOR/GoBackHARBOR0.png", Texture.class);//Level 1
                     manager.load("MOUNTAINS/GoBackMOUNTAINS0.png", Texture.class); //Level2
                     manager.load("WOODS/WOODSBeginning.png",Texture.class); //Level3
-                    manager.load("WOODS/WOODSEnding.png",Texture.class);
+                    manager.load("WOODS/WOODSEnding.png",Texture.class);//Level 4
                     manager.load("Interfaces/MENU/ABOUT.png", Texture.class); 
                     manager.load("Interfaces/MENU/ARCADE.png", Texture.class);
                     manager.load("Interfaces/MENU/SOUND.png", Texture.class);
@@ -109,10 +110,11 @@ class Fade implements Screen {
                     manager.load("MUSIC/GoBackMusicMainMenu.mp3", Music.class);
                     break;
                 case SOUNDSETTINGS:
-                    manager.load("INTRO/INTROBackground.png", Texture.class);
-                    manager.load("HARBOR/GoBackHARBOR0.png", Texture.class);
+                    manager.load("INTRO/INTROBackground.png", Texture.class); //Level 0
+                    manager.load("HARBOR/GoBackHARBOR0.png", Texture.class);//Level 1
                     manager.load("MOUNTAINS/GoBackMOUNTAINS0.png", Texture.class); //Level2
-                    manager.load("WOODS/WOODSPanoramic2of2.png",Texture.class); //Level3
+                    manager.load("WOODS/WOODSBeginning.png",Texture.class); //Level3
+                    manager.load("WOODS/WOODSEnding.png",Texture.class);//Level 4
                     manager.load("Interfaces/SOUND/SOUNDMusicON.png", Texture.class);
                     manager.load("Interfaces/SOUND/SOUNDMusic.png", Texture.class);
                     manager.load("Interfaces/SOUND/SOUNDSoundON.png", Texture.class);
@@ -170,7 +172,18 @@ class Fade implements Screen {
                     manager.load("WOODS/WOODSMiddle01.png",Texture.class);
                     break;
                 case LEVEL4:
+                    manager.load("Squirts/Sophie/SOPHIEWalk.png",Texture.class);
+
+                    manager.load("HARBOR/GoBackHARBORPanoramic.png",Texture.class);
+                    manager.load("MOUNTAINS/GoBackMOUNTAINSPanoramic.png",Texture.class);
+                    manager.load("WOODS/WOODSPanoramic1of2.png",Texture.class);
+
                     manager.load("WOODS/WOODSEnding.png",Texture.class);
+
+                    manager.load("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTYellowOrb.png",Texture.class);
+                    manager.load("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTBlueOrb.png",Texture.class);
+                    manager.load("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTRedOrb.png",Texture.class);
+
                 case BOSS1:
 
                     break;

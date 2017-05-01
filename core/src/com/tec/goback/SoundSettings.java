@@ -113,6 +113,12 @@ class SoundSettings implements Screen{
             case 2:
                 background = aManager.get("MOUNTAINS/GoBackMOUNTAINS0.png");
                 break;
+            case 3:
+                background = aManager.get("WOODS/WOODSBeginning.png");
+                break;
+            case 4:
+                background = aManager.get("WOODS/WOODSEnding.png");
+                break;
 
         }
         backButton = aManager.get("Interfaces/SOUND/SOUNDBack.png");

@@ -77,7 +77,12 @@ class About implements Screen {
             case 2:
                 background = aManager.get("MOUNTAINS/GoBackMOUNTAINS0.png");
                 break;
-
+            case 3:
+                background = aManager.get("WOODS/WOODSBeginning.png");
+                break;
+            case 4:
+                background = aManager.get("WOODS/WOODSEnding.png");
+                break;
         }
         castOverlay = aManager.get("Interfaces/ABOUT/ABOUTCast.png");
         backButton = aManager.get("Interfaces/ABOUT/ABOUTBack.png");
