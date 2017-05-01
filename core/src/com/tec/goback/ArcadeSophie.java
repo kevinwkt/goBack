@@ -20,7 +20,7 @@ import com.badlogic.gdx.physics.box2d.World;
 class ArcadeSophie {    //TODO ADAPT FOR LEVELS
     private Body body;
     private Sprite sprite;
-    private float life = 100;
+    protected float life = 100;
     private int color = 1;
     private Animation<TextureRegion> standby;
     private Animation<TextureRegion> walking;
@@ -90,7 +90,7 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
         );
 
         body = world.createBody(bodyDef);
-        fixturer(0.1f, 0.7f);
+        fixturer(0.0f, 0.0f);
         body.setLinearVelocity(0f, 0f);
         body.setUserData(this);
     }

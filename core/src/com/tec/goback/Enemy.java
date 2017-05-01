@@ -121,6 +121,47 @@ abstract class Enemy{
 
     }
 
+    Enemy(World world, int type,int arcadeOr3, int leftRight, Texture tx){    //FOR ARCADEARROWWWWWW
+        this.sprite=new Sprite(tx);
+        if(leftRight==0&&arcadeOr3==0) sprite.flip(false,true);
+        this.color=type;
+        BodyDef bodyDef= new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        if(arcadeOr3==1) {  //if arcadeOr3 is 1, LEVEL 3
+            float rand = MathUtils.random(ArcadeValues.pelletOriginY,ArcadeValues.HEIGHT); //START OF Y RANGE TO END
+            bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.WIDTH+100),ArcadeValues.pxToMeters(rand));  //PUT THE END OF X TO X,PUT THE RANDOM FOR Y
+        }else if(arcadeOr3==0){ //IF IT IS ARCADE
+            if(leftRight==1) {
+                switch (type) {
+                    case 0:
+                        bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX + 800), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
+                        break;
+                    case 1:
+                        bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX + 800), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY+50));
+                        break;
+                    case 2:
+                        bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX + 800), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY+100));
+                        break;
+                }
+            }else if(leftRight==0){
+                switch (type) {
+                    case 0:
+                        bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX + 800), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
+                        break;
+                    case 1:
+                        bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX + 800), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY+50));
+                        break;
+                    case 2:
+                        bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX + 800), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY+100));
+                        break;
+                }
+            }
+        }
+        body=world.createBody(bodyDef);
+        fixturer(0f,0f);
+        body.setUserData(this);
+    }
+
     Enemy(World world, float x, Texture tx) {
         this.sprite= new Sprite(tx);
         this.color = 2;

@@ -6,6 +6,7 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -59,9 +60,10 @@ class Level3 extends Frame {
     private Box2DDebugRenderer debugRenderer;
     private Matrix4 debugMatrix;
 
-    private Random randomArrayPosition = new Random();
+    private Random randomArrowPosition = new Random();
     private Array<Body> bodies = new Array<Body>();
     private Array<ArcadeArrow> arrows = new Array<ArcadeArrow>();
+    private Object obj;
 
     private float timeForArrow = 0;
 
@@ -84,12 +86,21 @@ class Level3 extends Frame {
     }
 
     private void worldInit() {
-        world = new World(new Vector2(0,-10), true);
+        world = new World(Vector2.Zero, true);
         deadThings = new HashSet<Body>();
         world.setContactListener(new ContactListener() {
                                      @Override
                                      public void beginContact(Contact contact) {
-
+                                         Object ob1 = contact.getFixtureA().getBody().getUserData();
+                                         Object ob2 = contact.getFixtureB().getBody().getUserData();
+                                         if(ob1 instanceof ArcadeSophie || ob2 instanceof ArcadeSophie){
+                                             if(ob1 instanceof ArcadeSophie){
+                                                 deadThings.add(contact.getFixtureB().getBody());
+                                             }
+                                             if(ob2 instanceof ArcadeSophie){
+                                                 deadThings.add(contact.getFixtureA().getBody());
+                                             }
+                                         }
                                      }
 
                                      @Override
@@ -107,9 +118,12 @@ class Level3 extends Frame {
 
                                      }
                                  }
+
         );
 
         sophie = new ArcadeSophie(world,sophieTexture);
+
+
     }
 
     private void textureInit() {
@@ -153,7 +167,7 @@ class Level3 extends Frame {
             if(sophieInitFlag) {
                 sophieInitialMove();
             }
-//            drawArrow(delta);
+            drawArrow(delta);
             sophie.update();
             sophie.draw(batch);
 
@@ -177,13 +191,42 @@ class Level3 extends Frame {
         batch.end();
     }
 
-//    private void drawArrow(float delta) {
-//        // must appear at 1420
-//        timeForArrow += delta;
-//        for(ArcadeArrow acm : arrow1){
-//            acm.draw(batch);
-//        }
-//    }
+    private void drawArrow(float delta) {
+        // must appear at 1420
+        timeForArrow += delta;
+        if(timeForArrow >= .5){
+            int rl= MathUtils.random(1);
+            int typeshit= MathUtils.random(2);
+            switch (typeshit){
+                case 0:
+                    new ArcadeArrow(world, typeshit,1,rl, arrow1);
+                    break;
+                case 1:
+                    new ArcadeArrow(world, typeshit,1,rl, arrow2);
+                    break;
+                case 2:
+                    new ArcadeArrow(world, typeshit,1,rl, arrow3);
+                    break;
+            }
+            timeForArrow = 0;
+        }
+
+        world.getBodies(bodies);
+        for(Body b : bodies){
+            obj = b.getUserData();
+            if( obj instanceof ArcadeArrow){
+                ((ArcadeArrow)obj).draw(batch);
+                Gdx.app.log("arrows", ((ArcadeArrow) obj).sprite.getY()+"");
+                if(((ArcadeArrow) obj).sprite.getX() <= 0){
+                    deadThings.add(b);
+                }
+            }
+
+
+        }
+
+        bodies.clear();
+    }
 
     private void stepper(float delta){
         world.step(1/60f, 6, 2);
@@ -195,7 +238,6 @@ class Level3 extends Frame {
             world.destroyBody(b);
         }
         deadThings.clear();
-
     }
 
     private void sophieInitialMove() {
