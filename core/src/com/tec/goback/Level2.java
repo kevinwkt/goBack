@@ -28,6 +28,8 @@ class Level2 extends Frame {
     //box2d shit
     private World world;
     private HashSet<Body> deadThings;
+    private Array<Body> squirts = new Array<Body>();
+    private Object meteorObj;
 
 
     // Sophie
@@ -58,10 +60,8 @@ class Level2 extends Frame {
     private Matrix4 debugMatrix;
 
     private Random randomMeteorPosition = new Random();
-    private Array<Body> squirts = new Array<Body>();
-    private Array<ArcadeMeteor> meteors = new Array<ArcadeMeteor>();
 
-    private float timeForMeteor = 0;
+    private float timeForMeteor = 2;
 
 
 
@@ -75,11 +75,6 @@ class Level2 extends Frame {
         super.show();
         textureInit();
         worldInit();
-
-        for (int i = 0; i < 10; i++){
-            meteors.add(new ArcadeMeteor(world, (float)(randomMeteorPosition.nextInt(2230)+1420), meteor));
-            //meteors.add(new ArcadeMeteor(world, (float)(randomMeteorPosition.nextInt(1000)*i+1420), meteor));
-        }
         Gdx.input.setCatchBackKey(true);
         Gdx.input.setInputProcessor(level2Input);
 
@@ -196,9 +191,28 @@ class Level2 extends Frame {
     private void drawMeteors(float delta) {
         // must appear at 1420
         timeForMeteor += delta;
-        for(ArcadeMeteor acm : meteors){
-            acm.draw(batch);
+
+        if(timeForMeteor >= 2){
+            new ArcadeMeteor(world, (float)(randomMeteorPosition.nextInt(2430)+1220), meteor);
+            timeForMeteor = 0;
         }
+
+        world.getBodies(squirts);
+        for(Body b : squirts){
+            meteorObj = b.getUserData();
+            if( meteorObj instanceof ArcadeMeteor){
+                ((ArcadeMeteor)meteorObj).draw(batch);
+                Gdx.app.log("meteor", ((ArcadeMeteor) meteorObj).sprite.getY()+"");
+                if(((ArcadeMeteor) meteorObj).sprite.getY() <= 63){
+                    deadThings.add(b);
+                }
+            }
+
+
+        }
+        Gdx.app.log("time for meteor", timeForMeteor+" - "+squirts.size);
+        squirts.clear();
+
 
 
     }
