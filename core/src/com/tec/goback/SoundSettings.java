@@ -216,7 +216,7 @@ class SoundSettings implements Screen{
                 Skin skin = new Skin(Gdx.files.internal("neutralizer/skin/neutralizer-ui.json"));
                 Dialog resetDialog = new Dialog("Confirm Reset", skin) {
                     {
-                        text("Do you really want to reset the game? Your whole progress will be lost.");
+                        text("Do you really want to reset the game?\nYour whole progress will be lost.\nThe game will need to be restarted manually.");
                         button("Yes", "Yes");
                         button("Cancel", "No");
                     }
@@ -245,7 +245,8 @@ class SoundSettings implements Screen{
                         stats.putFloat("RedAtk",0);
                         stats.flush();
 
-                        new App();
+
+                        Gdx.app.exit();
                     }
                 };
                 resetDialog.show(soundSettingsStage);
