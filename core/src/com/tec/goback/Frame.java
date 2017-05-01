@@ -364,7 +364,9 @@ abstract class Frame implements Screen {
                 case 2:
                     background = aManager.get("MOUNTAINS/GoBackMOUNTAINS0.png");
                     break;
-
+                case 3:
+                    background = aManager.get("WOODS/WOODSPanoramic2of2.png");
+                    break;
             }
 
             blueOrbPanel = aManager.get("Interfaces/STATS/STATSBlueOrb.png");
@@ -987,6 +989,9 @@ abstract class Frame implements Screen {
                     break;
                 case 2:
                     background = aManager.get("MOUNTAINS/GoBackMOUNTAINS0.png");
+                    break;
+                case 3:
+                    background = aManager.get("WOODS/WOODSBeginning.png");
                     break;
             }
             bottom = aManager.get("Interfaces/PAUSE/PAUSEBottomDisplay.png");

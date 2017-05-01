@@ -68,8 +68,8 @@ class ArcadeValues {
 
     static final short wallMask = pelletCat;
     static final short pelletMask = enemyCat | wallCat;
-    static final short sophieMask = 0;
-    static final short enemyMask = pelletCat | orbCat;
+    static final short sophieMask = enemyCat;
+    static final short enemyMask = pelletCat | orbCat | sophieCat;
 
 
     static float pxToMeters(float n) {

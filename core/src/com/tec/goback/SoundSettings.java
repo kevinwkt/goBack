@@ -10,17 +10,18 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
-import sun.applet.Main;
 
 /**
  * Created b1y pablo on 16/02/17.
@@ -28,7 +29,7 @@ import sun.applet.Main;
 
 class SoundSettings implements Screen{
 
-    private final App app;
+    private  App app;
     private AssetManager aManager;
 
     public static final float WIDTH = 1280;
@@ -49,6 +50,7 @@ class SoundSettings implements Screen{
     private Texture musicButton ;
     private Texture fxButton;
     private Texture soundDecoration;
+    private Texture resetButton;
 
 
     // camera
@@ -69,6 +71,7 @@ class SoundSettings implements Screen{
 
     //Menu
     private MainMenu menu;
+    private Skin skin;
 
     public SoundSettings(App app, MainMenu menu) {
         this.app = app;
@@ -114,6 +117,7 @@ class SoundSettings implements Screen{
         }
         backButton = aManager.get("Interfaces/SOUND/SOUNDBack.png");
         soundDecoration = aManager.get("Interfaces/SOUND/SOUNDDecoration.png");
+        resetButton = aManager.get("Interfaces/SOUND/SOUNDResetButton.png");
         if(soundPreferences.getBoolean("soundOn")){
             musicButton = aManager.get("Interfaces/SOUND/SOUNDMusicON.png");
         }else{
@@ -124,7 +128,6 @@ class SoundSettings implements Screen{
         }else{
             fxButton = aManager.get("Interfaces/SOUND/SOUNDSound.png");
         }
-
     }
 
     private void changeSoundTexture() {
@@ -198,8 +201,59 @@ class SoundSettings implements Screen{
         // buttons
         TextureRegionDrawable soundDecorationPlay = new TextureRegionDrawable(new TextureRegion(soundDecoration));
         ImageButton soundDecorationImg = new ImageButton(soundDecorationPlay);
-        soundDecorationImg.setPosition(WIDTH/20, HEIGHT/2-soundDecorationImg.getHeight()/2);
+        soundDecorationImg.setPosition(HALFW, HEIGHT/2-soundDecorationImg.getHeight()/2);
         soundSettingsStage.addActor(soundDecorationImg);
+
+        //reset
+        TextureRegionDrawable resetBtnPlay = new TextureRegionDrawable(new TextureRegion(resetButton));
+        ImageButton resetBtnImg = new ImageButton(resetBtnPlay);
+        resetBtnImg.setPosition(HALFW/4, HALFH-resetBtnImg.getHeight()/2);
+        soundSettingsStage.addActor(resetBtnImg);
+
+        resetBtnImg.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Skin skin = new Skin(Gdx.files.internal("neutralizer/skin/neutralizer-ui.json"));
+                Dialog resetDialog = new Dialog("Confirm Reset", skin) {
+                    {
+                        text("Do you really want to reset the game? Your whole progress will be lost.");
+                        button("Yes", "Yes");
+                        button("Cancel", "No");
+                    }
+
+                    @Override
+                    protected void result(Object object) {
+                        if (object.equals("Yes")) {
+                            resetPreferences();
+                        }
+                        this.remove();
+                    }
+
+                    private void resetPreferences() {
+                        Preferences pref = Gdx.app.getPreferences("getLevel");
+                        pref.putInteger("level", 0);
+                        pref.flush();
+
+                        Preferences stats=Gdx.app.getPreferences("STATS");
+                        stats.putInteger("XP",0);
+                        stats.putFloat("SophieLife",0);
+                        stats.putFloat("YellowLife",0);
+                        stats.putFloat("YellowAtk",0);
+                        stats.putFloat("BlueLife",0);
+                        stats.putFloat("BlueAtk",0);
+                        stats.putFloat("RedLife",0);
+                        stats.putFloat("RedAtk",0);
+                        stats.flush();
+
+                        new App();
+                    }
+                };
+                resetDialog.show(soundSettingsStage);
+            }
+        });
+
+
+        //back
 
         TextureRegionDrawable backBtnPlay = new TextureRegionDrawable(new TextureRegion(backButton));
         ImageButton backBtnImg = new ImageButton(backBtnPlay);
@@ -260,8 +314,6 @@ class SoundSettings implements Screen{
 
     }
 
-
-
     @Override
     public void render(float delta) {
         cls();
@@ -302,15 +354,16 @@ class SoundSettings implements Screen{
 
     @Override
     public void dispose() {
-        aManager.load("INTRO/INTROBackground.png", Texture.class);
-        aManager.load("HARBOR/GoBackHARBOR0.png", Texture.class);
-        aManager.load("MOUNTAINS/GoBackMOUNTAINS0.png", Texture.class); //Level2
-        //aManager.load(".png", Texture.class); //Level3
-        aManager.load("Interfaces/SOUND/SOUNDMusicON.png", Texture.class);
-        aManager.load("Interfaces/SOUND/SOUNDMusic.png", Texture.class);
-        aManager.load("Interfaces/SOUND/SOUNDSoundON.png", Texture.class);
-        aManager.load("Interfaces/SOUND/SOUNDSound.png", Texture.class);
-        aManager.load("Interfaces/SOUND/SOUNDBack.png", Texture.class);
-        aManager.load("Interfaces/SOUND/SOUNDDecoration.png", Texture.class);
+        aManager.unload("INTRO/INTROBackground.png");
+        aManager.unload("HARBOR/GoBackHARBOR0.png");
+        aManager.unload("MOUNTAINS/GoBackMOUNTAINS0.png"); //Level2
+        //aManager.unload(".png"); //Level3
+        aManager.unload("Interfaces/SOUND/SOUNDMusicON.png");
+        aManager.unload("Interfaces/SOUND/SOUNDMusic.png");
+        aManager.unload("Interfaces/SOUND/SOUNDSoundON.png");
+        aManager.unload("Interfaces/SOUND/SOUNDSound.png");
+        aManager.unload("Interfaces/SOUND/SOUNDBack.png");
+        aManager.unload("Interfaces/SOUND/SOUNDDecoration.png");
+        aManager.unload("Interfaces/SOUND/SOUNDSoundResetButton.png");
     }
 }

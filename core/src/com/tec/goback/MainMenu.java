@@ -118,6 +118,9 @@ class MainMenu implements Screen {
             case 2:
                 background = aManager.get("MOUNTAINS/GoBackMOUNTAINS0.png");
                 break;
+            case 3:
+                background = aManager.get("WOODS/WOODSMiddle00.png");
+                break;
         }
 
         aboutBtn = aManager.get("Interfaces/MENU/ABOUT.png");
@@ -144,7 +147,7 @@ class MainMenu implements Screen {
         TextureRegionDrawable aboutBtnTrd = new TextureRegionDrawable(new TextureRegion(aboutBtn));
         ImageButton aboutBtnImg = new ImageButton(aboutBtnTrd);
 
-        aboutBtnImg.setPosition(160, 10);
+        aboutBtnImg.setPosition(170, 80-aboutBtnImg.getHeight()/2);
         mainMenuStage.addActor(aboutBtnImg);
 
 
@@ -159,7 +162,7 @@ class MainMenu implements Screen {
         TextureRegionDrawable soundBtnTrd = new TextureRegionDrawable(new TextureRegion(soundBtn));
         ImageButton soundBtnImg = new ImageButton(soundBtnTrd);
 
-        soundBtnImg.setPosition(10, 10);
+        soundBtnImg.setPosition(20, 80-soundBtnImg.getHeight()/2);
         mainMenuStage.addActor(soundBtnImg);
 
         soundBtnImg.addListener(new ClickListener(){
