@@ -106,6 +106,9 @@ class Arcade extends Frame{
 
     private Texture bossLizard;
     private Texture bossJaguar;
+    private Texture bossEyesY;
+    private Texture bossEyesB;
+    private Texture bossEyesR;
 
     private static final float WIDTH_MAP = 1280;
     private static final float HEIGHT_MAP = 720;
@@ -122,7 +125,6 @@ class Arcade extends Frame{
     private Matrix4 debugMatrix;
 
 
-
     Arcade(App app) {
         super(app, WIDTH_MAP,HEIGHT_MAP);
     }
@@ -133,7 +135,7 @@ class Arcade extends Frame{
         debugRenderer = new Box2DDebugRenderer();
         d = 3;
         //bossFight = ArcadeValues.bossFightFlag;
-        bossFight = false;
+        bossFight = true;
         arcadeMultiplier = !bossFight ? ArcadeValues.arcadeMultiplier : 1;
         super.show();
         textureInit();
@@ -201,6 +203,9 @@ class Arcade extends Frame{
         goo=new Texture("MINIONS/GOO/MINIONAnimation.png");
         skull=new Texture("SKULL/MINIONSkulls.png");
         spike=new Texture("MINIONS/SPIKE/MINIONYellowSpike00.png");
+        bossEyesY = new Texture("BOSS/BATS/BOSSBatYellow.png");
+        bossEyesB = new Texture("BOSS/BATS/BOSSBatBlue.png");
+        bossEyesR = new Texture("BOSS/BATS/BOSSBatRed.png");
         //LIKE SO
         meteor = aManager.get("MINIONS/METEOR/MINIONMeteor00.png");
 
@@ -254,7 +259,7 @@ class Arcade extends Frame{
                     boss = new ArcadeBoss(world, 2, bossJaguar);
                     break;
                 case 3:
-                    boss = new ArcadeBoss(world, 1, bossLizard);
+                    boss = new ArcadeEyes(world, bossEyesY, bossEyesB, bossEyesR);
                     break;
             }
         }
@@ -472,13 +477,6 @@ class Arcade extends Frame{
             }
         }
         squirts.clear();
-        /*
-        before/after creating array in the method
-        t0 = 3500000
-        t1 = 2000000
-         */
-        //time = TimeUtils.nanoTime()-time;
-        //Gdx.app.log("Time was:", ""+time);
     }
 
     private void stepper(float delta){
@@ -523,7 +521,7 @@ class Arcade extends Frame{
 
     private void loose(float delta){
         if(!putXp) {
-            stats.putInteger("XP", stats.getInteger("XP") + 100);
+            stats.putInteger("XP", stats.getInteger("XP") + 100000000);
             //stats.putInteger("XP", stats.getInteger("XP") + ((int)(hit + 10 * (hit / shot) + 10 * (hit * (match / hit))))/10);
             stats.flush();
             putXp = true;

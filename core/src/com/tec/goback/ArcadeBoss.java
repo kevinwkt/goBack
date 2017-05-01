@@ -87,7 +87,7 @@ class ArcadeBoss implements IArcadeBoss{
                 ArcadeValues.metersToPx(body.getPosition().y)
         );
 
-        switch(((int)((life*10)/ArcadeValues.yellowBossLife))){
+        switch(((int)((life*10)/color == 1 ? ArcadeValues.yellowBossLife : ArcadeValues.blueBossLife))){
             case 10:case 9:
                     sprite.setColor(1f, 1f, 1f, 1f);
                 break;

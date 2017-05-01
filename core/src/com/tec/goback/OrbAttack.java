@@ -24,7 +24,7 @@ class OrbAttack extends Squirt {
     private int color;
     private Body body;
     private Sprite sprite;
-    Preferences stats = Gdx.app.getPreferences("STATS");
+    private Preferences stats = Gdx.app.getPreferences("STATS");
 
     OrbAttack(World world, int color, float angle, Texture tx) {
         sprite = new Sprite(tx);

@@ -12,6 +12,8 @@ import com.badlogic.gdx.physics.box2d.World;
  */
 
 class ArcadeMeteor extends Enemy {
+
+    private int meteorAcceleration = 0;
     ArcadeMeteor(World world, float x, Texture tx){
         super(world, x, tx);
         this.sprite = new Sprite(tx);
@@ -43,6 +45,12 @@ class ArcadeMeteor extends Enemy {
         if(body.getPosition().y < 3){
             //hello
         }
+        accelerate();
         sprite.draw(batch);
+    }
+
+    private void accelerate() {
+        body.setLinearVelocity(0.0f, ArcadeValues.meteorVelocity/*+meteorAcceleration*/);
+        meteorAcceleration ++;
     }
 }

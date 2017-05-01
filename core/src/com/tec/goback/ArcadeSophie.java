@@ -34,6 +34,8 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
     private ArcadeSophie.MovementState currentstate = ArcadeSophie.MovementState.STILL_RIGHT; //STILL_RIGHT
 
     private Preferences pref=Gdx.app.getPreferences("getLevel");
+    private BodyEditorLoader loader = new BodyEditorLoader(Gdx.files.internal("Physicshit.json"));
+    private PolygonShape shape;
 
 
     ArcadeSophie(World world, Texture tx){
@@ -76,8 +78,9 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
         timerchangeframewake=0;
 
         sprite = new Sprite(texturaPersonaje[0][0]);
+        sprite.setCenter(0,0);
 
-        sprite.setCenter(ArcadeValues.pelletOriginX-500,ArcadeValues.pelletOriginY);
+
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -95,12 +98,12 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
     private void fixturer(float density, float restitution) {
 
         //shape of girl
-        PolygonShape shape = new PolygonShape();
+        /*PolygonShape shape = new PolygonShape();
         shape.setAsBox(
-                ArcadeValues.pxToMeters(sprite.getWidth())/4,
-                ArcadeValues.pxToMeters(sprite.getHeight())/2
 
-        );
+
+
+        );*/
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.density = density;
@@ -108,9 +111,10 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
         fixtureDef.shape = shape;
         fixtureDef.friction = 0;
 
+
         fixtureDef.filter.categoryBits = ArcadeValues.sophieCat; //its category
         fixtureDef.filter.maskBits = ArcadeValues.sophieMask; //or of its category with colliding categories
-
+        loader.attachFixture(body,"sophie",fixtureDef,1.5f);
         body.createFixture(fixtureDef);
     }
 
@@ -142,6 +146,8 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
                     //body.setLinearVelocity(1.5f, 0f);
                 }
 
+                //batch.draw(region,ArcadeValues.metersToPx(body.getPosition().x),ArcadeValues.metersToPx(body.getPosition().y));
+
                 sprite.setCenter(
                         ArcadeValues.metersToPx(body.getPosition().x),
                         ArcadeValues.metersToPx(body.getPosition().y)
@@ -164,11 +170,12 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
                     }
 
                 }
+
                 sprite.setCenter(
                         ArcadeValues.metersToPx(body.getPosition().x),
                         ArcadeValues.metersToPx(body.getPosition().y)
                 );
-                batch.draw(region,sprite.getX(),sprite.getY()); // Dibuja el sprite estático
+                batch.draw(region,sprite.getX(),sprite.getY());
                 break;
         }
 
@@ -255,7 +262,7 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
     }
 
     public Sprite getSprite(){
-        return sprite;
+      return sprite;
     }
 
     public enum MovementState {

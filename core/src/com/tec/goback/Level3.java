@@ -84,7 +84,7 @@ class Level3 extends Frame {
     }
 
     private void worldInit() {
-        world = new World(new Vector2(5,-10), true);
+        world = new World(new Vector2(0,-10), true);
         deadThings = new HashSet<Body>();
         world.setContactListener(new ContactListener() {
                                      @Override
@@ -126,36 +126,64 @@ class Level3 extends Frame {
 
     @Override
     public void render(float delta) {
+        debugMatrix = new Matrix4(super.camera.combined);
+        debugMatrix.scale(100, 100, 1f);
         cls();
 
-        batch.setProjectionMatrix(super.camera.combined);
         batch.begin();
+        batch.setProjectionMatrix(super.camera.combined);
 
+        if(state == GameState.CLUE){
+            batch.end();
+            clueStage.draw();
+            Gdx.input.setInputProcessor(clueStage);
+        }else if(state == GameState.STATS){
+            batch.end();
+            statsStage.sophieCoins.setText(Integer.toString(statsStage.statsPrefs.getInteger("Coins")));
+            statsStage.yellowXPLbl.setText(Integer.toString(statsStage.statsPrefs.getInteger("XP")));
+            statsStage.blueXPLbl.setText(Integer.toString(statsStage.statsPrefs.getInteger("XP")));
+            statsStage.redXPLbl.setText(Integer.toString(statsStage.statsPrefs.getInteger("XP")));
+            statsStage.draw();
+            Gdx.input.setInputProcessor(inputMultiplexer);
+        }else if(state == GameState.PLAYING){
 
-
-        if(state == GameState.PLAYING){
             batch.draw(background,0,0);
             batch.draw(pauseButton,camera.position.x+HALFW-pauseButton.getWidth(),camera.position.y-HALFH);
 
             if(sophieInitFlag) {
                 sophieInitialMove();
             }
+//            drawArrow(delta);
             sophie.update();
             sophie.draw(batch);
-            stepper(delta);
+
             updateCamera();
+            Gdx.input.setInputProcessor(level3Input);
+            stepper(delta);
+            batch.end();
 
         }else if(state == GameState.PAUSED){
-            Gdx.app.log("Game status","Paused");
-
+            batch.end();
+            //pauseStage.draw();
+            Gdx.input.setInputProcessor(pauseStage);
         }
 
 
 
+
+        batch.begin();
+        batch.setProjectionMatrix(super.camera.combined);
+        debugRenderer.render(world, debugMatrix);
         batch.end();
     }
 
-
+//    private void drawArrow(float delta) {
+//        // must appear at 1420
+//        timeForArrow += delta;
+//        for(ArcadeArrow acm : arrow1){
+//            acm.draw(batch);
+//        }
+//    }
 
     private void stepper(float delta){
         world.step(1/60f, 6, 2);
@@ -209,7 +237,9 @@ class Level3 extends Frame {
 
     @Override
     public void dispose() {
-        aManager.unload("MINIONS/METEOR/MINIONMeteor00.png");
+        aManager.unload("MINIONS/ARROW/MINIONBlueArrow00.png");
+        aManager.unload("MINIONS/ARROW/MINIONRedArrow00.png");
+        aManager.unload("MINIONS/ARROW/MINIONYellowArrow00.png");
         aManager.unload("MOUNTAINS/GoBackMOUNTAINSPanoramic.png");
         aManager.unload("Squirts/Sophie/SOPHIEWalk.png");
     }
@@ -273,6 +303,14 @@ class Level3 extends Frame {
                 sophie.setMovementState(ArcadeSophie.MovementState.STILL_LEFT);
             else if(sophie.getMovementState() == ArcadeSophie.MovementState.MOVE_RIGHT)
                 sophie.setMovementState(ArcadeSophie.MovementState.STILL_RIGHT);
+            sophie.update();
+
+
+            if(camera.position.x - v.x < -522 && v.y < 135){
+                state = GameState.PAUSED;
+
+            }
+
             return true;
         }
 
