@@ -5,6 +5,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 
@@ -37,11 +38,12 @@ class LevelEND extends Frame {
 
 
     LevelEND(App app) {
-        super(app, WIDTH_MAP, HEIGHT_MAP);
+        super(app, 1280, 720);
     }
 
     @Override
     public void show() {
+        super.show();
         input = new Input();
         dialogue = new Dialogue(aManager);
         state = GameState.PLAYING;
@@ -53,11 +55,11 @@ class LevelEND extends Frame {
     }
 
     private void textureInit(){
-        bgTx = aManager.get("CLUES/CLUESBoneDisplay.png");
-        newsPaperTx = aManager.get("CLUES/Newspaper/CLUESNewspaper.png");
-        photoTx = aManager.get("CLUES/Photo/CLUESPhoto.png");
-        noteTx = aManager.get("CLUES/Note/CLUESNote.png");
-        boneTx = aManager.get("CLUES/Bone/CLUESBone.png");
+        bgTx = new Texture("CLUES/CLUESBoneDisplay.png");
+        newsPaperTx = new Texture("CLUES/Newspaper/CLUESNewspaper.png");
+        photoTx = new Texture("CLUES/Photo/CLUESPhoto.png");
+        noteTx = new Texture("CLUES/Note/CLUESNote.png");
+        boneTx = new Texture("CLUES/Bone/CLUESBone.png");
 
         bg = new Sprite(bgTx);
         newsPaper = new Sprite(newsPaperTx);
@@ -83,8 +85,7 @@ class LevelEND extends Frame {
     }
 
     @Override
-    public void resize(int width, int height) {
-        view.update(width, height);
+    public void resize(int width, int height){
     }
 
     @Override
