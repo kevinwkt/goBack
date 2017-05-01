@@ -84,7 +84,7 @@ class Level3 extends Frame {
     }
 
     private void worldInit() {
-        world = new World(new Vector2(5,-10), true);
+        world = new World(new Vector2(0,-10), true);
         deadThings = new HashSet<Body>();
         world.setContactListener(new ContactListener() {
                                      @Override
@@ -153,7 +153,7 @@ class Level3 extends Frame {
             if(sophieInitFlag) {
                 sophieInitialMove();
             }
-            drawArrow(delta);
+//            drawArrow(delta);
             sophie.update();
             sophie.draw(batch);
 
@@ -177,13 +177,13 @@ class Level3 extends Frame {
         batch.end();
     }
 
-    private void drawArrow(float delta) {
-        // must appear at 1420
-        timeForArrow += delta;
-        for(ArcadeArrow acm : arrow1){
-            acm.draw(batch);
-        }
-    }
+//    private void drawArrow(float delta) {
+//        // must appear at 1420
+//        timeForArrow += delta;
+//        for(ArcadeArrow acm : arrow1){
+//            acm.draw(batch);
+//        }
+//    }
 
     private void stepper(float delta){
         world.step(1/60f, 6, 2);
