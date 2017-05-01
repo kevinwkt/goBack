@@ -84,7 +84,7 @@ class Fade implements Screen {
                     manager.load("INTRO/INTROBackground.png", Texture.class);
                     manager.load("HARBOR/GoBackHARBOR0.png", Texture.class);
                     manager.load("MOUNTAINS/GoBackMOUNTAINS0.png", Texture.class); //Level2
-                    //manager.load(".png", Texture.class); //Level3
+                    manager.load("WOODS/WOODSPanoramic2of2.png",Texture.class); //Level3
                     manager.load("Interfaces/ABOUT/ABOUTCast.png", Texture.class);
                     manager.load("Interfaces/ABOUT/ABOUTBack.png", Texture.class);
                     manager.load("MUSIC/GoBackMusicMainMenu.mp3", Music.class);
@@ -93,7 +93,7 @@ class Fade implements Screen {
                     manager.load("INTRO/INTROBackground.png", Texture.class);
                     manager.load("HARBOR/GoBackHARBOR0.png", Texture.class);
                     manager.load("MOUNTAINS/GoBackMOUNTAINS0.png", Texture.class); //Level2
-                    //manager.load(".png", Texture.class); //Level3
+                    manager.load("WOODS/WOODSPanoramic2of2.png",Texture.class); //Level3
                     manager.load("Interfaces/MENU/ABOUT.png", Texture.class); 
                     manager.load("Interfaces/MENU/ARCADE.png", Texture.class);
                     manager.load("Interfaces/MENU/SOUND.png", Texture.class);
@@ -105,7 +105,7 @@ class Fade implements Screen {
                     manager.load("INTRO/INTROBackground.png", Texture.class);
                     manager.load("HARBOR/GoBackHARBOR0.png", Texture.class);
                     manager.load("MOUNTAINS/GoBackMOUNTAINS0.png", Texture.class); //Level2
-                    //manager.load(".png", Texture.class); //Level3
+                    manager.load("WOODS/WOODSPanoramic2of2.png",Texture.class); //Level3
                     manager.load("Interfaces/SOUND/SOUNDMusicON.png", Texture.class);
                     manager.load("Interfaces/SOUND/SOUNDMusic.png", Texture.class);
                     manager.load("Interfaces/SOUND/SOUNDSoundON.png", Texture.class);
@@ -147,7 +147,11 @@ class Fade implements Screen {
                     manager.load("Squirts/Sophie/SOPHIEWalk.png",Texture.class);
                     break;
                 case LEVEL3:
-
+                    manager.load("WOODS/WOODSPanoramic2of2.png",Texture.class);
+                    manager.load("MINIONS/ARROW/MINIONBlueArrow00.png",Texture.class);
+                    manager.load("MINIONS/ARROW/MINIONRedArrow00.png",Texture.class);
+                    manager.load("MINIONS/ARROW/MINIONYellowArrow00.png",Texture.class);
+                    manager.load("Squirts/Sophie/SOPHIEWalk.png",Texture.class);
                     break;
                 case BOSS1:
 
@@ -162,7 +166,7 @@ class Fade implements Screen {
                     manager.load("MUSIC/GoBackMusicArcade.mp3", Music.class);
                     manager.load("HARBOR/GoBackHARBOR0.png", Texture.class);
                     manager.load("MOUNTAINS/GoBackMOUNTAINS0.png", Texture.class); //Level2
-                    //manager.load(".png", Texture.class); //Level3
+                    manager.load("WOODS/WOODSPanoramic2of2.png",Texture.class); //Level3
                     manager.load("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png", Texture.class);
                     manager.load("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrbEyes.png", Texture.class);
                     manager.load("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrb.png", Texture.class);

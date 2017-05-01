@@ -447,18 +447,17 @@ class Level1 extends Frame {
             v.set(screenX,screenY,0);
             camera.unproject(v);
 
-            if(sophie.getMovementState()==Sophie.MovementState.STILL_LEFT||sophie.getMovementState()==Sophie.MovementState.STILL_RIGHT) {
-                if(camera.position.x - v.x < -522 && v.y < 135){
-                    state = GameState.PAUSED;
-                }else{
-                    if(!dialogueOn){
-                        if (v.x >= camera.position.x) {
-                            sophie.setMovementState(Sophie.MovementState.MOVE_RIGHT);
-                        } else {
-                            sophie.setMovementState(Sophie.MovementState.MOVE_LEFT);
-                        }
-                    }
+            if(camera.position.x - v.x < -522 && v.y < 135){
+                state = GameState.PAUSED;
+            }
 
+            if(sophie.getMovementState()==Sophie.MovementState.STILL_LEFT||sophie.getMovementState()==Sophie.MovementState.STILL_RIGHT) {
+                if(!dialogueOn) {
+                    if (v.x >= camera.position.x) {
+                        sophie.setMovementState(Sophie.MovementState.MOVE_RIGHT);
+                    } else {
+                        sophie.setMovementState(Sophie.MovementState.MOVE_LEFT);
+                    }
                 }
             }
             return true;
