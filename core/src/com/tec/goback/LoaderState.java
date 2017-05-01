@@ -7,12 +7,12 @@ package com.tec.goback;
 enum LoaderState {
     ABOUT,
     MAINMENU,
-    PAUSE,
     SOUNDSETTINGS,
     LEVEL0,
     LEVEL1,
     LEVEL2,
     LEVEL3,
+    LEVEL4,
     BOSS1,
     BOSS2,
     BOSS3,
