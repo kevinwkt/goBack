@@ -21,7 +21,6 @@ public class App extends Game {
 		setScreen(new SplashScreen(this));
 		aManager.load("HARBOR/GoBackHARBOR0.png", Texture.class);
 		aManager.load("WOODS/WOODSBeginning.png", Texture.class);
-		aManager.load("WOODS/WOODSMiddle00.png", Texture.class);
 		aManager.load("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTPause.png", Texture.class);
 		aManager.load("Interfaces/PAUSE/PAUSEBottomDisplay.png", Texture.class);
 		aManager.load("Interfaces/PAUSE/PAUSEMapList.png", Texture.class);
