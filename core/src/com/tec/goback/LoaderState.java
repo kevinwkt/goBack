@@ -16,5 +16,6 @@ enum LoaderState {
     BOSS1,
     BOSS2,
     BOSS3,
+    LEVELEND,
     ARCADE
 }

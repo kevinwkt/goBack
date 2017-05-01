@@ -146,10 +146,8 @@ class Arcade extends Frame{
         input = new Input();
         dialogue = new Dialogue(aManager);
         Gdx.input.setInputProcessor(input);
-        Gdx.input.setCatchBackKey(true); //Not important
+        Gdx.input.setCatchBackKey(true);
 
-
-        pelletBlue = aManager.get("PELLET/ATAQUEBluePellet.png");
         musicInit();
     }
 
