@@ -80,7 +80,7 @@ class MainMenu implements Screen {
     public void show() {
         //     -----------------------  TO GET INTO LEVEL 0 TEMPORAL OMG
 
-        //pref.putInteger("level",3);
+        //pref.putInteger("level",4);
         //pref.flush();
 
         if(pref.getInteger("level")==0){
@@ -206,7 +206,7 @@ class MainMenu implements Screen {
                         next = LoaderState.LEVEL0;
                 }
 
-                app.setScreen(new Fade(app, LoaderState.LEVELEND));
+                app.setScreen(new Fade(app, next));
                 bgMusic.stop();
                 menu.dispose();
             }
@@ -289,7 +289,7 @@ class MainMenu implements Screen {
         aManager.unload("INTRO/INTROBackground.png");
         aManager.unload("HARBOR/GoBackHARBOR0.png");
         //aManager.unload("MOUNTAINS/GoBackMOUNTAINS0.png"); //Level2
-        aManager.unload("WOODS/WOODSBeginning.png"); //Level3
+        //aManager.unload("WOODS/WOODSBeginning.png"); //Level3
         //aManager.unload("Interfaces/MENU/ABOUT.png");
         aManager.unload("Interfaces/MENU/ARCADE.png");
         aManager.unload("Interfaces/MENU/SOUND.png");
