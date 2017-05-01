@@ -988,6 +988,9 @@ abstract class Frame implements Screen {
                 case 2:
                     background = aManager.get("MOUNTAINS/GoBackMOUNTAINS0.png");
                     break;
+                case 3:
+                    background = aManager.get("MOUNTAINS/GoBackMOUNTAINS0.png");
+                    break;
             }
             bottom = aManager.get("Interfaces/PAUSE/PAUSEBottomDisplay.png");
             map = aManager.get("Interfaces/PAUSE/PAUSEMapList.png");
