@@ -168,7 +168,6 @@ class Fade implements Screen {
                     break;
                 case LEVEL4:
                     manager.load("WOODS/WOODSEnding.png",Texture.class);
-
                 case BOSS1:
 
                     break;
@@ -177,6 +176,9 @@ class Fade implements Screen {
                     break;
                 case BOSS3:
 
+                    break;
+                case LEVELEND:
+                    manager.load("CLUES/CLUESBoneDisplay.png", Texture.class);
                     break;
                 case ARCADE:
                     manager.load("MUSIC/GoBackMusicArcade.mp3", Music.class);
