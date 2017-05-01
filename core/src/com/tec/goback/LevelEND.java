@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 
@@ -17,8 +18,23 @@ public class LevelEND extends Frame {
     private Dialogue dialogue;
     private GameState state;
 
-    //Textures
-    private Texture bg;
+    //Drawables
+    private Texture bgTx;
+    private Texture newsPaperTx;
+    private Texture photoTx;
+    private Texture noteTx;
+    private Texture boneTx;
+
+    private Sprite bg;
+    private Sprite newsPaper;
+    private Sprite photo;
+    private Sprite note;
+    private Sprite bone;
+
+
+
+
+
 
     LevelEND(App app, float WIDTH_MAP, float HEIGHT_MAP) {
         super(app, WIDTH_MAP, HEIGHT_MAP);
@@ -37,7 +53,17 @@ public class LevelEND extends Frame {
     }
 
     private void textureInit(){
-        //bg =
+        bgTx = aManager.get("CLUES/CLUESBoneDisplay.png");
+        newsPaperTx = aManager.get("CLUES/Newspaper/CLUESNewspaper.png");
+        photoTx = aManager.get("CLUES/Photo/CLUESPhoto.png");
+        noteTx = aManager.get("CLUES/Note/CLUESNote.png");
+        boneTx = aManager.get("CLUES/Bone/CLUESBone.png");
+
+        bg = new Sprite(bgTx);
+        newsPaper = new Sprite(newsPaperTx);
+        photo = new Sprite(photoTx);
+        note = new Sprite(noteTx);
+        bone = new Sprite(boneTx);
     }
 
     private void cls() {
@@ -49,7 +75,8 @@ public class LevelEND extends Frame {
         cls();
         batch.begin();
         if(state == GameState.PLAYING){
-
+            bg.draw(batch);
+            batch.end();
         }
 
     }
