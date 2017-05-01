@@ -247,6 +247,7 @@ class Fade implements Screen {
                     break;
                 case LEVEL4:
                     app.setScreen(new Level4(app));
+                    break;
                 case LEVELEND:
                     app.setScreen(new LevelEND(app));
                     break;
