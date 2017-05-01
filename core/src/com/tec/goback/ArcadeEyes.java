@@ -60,12 +60,14 @@ class ArcadeEyes implements IArcadeBoss{
 
             BodyDef bodyDef = new BodyDef();  bodyDef.type = BodyDef.BodyType.DynamicBody;
             bodyDef.position.set(
-                (color == 1 || color == 2 ? (color == 1 ? ArcadeValues.meterspelletOriginX - 1 :  ArcadeValues.meterspelletOriginX + 1 ) : ArcadeValues.meterspelletOriginX + 2),
+                (color == 1 || color == 2 ? (color == 1 ? ArcadeValues.meterspelletOriginX - 2 :  ArcadeValues.meterspelletOriginX + 1 ) : ArcadeValues.meterspelletOriginX + 4),
                     ArcadeValues.meterspelletOriginY + 2
             );
 
             body = world.createBody(bodyDef);
             body.setLinearVelocity(1f, 0f);
+            body.setUserData(this);
+
 
             FixtureDef fixtureDef = new FixtureDef();
             fixtureDef.density = 0f;
@@ -74,7 +76,7 @@ class ArcadeEyes implements IArcadeBoss{
             fixtureDef.filter.categoryBits = ArcadeValues.enemyCat;
             fixtureDef.filter.maskBits = ArcadeValues.enemyMask;
 
-            loader.attachFixture(body, "bossEyes", fixtureDef, 1f);
+            loader.attachFixture(body, "bossEyes", fixtureDef, 3.4f);
         }
 
         public boolean getHurtDie(int color, float damage) {
@@ -83,10 +85,12 @@ class ArcadeEyes implements IArcadeBoss{
         }
 
         public void move() {
-            if(body.getPosition().x < 0 || body.getPosition().x > ArcadeValues.pxToMeters(1280)) body.setLinearVelocity(-1*body.getLinearVelocity().x, body.getLinearVelocity().y);
+            if(body.getPosition().x > ArcadeValues.pxToMeters(1280) || body.getPosition().x < 0.0f) body.setLinearVelocity(-1, 0);
+
         }
 
         public void draw(SpriteBatch batch) {
+            if(color == 1)Gdx.app.log("LAMEGACONCHA", "at: "+body.getPosition().x);
             move();
             sprite.setPosition(
                     ArcadeValues.metersToPx(body.getPosition().x),

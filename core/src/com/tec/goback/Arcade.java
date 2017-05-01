@@ -420,13 +420,16 @@ class Arcade extends Frame{
         }
         if(!flag) state = GameState.LOST;
         //
-
-        if(state == GameState.STATS){
+        if(state == GameState.CLUE){
+            batch.end();
+            clueStage.draw();
+            Gdx.input.setInputProcessor(clueStage);
+        }else if(state == GameState.STATS){
+            batch.end();
             statsStage.sophieCoins.setText(Integer.toString(statsStage.statsPrefs.getInteger("Coins")));
             statsStage.yellowXPLbl.setText(Integer.toString(statsStage.statsPrefs.getInteger("XP")));
             statsStage.blueXPLbl.setText(Integer.toString(statsStage.statsPrefs.getInteger("XP")));
             statsStage.redXPLbl.setText(Integer.toString(statsStage.statsPrefs.getInteger("XP")));
-            batch.end();
             statsStage.draw();
             Gdx.input.setInputProcessor(inputMultiplexer);
         }else if (state == GameState.PAUSED) {//Draw pause menu
@@ -461,7 +464,6 @@ class Arcade extends Frame{
     }
 
     private void drawBodies(){
-        long time = TimeUtils.nanoTime();
         world.getBodies(squirts);
         Object obj;
         for(Body b: squirts){
