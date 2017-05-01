@@ -6,6 +6,7 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -59,9 +60,10 @@ class Level3 extends Frame {
     private Box2DDebugRenderer debugRenderer;
     private Matrix4 debugMatrix;
 
-    private Random randomArrayPosition = new Random();
+    private Random randomArrowPosition = new Random();
     private Array<Body> bodies = new Array<Body>();
     private Array<ArcadeArrow> arrows = new Array<ArcadeArrow>();
+    private Object obj;
 
     private float timeForArrow = 0;
 
@@ -177,13 +179,42 @@ class Level3 extends Frame {
         batch.end();
     }
 
-//    private void drawArrow(float delta) {
-//        // must appear at 1420
-//        timeForArrow += delta;
-//        for(ArcadeArrow acm : arrow1){
-//            acm.draw(batch);
-//        }
-//    }
+    private void drawArrow(float delta) {
+        // must appear at 1420
+        timeForArrow += delta;
+        if(timeForArrow >= .1){
+            int rl= MathUtils.random(1);
+            int typeshit= MathUtils.random(2);
+            switch (typeshit){
+                case 0:
+                    new ArcadeArrow(world, typeshit,1,rl, arrow1);
+                    break;
+                case 1:
+                    new ArcadeArrow(world, typeshit,1,rl, arrow2);
+                    break;
+                case 2:
+                    new ArcadeArrow(world, typeshit,1,rl, arrow3);
+                    break;
+            }
+            timeForArrow = 0;
+        }
+
+        world.getBodies(bodies);
+        for(Body b : bodies){
+            obj = b.getUserData();
+            if( obj instanceof ArcadeArrow){
+                ((ArcadeArrow)obj).draw(batch);
+                Gdx.app.log("arrows", ((ArcadeMeteor) obj).sprite.getY()+"");
+                if(((ArcadeArrow) obj).sprite.getY() <= 0){
+                    deadThings.add(b);
+                }
+            }
+
+
+        }
+
+        bodies.clear();
+    }
 
     private void stepper(float delta){
         world.step(1/60f, 6, 2);

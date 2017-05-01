@@ -153,6 +153,11 @@ class Fade implements Screen {
                     manager.load("MINIONS/ARROW/MINIONRedArrow00.png",Texture.class);
                     manager.load("MINIONS/ARROW/MINIONYellowArrow00.png",Texture.class);
                     manager.load("Squirts/Sophie/SOPHIEWalk.png",Texture.class);
+                    manager.load("WOODS/WOODSPanoramic1of2.png",Texture.class);
+                    manager.load("WOODS/WOODSBeginning.png",Texture.class);
+                    manager.load("WOODS/WOODSEnding.png",Texture.class);
+                    manager.load("WOODS/WOODSMiddle00.png",Texture.class);
+                    manager.load("WOODS/WOODSMiddle01.png",Texture.class);
                     break;
                 case BOSS1:
 
@@ -210,7 +215,7 @@ class Fade implements Screen {
                     app.setScreen(new Level2(app));
                     break;
                 case LEVEL3:
-
+                    app.setScreen(new Level3(app));
                     break;
                 case BOSS1:
 
