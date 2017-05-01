@@ -86,12 +86,21 @@ class Level3 extends Frame {
     }
 
     private void worldInit() {
-        world = new World(new Vector2(0,-10), true);
+        world = new World(Vector2.Zero, true);
         deadThings = new HashSet<Body>();
         world.setContactListener(new ContactListener() {
                                      @Override
                                      public void beginContact(Contact contact) {
-
+                                         Object ob1 = contact.getFixtureA().getBody().getUserData();
+                                         Object ob2 = contact.getFixtureB().getBody().getUserData();
+                                         if(ob1 instanceof ArcadeSophie || ob2 instanceof ArcadeSophie){
+                                             if(ob1 instanceof ArcadeSophie){
+                                                 deadThings.add(contact.getFixtureB().getBody());
+                                             }
+                                             if(ob2 instanceof ArcadeSophie){
+                                                 deadThings.add(contact.getFixtureA().getBody());
+                                             }
+                                         }
                                      }
 
                                      @Override
@@ -109,9 +118,12 @@ class Level3 extends Frame {
 
                                      }
                                  }
+
         );
 
         sophie = new ArcadeSophie(world,sophieTexture);
+
+
     }
 
     private void textureInit() {
@@ -155,7 +167,7 @@ class Level3 extends Frame {
             if(sophieInitFlag) {
                 sophieInitialMove();
             }
-//            drawArrow(delta);
+            drawArrow(delta);
             sophie.update();
             sophie.draw(batch);
 
@@ -182,7 +194,7 @@ class Level3 extends Frame {
     private void drawArrow(float delta) {
         // must appear at 1420
         timeForArrow += delta;
-        if(timeForArrow >= .1){
+        if(timeForArrow >= .5){
             int rl= MathUtils.random(1);
             int typeshit= MathUtils.random(2);
             switch (typeshit){
@@ -204,8 +216,8 @@ class Level3 extends Frame {
             obj = b.getUserData();
             if( obj instanceof ArcadeArrow){
                 ((ArcadeArrow)obj).draw(batch);
-                Gdx.app.log("arrows", ((ArcadeMeteor) obj).sprite.getY()+"");
-                if(((ArcadeArrow) obj).sprite.getY() <= 0){
+                Gdx.app.log("arrows", ((ArcadeArrow) obj).sprite.getY()+"");
+                if(((ArcadeArrow) obj).sprite.getX() <= 0){
                     deadThings.add(b);
                 }
             }
@@ -226,7 +238,6 @@ class Level3 extends Frame {
             world.destroyBody(b);
         }
         deadThings.clear();
-
     }
 
     private void sophieInitialMove() {
