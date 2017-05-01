@@ -183,7 +183,7 @@ class Fade implements Screen {
                     manager.load("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTYellowOrb.png",Texture.class);
                     manager.load("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTBlueOrb.png",Texture.class);
                     manager.load("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTRedOrb.png",Texture.class);
-
+                    break;
                 case BOSS1:
 
                     break;
