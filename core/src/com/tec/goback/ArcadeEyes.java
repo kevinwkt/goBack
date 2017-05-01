@@ -50,6 +50,7 @@ class ArcadeEyes implements IArcadeBoss{
 
         private float life = ArcadeValues.redBossLife;
         public Body body;
+        private float time = 0;
 
 
         private BodyEditorLoader loader = new BodyEditorLoader(Gdx.files.internal("Physicshit.json"));
@@ -60,12 +61,12 @@ class ArcadeEyes implements IArcadeBoss{
 
             BodyDef bodyDef = new BodyDef();  bodyDef.type = BodyDef.BodyType.DynamicBody;
             bodyDef.position.set(
-                (color == 1 || color == 2 ? (color == 1 ? ArcadeValues.meterspelletOriginX - 2 :  ArcadeValues.meterspelletOriginX + 1 ) : ArcadeValues.meterspelletOriginX + 4),
+                (color == 1 || color == 2 ? (color == 1 ? ArcadeValues.meterspelletOriginX - 2.5f :  ArcadeValues.meterspelletOriginX ) : ArcadeValues.meterspelletOriginX + 2.5f),
                     ArcadeValues.meterspelletOriginY + 2
             );
 
             body = world.createBody(bodyDef);
-            body.setLinearVelocity(1f, 0f);
+            body.setLinearVelocity((color == 1 || color == 2 ? (color == 1 ? 2f :  3.5f ) : 5f), 0f);
             body.setUserData(this);
 
 
@@ -85,12 +86,16 @@ class ArcadeEyes implements IArcadeBoss{
         }
 
         public void move() {
-            if(body.getPosition().x > ArcadeValues.pxToMeters(1280) || body.getPosition().x < 0.0f) body.setLinearVelocity(-1, 0);
-
+            time += Gdx.graphics.getDeltaTime();
+            if(body.getPosition().x+ArcadeValues.pxToMeters(sprite.getWidth()) > ArcadeValues.pxToMeters(1280) || body.getPosition().x < 0) {
+                body.setLinearVelocity(-1*body.getLinearVelocity().x, body.getLinearVelocity().y);
+            }
+            body.setLinearVelocity(body.getLinearVelocity().x,
+                    ((color == 1 || color == 2 ? (color == 1 ? 3f :  3.5f ) : 4f))*MathUtils.sin( time*(color == 1 || color == 2 ? (color == 1 ? 4f :  6f ) : 7f) + (color == 1 || color == 2 ? (color == 1 ? 0 :  1f ) : 2f) )
+            );
         }
 
         public void draw(SpriteBatch batch) {
-            if(color == 1)Gdx.app.log("LAMEGACONCHA", "at: "+body.getPosition().x);
             move();
             sprite.setPosition(
                     ArcadeValues.metersToPx(body.getPosition().x),
