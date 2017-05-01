@@ -192,7 +192,7 @@ class Level2 extends Frame {
         // must appear at 1420
         timeForMeteor += delta;
 
-        if(timeForMeteor >= 2){
+        if(timeForMeteor >= .1){
             new ArcadeMeteor(world, (float)(randomMeteorPosition.nextInt(2430)+1220), meteor);
             timeForMeteor = 0;
         }
