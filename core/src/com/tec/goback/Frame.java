@@ -843,6 +843,7 @@ abstract class Frame implements Screen {
                         //Actualizar preferencias
                         statsPrefs.putInteger(stageStr, statsPrefs.getInteger(stageStr)+1);
                         statsPrefs.putFloat(upgradeStr, upgradeArr[statsPrefs.getInteger(stageStr)]);
+                        statsPrefs.flush();
 
                         //Actualizar Banners
                         if(statsPrefs.getInteger(stageStr)<cost.length-1){
@@ -852,6 +853,7 @@ abstract class Frame implements Screen {
                         }
 
                         statsPrefs.putInteger(prefStr, statsPrefs.getInteger(prefStr)-cost[statsPrefs.getInteger(stageStr)]);
+                        statsPrefs.flush();
 
                         if (color==StatsState.SOPHIE) {
                             sophieCoins.setText(Integer.toString(statsPrefs.getInteger(prefStr)));
@@ -902,6 +904,8 @@ abstract class Frame implements Screen {
         private Texture photoDetail; //Image
         private Texture note; //Image
         private Texture noteDetail; //Image
+        private Texture bone; //Image
+        private Texture boneDetail; //Image
 
         Preferences prefes = Gdx.app.getPreferences("My Preferences");
 
@@ -998,8 +1002,8 @@ abstract class Frame implements Screen {
             photoDetail = aManager.get("CLUES/Photo/CLUESPhotoDetail.png");
             note = aManager.get("CLUES/Note/CLUESNote.png");
             noteDetail = aManager.get("CLUES/Note/CLUESNoteDetail.png");
-            //aManager.get("CLUES/Note/CLUESNote.png");
-            //aManager.get("CLUES/Note/CLUESNoteDetail.png");
+            bone = aManager.get("CLUES/Bone/CLUESBone.png");
+            boneDetail = aManager.get("CLUES/Bone/CLUESBoneDetail.png");
 
             if(prefes.getBoolean("soundOn")){
                 musicBton = aManager.get("Interfaces/SOUND/SOUNDMusicON.png");
@@ -1045,7 +1049,7 @@ abstract class Frame implements Screen {
             TextureRegionDrawable newsBtonTrd = new TextureRegionDrawable(new TextureRegion(newspaper));
             ImageButton newspaperBtonImg = new ImageButton(newsBtonTrd);
 
-            newspaperBtonImg.setPosition(150-newspaperBtonImg.getWidth()/2, 440-newspaperBtonImg.getHeight()/2);
+            newspaperBtonImg.setPosition(145-newspaperBtonImg.getWidth()/2, 440-newspaperBtonImg.getHeight()/2);
 
             newspaperBtonImg.addListener(new ClickListener(){
                 @Override
@@ -1059,7 +1063,7 @@ abstract class Frame implements Screen {
             TextureRegionDrawable photoBtonTrd = new TextureRegionDrawable(new TextureRegion(photo));
             ImageButton photoBtonImg = new ImageButton(photoBtonTrd);
 
-            photoBtonImg.setPosition(400-photoBtonImg.getWidth()/2, 440-photoBtonImg.getHeight()/2);
+            photoBtonImg.setPosition(410-photoBtonImg.getWidth()/2, 440-photoBtonImg.getHeight()/2);
 
             photoBtonImg.addListener(new ClickListener(){
                 @Override
@@ -1073,7 +1077,7 @@ abstract class Frame implements Screen {
             TextureRegionDrawable noteBtonTrd = new TextureRegionDrawable(new TextureRegion(note));
             ImageButton noteBtonImg = new ImageButton(noteBtonTrd);
 
-            noteBtonImg.setPosition(150-noteBtonImg.getWidth()/2, 290-noteBtonImg.getHeight()/2);
+            noteBtonImg.setPosition(145-noteBtonImg.getWidth()/2, 290-noteBtonImg.getHeight()/2);
 
             noteBtonImg.addListener(new ClickListener(){
                 @Override
@@ -1083,7 +1087,24 @@ abstract class Frame implements Screen {
                 }
             });
 
-            /*switch(pref.getInteger("level")){
+            //Bone
+            TextureRegionDrawable boneBtonTrd = new TextureRegionDrawable(new TextureRegion(bone));
+            ImageButton boneBtonImg = new ImageButton(boneBtonTrd);
+
+            boneBtonImg.setPosition(410-boneBtonImg.getWidth()/2, 290-boneBtonImg.getHeight()/2);
+
+            boneBtonImg.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    clueStage = new ClueDetail(view, batch, app, pauseStg, boneDetail);
+                    state = GameState.CLUE;
+                }
+            });
+
+
+            switch(pref.getInteger("level")){
+                case 5:
+                    this.addActor(boneBtonImg);
                 case 4:
                     this.addActor(noteBtonImg);
                 case 3:
@@ -1092,11 +1113,7 @@ abstract class Frame implements Screen {
                     this.addActor(newspaperBtonImg);
                 default:
                     break;
-            }*/
-
-            this.addActor(newspaperBtonImg);
-            this.addActor(photoBtonImg);
-            this.addActor(noteBtonImg);
+            }
 
 
             //////////////////////

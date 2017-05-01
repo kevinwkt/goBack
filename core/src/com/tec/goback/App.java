@@ -30,8 +30,8 @@ public class App extends Game {
 		aManager.load("CLUES/Photo/CLUESPhotoDetail.png",Texture.class);
 		aManager.load("CLUES/Note/CLUESNote.png",Texture.class);
 		aManager.load("CLUES/Note/CLUESNoteDetail.png",Texture.class);
-		//aManager.load("CLUES/Note/CLUESNote.png",Texture.class);
-		//aManager.load("CLUES/Note/CLUESNoteDetail.png",Texture.class);
+		aManager.load("CLUES/Bone/CLUESBone.png",Texture.class);
+		aManager.load("CLUES/Bone/CLUESBoneDetail.png",Texture.class);
 		//Stats
 		aManager.load("Interfaces/STATS/STATSback.png", Texture.class);
 		aManager.load("Interfaces/STATS/STATSBlueOrb.png", Texture.class);
@@ -58,6 +58,8 @@ public class App extends Game {
 
 	private void checkStatsPref() {
 		Preferences stats=Gdx.app.getPreferences("STATS");
+
+		/*
 		stats.putInteger("XP",0);
 		stats.putFloat("SophieLife",0);
 		stats.putFloat("YellowLife",0);
@@ -66,9 +68,9 @@ public class App extends Game {
 		stats.putFloat("BlueAtk",0);
 		stats.putFloat("RedLife",0);
 		stats.putFloat("RedAtk",0);
+		stats.flush();
+		*/
 
-
-		//stats.putInteger("XP",0);
 		if(stats.getFloat("SophieLife")==0){
 			stats.putFloat("SophieLife", 100f);
 			stats.putInteger("SophieLifeStg", 0);
