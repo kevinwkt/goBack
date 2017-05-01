@@ -43,7 +43,6 @@ class LevelEND extends Frame {
 
     @Override
     public void show() {
-        super.show();
         input = new Input();
         dialogue = new Dialogue(aManager);
         state = GameState.PLAYING;
@@ -52,6 +51,7 @@ class LevelEND extends Frame {
         Gdx.input.setCatchBackKey(true);
 
         textureInit();
+        super.show();
     }
 
     private void textureInit(){
@@ -86,6 +86,7 @@ class LevelEND extends Frame {
 
     @Override
     public void resize(int width, int height){
+            view.update(width, height);
     }
 
     @Override
