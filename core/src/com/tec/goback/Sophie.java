@@ -87,23 +87,12 @@ class Sophie extends Squirt
         TextureRegion region;
         switch (currentstate) {
             //case HIT:
-            case WAKING_RIGHT:
+            case WAKING:
                 timerchangeframewake +=Gdx.graphics.getDeltaTime();
                 region=waking.getKeyFrame(timerchangeframewake);
                 batch.draw(region,sprite.getX(),sprite.getY());
-
                 if(waking.isAnimationFinished(timerchangeframewake))
                     currentstate=MovementState.STILL_RIGHT;
-                break;
-            case WAKING_LEFT:
-                timerchangeframewake +=Gdx.graphics.getDeltaTime();
-                region=waking.getKeyFrame(timerchangeframewake);
-                if (!region.isFlipX()) {
-                    region.flip(true,false);
-                }
-                batch.draw(region,sprite.getX(),sprite.getY());
-                if(waking.isAnimationFinished(timerchangeframewake))
-                    currentstate=MovementState.STILL_LEFT;
                 break;
             case DYING:
                 timerchangeframedie +=Gdx.graphics.getDeltaTime();
@@ -250,8 +239,7 @@ class Sophie extends Squirt
 
     public enum MovementState {
         CREATING,
-        WAKING_RIGHT,
-        WAKING_LEFT,
+        WAKING,
         STILL_RIGHT,
         STILL_LEFT,
         HIT,
