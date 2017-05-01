@@ -73,7 +73,7 @@ class Fade implements Screen {
         cls();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        loadIcon.setPosition(ArcadeValues.pelletOriginX, ArcadeValues.pelletOriginY + 100*MathUtils.sin(time*5));
+        loadIcon.setPosition(ArcadeValues.pelletOriginX-loadIcon.getWidth()/2, ArcadeValues.pelletOriginY + 100*MathUtils.sin(time*5));
         loadIcon.draw(batch);
         batch.end();
         goNextScreen();
