@@ -1,12 +1,8 @@
 package com.tec.goback;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -326,7 +322,7 @@ class Level1 extends Frame {
         if(!foundOrb){
             if(yellowOrb.getBoundingRectangle().contains(sophie.sprite.getX()+yellowOrb.getBoundingRectangle().getWidth()/2,sophie.sprite.getY())){
                 foundOrb = true;
-                sophie.setMovementState(Sophie.MovementState.WAKING);
+                sophie.setMovementState(Sophie.MovementState.WAKING_RIGHT);
             }
         }else{
             if(yellowOrb.getX()<(sophie.sprite.getX()-yellowOrb.getWidth()-DISTANCE_ORB_SOPHIE)){
