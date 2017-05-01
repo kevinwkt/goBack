@@ -120,6 +120,7 @@ class Arcade extends Frame{
     private Input input;
 
     private Preferences soundPreferences = Gdx.app.getPreferences("My Preferences");
+    boolean flag;
 
     private Box2DDebugRenderer debugRenderer;
     private Matrix4 debugMatrix;
@@ -132,9 +133,9 @@ class Arcade extends Frame{
     @Override
     public void show() {
         //d = pref.getInteger("level");
-        debugRenderer = new Box2DDebugRenderer();
         d = 3;
-        //bossFight = ArcadeValues.bossFightFlag;
+        debugRenderer = new Box2DDebugRenderer();
+        bossFight = ArcadeValues.bossFightFlag;
         bossFight = true;
         arcadeMultiplier = !bossFight ? ArcadeValues.arcadeMultiplier : 1;
         super.show();
@@ -179,7 +180,7 @@ class Arcade extends Frame{
                 pelletYellow = aManager.get("PELLET/ATAQUEYellowPellet.png");
                 pelletBlue = aManager.get("PELLET/ATAQUEBluePellet.png");
 
-                background = new Texture("HARBOR/GoBackHARBORPanoramic.png"); //switch
+                background = new Texture("MOUNTAINS/GoBackMOUNTAINSPanoramic.png"); //switch
                 break;
             case 3:
                 orbYellow = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png");
@@ -193,7 +194,7 @@ class Arcade extends Frame{
                 pelletBlue = aManager.get("PELLET/ATAQUEBluePellet.png");
                 pelletRed = aManager.get("PELLET/ATAQUERedPellet.png");
 
-                background = new Texture("HARBOR/GoBackHARBORPanoramic.png"); //switch
+                background = new Texture("HARBOR/GoBackWOODSPanoramic.png"); //switch
                 break;
         }
 
@@ -414,13 +415,18 @@ class Arcade extends Frame{
         batch.draw(pauseButton,camera.position.x+HALFW-pauseButton.getWidth(),camera.position.y-HALFH);
 
         //If all orbes died
-        boolean flag = false;
+        flag = false;
         for(ArcadeOrb orb : orbs) {
             if (orb != null) flag = true;
         }
         if(!flag) state = GameState.LOST;
-        //
-        if(state == GameState.CLUE){
+
+        if(bossFight)if(boss.getHurtDie(1, 0)) state = GameState.WON;
+
+
+        if(state == GameState.WON){
+            win(delta);
+        }else if(state == GameState.CLUE){
             batch.end();
             clueStage.draw();
             Gdx.input.setInputProcessor(clueStage);
@@ -458,7 +464,7 @@ class Arcade extends Frame{
         batch.draw(background,-2560,0);
         sophie.setColor(1.0f,1.0f,1.0f,0.8f);
         sophie.setPosition(ArcadeValues.pelletOriginX-100
-                , ArcadeValues.pelletOriginY-27);
+                , ArcadeValues.pelletOriginY-30);
         sophie.draw(batch);
         drawBodies();
     }
@@ -521,20 +527,42 @@ class Arcade extends Frame{
 
     }
 
-    private void loose(float delta){
-        if(!putXp) {
-            stats.putInteger("XP", stats.getInteger("XP") + 100000000);
-            //stats.putInteger("XP", stats.getInteger("XP") + ((int)(hit + 10 * (hit / shot) + 10 * (hit * (match / hit))))/10);
-            stats.flush();
-            putXp = true;
-        }
+    private void win(float delta){
         dialoguetime += delta;
-        if(dialoguetime < 2.5f) {
-            dialogue.makeText(glyph, batch, "This dream overwhelmed you", camera.position.x);
+        if (dialoguetime < 2.5f) {
+            dialogue.makeText(glyph, batch, "You have proven yourself worthy of going on forward.\n You now carry new knowledge", camera.position.x);
             batch.end();
-        }else{
+        } else {
             batch.end();
             app.setScreen(new Fade(app, LoaderState.ARCADE));
+        }
+    }
+
+    private void loose(float delta){
+        if(bossFight) {
+            dialoguetime += delta;
+            if (dialoguetime < 2.5f) {
+                dialogue.makeText(glyph, batch, "This dream overwhelmed you\n Your inexperienced soul was not ready.", camera.position.x);
+                batch.end();
+            } else {
+                batch.end();
+                app.setScreen(new Fade(app, LoaderState.ARCADE));
+            }
+        }else{
+            if (!putXp) {
+                stats.putInteger("XP", stats.getInteger("XP") + 100000000);
+                //stats.putInteger("XP", stats.getInteger("XP") + ((int)(hit + 10 * (hit / shot) + 10 * (hit * (match / hit))))/10);
+                stats.flush();
+                putXp = true;
+            }
+            dialoguetime += delta;
+            if (dialoguetime < 2.5f) {
+                dialogue.makeText(glyph, batch, "This dream overwhelmed you\n Your experience grew to " + stats.getInteger("XP"), camera.position.x);
+                batch.end();
+            } else {
+                batch.end();
+                app.setScreen(new Fade(app, LoaderState.ARCADE));
+            }
         }
     }
 
@@ -593,6 +621,10 @@ class Arcade extends Frame{
             return betweenSpawns - (0.006666666667f*arcadeMultiplier)/30;
         }
         if(time >= ArcadeValues.stepTimes[5] && time < ArcadeValues.stepTimes[6]){//starts in 0.8 and goes slowly
+            if(bossActive && bossFight) {
+                (boss).move();
+                bossActive = true;
+            }
             return betweenSpawns - (0.006666666667f*arcadeMultiplier)/50;
         }
         return betweenSpawns;
