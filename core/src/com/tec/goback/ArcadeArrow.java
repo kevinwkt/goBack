@@ -13,8 +13,6 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
-import java.util.Iterator;
-
 /**
  * Created by kevin on 3/20/2017.
  */
@@ -27,25 +25,27 @@ class ArcadeArrow extends Enemy {
 
     ArcadeArrow(World world, int type,int arcadeOr3, int leftOrRight,Texture tx){
         super(world,type,arcadeOr3,leftOrRight,tx); //0 if its only for arcade, 1 if its for level 3
+        if(leftRight==1) sprite.rotate(90);
+        else sprite.rotate(-90);
         if(arcadeOr3==1) {
             switch (type) {
-                case 1:
+                case 0:
                     SPEED = 1f;
                     if (leftOrRight == 1) body.setLinearVelocity(-SPEED, 0f);
                     if (leftOrRight == 0) body.setLinearVelocity(SPEED, 0f);
                     break;
-                case 2:
+                case 1:
                     SPEED = 2f;
                     if (leftOrRight == 1) body.setLinearVelocity(-SPEED, 0f);
                     if (leftOrRight == 0) body.setLinearVelocity(SPEED, 0f);
                     break;
-                case 3:
+                case 2:
                     SPEED = 3f;
                     if (leftOrRight == 1) body.setLinearVelocity(-SPEED, 0f);
                     if (leftOrRight == 0) body.setLinearVelocity(SPEED, 0f);
                     break;
             }
-        }else if(arcadeOr3==0){
+        }else if(arcadeOr3==0){     //From arcade
             SPEED=2f;
             if(leftOrRight==0) //from left
             body.setLinearVelocity(SPEED,0);
@@ -72,8 +72,8 @@ class ArcadeArrow extends Enemy {
 
     void draw(SpriteBatch batch) {
         timeframe +=Gdx.graphics.getDeltaTime();
-        batch.draw(region, ArcadeValues.metersToPx(body.getPosition().x)-120, ArcadeValues.metersToPx(body.getPosition().y)-39);
-        walkCounter++;
+        sprite.setPosition(ArcadeValues.metersToPx(body.getPosition().x-0.4f), ArcadeValues.metersToPx(body.getPosition().y-0.4f));
+        sprite.draw(batch);
     }
 }
 
