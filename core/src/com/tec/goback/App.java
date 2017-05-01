@@ -102,12 +102,12 @@ public class App extends Game {
 	}
 
 	public AssetManager getAssetManager() {
-        return aManager;
-    }
+		return aManager;
+	}
 
 	@Override
-    public void dispose() {
-        super.dispose();
-        aManager.clear();
-    }
+	public void dispose() {
+		super.dispose();
+		aManager.clear();
+	}
 }

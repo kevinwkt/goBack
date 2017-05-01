@@ -1,6 +1,7 @@
 package com.tec.goback;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -23,6 +24,7 @@ class OrbAttack extends Squirt {
     private int color;
     private Body body;
     private Sprite sprite;
+    Preferences stats = Gdx.app.getPreferences("STATS");
 
     OrbAttack(World world, int color, float angle, Texture tx) {
         sprite = new Sprite(tx);
@@ -87,7 +89,18 @@ class OrbAttack extends Squirt {
         sprite.draw(batch);
     }
 
-    float getDamage(){ return ArcadeValues.attackDamage;}
+    float getDamage(){
+        switch (color){
+            case 1:
+                return stats.getFloat("YellowAtk");
+            case 2:
+                return stats.getFloat("BlueAtk");
+            case 3:
+                return stats.getFloat("RedAtk");
+            default:
+                return 0f;
+        }
+    }
 
     int getColor(){
         return color;
