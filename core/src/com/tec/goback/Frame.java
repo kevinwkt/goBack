@@ -62,11 +62,13 @@ abstract class Frame implements Screen {
 
     //Textures
     protected Texture pauseButton;//Image that holds creators photos and back button
+    protected Texture background;
 
     protected SpriteBatch batch;
 
     //Stage
     protected Stage frameStage;
+
 
     //Auxiliary screens
     protected Pause pauseStage;
@@ -113,6 +115,25 @@ abstract class Frame implements Screen {
     }
 
     private void pauseInit() {
+        switch(pref.getInteger("level")){
+            default:
+            case 0:
+                background = aManager.get("INTRO/INTROBackground.png");
+                break;
+            case 1:
+                background = aManager.get("HARBOR/GoBackHARBOR0.png");
+                break;
+            case 2:
+                background = aManager.get("MOUNTAINS/GoBackMOUNTAINS0.png");
+                break;
+            case 3:
+                background = aManager.get("WOODS/WOODSBeginning.png");
+                break;
+            case 4:
+                background = aManager.get("WOODS/WOODSEnding.png");
+                break;
+        }
+
         batch = new SpriteBatch();
         frameStage = new Stage(view, batch);
         pauseStage = new Pause(view, batch, app);
@@ -282,7 +303,6 @@ abstract class Frame implements Screen {
         public static final float HALFH = HEIGHT/2;
 
         //Textures
-        private Texture background; //Background
 
         Texture blueOrbPanel;
         Texture blueOrbArrow;
@@ -353,21 +373,7 @@ abstract class Frame implements Screen {
         }
 
         public void textureInit(){
-            switch(pref.getInteger("level")){
-                default:
-                case 0:
-                    background = aManager.get("INTRO/INTROBackground.png");
-                    break;
-                case 1:
-                    background = aManager.get("HARBOR/GoBackHARBOR0.png");
-                    break;
-                case 2:
-                    background = aManager.get("MOUNTAINS/GoBackMOUNTAINS0.png");
-                    break;
-                case 3:
-                    background = aManager.get("WOODS/WOODSPanoramic2of2.png");
-                    break;
-            }
+
 
             blueOrbPanel = aManager.get("Interfaces/STATS/STATSBlueOrb.png");
             blueOrbArrow = aManager.get("Interfaces/STATS/STATSBlueOrbArrow.png");
@@ -890,7 +896,6 @@ abstract class Frame implements Screen {
         public static final float HALFH = HEIGHT/2;
 
         //Textures
-        private Texture background; //Background
         private Texture bottom; //Image
         private Texture map; //Image
         private Texture quitBton; //Button
@@ -979,21 +984,6 @@ abstract class Frame implements Screen {
         }
 
         private void textureInit(){
-            switch(pref.getInteger("level")){
-                default:
-                case 0:
-                    background = aManager.get("INTRO/INTROBackground.png");
-                    break;
-                case 1:
-                    background = aManager.get("HARBOR/GoBackHARBOR0.png");
-                    break;
-                case 2:
-                    background = aManager.get("MOUNTAINS/GoBackMOUNTAINS0.png");
-                    break;
-                case 3:
-                    background = aManager.get("WOODS/WOODSBeginning.png");
-                    break;
-            }
             bottom = aManager.get("Interfaces/PAUSE/PAUSEBottomDisplay.png");
             map = aManager.get("Interfaces/PAUSE/PAUSEMapList.png");
             quitBton = aManager.get("Interfaces/PAUSE/PAUSEQuit.png");
