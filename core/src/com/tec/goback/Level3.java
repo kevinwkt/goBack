@@ -220,6 +220,8 @@ class Level3 extends Frame {
                 if(((ArcadeArrow) obj).sprite.getX() <= 0){
                     deadThings.add(b);
                 }
+            }else if(obj instanceof ArcadeSophie){
+                ((ArcadeSophie)obj).draw(batch);
             }
 
 
