@@ -19,41 +19,6 @@ public class App extends Game {
 	@Override
 	public void create () {
 		setScreen(new SplashScreen(this));
-		aManager.load("HARBOR/GoBackHARBOR0.png", Texture.class);
-		aManager.load("WOODS/WOODSBeginning.png", Texture.class);
-		aManager.load("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTPause.png", Texture.class);
-		aManager.load("Interfaces/PAUSE/PAUSEBottomDisplay.png", Texture.class);
-		aManager.load("Interfaces/PAUSE/PAUSEMapList.png", Texture.class);
-		aManager.load("Interfaces/PAUSE/PAUSEStats.png", Texture.class);
-		aManager.load("CLUES/Newspaper/CLUESNewspaper.png",Texture.class);
-		aManager.load("CLUES/Newspaper/CLUESNewspaperDetail.png",Texture.class);
-		aManager.load("CLUES/Photo/CLUESPhoto.png",Texture.class);
-		aManager.load("CLUES/Photo/CLUESPhotoDetail.png",Texture.class);
-		aManager.load("CLUES/Note/CLUESNote.png",Texture.class);
-		aManager.load("CLUES/Note/CLUESNoteDetail.png",Texture.class);
-		aManager.load("CLUES/Bone/CLUESBone.png",Texture.class);
-		aManager.load("CLUES/Bone/CLUESBoneDetail.png",Texture.class);
-		//Stats
-		aManager.load("Interfaces/STATS/STATSback.png", Texture.class);
-		aManager.load("Interfaces/STATS/STATSBlueOrb.png", Texture.class);
-		aManager.load("Interfaces/STATS/STATSBlueOrbArrow.png", Texture.class);
-		aManager.load("Interfaces/STATS/STATSRedOrb.png", Texture.class);
-		aManager.load("Interfaces/STATS/STATSRedOrbArrow.png", Texture.class);
-		aManager.load("Interfaces/STATS/STATSYellowOrb.png", Texture.class);
-		aManager.load("Interfaces/STATS/STATSYellowOrbArrow.png", Texture.class);
-		aManager.load("Interfaces/STATS/STATSSophie.png", Texture.class);
-		aManager.load("Interfaces/STATS/STATSSophieArrow.png", Texture.class);
-		///
-		aManager.load("Interfaces/PAUSE/PAUSEQuit.png", Texture.class);
-		aManager.load("Interfaces/PAUSE/PAUSETopDisplay.png", Texture.class);
-		aManager.load("Interfaces/PAUSE/PAUSEback.png", Texture.class);
-		aManager.load("Interfaces/SOUND/SOUNDMusicON.png", Texture.class);
-		aManager.load("Interfaces/SOUND/SOUNDMusic.png", Texture.class);
-		aManager.load("Interfaces/SOUND/SOUNDSoundON.png", Texture.class);
-		aManager.load("Interfaces/SOUND/SOUNDSound.png", Texture.class);
-		aManager.load("CONSTANT/CONSTDialogueBox.png", Texture.class);
-		aManager.load("Interfaces/GAMEPLAY/ARCADE/ARCADESophie.png", Texture.class);
-
 		checkStatsPref();
 	}
 
