@@ -6,16 +6,20 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 
 import java.util.HashSet;
+import java.util.Random;
 
 /**
  * Created by kevin on 18/03/17.
@@ -35,6 +39,9 @@ class Level3 extends Frame {
 
     // background
     Texture background;
+    Texture arrow1;
+    Texture arrow2;
+    Texture arrow3;
 
     //map
     public static final float WIDTH_MAP = 3840;
@@ -43,11 +50,20 @@ class Level3 extends Frame {
     protected static final float LEFT_LIMIT = 20;
     protected static float RIGHT_LIMIT = 3650;
 
+    private Input level3Input = new Input();
+
     // preferences
     Preferences pref = Gdx.app.getPreferences("getLevel");
     Preferences soundPreferences = Gdx.app.getPreferences("My Preferences");
 
+    private Box2DDebugRenderer debugRenderer;
+    private Matrix4 debugMatrix;
 
+    private Random randomArrayPosition = new Random();
+    private Array<Body> bodies = new Array<Body>();
+    private Array<ArcadeArrow> arrows = new Array<ArcadeArrow>();
+
+    private float timeForArrow = 0;
 
     public Level3(App app) {
         super(app, WIDTH_MAP,HEIGHT_MAP);
@@ -61,15 +77,14 @@ class Level3 extends Frame {
         worldInit();
 
         Gdx.input.setCatchBackKey(true);
-        Gdx.input.setInputProcessor(new Input());
+        Gdx.input.setInputProcessor(level3Input);
 
-
-
+        debugRenderer=new Box2DDebugRenderer();
 
     }
 
     private void worldInit() {
-        world = new World(Vector2.Zero, true);
+        world = new World(new Vector2(5,-10), true);
         deadThings = new HashSet<Body>();
         world.setContactListener(new ContactListener() {
                                      @Override
@@ -100,6 +115,10 @@ class Level3 extends Frame {
     private void textureInit() {
         // background
         background = aManager.get("WOODS/WOODSPanoramic2of2.png");
+
+        arrow1= aManager.get("MINIONS/ARROW/MINIONBlueArrow00.png");
+        arrow2= aManager.get("MINIONS/ARROW/MINIONRedArrow00.png");
+        arrow3= aManager.get("MINIONS/ARROW/MINIONYellowArrow00.png");
 
         // sophie
         sophieTexture = new Texture("Squirts/Sophie/SOPHIEWalk.png");
@@ -190,7 +209,9 @@ class Level3 extends Frame {
 
     @Override
     public void dispose() {
-
+        aManager.unload("MINIONS/METEOR/MINIONMeteor00.png");
+        aManager.unload("MOUNTAINS/GoBackMOUNTAINSPanoramic.png");
+        aManager.unload("Squirts/Sophie/SOPHIEWalk.png");
     }
 
     public void updateCamera(){
