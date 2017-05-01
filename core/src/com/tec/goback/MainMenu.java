@@ -119,7 +119,7 @@ class MainMenu implements Screen {
                 background = aManager.get("MOUNTAINS/GoBackMOUNTAINS0.png");
                 break;
             case 3:
-                background = aManager.get("WOODS/WOODSMiddle00.png");
+                background = aManager.get("WOODS/WOODSBeginning.png");
                 break;
         }
 
@@ -188,13 +188,13 @@ class MainMenu implements Screen {
                 switch (d){
                     case 1:
                         next = LoaderState.LEVEL1;
-                       break;
+                        break;
                     case 2:
                         next = LoaderState.LEVEL2;
                         break;
                     case 3:
                         next = LoaderState.LEVEL3;
-                       break;
+                        break;
                     case 4:
                         next = LoaderState.LEVEL3;
                         break;
@@ -285,7 +285,7 @@ class MainMenu implements Screen {
         aManager.unload("INTRO/INTROBackground.png");
         aManager.unload("HARBOR/GoBackHARBOR0.png");
         //aManager.unload("MOUNTAINS/GoBackMOUNTAINS0.png"); //Level2
-        //aManager.unload(".png"); //Level3
+        aManager.unload("WOODS/WOODSBeginning.png"); //Level3
         //aManager.unload("Interfaces/MENU/ABOUT.png");
         aManager.unload("Interfaces/MENU/ARCADE.png");
         aManager.unload("Interfaces/MENU/SOUND.png");
