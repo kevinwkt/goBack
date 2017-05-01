@@ -20,7 +20,7 @@ import com.badlogic.gdx.physics.box2d.World;
 class ArcadeSophie {    //TODO ADAPT FOR LEVELS
     private Body body;
     private Sprite sprite;
-    protected float life = 100;
+    protected float life = 30;
     private int color = 1;
     private Animation<TextureRegion> standby;
     private Animation<TextureRegion> walking;
@@ -60,7 +60,8 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
                 texturaPersonaje[0][32], texturaPersonaje[0][31], texturaPersonaje[0][30],
                 texturaPersonaje[0][29],texturaPersonaje[0][28], texturaPersonaje[0][27],
                 texturaPersonaje[0][26]);
-        dying= new Animation(0.1f, texturaPersonaje[0][26], texturaPersonaje[0][27],
+        dying= new Animation(0.18f, texturaPersonaje[0][23],texturaPersonaje[0][24],
+                texturaPersonaje[0][25], texturaPersonaje[0][26], texturaPersonaje[0][27],
                 texturaPersonaje[0][28], texturaPersonaje[0][29],
                 texturaPersonaje[0][30], texturaPersonaje[0][31],texturaPersonaje[0][32],
                 texturaPersonaje[0][33], texturaPersonaje[0][34], texturaPersonaje[0][35],
@@ -70,6 +71,7 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
         // Animación infinita
         standby.setPlayMode(Animation.PlayMode.LOOP);
         walking.setPlayMode(Animation.PlayMode.LOOP);
+        dying.setPlayMode(Animation.PlayMode.NORMAL);
 
         // Inicia el timer que contará tiempo para saber qué frame se dibuja
         timerchangeframewalk = 0;
@@ -165,6 +167,17 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
                 );
                 batch.draw(region,sprite.getX(),sprite.getY());
                 break;
+            case DYING:
+                timerchangeframestandby += Gdx.graphics.getDeltaTime();
+                region = dying.getKeyFrame(timerchangeframestandby);
+
+                sprite.setCenter(
+                        ArcadeValues.metersToPx(body.getPosition().x),
+                        ArcadeValues.metersToPx(body.getPosition().y)
+                );
+                batch.draw(region,sprite.getX(),sprite.getY());
+                break;
+
         }
 
 

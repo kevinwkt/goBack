@@ -1,11 +1,13 @@
 package com.tec.goback;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -27,7 +29,8 @@ import java.util.Random;
 class Level2 extends Frame {
     //box2d shit
     private World world;
-    private HashSet<Body> deadThings;
+    private HashSet<Body> meteorsOutOfBounds;
+    private HashSet<Body> deadMeteors;
     private Array<Body> squirts = new Array<Body>();
     private Object meteorObj;
 
@@ -62,7 +65,10 @@ class Level2 extends Frame {
     private Random randomMeteorPosition = new Random();
 
     private float timeForMeteor = 2;
+    private float dialoguetime = 0;
 
+    private Dialogue dialogue;
+    private GlyphLayout glyph = new GlyphLayout();
 
 
     public Level2(App app) {
@@ -77,17 +83,19 @@ class Level2 extends Frame {
         worldInit();
         Gdx.input.setCatchBackKey(true);
         Gdx.input.setInputProcessor(level2Input);
+        dialogue = new Dialogue(aManager);
 
         debugRenderer=new Box2DDebugRenderer();
 
 
 
-        
+
     }
 
     private void worldInit() {
         world = new World(Vector2.Zero, true);
-        deadThings = new HashSet<Body>();
+        meteorsOutOfBounds = new HashSet<Body>();
+        deadMeteors = new HashSet<Body>();
         world.setContactListener(new ContactListener() {
              @Override
              public void beginContact(Contact contact) {
@@ -95,10 +103,10 @@ class Level2 extends Frame {
                  Object ob2 = contact.getFixtureB().getBody().getUserData();
                  if(ob1 instanceof ArcadeSophie || ob2 instanceof ArcadeSophie){
                      if(ob1 instanceof ArcadeSophie){
-                         deadThings.add(contact.getFixtureB().getBody());
+                         deadMeteors.add(contact.getFixtureB().getBody());
                      }
                      if(ob2 instanceof ArcadeSophie){
-                         deadThings.add(contact.getFixtureA().getBody());
+                         deadMeteors.add(contact.getFixtureA().getBody());
                      }
                  }
              }
@@ -136,7 +144,7 @@ class Level2 extends Frame {
         // sophie
         sophieTexture = aManager.get("Squirts/Sophie/SOPHIEWalk.png");
 
-        
+
     }
 
     @Override
@@ -179,13 +187,25 @@ class Level2 extends Frame {
 
             updateCamera();
             Gdx.input.setInputProcessor(level2Input);
+
             stepper(delta);
             batch.end();
+            if(sophie.life <= 0){
+                state = GameState.LOST;
+            }
 
         }else if(state == GameState.PAUSED){
             batch.end();
             pauseStage.draw();
             Gdx.input.setInputProcessor(pauseStage);
+        }else if(state == GameState.LOST){
+            batch.draw(background,0,0);
+
+            sophie.setMovementState(ArcadeSophie.MovementState.DYING);
+            sophie.draw(batch);
+            //sophie.update();
+
+            loose(delta);
         }
 
 
@@ -197,12 +217,25 @@ class Level2 extends Frame {
         batch.end();
     }
 
+    private void loose(float delta) {
+        dialoguetime += delta;
+
+        if(dialoguetime < 2.5f) {
+            dialogue.makeText(glyph, batch, "This dream overwhelmed you", camera.position.x);
+            batch.end();
+        }else{
+            batch.end();
+            app.setScreen(new Fade(app, LoaderState.LEVEL2));
+        }
+    }
+
     private void drawMeteors(float delta) {
         // must appear at 1420
         timeForMeteor += delta;
 
-        if(timeForMeteor >= 0.5){
-            new ArcadeMeteor(world, (float)(randomMeteorPosition.nextInt(2630)+1020), meteor);
+        if(timeForMeteor >= 0.2){
+            //new ArcadeMeteor(world, (float)(randomMeteorPosition.nextInt(2630)+720), meteor);
+            new ArcadeMeteor(world, (float)(randomMeteorPosition.nextInt((int)camera.position.x)), meteor);
             timeForMeteor = 0;
         }
 
@@ -213,7 +246,7 @@ class Level2 extends Frame {
                 ((ArcadeMeteor)meteorObj).draw(batch);
 
                 if(((ArcadeMeteor) meteorObj).sprite.getY() <= -200){
-                    deadThings.add(b);
+                    meteorsOutOfBounds.add(b);
                 }
             }
 
@@ -225,14 +258,24 @@ class Level2 extends Frame {
 
     private void stepper(float delta){
         world.step(1/60f, 6, 2);
-
-        for(Body b: deadThings){
+        for(Body b: meteorsOutOfBounds){
             while(b.getFixtureList().size > 0){
                 b.destroyFixture(b.getFixtureList().get(0));
             }
             world.destroyBody(b);
         }
-        deadThings.clear();
+        meteorsOutOfBounds.clear();
+
+        for(Body b: deadMeteors){
+            while(b.getFixtureList().size > 0){
+                b.destroyFixture(b.getFixtureList().get(0));
+            }
+
+            world.destroyBody(b);
+            sophie.life -= 10;
+            Gdx.app.log("Sophie got hit", sophie.life+"");
+        }
+        deadMeteors.clear();
 
     }
 
