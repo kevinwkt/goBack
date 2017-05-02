@@ -74,6 +74,7 @@ class MainMenu implements Screen {
     public MainMenu(App app) {
         this.app = app;
         this.aManager = app.getAssetManager();
+
     }
 
     @Override
@@ -83,10 +84,7 @@ class MainMenu implements Screen {
         //pref.putInteger("level",4);
         //pref.flush();
 
-        if(pref.getInteger("level")==0){
-            pref.getBoolean("boss",false);
-            pref.flush();
-        }
+
         cameraInit();
         textureInit();
         objectInit();
@@ -190,6 +188,12 @@ class MainMenu implements Screen {
         storyBtnImg.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
+
+                if(pref.getInteger("level")==0){
+                    pref.putBoolean("boss",false);
+                    pref.flush();
+                }
+
                 LoaderState next;
 
                 int d= pref.getInteger("level");

@@ -24,6 +24,12 @@ public class App extends Game {
 
 	private void checkStatsPref() {
 		Preferences stats=Gdx.app.getPreferences("STATS");
+		Preferences pref=Gdx.app.getPreferences("getLevel");
+
+		if(pref.getInteger("level")==0){
+			pref.putBoolean("boss",false);
+			pref.flush();
+		}
 
 		/*
 		stats.putInteger("XP",0);
