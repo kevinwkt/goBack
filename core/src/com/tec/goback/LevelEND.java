@@ -15,6 +15,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 
+import java.util.ArrayList;
+
 import static com.badlogic.gdx.scenes.scene2d.ui.Table.Debug.actor;
 
 /*
@@ -28,13 +30,14 @@ class LevelEND extends Frame {
 
     private Stage stage;
 
-    //    private Texture boneTx;
-
     private Image bg;
+
+    private ArrayList<Image> arr = new ArrayList<Image>();
     private Image newsPaper;
     private Image photo;
     private Image note;
 //    private Image bone;
+
 
 
 
@@ -63,7 +66,7 @@ class LevelEND extends Frame {
         Texture newsPaperTx = new Texture("CLUES/Newspaper/CLUESNewspaper.png");
         Texture photoTx = new Texture("CLUES/Photo/CLUESPhoto.png");
         Texture noteTx = new Texture("CLUES/Note/CLUESNote.png");
-//        boneTx = new Texture("CLUES/Bone/CLUESBone.png");
+//        Texture boneTx = new Texture("CLUES/Bone/CLUESBone.png");
 
         bg = new Image(bgTx);
 
@@ -71,6 +74,8 @@ class LevelEND extends Frame {
         photo = new Image(photoTx);
         note = new Image(noteTx);
 //        bone = new Image(boneTx);
+
+        arr.add(newsPaper); arr.add(photo); arr.add(note);
 
         newsPaper.addListener(new DragListener() {
             public void drag(InputEvent event, float x, float y, int pointer) {
@@ -93,6 +98,10 @@ class LevelEND extends Frame {
 //            }
 //        });
 
+        newsPaper.setPosition(198,10);
+        photo.setPosition(327,117);
+        note.setPosition(410,10);
+
         stage.addActor(bg);
         stage.addActor(newsPaper);
         stage.addActor(photo);
@@ -107,9 +116,26 @@ class LevelEND extends Frame {
     @Override
     public void render(float delta) {
         cls();
+
+        if(squaresFilled()) state = GameState.WON;
+
         if(state == GameState.PLAYING) {
             stage.draw();
+        }else if(state == GameState.WON){
+            stage.draw();
         }
+    }
+
+    private boolean squaresFilled(){
+        boolean first = false, second = false, third = false;
+        float x, y;
+        for(Image i: arr){
+            x = i.getX()+i.getWidth()/2; y = i.getY()+i.getHeight()/2;
+            if( (x > 680 && x < 815) && (y > 25 && y <162) ) first = true;
+            if( (x > 902 && x < 1030) && (y > 25 && y <162) ) second = true;
+            if( (x > 1115 && x < 1247) && (y > 25 && y <162) ) third = true;
+        }
+        return (first && second) && third;
     }
 
     @Override

@@ -61,7 +61,7 @@ class Arcade extends Frame{
     private float hit = 0;
     private float match = 0;
 
-    private Preferences stats = Gdx.app.getPreferences("STATS");
+
 
     //CURRENT COLOR ORB
     private orbColor currentColor = orbColor.YELLOW;
@@ -120,6 +120,8 @@ class Arcade extends Frame{
     private Input input;
 
     private Preferences soundPreferences = Gdx.app.getPreferences("My Preferences");
+    private Preferences stats = Gdx.app.getPreferences("STATS");
+    private Preferences level = Gdx.app.getPreferences("getLevel");
     boolean flag;
 
     private Box2DDebugRenderer debugRenderer;
@@ -132,11 +134,9 @@ class Arcade extends Frame{
 
     @Override
     public void show() {
-        //d = pref.getInteger("level");
-        d = 3;
+        pref.getInteger("level");
         debugRenderer = new Box2DDebugRenderer();
-        bossFight = ArcadeValues.bossFightFlag;
-        bossFight = true;
+        level.getBoolean("boss");
         arcadeMultiplier = !bossFight ? ArcadeValues.arcadeMultiplier : 1;
         super.show();
         textureInit();
@@ -179,8 +179,8 @@ class Arcade extends Frame{
                 pelletBlue = aManager.get("PELLET/ATAQUEBluePellet.png");
 
 
-                background = new Texture("HARBOR/GoBackHARBORPanoramic.png");
-                //background = new Texture("MOUNTAINS/GoBackMOUNTAINSPanoramic.png"); //switch
+                //background = new Texture("HARBOR/GoBackHARBORPanoramic.png");
+                background = new Texture("MOUNTAINS/GoBackMOUNTAINSPanoramic.png"); //switch
                 break;
             case 3:
                 orbYellow = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png");
@@ -194,8 +194,8 @@ class Arcade extends Frame{
                 pelletBlue = aManager.get("PELLET/ATAQUEBluePellet.png");
                 pelletRed = aManager.get("PELLET/ATAQUERedPellet.png");
 
-                background = new Texture("HARBOR/GoBackHARBORPanoramic.png");
-                //background = new Texture("HARBOR/GoBackWOODSPanoramic.png"); //switch
+                //background = new Texture("HARBOR/GoBackHARBORPanoramic.png");
+                background = new Texture("UNDERGROUND/UNDERGROUNDArcade.png"); //switch
                 break;
         }
 
@@ -457,15 +457,16 @@ class Arcade extends Frame{
         }
         batch.begin();
         batch.setProjectionMatrix(super.camera.combined);
-        debugRenderer.render(world, debugMatrix);
+        //debugRenderer.render(world, debugMatrix);
         batch.end();
     }
 
     private void drawShit(){
-        batch.draw(background,-2560,0);
+        if(d == 1 || d == 2)batch.draw(background,-2560,0);
+        else batch.draw(background,0,0);
         sophie.setColor(1.0f,1.0f,1.0f,0.8f);
         sophie.setPosition(ArcadeValues.pelletOriginX-100
-                , ArcadeValues.pelletOriginY-30);
+                , ArcadeValues.pelletOriginY-35);
         sophie.draw(batch);
         drawBodies();
     }
@@ -529,6 +530,7 @@ class Arcade extends Frame{
     }
 
     private void win(float delta){
+
         dialoguetime += delta;
         if (dialoguetime < 2.5f) {
             dialogue.makeText(glyph, batch, "You have proven yourself worthy of going on forward.\n You now carry new knowledge", camera.position.x);
