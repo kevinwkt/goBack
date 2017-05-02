@@ -80,8 +80,8 @@ class MainMenu implements Screen {
     public void show() {
         //     -----------------------  TO GET INTO LEVEL 0 TEMPORAL OMG
 
-        pref.putInteger("level",3);
-        pref.flush();
+//        pref.putInteger("level",3);
+//        pref.flush();
 
         if(pref.getInteger("level")==0){
             pref.getBoolean("boss",false);
@@ -289,7 +289,7 @@ class MainMenu implements Screen {
         aManager.unload("INTRO/INTROBackground.png");
         aManager.unload("HARBOR/GoBackHARBOR0.png");
         //aManager.unload("MOUNTAINS/GoBackMOUNTAINS0.png"); //Level2
-        //aManager.unload("WOODS/WOODSBeginning.png"); //Level3
+        aManager.unload("WOODS/WOODSBeginning.png"); //Level3
         //aManager.unload("Interfaces/MENU/ABOUT.png");
         aManager.unload("Interfaces/MENU/ARCADE.png");
         aManager.unload("Interfaces/MENU/SOUND.png");

@@ -61,7 +61,7 @@ class Arcade extends Frame{
     private float hit = 0;
     private float match = 0;
 
-    private Preferences stats = Gdx.app.getPreferences("STATS");
+
 
     //CURRENT COLOR ORB
     private orbColor currentColor = orbColor.YELLOW;
@@ -120,6 +120,7 @@ class Arcade extends Frame{
     private Input input;
 
     private Preferences soundPreferences = Gdx.app.getPreferences("My Preferences");
+    private Preferences stats = Gdx.app.getPreferences("STATS");
     boolean flag;
 
     private Box2DDebugRenderer debugRenderer;
@@ -132,11 +133,9 @@ class Arcade extends Frame{
 
     @Override
     public void show() {
-        //d = pref.getInteger("level");
-        d = 3;
+        d = pref.getInteger("level");
         debugRenderer = new Box2DDebugRenderer();
-        bossFight = ArcadeValues.bossFightFlag;
-        bossFight = true;
+        bossFight = pref.getBoolean("boss");
         arcadeMultiplier = !bossFight ? ArcadeValues.arcadeMultiplier : 1;
         super.show();
         textureInit();
@@ -160,42 +159,28 @@ class Arcade extends Frame{
     }
 
     private void textureInit() {
+        orbYellow = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png");
+
+        orbBlue = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrb.png");
+
+        orbRed = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADERedOrb.png");
+
+
+        pelletYellow = aManager.get("PELLET/ATAQUEYellowPellet.png");
+        pelletBlue = aManager.get("PELLET/ATAQUEBluePellet.png");
+        pelletRed = aManager.get("PELLET/ATAQUERedPellet.png");
+
         switch (d){
             case 1:
-                orbYellow = new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png");
-
-
-                pelletYellow = aManager.get("PELLET/ATAQUEYellowPellet.png");
-
                 background = new Texture("HARBOR/GoBackHARBORPanoramic.png"); //switch
                 break;
             case 2:
-                orbYellow = new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png");
-
-                orbBlue = new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrb.png");
-
-
-                pelletYellow = aManager.get("PELLET/ATAQUEYellowPellet.png");
-                pelletBlue = aManager.get("PELLET/ATAQUEBluePellet.png");
-
-
-                background = new Texture("HARBOR/GoBackHARBORPanoramic.png");
-                //background = new Texture("MOUNTAINS/GoBackMOUNTAINSPanoramic.png"); //switch
+                //background = new Texture("HARBOR/GoBackHARBORPanoramic.png");
+                background = new Texture("MOUNTAINS/GoBackMOUNTAINSPanoramic.png"); //switch
                 break;
             case 3:
-                orbYellow = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png");
-
-                orbBlue = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrb.png");
-
-                orbRed = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADERedOrb.png");
-
-
-                pelletYellow = aManager.get("PELLET/ATAQUEYellowPellet.png");
-                pelletBlue = aManager.get("PELLET/ATAQUEBluePellet.png");
-                pelletRed = aManager.get("PELLET/ATAQUERedPellet.png");
-
-                background = new Texture("HARBOR/GoBackHARBORPanoramic.png");
-                //background = new Texture("HARBOR/GoBackWOODSPanoramic.png"); //switch
+                //background = new Texture("HARBOR/GoBackHARBORPanoramic.png");
+                background = new Texture("UNDERGROUND/UNDERGROUNDArcade.png"); //switch
                 break;
         }
 
@@ -457,15 +442,16 @@ class Arcade extends Frame{
         }
         batch.begin();
         batch.setProjectionMatrix(super.camera.combined);
-        debugRenderer.render(world, debugMatrix);
+        //debugRenderer.render(world, debugMatrix);
         batch.end();
     }
 
     private void drawShit(){
-        batch.draw(background,-2560,0);
+        if(d == 1 || d == 2)batch.draw(background,-2560,0);
+        else batch.draw(background,0,0);
         sophie.setColor(1.0f,1.0f,1.0f,0.8f);
         sophie.setPosition(ArcadeValues.pelletOriginX-100
-                , ArcadeValues.pelletOriginY-30);
+                , ArcadeValues.pelletOriginY-35);
         sophie.draw(batch);
         drawBodies();
     }
@@ -529,20 +515,44 @@ class Arcade extends Frame{
     }
 
     private void win(float delta){
+
         dialoguetime += delta;
-        if (dialoguetime < 2.5f) {
+        if (dialoguetime < 6f) {
             dialogue.makeText(glyph, batch, "You have proven yourself worthy of going on forward.\n You now carry new knowledge", camera.position.x);
             batch.end();
         } else {
             batch.end();
-            app.setScreen(new Fade(app, LoaderState.ARCADE));
+            LoaderState next;
+            switch(d){
+                case 1:
+                    pref.putInteger("level", 2);
+                    pref.putBoolean("boss", false);
+                    pref.flush();
+                    next = LoaderState.LEVEL2;
+                    break;
+                case 2:
+                    pref.putInteger("level", 3);
+                    pref.putBoolean("boss", false);
+                    pref.flush();
+                    next = LoaderState.LEVEL3;
+                    break;
+                case 3:
+                    pref.putInteger("level", 4);
+                    pref.putBoolean("boss", false);
+                    pref.flush();
+                    next = LoaderState.LEVEL4;
+                    break;
+                default:
+                    next = LoaderState.ARCADE;
+            }
+            app.setScreen(new Fade(app, next));
         }
     }
 
     private void loose(float delta){
         if(bossFight) {
             dialoguetime += delta;
-            if (dialoguetime < 2.5f) {
+            if (dialoguetime < 6f) {
                 dialogue.makeText(glyph, batch, "This dream overwhelmed you\n Your inexperienced soul was not ready.", camera.position.x);
                 batch.end();
             } else {
@@ -551,13 +561,13 @@ class Arcade extends Frame{
             }
         }else{
             if (!putXp) {
-                stats.putInteger("XP", stats.getInteger("XP") + 100000000);
-                //stats.putInteger("XP", stats.getInteger("XP") + ((int)(hit + 10 * (hit / shot) + 10 * (hit * (match / hit))))/10);
+                //stats.putInteger("XP", stats.getInteger("XP") + 100000000);
+                stats.putInteger("XP", stats.getInteger("XP") + ((int)(hit + 10 * (hit / shot) + 10 * (hit * (match / hit))))/10);
                 stats.flush();
                 putXp = true;
             }
             dialoguetime += delta;
-            if (dialoguetime < 2.5f) {
+            if (dialoguetime < 6f) {
                 dialogue.makeText(glyph, batch, "This dream overwhelmed you\n Your experience grew to " + stats.getInteger("XP"), camera.position.x);
                 batch.end();
             } else {

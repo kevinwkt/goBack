@@ -30,8 +30,8 @@ class ArcadeValues {
     //positioning
     static float highOnPot = (float) java.lang.Math.sqrt(640F * 640F + 448F * 448F);
     static final float bossX = 1000;
-    static final float yellowBossLife = 9000;
-    static final float blueBossLife = 9000;
+    static final float yellowBossLife = 5000;
+    static final float blueBossLife = 7000;
     static final float redBossLife = 9000;
 
     static final float pelletOriginX = 640;

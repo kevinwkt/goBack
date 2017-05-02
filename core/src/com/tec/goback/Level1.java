@@ -290,7 +290,7 @@ class Level1 extends Frame {
 
             switch (dialogueSprite){
                 case 1:
-                    dialogue.makeText(glyph, batch, "He's taking me back…. He's taking me back….. He surely is taking me back You! It's been a long long time. The boat will be coming back soon,  I hope what I have is enough. Will you be going back, too?", oldManNormalSpr, sophieNormalSpr, false, camera.position.x);
+                    dialogue.makeText(glyph, batch, "He's taking me back…. He's taking me back….. He surely is taking me back You! It has been a long long time. The boat will be coming back soon,  I hope what I have is enough. Will you be going back, too?", oldManNormalSpr, sophieNormalSpr, false, camera.position.x);
                     break;
                 case 2:
                     dialogue.makeText(glyph, batch, "I dont know… Where am I…?", oldManNormalSpr, sophieNormalSpr, true, camera.position.x);
@@ -305,7 +305,7 @@ class Level1 extends Frame {
                     break;
             }
 
-            if(dialogueTime > 3.5){ // 2.5
+            if(dialogueTime > 6){
                 dialogueSprite += 1;
                 dialogueTime = 0;
                 if(dialogueSprite >= 4){
