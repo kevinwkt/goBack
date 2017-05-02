@@ -67,12 +67,18 @@ class ArcadeArrow extends Enemy {
         fixtureDef.filter.categoryBits = ArcadeValues.enemyCat; //its category
         fixtureDef.filter.maskBits = ArcadeValues.enemyMask; //or of its category with colliding categories
 
-        body.createFixture(fixtureDef);
+        loader.attachFixture(body,"arrowRight",fixtureDef,0.25f);
+        if(leftRight==1) {
+            body.setTransform(body.getPosition() ,90*MathUtils.degreesToRadians);
+        }
+        if(leftRight==0) {
+            body.setTransform(body.getPosition(),-90*MathUtils.degreesToRadians);
+        }
     }
 
     void draw(SpriteBatch batch) {
         timeframe +=Gdx.graphics.getDeltaTime();
-        sprite.setPosition(ArcadeValues.metersToPx(body.getPosition().x-0.4f), ArcadeValues.metersToPx(body.getPosition().y-0.4f));
+        sprite.setPosition(ArcadeValues.metersToPx(body.getPosition().x+0.54f), ArcadeValues.metersToPx(body.getPosition().y-0.81f));
         sprite.draw(batch);
     }
 }

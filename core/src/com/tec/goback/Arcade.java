@@ -121,7 +121,6 @@ class Arcade extends Frame{
 
     private Preferences soundPreferences = Gdx.app.getPreferences("My Preferences");
     private Preferences stats = Gdx.app.getPreferences("STATS");
-    private Preferences level = Gdx.app.getPreferences("getLevel");
     boolean flag;
 
     private Box2DDebugRenderer debugRenderer;
@@ -136,7 +135,7 @@ class Arcade extends Frame{
     public void show() {
         d = pref.getInteger("level");
         debugRenderer = new Box2DDebugRenderer();
-        bossFight = level.getBoolean("boss");
+        bossFight = pref.getBoolean("boss");
         arcadeMultiplier = !bossFight ? ArcadeValues.arcadeMultiplier : 1;
         super.show();
         textureInit();
@@ -518,12 +517,35 @@ class Arcade extends Frame{
     private void win(float delta){
 
         dialoguetime += delta;
-        if (dialoguetime < 2.5f) {
+        if (dialoguetime < 4f) {
             dialogue.makeText(glyph, batch, "You have proven yourself worthy of going on forward.\n You now carry new knowledge", camera.position.x);
             batch.end();
         } else {
             batch.end();
-            app.setScreen(new Fade(app, LoaderState.ARCADE));
+            LoaderState next;
+            switch(d){
+                case 1:
+                    pref.putInteger("level", 2);
+                    pref.putBoolean("boss", false);
+                    pref.flush();
+                    next = LoaderState.LEVEL2;
+                    break;
+                case 2:
+                    pref.putInteger("level", 3);
+                    pref.putBoolean("boss", false);
+                    pref.flush();
+                    next = LoaderState.LEVEL3;
+                    break;
+                case 3:
+                    pref.putInteger("level", 4);
+                    pref.putBoolean("boss", false);
+                    pref.flush();
+                    next = LoaderState.LEVEL4;
+                    break;
+                default:
+                    next = LoaderState.ARCADE;
+            }
+            app.setScreen(new Fade(app, next));
         }
     }
 
