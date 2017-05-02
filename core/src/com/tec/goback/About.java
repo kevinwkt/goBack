@@ -95,7 +95,7 @@ class About implements Screen {
             @Override
             public boolean keyDown(int keycode) {
                 if (keycode == Input.Keys.BACK) {
-                    app.setScreen(new Fade(app, LoaderState.MAINMENU));
+                    app.setScreen(new Fade(app, LoaderState.MAINMENU, menu));
                     return true;
                 }
                 return false;
