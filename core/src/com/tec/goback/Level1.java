@@ -305,7 +305,7 @@ class Level1 extends Frame {
                     break;
             }
 
-            if(dialogueTime > 3.5){ // 2.5
+            if(dialogueTime > 6){
                 dialogueSprite += 1;
                 dialogueTime = 0;
                 if(dialogueSprite >= 4){

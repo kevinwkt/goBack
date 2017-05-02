@@ -517,7 +517,7 @@ class Arcade extends Frame{
     private void win(float delta){
 
         dialoguetime += delta;
-        if (dialoguetime < 4f) {
+        if (dialoguetime < 6f) {
             dialogue.makeText(glyph, batch, "You have proven yourself worthy of going on forward.\n You now carry new knowledge", camera.position.x);
             batch.end();
         } else {
@@ -552,7 +552,7 @@ class Arcade extends Frame{
     private void loose(float delta){
         if(bossFight) {
             dialoguetime += delta;
-            if (dialoguetime < 2.5f) {
+            if (dialoguetime < 6f) {
                 dialogue.makeText(glyph, batch, "This dream overwhelmed you\n Your inexperienced soul was not ready.", camera.position.x);
                 batch.end();
             } else {
@@ -561,13 +561,13 @@ class Arcade extends Frame{
             }
         }else{
             if (!putXp) {
-                stats.putInteger("XP", stats.getInteger("XP") + 100000000);
-                //stats.putInteger("XP", stats.getInteger("XP") + ((int)(hit + 10 * (hit / shot) + 10 * (hit * (match / hit))))/10);
+                //stats.putInteger("XP", stats.getInteger("XP") + 100000000);
+                stats.putInteger("XP", stats.getInteger("XP") + ((int)(hit + 10 * (hit / shot) + 10 * (hit * (match / hit))))/10);
                 stats.flush();
                 putXp = true;
             }
             dialoguetime += delta;
-            if (dialoguetime < 2.5f) {
+            if (dialoguetime < 6f) {
                 dialogue.makeText(glyph, batch, "This dream overwhelmed you\n Your experience grew to " + stats.getInteger("XP"), camera.position.x);
                 batch.end();
             } else {
