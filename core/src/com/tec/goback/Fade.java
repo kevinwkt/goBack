@@ -170,6 +170,7 @@ class Fade implements Screen {
                     manager.load("WOODS/WOODSEnding.png",Texture.class);
                     manager.load("WOODS/WOODSMiddle00.png",Texture.class);
                     manager.load("WOODS/WOODSMiddle01.png",Texture.class);
+                    manager.load("CLUES/Photo/CLUESPhoto.png",Texture.class);
                     break;
                 case LEVEL4:
                     manager.load("Squirts/Sophie/SOPHIEWalk.png",Texture.class);
