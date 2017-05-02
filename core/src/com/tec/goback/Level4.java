@@ -7,6 +7,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Queue;
+
+import java.util.Random;
 
 /**
  * Created by sergiohernandezjr on 01/05/17.
@@ -29,6 +32,8 @@ class Level4 extends Frame {
     private Texture background01;
     private Texture background02;
     private Texture background03;
+    private Texture handTexture;
+
 
     // yellow orb
     private Sprite yellowOrb;
@@ -51,6 +56,9 @@ class Level4 extends Frame {
     private OrbMovement currentRedOrbState = OrbMovement.GOING_UP;
     private final float DISTANCE_RED_ORB_SOPHIE = 30;
 
+    //Bottom hands
+    Hand [] arrHand = new Hand[11];
+
     Level4(App app) {
         super(app, WIDTH_MAP,HEIGHT_MAP);
     }
@@ -60,10 +68,6 @@ class Level4 extends Frame {
         super.show();
         textureInit();
         objectInit();
-
-
-        sophie.setMovementState(Sophie.MovementState.WAKING_LEFT);
-        sophie.sprite.setPosition(SOPHIE_START_X, SOPHIE_START_Y);
 
         Gdx.input.setCatchBackKey(true);
         Gdx.input.setInputProcessor(new Input());
@@ -76,13 +80,14 @@ class Level4 extends Frame {
         background01 = aManager.get("WOODS/WOODSPanoramic1of2.png");
         background02 = aManager.get("MOUNTAINS/GoBackMOUNTAINSPanoramic.png");
         background03 = aManager.get("HARBOR/GoBackHARBORPanoramic.png");
+        handTexture = aManager.get("MINIONS/HAND/MINIONSHand00.png");
 
         sophie = new Sophie(sophieTexture, 100,100);
         yellowOrb = new Sprite((Texture)aManager.get("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTYellowOrb.png"));
         blueOrb = new Sprite((Texture)aManager.get("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTBlueOrb.png"));
         redOrb = new Sprite((Texture)aManager.get("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTRedOrb.png"));
 
-        yellowOrb.setColor(1.0f,1.0f,1.0f,0.8f);
+        yellowOrb.setColor(1.0f,1.0f,1.0f,1f);
         blueOrb.setColor(1.0f,1.0f,1.0f,0.4f);
         redOrb.setColor(1.0f,1.0f,1.0f,0.4f);
     }
@@ -90,11 +95,26 @@ class Level4 extends Frame {
     private void objectInit() {
         batch = new SpriteBatch();
         batch.begin();
+
+        //BG
         batch.draw(background01,7680,0);
         batch.draw(background02,3840,0);
         batch.draw(background03,0,0);
+
+        //SOPHIE
+        sophie.setMovementState(Sophie.MovementState.WAKING_LEFT);
+        sophie.sprite.setPosition(SOPHIE_START_X, SOPHIE_START_Y);
+
+        //CAMERA
         camera.position.set(7680+background01.getWidth()-HALFW,camera.position.y, 0);
         camera.update();
+
+        //HANDS
+        arrHand[0]= new Hand(handTexture, camera.position.x-HALFW-(WIDTH/(arrHand.length-1)), 0);
+        for (int i = 0; i<arrHand.length-1;i++){
+            arrHand[i+1] = new Hand(handTexture, camera.position.x-HALFW+(WIDTH/(arrHand.length-1))*i, 0);
+        }
+
         batch.end();
     }
 
@@ -124,7 +144,7 @@ class Level4 extends Frame {
             batch.draw(background01,7680,0);
             batch.draw(background02,3840,0);
             batch.draw(background03,0,0);
-            batch.draw(pauseButton,camera.position.x+HALFW-pauseButton.getWidth(),camera.position.y-HALFH);
+
 
             sophie.draw(batch);
             sophie.update();
@@ -137,6 +157,12 @@ class Level4 extends Frame {
             moveBlueOrb(delta);
             moveRedOrb(delta);
 
+            for (int i = 0; i<arrHand.length;i++){
+                arrHand[i].update();
+                checkHand(arrHand[i]);
+            }
+
+            batch.draw(pauseButton,camera.position.x+HALFW-pauseButton.getWidth(),camera.position.y-HALFH);
             updateCamera();
             batch.end();
         }
@@ -144,6 +170,13 @@ class Level4 extends Frame {
 
 
     }
+
+    private void checkHand(Hand hand) {
+        if(hand.sprite.getX()-hand.sprite.getOriginX()>=camera.position.x+HALFW){
+            hand.sprite.setX(camera.position.x-HALFW-WIDTH/arrHand.length);
+        }
+    }
+
 
     private void moveRedOrb(float delta){
         if(redOrbYPosition >= 335){ // 155
@@ -225,6 +258,46 @@ class Level4 extends Frame {
         }
 
         camera.update();
+    }
+
+    class Hand extends Squirt{
+        private boolean rotate = true;
+        private Random rand = new Random();
+
+        public Hand(Texture textura, float x, float y){
+            sprite = new Sprite(textura);
+            sprite.rotate(90f);
+            sprite.setPosition(x, y);
+            sprite.setOrigin(60, 30);
+
+            float randFl = (0.14f)*rand.nextFloat()+0.01f;
+            sprite.scale(randFl);
+
+            if(rand.nextBoolean()){
+                sprite.flip(false, true);
+            }
+
+            sprite.draw(batch);
+        }
+
+        public void update(){
+            if (rotate) {
+                sprite.rotate(0.5f*rand.nextFloat());
+            } else {
+                sprite.rotate(-0.5f*rand.nextFloat());
+            }
+
+            if (sprite.getRotation() > 95) {
+                rotate = false;
+            } else if (sprite.getRotation() < 85) {
+                rotate = true;
+            }
+            sprite.draw(batch);
+        }
+
+
+
+
     }
 
     private class Input implements InputProcessor {

@@ -46,7 +46,7 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
     private long jumpFor2;
     float vi=3;
     private float ac;
-
+    private boolean done=false;
 
     ArcadeSophie(World world, Texture tx){
         TextureRegion texturaCompleta = new TextureRegion(tx);
@@ -250,7 +250,27 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
                 );
                 batch.draw(region,sprite.getX(),sprite.getY());
                 break;
+            case JUMPFIN:
+                timerchangeframejump+= Gdx.graphics.getDeltaTime();
+                region= walking.getKeyFrame(timerchangeframejump);
+                if (currentstate== ArcadeSophie.MovementState.STILL_LEFT) {
+                    if (!region.isFlipX()) {
+                        region.flip(true,false);
+                    }
 
+                } else {
+                    if (region.isFlipX()) {
+                        region.flip(true,false);
+                    }
+
+                }
+
+                sprite.setCenter(
+                        ArcadeValues.metersToPx(body.getPosition().x),
+                        ArcadeValues.metersToPx(body.getPosition().y)
+                );
+                batch.draw(region,sprite.getX(),sprite.getY());
+                break;
         }
 
 
@@ -260,19 +280,39 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
     public void update(){
         switch (currentstate){
             case MOVE_RIGHT:
+                if(pref.getInteger("level")!=3) moveHorizontal();
+                else{
+                    if(sprite.getX()>600&&!done) {
+                        currentstate=MovementState.STILL_RIGHT;
+                        done=true;
+                    }else if(sprite.getX()>2900) {
+                        moveHorizontal();
+                    }else if(sprite.getX()>605){
+                        currentstate=MovementState.STILL_LEFT;
+                    }else{
+                        moveHorizontal();
+                    }
+                }
+                break;
             case MOVE_LEFT:
                 moveHorizontal();
                 break;
             case STILL_LEFT:
+                if(pref.getInteger("level")!=3) body.setLinearVelocity(0f, 0f);
+                else body.setLinearVelocity(0.7f,0);
+                break;
             case STILL_RIGHT:
                 if(pref.getInteger("level")!=3) body.setLinearVelocity(0f, 0f);
-                else body.setLinearVelocity(0.5f,0);
+                else body.setLinearVelocity(0f,0);
                 break;
             case JUMP:
                 moveJump();
                 break;
             case JUMP2:
                 moveJump2();
+                break;
+            case JUMPFIN:
+                moveJump3();
                 break;
             default:
                 break;
@@ -293,9 +333,11 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
                     break;
                 case 3:
                     if(this.getX() <= Level3.RIGHT_LIMIT){
-                        body.setLinearVelocity(0.5f, 0f);
+                        body.setLinearVelocity(0.7f, 0f);
                         //body.setLinearVelocity(5f, 0f);
-                    }else{
+                    }else if(this.getX()<3000){
+                        body.setLinearVelocity(0.7f,0f);
+                    } else{
                         body.setLinearVelocity(0f, 0f);
                     }
                     break;
@@ -336,9 +378,9 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
     private void moveJump(){
         float doWhi= velocityCalc(jumpFor);
         if(doWhi>-vi) {
-            body.setLinearVelocity(0.5f,doWhi);
+            body.setLinearVelocity(0.7f,doWhi);
         }else {
-            body.setLinearVelocity(0.5f,0f);
+            body.setLinearVelocity(0.7f,0f);
             jumpFor=0;
             currentstate=MovementState.STILL_LEFT;
         }
@@ -348,14 +390,20 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
     private void moveJump2(){
         float doWhi= velocityCalc(jumpFor2);
         if(doWhi>-vi||sprite.getY()>232) {
-            body.setLinearVelocity(0.5f,doWhi);
+            body.setLinearVelocity(0.7f,doWhi);
         }else {
-            body.setLinearVelocity(0.5f,0f);
+            body.setLinearVelocity(0.7f,0f);
             jumpFor=0;
             currentstate=MovementState.STILL_LEFT;
             jumpFor2=0;
         }
         jumpFor2++;
+    }
+
+    private void moveJump3(){
+        float doWhi= velocityCalc(jumpFor);
+        body.setLinearVelocity(1f,doWhi);
+        jumpFor++;
     }
 
     void setColor(int color){
@@ -397,6 +445,7 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
         MOVE_LEFT,
         MOVE_RIGHT,
         DYING,
+        JUMPFIN,
         SLEEPING,
         UNCONDITIONAL_RIGHT
     }
