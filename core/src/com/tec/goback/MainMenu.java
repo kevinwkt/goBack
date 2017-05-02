@@ -206,7 +206,7 @@ class MainMenu implements Screen {
                         next = LoaderState.LEVEL0;
                 }
 
-                app.setScreen(new Fade(app, next));
+                app.setScreen(new Fade(app, LoaderState.LEVELEND));
                 bgMusic.stop();
                 menu.dispose();
             }
