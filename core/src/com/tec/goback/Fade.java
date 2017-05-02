@@ -184,6 +184,7 @@ class Fade implements Screen {
                     manager.load("WOODS/WOODSPanoramic1of2.png",Texture.class);
 
                     manager.load("WOODS/WOODSEnding.png",Texture.class);
+                    manager.load("MINIONS/HAND/MINIONSHand00.png", Texture.class);
 
                     manager.load("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTYellowOrb.png",Texture.class);
                     manager.load("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTBlueOrb.png",Texture.class);

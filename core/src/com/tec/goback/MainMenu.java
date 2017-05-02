@@ -80,8 +80,8 @@ class MainMenu implements Screen {
     public void show() {
         //     -----------------------  TO GET INTO LEVEL 0 TEMPORAL OMG
 
-        //pref.putInteger("level",4);
-        //pref.flush();
+        pref.putInteger("level",3);
+        pref.flush();
 
         if(pref.getInteger("level")==0){
             pref.getBoolean("boss",false);
@@ -206,7 +206,7 @@ class MainMenu implements Screen {
                         next = LoaderState.LEVEL0;
                 }
 
-                app.setScreen(new Fade(app, LoaderState.LEVELEND));
+                app.setScreen(new Fade(app, next));
                 bgMusic.stop();
                 menu.dispose();
             }

@@ -18,6 +18,8 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -29,12 +31,11 @@ class Level3 extends Frame {
     //box2d shit
     private World world;
     private HashSet<Body> deadThings;
-
-
     // Sophie
     //private Sophie sophie;
     private Texture sophieTexture;
     boolean sophieInitFlag = true;
+    boolean orbClueInitFlag = true;
 
     private ArcadeSophie sophie;
 
@@ -43,6 +44,8 @@ class Level3 extends Frame {
     Texture arrow1;
     Texture arrow2;
     Texture arrow3;
+    Sprite clue;
+    Sprite orb;
 
     //map
     public static final float WIDTH_MAP = 3840;
@@ -62,7 +65,6 @@ class Level3 extends Frame {
 
     private Random randomArrowPosition = new Random();
     private Array<Body> bodies = new Array<Body>();
-    private Array<ArcadeArrow> arrows = new Array<ArcadeArrow>();
     private Object obj;
 
     private float timeForArrow = 0;
@@ -122,8 +124,8 @@ class Level3 extends Frame {
         );
 
         sophie = new ArcadeSophie(world,sophieTexture);
-
-
+        clue.setPosition(700,250);
+        orb.setPosition(700,250);
     }
 
     private void textureInit() {
@@ -136,6 +138,11 @@ class Level3 extends Frame {
 
         // sophie
         sophieTexture = new Texture("Squirts/Sophie/SOPHIEWalk.png");
+
+        clue=new Sprite( new Texture("CLUES/Note/CLUESNote.png"));
+        orb= new Sprite(new Texture("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTRedOrb.png"));
+        clue.setPosition(800,250);
+        orb.setPosition(830,250);
     }
 
     @Override
@@ -164,13 +171,18 @@ class Level3 extends Frame {
             batch.draw(background,0,0);
             batch.draw(pauseButton,camera.position.x+HALFW-pauseButton.getWidth(),camera.position.y-HALFH);
 
+            if(orbClueInitFlag){
+                orbClueInit();
+            }
             if(sophieInitFlag) {
                 sophieInitialMove();
             }
+//            if(sophie.getX()<3000) drawArrow(delta);
+//            if(sophie.getX()<ArcadeValues.pxToMeters(3000)) drawArrow(delta);
             drawArrow(delta);
             sophie.update();
             sophie.draw(batch);
-
+            Gdx.app.log("sophie", (sophie.getX()+" "+sophie.getY()));
             updateCamera();
             Gdx.input.setInputProcessor(level3Input);
             stepper(delta);
@@ -194,7 +206,7 @@ class Level3 extends Frame {
     private void drawArrow(float delta) {
         // must appear at 1420
         timeForArrow += delta;
-        if(timeForArrow >= .5){
+        if(timeForArrow >= .9&&sophie.getX()<2740){
             int rl= MathUtils.random(1);
             int typeshit= MathUtils.random(2);
             switch (typeshit){
@@ -216,7 +228,7 @@ class Level3 extends Frame {
             obj = b.getUserData();
             if( obj instanceof ArcadeArrow){
                 ((ArcadeArrow)obj).draw(batch);
-                Gdx.app.log("arrows", ((ArcadeArrow) obj).sprite.getY()+"");
+//                Gdx.app.log("arrows", ((ArcadeArrow) obj).sprite.getY()+"");
                 if(((ArcadeArrow) obj).sprite.getX() <= 0){
                     deadThings.add(b);
                 }
@@ -248,9 +260,15 @@ class Level3 extends Frame {
             sophie.setMovementState(ArcadeSophie.MovementState.MOVE_RIGHT);
         }else{
             sophieInitFlag = false;
-            sophie.setMovementState(ArcadeSophie.MovementState.STILL_RIGHT);
+            sophie.setMovementState(ArcadeSophie.MovementState.STILL_LEFT);
         }
 
+    }
+
+    private void orbClueInit(){
+        if(orb.getX()<3400)
+
+        orbClueInitFlag=false;
     }
 
     private void cls() {
@@ -284,7 +302,7 @@ class Level3 extends Frame {
         aManager.unload("MINIONS/ARROW/MINIONBlueArrow00.png");
         aManager.unload("MINIONS/ARROW/MINIONRedArrow00.png");
         aManager.unload("MINIONS/ARROW/MINIONYellowArrow00.png");
-        aManager.unload("MOUNTAINS/GoBackMOUNTAINSPanoramic.png");
+        aManager.unload("WOODS/WOODSPanoramic2of2.png");
         aManager.unload("Squirts/Sophie/SOPHIEWalk.png");
     }
 
@@ -330,13 +348,16 @@ class Level3 extends Frame {
             if(camera.position.x - v.x < -522 && v.y < 135){
                 state = GameState.PAUSED;
             }
-            if(sophie.getMovementState()==ArcadeSophie.MovementState.STILL_LEFT||sophie.getMovementState()==ArcadeSophie.MovementState.STILL_RIGHT) {
+            if(sophie.getMovementState()==ArcadeSophie.MovementState.STILL_LEFT) {
                 if (v.x >= camera.position.x) {
-                    sophie.setMovementState(ArcadeSophie.MovementState.MOVE_RIGHT);
-
-                } else {
-                    sophie.setMovementState(ArcadeSophie.MovementState.MOVE_LEFT);
+                    sophie.setMovementState(ArcadeSophie.MovementState.JUMP);
                 }
+            } else if(sophie.getMovementState()==ArcadeSophie.MovementState.JUMP){
+                if (v.x >= camera.position.x) {
+                    sophie.setMovementState(ArcadeSophie.MovementState.JUMP2);
+                }
+            }else if(sophie.getMovementState()==ArcadeSophie.MovementState.MOVE_LEFT){
+
             }
             return true;
         }
@@ -345,8 +366,8 @@ class Level3 extends Frame {
         public boolean touchUp(int screenX, int screenY, int pointer, int button) {
             if(sophie.getMovementState()==ArcadeSophie.MovementState.MOVE_LEFT)
                 sophie.setMovementState(ArcadeSophie.MovementState.STILL_LEFT);
-            else if(sophie.getMovementState() == ArcadeSophie.MovementState.MOVE_RIGHT)
-                sophie.setMovementState(ArcadeSophie.MovementState.STILL_RIGHT);
+            else if(sophie.getMovementState() == ArcadeSophie.MovementState.JUMP)
+//                sophie.setMovementState(ArcadeSophie.MovementState.STILL_RIGHT);
             sophie.update();
 
 
