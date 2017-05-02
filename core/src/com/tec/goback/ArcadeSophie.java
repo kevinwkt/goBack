@@ -4,9 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -20,7 +22,8 @@ import com.badlogic.gdx.physics.box2d.World;
 class ArcadeSophie {    //TODO ADAPT FOR LEVELS
     private Body body;
     private Sprite sprite;
-    protected float life = 30;
+    private Preferences stats = Gdx.app.getPreferences("STATS");
+    protected float life = stats.getFloat("SophieLife");
     private int color = 1;
     private Animation<TextureRegion> standby;
     private Animation<TextureRegion> walking;
@@ -42,6 +45,7 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
     private long jumpFor;
     private long jumpFor2;
     float vi=3;
+    private float ac;
 
 
     ArcadeSophie(World world, Texture tx){
@@ -130,13 +134,43 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
         return life <= 0.0f;
     }
 
+    private void blink(float speed, Batch batch) {
+        ac = ac <= 1.0 ? ac + Gdx.graphics.getDeltaTime() : 0;
+        batch.setColor(1f, 1f, 1f, (0.3f * MathUtils.sin(ac * (2 * MathUtils.PI / speed)) + 0.5f));
+    }
+
     void draw(SpriteBatch batch) {
         TextureRegion region;
+
+        Gdx.app.log("sophie life",(   (life*10) / stats.getFloat("SophieLife")    )+"" );
+        switch((int) (   (life*10) / stats.getFloat("SophieLife")    ) ){
+            case 10:case 9:
+                batch.setColor(1f, 1f, 1f, 1f);
+                break;
+            case 8:case 7:  //low opacity
+                batch.setColor(1f, 1f, 1f, 0.8f);
+                break;
+            case 6:case 5:  //lower opacity
+                batch.setColor(1f, 1f, 1f, 0.6f);
+                break;
+            case 4:case 3:  //low freq blink
+                blink(0.5f,batch);
+                break;
+            case 2:case 1:  //hi freq blink
+                blink(0.18f,batch);
+                break;
+        }
+
+
+
+
+
         switch (currentstate) {
             case MOVE_RIGHT:
             case MOVE_LEFT:
                 timerchangeframewalk += Gdx.graphics.getDeltaTime();
                 region = walking.getKeyFrame(timerchangeframewalk);
+
                 if (currentstate== ArcadeSophie.MovementState.MOVE_LEFT) {
                     if (!region.isFlipX()) {
                         region.flip(true,false);

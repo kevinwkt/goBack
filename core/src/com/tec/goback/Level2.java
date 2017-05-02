@@ -253,6 +253,7 @@ class Level2 extends Frame {
 
             updateCamera();
             Gdx.input.setInputProcessor(level2Input);
+            //Gdx.app.log("sophie life",sophie.life+"");
 
             stepper(delta);
             batch.end();
@@ -266,6 +267,7 @@ class Level2 extends Frame {
             Gdx.input.setInputProcessor(pauseStage);
         }else if(state == GameState.LOST){
             batch.draw(background,0,0);
+            batch.setColor(1f, 1f, 1f, 1f);
 
             sophie.setMovementState(ArcadeSophie.MovementState.DYING);
             sophie.draw(batch);
@@ -441,7 +443,7 @@ class Level2 extends Frame {
             }
 
             world.destroyBody(b);
-            //sophie.life -= 10;
+            sophie.life -= 10;
         }
         deadMeteors.clear();
 
