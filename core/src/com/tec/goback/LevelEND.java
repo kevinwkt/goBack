@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
@@ -26,6 +27,9 @@ Created by gerry on 5/1/17.
 class LevelEND extends Frame {
 
     private Dialogue dialogue;
+    private float dialoguetime = 0;
+    private GlyphLayout glyph = new GlyphLayout();
+
     private GameState state;
 
     private Stage stage;
@@ -122,7 +126,14 @@ class LevelEND extends Frame {
         if(state == GameState.PLAYING) {
             stage.draw();
         }else if(state == GameState.WON){
-            stage.draw();
+            dialoguetime += delta;
+            if (dialoguetime < 6f) {
+                dialogue.makeText(glyph, batch, "You can now go back. Congrats.", camera.position.x);
+                batch.end();
+            } else {
+                batch.end();
+                app.setScreen(new Fade(app, LoaderState.MAINMENU));
+            }
         }
     }
 
