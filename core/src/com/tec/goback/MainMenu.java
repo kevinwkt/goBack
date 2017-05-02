@@ -245,6 +245,7 @@ class MainMenu implements Screen {
             arcadeBtnImg.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
+                    ArcadeValues.bossFightFlag = false;
                     app.setScreen(new Fade(app, LoaderState.ARCADE));
                     bgMusic.stop();
                     menu.dispose();

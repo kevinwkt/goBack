@@ -136,7 +136,7 @@ class Arcade extends Frame{
     public void show() {
         d = pref.getInteger("level");
         debugRenderer = new Box2DDebugRenderer();
-        bossFight = pref.getBoolean("boss");
+        bossFight = pref.getBoolean("boss") && ArcadeValues.bossFightFlag;
         arcadeMultiplier = !bossFight ? ArcadeValues.arcadeMultiplier : 1;
         super.show();
         textureInit();
@@ -558,9 +558,11 @@ class Arcade extends Frame{
                 batch.end();
             } else {
                 batch.end();
+                ArcadeValues.bossFightFlag = true;
                 app.setScreen(new Fade(app, LoaderState.ARCADE));
             }
         }else{
+            ArcadeValues.bossFightFlag = true;
             if (!putXp) {
                 //stats.putInteger("XP", stats.getInteger("XP") + 100000000);
                 stats.putInteger("XP", stats.getInteger("XP") + ((int)(hit + 10 * (hit / shot) + 10 * (hit * (match / hit))))/10);
@@ -573,7 +575,7 @@ class Arcade extends Frame{
                 batch.end();
             } else {
                 batch.end();
-                app.setScreen(new Fade(app, LoaderState.ARCADE));
+                app.setScreen(new Fade(app, LoaderState.MAINMENU));
             }
         }
     }
