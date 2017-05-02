@@ -1015,25 +1015,25 @@ abstract class Frame implements Screen {
         private void objectInit(){
             //background hace Image
             Image backgroundImg = new Image(background);
-            backgroundImg.setPosition(HALFW-backgroundImg.getWidth()/2, HALFH-backgroundImg.getHeight()/2);
+            backgroundImg.setPosition(0, 0);
             this.addActor(backgroundImg);
 
             //top
             Image topImg = new Image(top);
-            topImg.setPosition(HALFW-backgroundImg.getWidth()/2, HALFH-backgroundImg.getHeight()/2);
+            topImg.setPosition(0, 0);
             this.addActor(topImg);
 
 
             //bottom
             //1280x720
             Image bottomImg=new Image(bottom);
-            bottomImg.setPosition(HALFW-backgroundImg.getWidth()/2, HALFH-backgroundImg.getHeight()/2);
+            bottomImg.setPosition(0, 0);
             this.addActor(bottomImg);
 
 
             //map
             Image mapImg = new Image(map);
-            mapImg.setPosition(HALFW-backgroundImg.getWidth()/2, HALFH-backgroundImg.getHeight()/2+220);
+            mapImg.setPosition(0, 220);
             this.addActor(mapImg);
 
             ////////////ITEMS
@@ -1231,27 +1231,10 @@ abstract class Frame implements Screen {
         ClueDetail me;
 
         // buttons
-        private Texture background;
         private Texture backBton; //Button
         private Texture detTex;
 
         private void textureInit(){
-            switch(pref.getInteger("level")){
-                default:
-                case 0:
-                    background = aManager.get("INTRO/INTROBackground.png");
-                    break;
-                case 1:
-                    background = aManager.get("HARBOR/GoBackHARBOR0.png");
-                    break;
-                case 2:
-                    background = aManager.get("MOUNTAINS/GoBackMOUNTAINS0.png");
-                    break;
-                case 3:
-                    background = aManager.get("WOODS/WOODSPanoramic2of2.png");
-                    break;
-            }
-
             backBton = aManager.get("Interfaces/PAUSE/PAUSEback.png");
         }
 

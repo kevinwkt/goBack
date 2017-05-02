@@ -1,5 +1,6 @@
 package com.tec.goback;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
@@ -7,7 +8,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
+
+import static com.badlogic.gdx.scenes.scene2d.ui.Table.Debug.actor;
 
 /*
 Created by gerry on 5/1/17.
@@ -15,22 +23,18 @@ Created by gerry on 5/1/17.
 
 class LevelEND extends Frame {
 
-    private Input input;
     private Dialogue dialogue;
     private GameState state;
 
-    //Drawables
-    private Texture bgTx;
-    private Texture newsPaperTx;
-    private Texture photoTx;
-    private Texture noteTx;
-    private Texture boneTx;
+    private Stage stage;
 
-    private Sprite bg;
-    private Sprite newsPaper;
-    private Sprite photo;
-    private Sprite note;
-    private Sprite bone;
+    //    private Texture boneTx;
+
+    private Image bg;
+    private Image newsPaper;
+    private Image photo;
+    private Image note;
+//    private Image bone;
 
 
 
@@ -44,28 +48,56 @@ class LevelEND extends Frame {
     @Override
     public void show() {
         super.show();
-        input = new Input();
         dialogue = new Dialogue(aManager);
         state = GameState.PLAYING;
+        stage = new Stage(view, batch);
 
-        Gdx.input.setInputProcessor(input);
+        Gdx.input.setInputProcessor(stage);
         Gdx.input.setCatchBackKey(true);
 
-        textureInit();
+        actorInit();
     }
 
-    private void textureInit(){
-        bgTx = new Texture("CLUES/CLUESBoneDisplay.png");
-        newsPaperTx = new Texture("CLUES/Newspaper/CLUESNewspaper.png");
-        photoTx = new Texture("CLUES/Photo/CLUESPhoto.png");
-        noteTx = new Texture("CLUES/Note/CLUESNote.png");
-        boneTx = new Texture("CLUES/Bone/CLUESBone.png");
+    private void actorInit(){
+        Texture bgTx = new Texture("CLUES/CLUESBoneDisplay.png");
+        Texture newsPaperTx = new Texture("CLUES/Newspaper/CLUESNewspaper.png");
+        Texture photoTx = new Texture("CLUES/Photo/CLUESPhoto.png");
+        Texture noteTx = new Texture("CLUES/Note/CLUESNote.png");
+//        boneTx = new Texture("CLUES/Bone/CLUESBone.png");
 
-        bg = new Sprite(bgTx);
-        newsPaper = new Sprite(newsPaperTx);
-        photo = new Sprite(photoTx);
-        note = new Sprite(noteTx);
-        bone = new Sprite(boneTx);
+        bg = new Image(bgTx);
+
+        newsPaper = new Image(newsPaperTx);
+        photo = new Image(photoTx);
+        note = new Image(noteTx);
+//        bone = new Image(boneTx);
+
+        newsPaper.addListener(new DragListener() {
+            public void drag(InputEvent event, float x, float y, int pointer) {
+                newsPaper.moveBy(x - newsPaper.getWidth() / 2, y - newsPaper.getHeight() / 2);
+            }
+        });
+        photo.addListener(new DragListener() {
+            public void drag(InputEvent event, float x, float y, int pointer) {
+                photo.moveBy(x - photo.getWidth() / 2, y - photo.getHeight() / 2);
+            }
+        });
+        note.addListener(new DragListener() {
+            public void drag(InputEvent event, float x, float y, int pointer) {
+                note.moveBy(x - note.getWidth() / 2, y - note.getHeight() / 2);
+            }
+        });
+//        bone.addListener(new DragListener() {
+//            public void drag(InputEvent event, float x, float y, int pointer) {
+//                bone.moveBy(x - bone.getWidth() / 2, y - bone.getHeight() / 2);
+//            }
+//        });
+
+        stage.addActor(bg);
+        stage.addActor(newsPaper);
+        stage.addActor(photo);
+        stage.addActor(note);
+//        stage.addActor(bone);
     }
 
     private void cls() {
@@ -75,17 +107,14 @@ class LevelEND extends Frame {
     @Override
     public void render(float delta) {
         cls();
-
-        batch.begin();
-        if(state == GameState.PLAYING){
-            bg.draw(batch);
-            batch.end();
+        if(state == GameState.PLAYING) {
+            stage.draw();
         }
-
     }
 
     @Override
     public void resize(int width, int height){
+            view.update(width, height);
     }
 
     @Override
@@ -100,46 +129,4 @@ class LevelEND extends Frame {
     @Override
     public void dispose() {}
 
-    private class Input implements InputProcessor {
-        private Vector3 v = new Vector3();
-        @Override
-        public boolean keyDown(int keycode) {
-            return false;
-        }
-
-        @Override
-        public boolean keyUp(int keycode) {
-            return false;
-        }
-
-        @Override
-        public boolean keyTyped(char character) {
-            return false;
-        }
-
-        @Override
-        public boolean touchDown(int screenX, int screenY, int pointer, int button){
-            return false;
-        }
-
-        @Override
-        public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-            return true;
-        }
-
-        @Override
-        public boolean touchDragged(int screenX, int screenY, int pointer) {
-            return false;
-        }
-
-        @Override
-        public boolean mouseMoved(int screenX, int screenY) {
-            return false;
-        }
-
-        @Override
-        public boolean scrolled(int amount) {
-            return false;
-        }
-    }
 }
