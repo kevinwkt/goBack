@@ -26,16 +26,22 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
     private Animation<TextureRegion> walking;
     private Animation<TextureRegion> waking;
     private Animation<TextureRegion> dying;
+    private Animation<TextureRegion> jumping;
 
     private float timerchangeframestandby;
     private float timerchangeframewalk;
     private float timerchangeframedie;
     private float timerchangeframewake;
+    private float timerchangeframejump;
     private ArcadeSophie.MovementState currentstate = ArcadeSophie.MovementState.STILL_RIGHT; //STILL_RIGHT
 
     private Preferences pref=Gdx.app.getPreferences("getLevel");
     private BodyEditorLoader loader = new BodyEditorLoader(Gdx.files.internal("Physicshit.json"));
     private PolygonShape shape;
+
+    private long jumpFor;
+    private long jumpFor2;
+    float vi=3;
 
 
     ArcadeSophie(World world, Texture tx){
@@ -68,6 +74,9 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
                 texturaPersonaje[0][36], texturaPersonaje[0][37], texturaPersonaje[0][38],
                 texturaPersonaje[0][39],texturaPersonaje[0][40], texturaPersonaje[0][41],
                 texturaPersonaje[0][42]);
+//        jumping=new Animation();
+
+
         // Animación infinita
         standby.setPlayMode(Animation.PlayMode.LOOP);
         walking.setPlayMode(Animation.PlayMode.LOOP);
@@ -167,9 +176,39 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
                 );
                 batch.draw(region,sprite.getX(),sprite.getY());
                 break;
+            case JUMP:
+                timerchangeframejump+= Gdx.graphics.getDeltaTime();
+                region= walking.getKeyFrame(timerchangeframejump);
+                if (currentstate== ArcadeSophie.MovementState.STILL_LEFT) {
+                    if (!region.isFlipX()) {
+                        region.flip(true,false);
+                    }
+
+                } else {
+                    if (region.isFlipX()) {
+                        region.flip(true,false);
+                    }
+
+                }
+
+                sprite.setCenter(
+                        ArcadeValues.metersToPx(body.getPosition().x),
+                        ArcadeValues.metersToPx(body.getPosition().y)
+                );
+                batch.draw(region,sprite.getX(),sprite.getY());
+                break;
+            case JUMP2:
+                timerchangeframejump+= Gdx.graphics.getDeltaTime();
+                region= walking.getKeyFrame(timerchangeframejump);
+                sprite.setCenter(
+                        ArcadeValues.metersToPx(body.getPosition().x),
+                        ArcadeValues.metersToPx(body.getPosition().y)
+                );
+                batch.draw(region,sprite.getX(),sprite.getY());
+                break;
             case DYING:
-                timerchangeframestandby += Gdx.graphics.getDeltaTime();
-                region = dying.getKeyFrame(timerchangeframestandby);
+                timerchangeframedie += Gdx.graphics.getDeltaTime();
+                region = dying.getKeyFrame(timerchangeframedie);
 
                 sprite.setCenter(
                         ArcadeValues.metersToPx(body.getPosition().x),
@@ -192,7 +231,15 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
                 break;
             case STILL_LEFT:
             case STILL_RIGHT:
-                body.setLinearVelocity(0f, 0f);
+                if(pref.getInteger("level")!=3) body.setLinearVelocity(0f, 0f);
+                else body.setLinearVelocity(0.5f,0);
+                break;
+            case JUMP:
+                moveJump();
+                break;
+            case JUMP2:
+                moveJump2();
+                break;
             default:
                 break;
         }
@@ -211,6 +258,12 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
                     }
                     break;
                 case 3:
+                    if(this.getX() <= Level3.RIGHT_LIMIT){
+                        body.setLinearVelocity(0.5f, 0f);
+                        //body.setLinearVelocity(5f, 0f);
+                    }else{
+                        body.setLinearVelocity(0f, 0f);
+                    }
                     break;
                 default:
                     break;
@@ -231,6 +284,12 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
                     }
                     break;
                 case 3:
+                    if (this.getX() >= Level3.LEFT_LIMIT) {
+                        body.setLinearVelocity(0f, 0f);
+                        //body.setLinearVelocity(-5f, 0f);
+                    }else{
+                        body.setLinearVelocity(0f, 0f);
+                    }
                     break;
                 default:
                     break;
@@ -240,6 +299,30 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
 
     }
 
+    private void moveJump(){
+        float doWhi= velocityCalc(jumpFor);
+        if(doWhi>-vi) {
+            body.setLinearVelocity(0.5f,doWhi);
+        }else {
+            body.setLinearVelocity(0.5f,0f);
+            jumpFor=0;
+            currentstate=MovementState.STILL_LEFT;
+        }
+        jumpFor++;
+    }
+
+    private void moveJump2(){
+        float doWhi= velocityCalc(jumpFor2);
+        if(doWhi>-vi||sprite.getY()>232) {
+            body.setLinearVelocity(0.5f,doWhi);
+        }else {
+            body.setLinearVelocity(0.5f,0f);
+            jumpFor=0;
+            currentstate=MovementState.STILL_LEFT;
+            jumpFor2=0;
+        }
+        jumpFor2++;
+    }
 
     void setColor(int color){
         this.color = color;
@@ -265,15 +348,22 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
       return sprite;
     }
 
+    private float velocityCalc(float time){
+        return vi-0.08f*time;
+    }
+
     public enum MovementState {
         CREATING,
         WAKING,
+        JUMP,
+        JUMP2,
         STILL_RIGHT,
         STILL_LEFT,
         HIT,
         MOVE_LEFT,
         MOVE_RIGHT,
         DYING,
-        SLEEPING
+        SLEEPING,
+        UNCONDITIONAL_RIGHT
     }
 }
