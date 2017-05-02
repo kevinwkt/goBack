@@ -5,9 +5,12 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -37,7 +40,11 @@ class Fade implements Screen {
     private MainMenu menu;
 
     private Sprite loadIcon;
+    private Sprite loadIconSmall;
     private float time = 0;
+
+    BitmapFont font = new BitmapFont(Gdx.files.internal("fira.fnt"));
+    GlyphLayout glyph = new GlyphLayout();
 
     Fade(App app, LoaderState loaderState) {
         this.app = app;
@@ -58,6 +65,12 @@ class Fade implements Screen {
         superLoad();
 
         loadIcon = new Sprite(new Texture("Interfaces/GAMEPLAY/LOADING/LOADINGBigIcon.png"));
+        loadIcon.setOrigin(150.5f, 150.5f);
+        loadIcon.setPosition(ArcadeValues.pelletOriginX-loadIcon.getWidth()/2, ArcadeValues.pelletOriginY);
+
+        loadIconSmall = new Sprite(new Texture("Interfaces/GAMEPLAY/LOADING/LOADINGSmallIcon.png"));
+        loadIcon.setOrigin(38f, 36f);
+        loadIconSmall.setPosition(120, -1);
     }
 
     private void cameraInit() {
@@ -73,8 +86,14 @@ class Fade implements Screen {
         cls();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
+
+        glyph.setText(font, "Loading...", Color.WHITE, 710F, 30, true);
+        font.draw(batch, glyph, 0, 20);
+        loadIconSmall.setRotation(time*500);
         loadIcon.setPosition(ArcadeValues.pelletOriginX-loadIcon.getWidth()/2, ArcadeValues.pelletOriginY + 100*MathUtils.sin(time*5));
-        loadIcon.draw(batch);
+
+        loadIconSmall.draw(batch);
+        //loadIcon.draw(batch);
         batch.end();
         goNextScreen();
     }
@@ -267,7 +286,6 @@ class Fade implements Screen {
 
                     break;
                 case ARCADE:
-                    ArcadeValues.bossFightFlag = false;
                     app.setScreen(new Arcade(app));
                     break;
             }

@@ -134,9 +134,9 @@ class Arcade extends Frame{
 
     @Override
     public void show() {
-        pref.getInteger("level");
+        d = pref.getInteger("level");
         debugRenderer = new Box2DDebugRenderer();
-        level.getBoolean("boss");
+        bossFight = level.getBoolean("boss");
         arcadeMultiplier = !bossFight ? ArcadeValues.arcadeMultiplier : 1;
         super.show();
         textureInit();
@@ -160,40 +160,26 @@ class Arcade extends Frame{
     }
 
     private void textureInit() {
+        orbYellow = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png");
+
+        orbBlue = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrb.png");
+
+        orbRed = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADERedOrb.png");
+
+
+        pelletYellow = aManager.get("PELLET/ATAQUEYellowPellet.png");
+        pelletBlue = aManager.get("PELLET/ATAQUEBluePellet.png");
+        pelletRed = aManager.get("PELLET/ATAQUERedPellet.png");
+
         switch (d){
             case 1:
-                orbYellow = new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png");
-
-
-                pelletYellow = aManager.get("PELLET/ATAQUEYellowPellet.png");
-
                 background = new Texture("HARBOR/GoBackHARBORPanoramic.png"); //switch
                 break;
             case 2:
-                orbYellow = new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png");
-
-                orbBlue = new Texture("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrb.png");
-
-
-                pelletYellow = aManager.get("PELLET/ATAQUEYellowPellet.png");
-                pelletBlue = aManager.get("PELLET/ATAQUEBluePellet.png");
-
-
                 //background = new Texture("HARBOR/GoBackHARBORPanoramic.png");
                 background = new Texture("MOUNTAINS/GoBackMOUNTAINSPanoramic.png"); //switch
                 break;
             case 3:
-                orbYellow = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png");
-
-                orbBlue = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrb.png");
-
-                orbRed = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADERedOrb.png");
-
-
-                pelletYellow = aManager.get("PELLET/ATAQUEYellowPellet.png");
-                pelletBlue = aManager.get("PELLET/ATAQUEBluePellet.png");
-                pelletRed = aManager.get("PELLET/ATAQUERedPellet.png");
-
                 //background = new Texture("HARBOR/GoBackHARBORPanoramic.png");
                 background = new Texture("UNDERGROUND/UNDERGROUNDArcade.png"); //switch
                 break;
