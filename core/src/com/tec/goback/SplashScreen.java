@@ -45,7 +45,7 @@ class SplashScreen implements Screen
         batch = new SpriteBatch();
         logoScale();
         aManager = app.getAssetManager();
-
+        aManager.load("INTRO/INTROBackground.png",Texture.class);
         aManager.load("HARBOR/GoBackHARBOR0.png", Texture.class);
         aManager.load("WOODS/WOODSBeginning.png", Texture.class);
         aManager.load("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTPause.png", Texture.class);

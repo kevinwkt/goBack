@@ -103,7 +103,6 @@ abstract class Frame implements Screen {
     public void show() {
         cameraInit();
         pauseInit();
-
     }
 
     private void cameraInit() {

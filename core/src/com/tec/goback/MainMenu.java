@@ -80,8 +80,8 @@ class MainMenu implements Screen {
     public void show() {
         //     -----------------------  TO GET INTO LEVEL 0 TEMPORAL OMG
 
-//        pref.putInteger("level",3);
-//        pref.flush();
+        //pref.putInteger("level",4);
+        //pref.flush();
 
         if(pref.getInteger("level")==0){
             pref.getBoolean("boss",false);
@@ -128,7 +128,11 @@ class MainMenu implements Screen {
         }
 
         aboutBtn = aManager.get("Interfaces/MENU/ABOUT.png");
-        arcadeBtn = aManager.get("Interfaces/MENU/ARCADE.png");
+        if(pref.getInteger("level")<1||(pref.getInteger("level")==1&&!pref.getBoolean("boss"))){
+            arcadeBtn = aManager.get("Interfaces/MENU/ARCADEInactive.png");
+        }else{
+            arcadeBtn = aManager.get("Interfaces/MENU/ARCADEActive.png");
+        }
         soundBtn = aManager.get("Interfaces/MENU/SOUND.png");
         storyBtn = aManager.get("Interfaces/MENU/STORY.png");
         title = aManager.get("Interfaces/MENU/TITLE.png");
@@ -189,24 +193,29 @@ class MainMenu implements Screen {
                 LoaderState next;
 
                 int d= pref.getInteger("level");
-                switch (d){
-                    case 1:
-                        next = LoaderState.LEVEL1;
-                        break;
-                    case 2:
-                        next = LoaderState.LEVEL2;
-                        break;
-                    case 3:
-                        next = LoaderState.LEVEL3;
-                        break;
-                    case 4:
-                        next = LoaderState.LEVEL4;
-                        break;
-                    default:
-                        next = LoaderState.LEVEL0;
+
+                if(!pref.getBoolean("boss")) {
+                    switch (d) {
+                        case 1:
+                            next = LoaderState.LEVEL1;
+                            break;
+                        case 2:
+                            next = LoaderState.LEVEL2;
+                            break;
+                        case 3:
+                            next = LoaderState.LEVEL3;
+                            break;
+                        case 4:
+                            next = LoaderState.LEVEL4;
+                            break;
+                        default:
+                            next = LoaderState.LEVEL0;
+                    }
+                    app.setScreen(new Fade(app, next));
+                }else{
+                    app.setScreen(new Fade(app, LoaderState.ARCADE));
                 }
 
-                app.setScreen(new Fade(app, next));
                 bgMusic.stop();
                 menu.dispose();
             }
@@ -218,17 +227,17 @@ class MainMenu implements Screen {
 
         arcadeBtnImg.setPosition((HALFW-arcadeBtnImg.getWidth()/2)+190, HALFH-arcadeBtnImg.getHeight()/2-80);
         mainMenuStage.addActor(arcadeBtnImg);
-        arcadeBtnImg.addListener(new ClickListener() {
+
+        /*arcadeBtnImg.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 app.setScreen(new Fade(app, LoaderState.ARCADE));
                 bgMusic.stop();
                 menu.dispose();
             }
-        });
+        });*/
 
-        /* ////PARA QUE ROMAN CHEQUE ARCADE
-        if(pref.getInteger("level")>=1&&pref.getBoolean("boss")) {
+        if(pref.getInteger("level")>1||(pref.getInteger("level")==1&&pref.getBoolean("boss"))){
             arcadeBtnImg.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -238,7 +247,6 @@ class MainMenu implements Screen {
                 }
             });
         }
-        */
 
         //pass the Stage
         Gdx.input.setInputProcessor(mainMenuStage);
@@ -291,7 +299,8 @@ class MainMenu implements Screen {
         //aManager.unload("MOUNTAINS/GoBackMOUNTAINS0.png"); //Level2
         aManager.unload("WOODS/WOODSBeginning.png"); //Level3
         //aManager.unload("Interfaces/MENU/ABOUT.png");
-        aManager.unload("Interfaces/MENU/ARCADE.png");
+        aManager.unload("Interfaces/MENU/ARCADEActive.png");
+        aManager.unload("Interfaces/MENU/ARCADEInactive.png");
         aManager.unload("Interfaces/MENU/SOUND.png");
         aManager.unload("Interfaces/MENU/STORY.png");
         aManager.unload("Interfaces/MENU/TITLE.png");
