@@ -86,6 +86,22 @@ class Level2 extends Frame {
     private Level2.OrbMovement currentYellowOrbState = Level2.OrbMovement.GOING_UP;
     private final float DISTANCE_YELLOW_ORB_SOPHIE = -140;
 
+    // photo
+    private Sprite photoSpr;
+    private int photoXPosition = 3150;
+    private int photoYPosition = 200;
+
+    // JAGUAR
+    private Sprite jaguarSpr;
+    private Sprite jaguarArmSpr;
+    private Sprite jaguarLegSpr;
+    private float jaguarYPosition = 850; // 850
+    private float jaguarXPosition = 3200;
+    private float jaguarAcceleration = 5;
+    private boolean rotateJaguarArm = true;
+    private boolean bossMode = false;
+
+
     public Level2(App app) {
         super(app, WIDTH_MAP,HEIGHT_MAP);
 
@@ -168,6 +184,16 @@ class Level2 extends Frame {
         yellowOrb.setPosition(yellowOrbXPosition,yellowOrbYPosition);
         yellowOrb.setColor(1.0f,1.0f,1.0f,0.4f);
 
+        // photo
+        photoSpr = new Sprite((Texture)aManager.get("CLUES/Photo/CLUESPhoto.png"));
+        photoSpr.setPosition(photoXPosition,photoYPosition);
+
+        // JAGUAR
+        jaguarLegSpr = new Sprite((Texture)aManager.get("BOSS/JAGUAR/BOSSJaguarBackLeg.png"));
+        jaguarSpr = new Sprite((Texture)aManager.get("BOSS/JAGUAR/BOSSJaguarBody.png"));
+        jaguarArmSpr = new Sprite((Texture)aManager.get("BOSS/JAGUAR/BOSSJaguarFrontLeg.png"));
+
+
     }
 
     @Override
@@ -212,9 +238,18 @@ class Level2 extends Frame {
             sophie.draw(batch);
             blueOrb.draw(batch);
             yellowOrb.draw(batch);
+            photoSpr.draw(batch);
             moveBlueOrb(delta);
             moveYellowOrb(delta);
             checkBlueOrbCollision();
+            if(sophie.getX() >= 3050){
+                bossMode = true;
+                RIGHT_LIMIT = 3050;
+            }
+            if(bossMode){
+                drawJaguar(delta);
+            }
+
 
             updateCamera();
             Gdx.input.setInputProcessor(level2Input);
@@ -246,6 +281,47 @@ class Level2 extends Frame {
         batch.setProjectionMatrix(super.camera.combined);
         debugRenderer.render(world, debugMatrix);
         batch.end();
+    }
+
+    private void drawJaguar(float delta) {
+        if(jaguarYPosition > 255){
+            jaguarYPosition -= delta * jaguarAcceleration;
+            jaguarAcceleration += 9.5;
+        }else{
+            jaguarAcceleration += .5;
+            if(jaguarAcceleration > 870){
+                jaguarXPosition += delta * 100;
+
+                if(jaguarXPosition > 3790){
+
+
+                    pref.putBoolean("boss",true);
+                    pref.flush();
+                    app.setScreen(new Fade(app, LoaderState.ARCADE));
+                    this.dispose();
+
+                }
+            }
+        }
+
+        jaguarSpr.setPosition(jaguarXPosition,jaguarYPosition);
+        jaguarSpr.draw(batch);
+        jaguarLegSpr.setPosition(jaguarXPosition+515,jaguarYPosition-150);
+        jaguarLegSpr.draw(batch);
+        jaguarArmSpr.setPosition(jaguarXPosition + 250,jaguarYPosition-150);
+        jaguarArmSpr.draw(batch);
+        jaguarArmSpr.setOrigin(104,273);
+        if (rotateJaguarArm) {
+            jaguarArmSpr.rotate((float) 0.5);
+        } else {
+            jaguarArmSpr.rotate((float) -0.5);
+        }
+        if (jaguarArmSpr.getRotation() > 5) {
+            rotateJaguarArm = false;
+        } else if (jaguarArmSpr.getRotation() < -20) {
+            rotateJaguarArm = true;
+        }
+
     }
 
     private void loose(float delta) {
@@ -413,6 +489,11 @@ class Level2 extends Frame {
         aManager.unload("MOUNTAINS/GoBackMOUNTAINSPanoramic.png");
         aManager.unload("Squirts/Sophie/SOPHIEWalk.png");
         aManager.unload("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrb.png");
+        aManager.unload("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png");
+        aManager.unload("CLUES/Photo/CLUESPhoto.png");
+        aManager.unload("BOSS/JAGUAR/BOSSJaguarBackLeg.png");
+        aManager.unload("BOSS/JAGUAR/BOSSJaguarBody.png");
+        aManager.unload("BOSS/JAGUAR/BOSSJaguarFrontLeg.png");
         meteorsOutOfBounds.clear();
         deadMeteors.clear();
     }
@@ -459,12 +540,15 @@ class Level2 extends Frame {
 
             if(sophie.getMovementState()==ArcadeSophie.MovementState.STILL_LEFT||sophie.getMovementState()==ArcadeSophie.MovementState.STILL_RIGHT) {
                 if(!(camera.position.x - v.x < -522 && v.y < 135)){
-                    if (v.x >= camera.position.x) {
-                        sophie.setMovementState(ArcadeSophie.MovementState.MOVE_RIGHT);
+                    if(!bossMode){
+                        if (v.x >= camera.position.x) {
+                            sophie.setMovementState(ArcadeSophie.MovementState.MOVE_RIGHT);
 
-                    } else {
-                        sophie.setMovementState(ArcadeSophie.MovementState.MOVE_LEFT);
+                        } else {
+                            sophie.setMovementState(ArcadeSophie.MovementState.MOVE_LEFT);
+                        }
                     }
+
                 }
 
             }
