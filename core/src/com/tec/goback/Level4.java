@@ -2,7 +2,9 @@ package com.tec.goback;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 
@@ -12,13 +14,23 @@ import com.badlogic.gdx.math.Vector3;
 
 class Level4 extends Frame {
 
-    private static final float SOPHIE_START_X = 3200;
+    private static final float SOPHIE_START_X = 10800;
     private static final float SOPHIE_START_Y = 220;
     private Sophie sophie;
+
     public static final float WIDTH_MAP = 11520;
     public static final float HEIGHT_MAP = 720;
+
+    public static final float LEFT_LIMIT = 980;
+    public static float RIGHT_LIMIT = 11000;
+
+
     private Texture sophieTexture;
     private Texture background01;
+
+    private Sprite yellowOrb;
+    private Sprite blueOrb;
+    private Sprite redOrb;
 
     Level4(App app) {
         super(app, WIDTH_MAP,HEIGHT_MAP);
@@ -31,7 +43,7 @@ class Level4 extends Frame {
         objectInit();
 
 
-        sophie.setMovementState(Sophie.MovementState.SLEEPING);
+        sophie.setMovementState(Sophie.MovementState.WAKING_LEFT);
         sophie.sprite.setPosition(SOPHIE_START_X, SOPHIE_START_Y);
 
         Gdx.input.setCatchBackKey(true);
@@ -43,18 +55,26 @@ class Level4 extends Frame {
     private void textureInit() {
         sophieTexture = new Texture("Squirts/Sophie/SOPHIEWalk.png");
         background01 = new Texture("WOODS/WOODSPanoramic1of2.png");
+
         sophie = new Sophie(sophieTexture, 100,100);
+        yellowOrb = new Sprite((Texture)aManager.get("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTYellowOrb.png"));
+        blueOrb = new Sprite((Texture)aManager.get("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTBlueOrb.png"));
+        redOrb = new Sprite((Texture)aManager.get("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTRedOrb.png"));
     }
 
     private void objectInit() {
         batch = new SpriteBatch();
-
-        camera.position.set(background01.getWidth()-HALFW,camera.position.y, 0);
+        batch.begin();
+        batch.draw(background01,7680,0);
+        camera.position.set(7680+background01.getWidth()-HALFW,camera.position.y, 0);
         camera.update();
+        batch.end();
     }
 
     @Override
     public void render(float delta) {
+        cls();
+
         batch.setProjectionMatrix(super.camera.combined);
         batch.begin();
 
@@ -72,8 +92,11 @@ class Level4 extends Frame {
             pauseStage.draw();
             Gdx.input.setInputProcessor(pauseStage);
         }else if(state==GameState.PLAYING){
-            batch.draw(background01,0,0);
+            batch.draw(background01,7680,0);
+            batch.draw(pauseButton,camera.position.x+HALFW-pauseButton.getWidth(),camera.position.y-HALFH);
+
             sophie.draw(batch);
+            sophie.update();
         }
 
 
@@ -102,6 +125,8 @@ class Level4 extends Frame {
         public boolean touchDown(int screenX, int screenY, int pointer, int button) {
             v.set(screenX,screenY,0);
             camera.unproject(v);
+
+            Gdx.app.log(""+v.x, "");
 
             if(camera.position.x - v.x < -522 && v.y < 135){
                 state = GameState.PAUSED;
@@ -165,5 +190,10 @@ class Level4 extends Frame {
     @Override
     public void dispose() {
 
+    }
+
+    private void cls() {
+        Gdx.gl.glClearColor(0,0,0,1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 }

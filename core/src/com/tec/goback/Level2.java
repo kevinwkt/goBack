@@ -8,6 +8,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -70,6 +71,20 @@ class Level2 extends Frame {
     private Dialogue dialogue;
     private GlyphLayout glyph = new GlyphLayout();
 
+    // blue orb
+    private Sprite blueOrb;
+    private boolean foundOrb = false;
+    private float blueOrbXPosition = 1350;
+    private float blueOrbYPosition = 200;
+    private Level2.OrbMovement currentBlueOrbState = Level2.OrbMovement.GOING_DOWN;
+    private final float DISTANCE_BLUE_ORB_SOPHIE = 10;
+
+    // yellow orb
+    private Sprite yellowOrb;
+    private float yellowOrbXPosition = -500;
+    private float yellowOrbYPosition = 150;
+    private Level2.OrbMovement currentYellowOrbState = Level2.OrbMovement.GOING_UP;
+    private final float DISTANCE_YELLOW_ORB_SOPHIE = -140;
 
     public Level2(App app) {
         super(app, WIDTH_MAP,HEIGHT_MAP);
@@ -132,6 +147,7 @@ class Level2 extends Frame {
         sophie = new ArcadeSophie(world,sophieTexture);
 
 
+
     }
 
     private void textureInit() {
@@ -144,6 +160,13 @@ class Level2 extends Frame {
         // sophie
         sophieTexture = aManager.get("Squirts/Sophie/SOPHIEWalk.png");
 
+        // orb
+        blueOrb = new Sprite((Texture)aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrb.png"));
+        blueOrb.setPosition(blueOrbXPosition,blueOrbYPosition);
+        blueOrb.setColor(1.0f,1.0f,1.0f,0.4f);
+        yellowOrb = new Sprite((Texture)aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png"));
+        yellowOrb.setPosition(yellowOrbXPosition,yellowOrbYPosition);
+        yellowOrb.setColor(1.0f,1.0f,1.0f,0.4f);
 
     }
 
@@ -180,10 +203,18 @@ class Level2 extends Frame {
 
             if(sophieInitFlag) {
                 sophieInitialMove();
+            }else{
+                drawMeteors(delta);
+
             }
-            drawMeteors(delta);
+
             sophie.update();
             sophie.draw(batch);
+            blueOrb.draw(batch);
+            yellowOrb.draw(batch);
+            moveBlueOrb(delta);
+            moveYellowOrb(delta);
+            checkBlueOrbCollision();
 
             updateCamera();
             Gdx.input.setInputProcessor(level2Input);
@@ -203,7 +234,7 @@ class Level2 extends Frame {
 
             sophie.setMovementState(ArcadeSophie.MovementState.DYING);
             sophie.draw(batch);
-            //sophie.update();
+
 
             loose(delta);
         }
@@ -226,6 +257,7 @@ class Level2 extends Frame {
         }else{
             batch.end();
             app.setScreen(new Fade(app, LoaderState.LEVEL2));
+            dispose();
         }
     }
 
@@ -234,12 +266,14 @@ class Level2 extends Frame {
         timeForMeteor += delta;
 
         if(timeForMeteor >= 0.2){
-            //new ArcadeMeteor(world, (float)(randomMeteorPosition.nextInt(2630)+720), meteor);
-            new ArcadeMeteor(world, (float)(randomMeteorPosition.nextInt((int)camera.position.x)), meteor);
+            if(camera.position.x <= 3100){
+                new ArcadeMeteor(world, (float)(randomMeteorPosition.nextInt(1280)+(camera.position.x-640) )   , meteor);
+            }
             timeForMeteor = 0;
         }
 
         world.getBodies(squirts);
+
         for(Body b : squirts){
             meteorObj = b.getUserData();
             if( meteorObj instanceof ArcadeMeteor){
@@ -255,6 +289,65 @@ class Level2 extends Frame {
         squirts.clear();
     }
 
+    private void moveBlueOrb(float delta){
+        if(blueOrbYPosition >= 205){ // 155
+            currentBlueOrbState = OrbMovement.GOING_DOWN;
+        }else if(blueOrbYPosition <= 175){ //145
+            currentBlueOrbState = OrbMovement.GOING_UP;
+        }
+
+        if(foundOrb){
+            blueOrbXPosition = blueOrb.getX();
+        }
+
+        if(currentBlueOrbState == OrbMovement.GOING_UP){
+            blueOrbYPosition += delta*30;
+        }else if(currentBlueOrbState == OrbMovement.GOING_DOWN){
+            blueOrbYPosition -= delta*30;
+        }
+
+        blueOrb.setPosition(blueOrbXPosition,blueOrbYPosition);
+    }
+
+    private void moveYellowOrb(float delta){
+
+        if(yellowOrbYPosition >= 155){ // 155
+            currentYellowOrbState = OrbMovement.GOING_DOWN;
+        }else if(yellowOrbYPosition <= 125){ //145
+            currentYellowOrbState = OrbMovement.GOING_UP;
+        }
+        yellowOrbXPosition = yellowOrb.getX();
+
+        if(currentYellowOrbState == OrbMovement.GOING_UP){
+            yellowOrbYPosition += delta*30;
+        }else if(currentYellowOrbState == OrbMovement.GOING_DOWN){
+            yellowOrbYPosition -= delta*30;
+        }
+
+        yellowOrb.setPosition(yellowOrbXPosition,yellowOrbYPosition);
+        if(yellowOrb.getX()<(sophie.getX()-yellowOrb.getWidth()-DISTANCE_YELLOW_ORB_SOPHIE)){
+            yellowOrb.setPosition(sophie.getX()-yellowOrb.getWidth()-DISTANCE_YELLOW_ORB_SOPHIE+1,yellowOrb.getY());
+        }else if((sophie.getX()+sophie.getSprite().getWidth()+DISTANCE_YELLOW_ORB_SOPHIE)<yellowOrb.getX()){
+            yellowOrb.setPosition(sophie.getX()+sophie.getSprite().getWidth()+DISTANCE_YELLOW_ORB_SOPHIE-1, yellowOrb.getY());
+        }
+    }
+
+
+    private void checkBlueOrbCollision() {
+
+        if(!foundOrb){
+            if(blueOrb.getBoundingRectangle().contains(sophie.getX()+blueOrb.getBoundingRectangle().getWidth()/2,sophie.getY())){
+                foundOrb = true;
+            }
+        }else{
+            if(blueOrb.getX()<(sophie.getX()-blueOrb.getWidth()-DISTANCE_BLUE_ORB_SOPHIE)){
+                blueOrb.setPosition(sophie.getX()-blueOrb.getWidth()-DISTANCE_BLUE_ORB_SOPHIE+1,blueOrb.getY());
+            }else if((sophie.getX()+sophie.getSprite().getWidth()+DISTANCE_BLUE_ORB_SOPHIE)<blueOrb.getX()){
+                blueOrb.setPosition(sophie.getX()+sophie.getSprite().getWidth()+DISTANCE_BLUE_ORB_SOPHIE-1, blueOrb.getY());
+            }
+
+        }
+    }
 
     private void stepper(float delta){
         world.step(1/60f, 6, 2);
@@ -272,8 +365,7 @@ class Level2 extends Frame {
             }
 
             world.destroyBody(b);
-            sophie.life -= 10;
-            Gdx.app.log("Sophie got hit", sophie.life+"");
+            //sophie.life -= 10;
         }
         deadMeteors.clear();
 
@@ -320,6 +412,9 @@ class Level2 extends Frame {
         aManager.unload("MINIONS/METEOR/MINIONMeteor00.png");
         aManager.unload("MOUNTAINS/GoBackMOUNTAINSPanoramic.png");
         aManager.unload("Squirts/Sophie/SOPHIEWalk.png");
+        aManager.unload("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrb.png");
+        meteorsOutOfBounds.clear();
+        deadMeteors.clear();
     }
 
     public void updateCamera(){
@@ -408,4 +503,10 @@ class Level2 extends Frame {
             return false;
         }
     }
+
+    private enum OrbMovement{
+        GOING_UP,
+        GOING_DOWN
+    }
+
 }
