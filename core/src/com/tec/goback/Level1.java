@@ -426,12 +426,10 @@ class Level1 extends Frame {
         @Override
         public boolean keyDown(int keycode) {
             if (keycode == com.badlogic.gdx.Input.Keys.BACK) {
-
-            app.setScreen(new Fade(app, LoaderState.MAINMENU));
-            return true;
-        }
+                app.setScreen(new Fade(app, LoaderState.MAINMENU));
+                return true;
+            }
             return false;
-
         }
 
         @Override
