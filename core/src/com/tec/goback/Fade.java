@@ -184,6 +184,9 @@ class Fade implements Screen {
 
                     break;
                 case LEVEL3:
+                    manager.load("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrb.png",Texture.class);
+                    manager.load("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png",Texture.class);
+                    manager.load("Interfaces/GAMEPLAY/ARCADE/ARCADERedOrb.png",Texture.class);
                     manager.load("WOODS/WOODSPanoramic2of2.png",Texture.class);
                     manager.load("MINIONS/ARROW/MINIONBlueArrow00.png",Texture.class);
                     manager.load("MINIONS/ARROW/MINIONRedArrow00.png",Texture.class);
