@@ -1,6 +1,7 @@
 package com.tec.goback;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
@@ -840,8 +841,15 @@ class Arcade extends Frame{
     //WTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTF
     private class Input implements InputProcessor {
         private Vector3 v = new Vector3();
+
         @Override
         public boolean keyDown(int keycode) {
+
+            if (keycode == com.badlogic.gdx.Input.Keys.BACK) {
+
+                app.setScreen(new Fade(app, LoaderState.MAINMENU));
+                return true;
+            }
             return false;
         }
 

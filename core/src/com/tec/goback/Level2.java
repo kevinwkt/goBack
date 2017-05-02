@@ -281,7 +281,7 @@ class Level2 extends Frame {
 
         batch.begin();
         batch.setProjectionMatrix(super.camera.combined);
-        debugRenderer.render(world, debugMatrix);
+        //debugRenderer.render(world, debugMatrix);
         batch.end();
     }
 
@@ -522,7 +522,13 @@ class Level2 extends Frame {
 
         @Override
         public boolean keyDown(int keycode) {
+
+            if (keycode == com.badlogic.gdx.Input.Keys.BACK){
+                app.setScreen(new Fade(app, LoaderState.MAINMENU));
+                return true;
+            }
             return false;
+
         }
 
         @Override

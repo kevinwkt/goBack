@@ -1,6 +1,7 @@
 package com.tec.goback;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
@@ -90,7 +91,16 @@ class About implements Screen {
 
     private void objectInit() {
         batch = new SpriteBatch();
-        aboutScreenStage = new Stage(view, batch);
+        aboutScreenStage = new Stage(view, batch) {
+            @Override
+            public boolean keyDown(int keycode) {
+                if (keycode == Input.Keys.BACK) {
+                    app.setScreen(new Fade(app, LoaderState.MAINMENU));
+                    return true;
+                }
+                return false;
+            }
+        };
 
         //Background
         Image bgImg = new Image(background);

@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.sun.tools.doclets.internal.toolkit.util.links.LinkOutput;
 
 /**
  * Created b1y pablo on 16/02/17.
@@ -197,7 +198,17 @@ class SoundSettings implements Screen{
 
     private void objectInit() {
         batch = new SpriteBatch();
-        soundSettingsStage = new Stage(view,batch);
+        soundSettingsStage = new Stage(view, batch) {
+            @Override
+            public boolean keyDown(int keycode) {
+                if (keycode == Input.Keys.BACK) {
+                    app.setScreen(new Fade(app, LoaderState.MAINMENU));
+                    return true;
+                }
+                return false;
+            }
+        };
+
 
         // background
         Image backImg = new Image(background);
