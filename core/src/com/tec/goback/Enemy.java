@@ -128,8 +128,16 @@ abstract class Enemy{
         BodyDef bodyDef= new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         if(arcadeOr3==1) {  //if arcadeOr3 is 1, LEVEL 3
-            float rand = MathUtils.random(ArcadeValues.pelletOriginY,ArcadeValues.HEIGHT); //START OF Y RANGE TO END
-            bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.WIDTH+100),ArcadeValues.pxToMeters(rand));  //PUT THE END OF X TO X,PUT THE RANDOM FOR Y
+            int r=MathUtils.random(2);
+            float rand;
+            if(r==0) {
+                rand = MathUtils.random(ArcadeValues.pelletOriginY+140,ArcadeValues.pelletOriginY+160); //START OF Y RANGE TO END
+            }else if(r==1) {
+                rand = MathUtils.random(ArcadeValues.pelletOriginY+40,ArcadeValues.pelletOriginY+100);
+            }else{
+                rand = MathUtils.random(ArcadeValues.pelletOriginY,ArcadeValues.pelletOriginY+20);
+            }
+            bodyDef.position.set(ArcadeValues.pxToMeters(3840),ArcadeValues.pxToMeters(rand));  //PUT THE END OF X TO X,PUT THE RANDOM FOR Y
         }else if(arcadeOr3==0){ //IF IT IS ARCADE
             if(leftRight==1) {
                 switch (type) {
