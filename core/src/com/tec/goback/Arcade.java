@@ -547,6 +547,7 @@ class Arcade extends Frame{
                     next = LoaderState.ARCADE;
             }
             ArcadeValues.bossFightFlag = false;
+            bgMusic.stop();
             app.setScreen(new Fade(app, next));
         }
     }
@@ -556,10 +557,12 @@ class Arcade extends Frame{
             dialoguetime += delta;
             if (dialoguetime < 6f) {
                 dialogue.makeText(glyph, batch, "This dream overwhelmed you\n Your inexperienced soul was not ready.", camera.position.x);
+                bgMusic.stop();
                 batch.end();
             } else {
                 batch.end();
                 ArcadeValues.bossFightFlag = true;
+                bgMusic.stop();
                 app.setScreen(new Fade(app, LoaderState.ARCADE));
             }
         }else{
@@ -573,9 +576,11 @@ class Arcade extends Frame{
             dialoguetime += delta;
             if (dialoguetime < 6f) {
                 dialogue.makeText(glyph, batch, "This dream overwhelmed you\n Your experience grew to " + stats.getInteger("XP"), camera.position.x);
+                bgMusic.stop();
                 batch.end();
             } else {
                 batch.end();
+                bgMusic.stop();
                 app.setScreen(new Fade(app, LoaderState.MAINMENU));
             }
         }
