@@ -196,7 +196,7 @@ class MainMenu implements Screen {
 
                 LoaderState next;
 
-                int d= pref.getInteger("level");
+                int d = pref.getInteger("level");
 
                 if(!pref.getBoolean("boss")) {
                     switch (d) {
@@ -217,6 +217,7 @@ class MainMenu implements Screen {
                     }
                     app.setScreen(new Fade(app, next));
                 }else{
+                    ArcadeValues.bossFightFlag = true;
                     app.setScreen(new Fade(app, LoaderState.ARCADE));
                 }
 

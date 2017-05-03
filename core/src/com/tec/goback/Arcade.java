@@ -546,6 +546,7 @@ class Arcade extends Frame{
                 default:
                     next = LoaderState.ARCADE;
             }
+            ArcadeValues.bossFightFlag = false;
             app.setScreen(new Fade(app, next));
         }
     }
