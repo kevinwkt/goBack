@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.utils.TimeUtils;
 
 /*
  * Created by gerry on 2/18/17.
@@ -99,6 +98,7 @@ class Arcade extends Frame{
     private Texture skull;
     private Texture spike;
     private Texture meteor;
+    private Texture jaguar;
 
     private Animation<TextureRegion> lizardAnimation;
     private Animation<TextureRegion> yellowGooAnimation;
@@ -107,6 +107,7 @@ class Arcade extends Frame{
     private Animation<TextureRegion> skullRedAnimation;
     private Animation<TextureRegion> skullBlueAnimation;
     private Animation<TextureRegion> skullYellowAnimation;
+    private Animation<TextureRegion> jaguarAnimation;
 
     private Texture bossLizard;
     private Texture bossJaguar;
@@ -198,6 +199,7 @@ class Arcade extends Frame{
         bossEyesY = new Texture("BOSS/BATS/BOSSBatYellow.png");
         bossEyesB = new Texture("BOSS/BATS/BOSSBatBlue.png");
         bossEyesR = new Texture("BOSS/BATS/BOSSBatRed.png");
+        jaguar= new Texture("MINIONS/JAGUAR/MINIONJaguarAnimation.png");
         //LIKE SO
         meteor = aManager.get("MINIONS/METEOR/MINIONMeteor00.png");
 
@@ -223,6 +225,11 @@ class Arcade extends Frame{
         skullBlueAnimation.setPlayMode(Animation.PlayMode.LOOP);
         skullRedAnimation.setPlayMode(Animation.PlayMode.LOOP);
         skullYellowAnimation.setPlayMode(Animation.PlayMode.LOOP);
+
+        texturaCompleta=new TextureRegion(jaguar);
+        texturaPersonaje=texturaCompleta.split(175,65);
+        jaguarAnimation=new Animation(0.18f,texturaPersonaje[0][0],texturaPersonaje[0][1]);
+        jaguarAnimation.setPlayMode(Animation.PlayMode.LOOP);
 
         sophieTx = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADESophie.png");
         bossLizard = aManager.get("BOSS/IGUANA/BOSSIguanaBody.png");
@@ -661,6 +668,7 @@ class Arcade extends Frame{
 
         float p = MathUtils.random();
         float lr = MathUtils.random();
+        new ArcadeJaguar(world, 2, lr > 0.5 ? 0 : 1, jaguarAnimation);
 
         int c = calcColor();
         if(0 <= p && p < e0/2){ //skull
@@ -708,7 +716,7 @@ class Arcade extends Frame{
                     new ArcadeLizard(world, 1, lr > 0.5 ? 0 : 1, lizardAnimation);
                     break;
                 case 2: //Jaguar
-                    new ArcadeLizard(world, 2, lr > 0.5 ? 0 : 1, lizardAnimation);
+                    new ArcadeJaguar(world, 2, lr > 0.5 ? 0 : 1, jaguarAnimation);
                     break;
                 case 3: //Bat
                     new ArcadeLizard(world, 3, lr > 0.5 ? 0 : 1, lizardAnimation);

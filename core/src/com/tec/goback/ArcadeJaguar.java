@@ -21,7 +21,8 @@ import java.util.Iterator;
  */
 
 class ArcadeJaguar extends Enemy {
-
+    private float vi=5;
+    private float jumpFor=0;
     private int walkCounter;
     private int walkLimit;
     private boolean walkCond=true;
@@ -29,8 +30,8 @@ class ArcadeJaguar extends Enemy {
     ArcadeJaguar(World world, int type, int leftOrRight, Animation tx) {
         super(world,type,leftOrRight,tx);
         SPEED=1f;
-        if(leftOrRight==1) body.setLinearVelocity(-SPEED, 0f);
-        if(leftOrRight==0) body.setLinearVelocity(SPEED,0f);
+        if(leftOrRight==1) SPEED=SPEED*-1;
+        body.setLinearVelocity(SPEED,0f);
         timeframe=0;
         walkCounter=0;
         dmg=15f;
@@ -53,33 +54,22 @@ class ArcadeJaguar extends Enemy {
         body.createFixture(fixtureDef);
     }
 
+    private float velocityCalc(float time){
+        return vi-0.07f*time;
+    }
+    private void moveJump(){
+        float doWhi= velocityCalc(jumpFor);
+        if(doWhi>-vi) {
+            body.setLinearVelocity(SPEED,doWhi);
+        }
+        jumpFor++;
+    }
     void draw(SpriteBatch batch) {
         timeframe +=Gdx.graphics.getDeltaTime();
         region=an.getKeyFrame(timeframe);
-        if (!region.isFlipX()) {
-            if(leftRight==0) region.flip(true,false);
-        }
-        if(region.isFlipX()){
-            if(leftRight==1) region.flip(true,false);
-        }
-        if(walkCounter==0){
-            walkLimit=50 + (int)(Math.random() * 100);
-        }
-        if(walkCounter==walkLimit&&walkCond) {
-            walkCounter=0;
-            walkCond=false;
-            body.setLinearVelocity(0f,0f);
-
-        }
-        if(walkCounter==walkLimit&&!walkCond) {
-            walkCounter=0;
-            walkCond=true;
-            if(leftRight==1) body.setLinearVelocity(-SPEED, 0f);
-            if(leftRight==0) body.setLinearVelocity(SPEED,0f);
-
-        }
-        batch.draw(region, ArcadeValues.metersToPx(body.getPosition().x)-120, ArcadeValues.metersToPx(body.getPosition().y)-39);
-        walkCounter++;
+        moveJump();
+        if(leftRight==1) batch.draw(region, ArcadeValues.metersToPx(body.getPosition().x)-83, ArcadeValues.metersToPx(body.getPosition().y)-40);
+        else batch.draw(region, ArcadeValues.metersToPx(body.getPosition().x)-147, ArcadeValues.metersToPx(body.getPosition().y)-40);
     }
 }
 
