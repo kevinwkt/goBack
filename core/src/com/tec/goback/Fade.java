@@ -174,7 +174,7 @@ class Fade implements Screen {
                 case LEVEL2:
                     manager.load("MOUNTAINS/GoBackMOUNTAINSPanoramic.png",Texture.class);
                     manager.load("MINIONS/METEOR/MINIONMeteor00.png",Texture.class);
-                    manager.load("Squirts/Sophie/SOPHIEWalk.png",Texture.class);
+                    manager.load("Squirts/Sophie/SOPHIEComplete.png",Texture.class);
                     //manager.load("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTBlueOrb.png",Texture.class);
                     manager.load("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrb.png",Texture.class);
                     manager.load("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png",Texture.class);
