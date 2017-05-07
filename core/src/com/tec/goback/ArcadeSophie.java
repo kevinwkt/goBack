@@ -78,19 +78,23 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
                 texturaPersonaje[0][36], texturaPersonaje[0][37], texturaPersonaje[0][38],
                 texturaPersonaje[0][39],texturaPersonaje[0][40], texturaPersonaje[0][41],
                 texturaPersonaje[0][42]);
-//        jumping=new Animation();
+        jumping=new Animation(0.4f,texturaPersonaje[0][0],texturaPersonaje[0][43],
+                texturaPersonaje[0][44],texturaPersonaje[0][45],texturaPersonaje[0][46],
+                texturaPersonaje[0][47],texturaPersonaje[0][48],texturaPersonaje[0][49]);
 
 
         // Animación infinita
         standby.setPlayMode(Animation.PlayMode.LOOP);
         walking.setPlayMode(Animation.PlayMode.LOOP);
         dying.setPlayMode(Animation.PlayMode.NORMAL);
+        jumping.setPlayMode(Animation.PlayMode.NORMAL);
 
         // Inicia el timer que contará tiempo para saber qué frame se dibuja
         timerchangeframewalk = 0;
         timerchangeframestandby=0;
         timerchangeframedie=0;
         timerchangeframewake=0;
+        timerchangeframejump=0;
 
         sprite = new Sprite(texturaPersonaje[0][0]);
         sprite.setCenter(0,0);
@@ -212,7 +216,7 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
                 break;
             case JUMP:
                 timerchangeframejump+= Gdx.graphics.getDeltaTime();
-                region= walking.getKeyFrame(timerchangeframejump);
+                region= jumping.getKeyFrame(timerchangeframejump);
                 if (currentstate== ArcadeSophie.MovementState.STILL_LEFT) {
                     if (!region.isFlipX()) {
                         region.flip(true,false);
@@ -224,6 +228,7 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
                     }
 
                 }
+                if(jumping.isAnimationFinished(timerchangeframejump)) timerchangeframejump=0;
 
                 sprite.setCenter(
                         ArcadeValues.metersToPx(body.getPosition().x),
@@ -233,12 +238,13 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
                 break;
             case JUMP2:
                 timerchangeframejump+= Gdx.graphics.getDeltaTime();
-                region= walking.getKeyFrame(timerchangeframejump);
+                region= jumping.getKeyFrame(timerchangeframejump);
                 sprite.setCenter(
                         ArcadeValues.metersToPx(body.getPosition().x),
                         ArcadeValues.metersToPx(body.getPosition().y)
                 );
                 batch.draw(region,sprite.getX(),sprite.getY());
+                if(jumping.isAnimationFinished(timerchangeframejump)) timerchangeframejump=0;
                 break;
             case DYING:
                 timerchangeframedie += Gdx.graphics.getDeltaTime();
@@ -252,7 +258,7 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
                 break;
             case JUMPFIN:
                 timerchangeframejump+= Gdx.graphics.getDeltaTime();
-                region= walking.getKeyFrame(timerchangeframejump);
+                region= jumping.getKeyFrame(timerchangeframejump);
                 if (currentstate== ArcadeSophie.MovementState.STILL_LEFT) {
                     if (!region.isFlipX()) {
                         region.flip(true,false);

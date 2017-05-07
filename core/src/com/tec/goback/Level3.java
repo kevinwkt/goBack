@@ -24,6 +24,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -37,7 +38,9 @@ class Level3 extends Frame {
     private World world;
     private HashSet<Body> deadThings;
     private HashSet<Body> outofBountThings;
-    private ConcurrentHashMap<Sprite,Integer> sprts;
+    private HashMap<Sprite,Integer> sprts;
+    private HashSet<Sprite> dsprts;
+    private HashSet<Sprite> ddsprts;
     // Sophie
     //private Sophie sophie;
     private Texture sophieTexture;
@@ -96,8 +99,8 @@ class Level3 extends Frame {
     Preferences pref = Gdx.app.getPreferences("getLevel");
     Preferences soundPreferences = Gdx.app.getPreferences("My Preferences");
 
-    private Box2DDebugRenderer debugRenderer;
-    private Matrix4 debugMatrix;
+//    private Box2DDebugRenderer debugRenderer;
+//    private Matrix4 debugMatrix;
 
     private Random randomArrowPosition = new Random();
     private Array<Body> bodies = new Array<Body>();
@@ -121,7 +124,7 @@ class Level3 extends Frame {
         Gdx.input.setCatchBackKey(true);
         Gdx.input.setInputProcessor(level3Input);
 
-        debugRenderer=new Box2DDebugRenderer();
+//        debugRenderer=new Box2DDebugRenderer();
 
     }
 
@@ -129,7 +132,7 @@ class Level3 extends Frame {
         world = new World(Vector2.Zero, true);
         deadThings = new HashSet<Body>();
         outofBountThings= new HashSet<Body>();
-        sprts=new ConcurrentHashMap<Sprite, Integer>();
+        sprts=new HashMap<Sprite, Integer>();
         sprts.put(air,1);
         world.setContactListener(new ContactListener() {
                                      @Override
@@ -180,7 +183,7 @@ class Level3 extends Frame {
         arrow3= aManager.get("MINIONS/ARROW/MINIONYellowArrow00.png");
 
         // sophie
-        sophieTexture = new Texture("Squirts/Sophie/SOPHIEWalk.png");
+        sophieTexture = new Texture("Squirts/Sophie/SOPHIEComplete.png");
 
         clue=new Sprite( new Texture("CLUES/Note/CLUESNote.png"));
         orb= new Sprite(new Sprite((Texture)aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADERedOrb.png")));
@@ -198,8 +201,8 @@ class Level3 extends Frame {
 
     @Override
     public void render(float delta) {
-        debugMatrix = new Matrix4(super.camera.combined);
-        debugMatrix.scale(100, 100, 1f);
+//        debugMatrix = new Matrix4(super.camera.combined);
+//        debugMatrix.scale(100, 100, 1f);
         cls();
 
         batch.begin();
@@ -280,10 +283,10 @@ class Level3 extends Frame {
 
 
 
-        batch.begin();
-        batch.setProjectionMatrix(super.camera.combined);
-        debugRenderer.render(world, debugMatrix);
-        batch.end();
+//        batch.begin();
+//        batch.setProjectionMatrix(super.camera.combined);
+//        debugRenderer.render(world, debugMatrix);
+//        batch.end();
     }
 
     private void drawAirs(Batch batch,float delta){
@@ -295,15 +298,20 @@ class Level3 extends Frame {
             sprts.put(sh,1);
             timeForAir = 0;
         }
-        for(Sprite s:sprts.keySet()){
+        dsprts=new HashSet<Sprite>(sprts.keySet());
+        sprts.clear();
+        for(Sprite s:dsprts){
             s.setPosition(s.getX()+2,s.getY());
+            sprts.put(s,1);
             s.draw(batch);
         }
         timeForAir++;
     }
     private void killAirs(){
-        for(Sprite s:sprts.keySet()){
-            if(s.getX()>2700)sprts.remove(s);
+        ddsprts=new HashSet<Sprite>(sprts.keySet());
+        sprts.clear();
+        for(Sprite s:ddsprts){
+            if(s.getX()<2700) sprts.put(s,1);
         }
     }
 
@@ -531,6 +539,10 @@ class Level3 extends Frame {
 
         @Override
         public boolean keyDown(int keycode) {
+            if (keycode == com.badlogic.gdx.Input.Keys.BACK){
+                app.setScreen(new Fade(app, LoaderState.MAINMENU));
+                return true;
+            }
             return false;
         }
 
