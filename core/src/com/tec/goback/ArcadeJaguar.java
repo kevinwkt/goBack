@@ -21,15 +21,15 @@ import java.util.Iterator;
  */
 
 class ArcadeJaguar extends Enemy {
-    private float vi=5;
+    private float vi=3;
     private float jumpFor=0;
     private int walkCounter;
     private int walkLimit;
-    private boolean walkCond=true;
+    private boolean inAir=false;
 
     ArcadeJaguar(World world, int type, int leftOrRight, Animation tx) {
         super(world,type,leftOrRight,tx);
-        SPEED=1f;
+        SPEED=0.5f;
         if(leftOrRight==1) SPEED=SPEED*-1;
         body.setLinearVelocity(SPEED,0f);
         timeframe=0;
@@ -39,8 +39,6 @@ class ArcadeJaguar extends Enemy {
     }
 
     void fixturer(float density, float restitution) {
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(ArcadeValues.pxToMeters(100f), ArcadeValues.pxToMeters(35f));
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.density = density;
@@ -51,7 +49,12 @@ class ArcadeJaguar extends Enemy {
         fixtureDef.filter.categoryBits = ArcadeValues.enemyCat; //its category
         fixtureDef.filter.maskBits = ArcadeValues.enemyMask; //or of its category with colliding categories
 
-        body.createFixture(fixtureDef);
+        if(leftRight==1) {
+            loader.attachFixture(body,"lizardRight",fixtureDef,2.4f);
+        }
+        if(leftRight==0) {
+            loader.attachFixture(body,"lizardLeft",fixtureDef,2.4f);
+        }
     }
 
     private float velocityCalc(float time){
@@ -60,16 +63,31 @@ class ArcadeJaguar extends Enemy {
     private void moveJump(){
         float doWhi= velocityCalc(jumpFor);
         if(doWhi>-vi) {
-            body.setLinearVelocity(SPEED,doWhi);
+            inAir=true;
+            body.setLinearVelocity(SPEED*3,doWhi);
+        }else{
+            inAir=false;
+            body.setLinearVelocity(SPEED,0f);
         }
         jumpFor++;
     }
     void draw(SpriteBatch batch) {
         timeframe +=Gdx.graphics.getDeltaTime();
         region=an.getKeyFrame(timeframe);
-        moveJump();
-        if(leftRight==1) batch.draw(region, ArcadeValues.metersToPx(body.getPosition().x)-83, ArcadeValues.metersToPx(body.getPosition().y)-40);
-        else batch.draw(region, ArcadeValues.metersToPx(body.getPosition().x)-147, ArcadeValues.metersToPx(body.getPosition().y)-40);
+        if(inAir)region=an.getKeyFrame(0.41f);
+        if(leftRight==1){
+            if(body.getPosition().x<12) moveJump();
+        }else if(leftRight==0){
+            if(body.getPosition().x>2) moveJump();
+        }
+        if(leftRight==1) {
+            if(!region.isFlipX())region.flip(true,false);
+            batch.draw(region, ArcadeValues.metersToPx(body.getPosition().x)-83, ArcadeValues.metersToPx(body.getPosition().y)-40);
+        }
+        else {
+            if(region.isFlipX()) region.flip(true,false);
+            batch.draw(region, ArcadeValues.metersToPx(body.getPosition().x)-100, ArcadeValues.metersToPx(body.getPosition().y)-40);
+        }
     }
 }
 

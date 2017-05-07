@@ -25,8 +25,9 @@ class ArcadeArrow extends Enemy {
 
     ArcadeArrow(World world, int type,int arcadeOr3, int leftOrRight,Texture tx){
         super(world,type,arcadeOr3,leftOrRight,tx); //0 if its only for arcade, 1 if its for level 3
-        if(leftRight==1) sprite.rotate(90);
-        else sprite.rotate(-90);
+        this.dmg=5;
+        if(leftRight==1) sprite.rotate(-90);
+        else sprite.rotate(90);
         if(arcadeOr3==1) {
             switch (type) {
                 case 0:
@@ -46,7 +47,7 @@ class ArcadeArrow extends Enemy {
                     break;
             }
         }else if(arcadeOr3==0){     //From arcade
-            SPEED=2f;
+            SPEED=1f;
             if(leftOrRight==0) //from left
             body.setLinearVelocity(SPEED,0);
             else if(leftOrRight==1) //from right
@@ -55,8 +56,6 @@ class ArcadeArrow extends Enemy {
     }
 
     void fixturer(float density, float restitution) {
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(ArcadeValues.pxToMeters(100f), ArcadeValues.pxToMeters(35f));
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.density = density;
@@ -69,16 +68,17 @@ class ArcadeArrow extends Enemy {
 
         loader.attachFixture(body,"arrowRight",fixtureDef,0.25f);
         if(leftRight==1) {
-            body.setTransform(body.getPosition() ,90*MathUtils.degreesToRadians);
-        }
-        if(leftRight==0) {
-            body.setTransform(body.getPosition(),-90*MathUtils.degreesToRadians);
+            body.setTransform(body.getPosition() ,-90*MathUtils.degreesToRadians);
+        }else{
+            body.setTransform(body.getPosition(),90*MathUtils.degreesToRadians);
         }
     }
 
     void draw(SpriteBatch batch) {
         timeframe +=Gdx.graphics.getDeltaTime();
-        sprite.setPosition(ArcadeValues.metersToPx(body.getPosition().x+0.54f), ArcadeValues.metersToPx(body.getPosition().y-0.81f));
+        if(leftRight==1){
+            sprite.setPosition(ArcadeValues.metersToPx(body.getPosition().x-0.04f), ArcadeValues.metersToPx(body.getPosition().y-0.67f));
+        }else sprite.setPosition(ArcadeValues.metersToPx(body.getPosition().x-0.25f), ArcadeValues.metersToPx(body.getPosition().y-0.67f));
         sprite.draw(batch);
     }
 }

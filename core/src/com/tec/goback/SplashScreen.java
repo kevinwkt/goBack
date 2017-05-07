@@ -80,6 +80,8 @@ class SplashScreen implements Screen
         aManager.load("Interfaces/SOUND/SOUNDSound.png", Texture.class);
         aManager.load("CONSTANT/CONSTDialogueBox.png", Texture.class);
         aManager.load("Interfaces/GAMEPLAY/ARCADE/ARCADESophie.png", Texture.class);
+
+        aManager.finishLoading();
     }
 
     private void cameraInit() {

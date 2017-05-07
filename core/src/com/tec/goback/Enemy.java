@@ -123,7 +123,7 @@ abstract class Enemy{
 
     Enemy(World world, int type,int arcadeOr3, int leftRight, Texture tx){    //FOR ARCADEARROWWWWWW
         this.sprite=new Sprite(tx);
-        if(leftRight==0&&arcadeOr3==0) sprite.flip(false,true);
+        this.leftRight=leftRight;
         this.color=type;
         BodyDef bodyDef= new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -142,32 +142,32 @@ abstract class Enemy{
             if(leftRight==1) {
                 switch (type) {
                     case 0:
-                        bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX + 800), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
+                        bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX + 800), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY-20));
                         break;
                     case 1:
-                        bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX + 800), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY+50));
+                        bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX + 800), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
                         break;
                     case 2:
-                        bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX + 800), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY+100));
+                        bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX + 800), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY+20));
                         break;
                 }
             }else if(leftRight==0){
                 switch (type) {
                     case 0:
-                        bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX + 800), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
+                        bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX - 800), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY-20));
                         break;
                     case 1:
-                        bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX + 800), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY+50));
+                        bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX - 800), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY));
                         break;
                     case 2:
-                        bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX + 800), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY+100));
+                        bodyDef.position.set(ArcadeValues.pxToMeters(ArcadeValues.pelletOriginX - 800), ArcadeValues.pxToMeters(ArcadeValues.pelletOriginY+20));
                         break;
                 }
             }
         }
         body=world.createBody(bodyDef);
-        fixturer(0f,0f);
         body.setUserData(this);
+        fixturer(0f,0f);
     }
 
     Enemy(World world, float x, Texture tx) {
