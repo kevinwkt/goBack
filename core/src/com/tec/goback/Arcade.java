@@ -28,7 +28,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import java.util.ArrayList;
 import java.util.HashSet;
-
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.utils.TimeUtils;
 
@@ -39,6 +39,9 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 @SuppressWarnings("ConstantConditions")
 class Arcade extends Frame{
+
+
+    private Sound shootSound;
 
     //B2D bodies
     private Array<Body> squirts = new Array<Body>();
@@ -134,6 +137,7 @@ class Arcade extends Frame{
 
     @Override
     public void show() {
+
         d = pref.getInteger("level");
         debugRenderer = new Box2DDebugRenderer();
         bossFight = pref.getBoolean("boss") && ArcadeValues.bossFightFlag;
@@ -147,7 +151,6 @@ class Arcade extends Frame{
         dialogue = new Dialogue(aManager);
         Gdx.input.setInputProcessor(input);
         Gdx.input.setCatchBackKey(true);
-
         musicInit();
     }
 
@@ -160,6 +163,7 @@ class Arcade extends Frame{
     }
 
     private void textureInit() {
+        shootSound = aManager.get("MUSIC/shoot.mp3", Sound.class);
         orbYellow = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png");
 
         orbBlue = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrb.png");
@@ -443,7 +447,7 @@ class Arcade extends Frame{
         }
         batch.begin();
         batch.setProjectionMatrix(super.camera.combined);
-        //debugRenderer.render(world, debugMatrix);
+        debugRenderer.render(world, debugMatrix);
         batch.end();
     }
 
@@ -568,8 +572,7 @@ class Arcade extends Frame{
         }else{
             ArcadeValues.bossFightFlag = true;
             if (!putXp) {
-                //stats.putInteger("XP", stats.getInteger("XP") + 100000000);
-                stats.putInteger("XP", stats.getInteger("XP") + ((int)(hit + 10 * (hit / shot) + 10 * (hit * (match / hit))))/10);
+                stats.putInteger("XP", !ArcadeValues.debug ? (stats.getInteger("XP") + ((int)(hit + 10 * (hit / shot) + 10 * (hit * (match / hit))))/10):557);
                 stats.flush();
                 putXp = true;
             }
@@ -641,7 +644,7 @@ class Arcade extends Frame{
             return betweenSpawns - (0.006666666667f*arcadeMultiplier)/30;
         }
         if(time >= ArcadeValues.stepTimes[5] && time < ArcadeValues.stepTimes[6]){//starts in 0.8 and goes slowly
-            if(bossActive && bossFight) {
+            if(!bossActive && bossFight) {
                 (boss).move();
                 bossActive = true;
             }
@@ -905,6 +908,7 @@ class Arcade extends Frame{
                             //Gdx.app.log("3", "");
                             break;
                     }
+                    if(soundPreferences.getBoolean("fxOn")){shootSound.play(0.5f);}
                     cooldown = 0.0f;
                 }
 

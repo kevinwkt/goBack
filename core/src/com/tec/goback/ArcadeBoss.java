@@ -58,7 +58,7 @@ class ArcadeBoss implements IArcadeBoss{
         if(color == 1) {
             loader.attachFixture(body, "bossLizzard", fixtureDef, 7f);
         }else{
-            loader.attachFixture(body, "bossJaguar", fixtureDef, 8f);
+            loader.attachFixture(body, "bossJaguar", fixtureDef, 7f);
         }
     }
 

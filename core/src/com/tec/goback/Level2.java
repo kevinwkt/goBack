@@ -286,7 +286,7 @@ class Level2 extends Frame {
     }
 
     private void drawJaguar(float delta) {
-        if(jaguarYPosition > 255){
+        if(jaguarYPosition > 300){
             jaguarYPosition -= delta * jaguarAcceleration;
             jaguarAcceleration += 9.5;
         }else{
@@ -299,6 +299,7 @@ class Level2 extends Frame {
 
                     pref.putBoolean("boss",true);
                     pref.flush();
+                    ArcadeValues.bossFightFlag = true;
                     app.setScreen(new Fade(app, LoaderState.ARCADE));
                     this.dispose();
 

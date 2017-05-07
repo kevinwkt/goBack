@@ -105,7 +105,7 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
         );
 
         body = world.createBody(bodyDef);
-        fixturer(0.0f, 0.0f);
+        fixturer(100.0f, 0.0f);
         body.setLinearVelocity(0f, 0f);
         body.setUserData(this);
     }

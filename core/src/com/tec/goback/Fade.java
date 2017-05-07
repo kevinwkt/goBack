@@ -226,6 +226,7 @@ class Fade implements Screen {
                     manager.load("CLUES/CLUESBoneDisplay.png", Texture.class);
                     break;
                 case ARCADE:
+                    manager.load("MUSIC/shoot.mp3", Sound.class);
                     manager.load("MUSIC/GoBackMusicArcade.mp3", Music.class);
                     manager.load("HARBOR/GoBackHARBOR0.png", Texture.class);
                     manager.load("MOUNTAINS/GoBackMOUNTAINS0.png", Texture.class); //Level2
