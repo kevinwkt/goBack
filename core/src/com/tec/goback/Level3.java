@@ -262,6 +262,7 @@ class Level3 extends Frame {
             if(blueOrbYPosition<-40){
                 pref.putBoolean("boss",true);
                 pref.flush();
+                ArcadeValues.bossFightFlag = true;
                 app.setScreen(new Fade(app, LoaderState.ARCADE));
                 this.dispose();
             }
