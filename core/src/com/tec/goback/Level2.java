@@ -174,7 +174,7 @@ class Level2 extends Frame {
         meteor = aManager.get("MINIONS/METEOR/MINIONMeteor00.png");
 
         // sophie
-        sophieTexture = aManager.get("Squirts/Sophie/SOPHIEWalk.png");
+        sophieTexture = aManager.get("Squirts/Sophie/SOPHIEComplete.png");
 
         // orb
         blueOrb = new Sprite((Texture)aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrb.png"));
@@ -286,7 +286,7 @@ class Level2 extends Frame {
     }
 
     private void drawJaguar(float delta) {
-        if(jaguarYPosition > 255){
+        if(jaguarYPosition > 300){
             jaguarYPosition -= delta * jaguarAcceleration;
             jaguarAcceleration += 9.5;
         }else{
@@ -299,6 +299,7 @@ class Level2 extends Frame {
 
                     pref.putBoolean("boss",true);
                     pref.flush();
+                    ArcadeValues.bossFightFlag = true;
                     app.setScreen(new Fade(app, LoaderState.ARCADE));
                     this.dispose();
 
@@ -489,7 +490,7 @@ class Level2 extends Frame {
     public void dispose() {
         aManager.unload("MINIONS/METEOR/MINIONMeteor00.png");
         aManager.unload("MOUNTAINS/GoBackMOUNTAINSPanoramic.png");
-        aManager.unload("Squirts/Sophie/SOPHIEWalk.png");
+        aManager.unload("Squirts/Sophie/SOPHIEComplete.png");
         aManager.unload("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrb.png");
         aManager.unload("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png");
         aManager.unload("CLUES/Photo/CLUESPhoto.png");

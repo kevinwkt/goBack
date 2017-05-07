@@ -98,7 +98,7 @@ class OrbAttack extends Squirt {
             case 3:
                 return stats.getFloat("RedAtk");
             default:
-                return 0f;
+                return 20f;
         }
     }
 

@@ -291,10 +291,10 @@ class Level1 extends Frame {
 
             switch (dialogueSprite){
                 case 1:
-                    dialogue.makeText(glyph, batch, "He's taking me back…. He's taking me back….. He surely is taking me back You! It has been a long long time. The boat will be coming back soon,  I hope what I have is enough. Will you be going back, too?", oldManNormalSpr, sophieNormalSpr, false, camera.position.x);
+                    dialogue.makeText(glyph, batch, "He's taking me back... He's taking me back... He surely is taking me back You! It has been a long long time. The boat will be coming back soon,  I hope what I have is enough. Will you be going back, too?", oldManNormalSpr, sophieNormalSpr, false, camera.position.x);
                     break;
                 case 2:
-                    dialogue.makeText(glyph, batch, "I dont know… Where am I…?", oldManNormalSpr, sophieNormalSpr, true, camera.position.x);
+                    dialogue.makeText(glyph, batch, "I dont know... Where am I...?", oldManNormalSpr, sophieNormalSpr, true, camera.position.x);
                     break;
                 case 3:
                     dialogue.makeText(glyph, batch, "You sweet girl, it really is a shame. I've done some terrible things, but I guess I can help somebody for a change. Take this, it will help you on your journey.", oldManNormalSpr, sophieNormalSpr, false,camera.position.x);

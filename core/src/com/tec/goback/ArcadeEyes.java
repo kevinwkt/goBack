@@ -43,6 +43,14 @@ class ArcadeEyes implements IArcadeBoss{
         }
     }
 
+    public int getLife(){
+        float avrg = 0;
+        for(Eyes e: eyes){
+            avrg += e.getLife();
+        }
+        return (int)avrg/3;
+    }
+
 
     private class Eyes implements IArcadeBoss{
         private int color;
@@ -102,6 +110,7 @@ class ArcadeEyes implements IArcadeBoss{
         }
 
         public void draw(SpriteBatch batch) {
+            //TODO BLINKING
             move();
             fade(fading);
             sprite.setPosition(
@@ -131,5 +140,7 @@ class ArcadeEyes implements IArcadeBoss{
                 }
             }
         }
+
+        public int getLife(){return ((int)((life*10)/ArcadeValues.redBossLife));}
     }
 }
