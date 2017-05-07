@@ -729,10 +729,6 @@ class Arcade extends Frame{
         float p = MathUtils.random();
         float lr = MathUtils.random();
 
-        new ArcadeArrow(world, 0, 0, lr > 0.5 ? 0 : 1, arrowBlue);
-        new ArcadeArrow(world, 1, 0, lr > 0.5 ? 0 : 1, arrowRed);
-        new ArcadeArrow(world, 2, 0, lr > 0.5 ? 0 : 1, arrowYellow);
-
         int c = calcColor();
         if(0 <= p && p < e0/2){ //skull
             float a = lr * MathUtils.PI;
