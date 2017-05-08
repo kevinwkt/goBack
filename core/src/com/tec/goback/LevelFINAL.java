@@ -154,6 +154,11 @@ class LevelFINAL extends Frame {
         batch.setProjectionMatrix(super.camera.combined);
         batch.begin();
 
+        if(soundPreferences.getBoolean("soundOn"))
+            bgMusic.play();
+        else
+            bgMusic.stop();
+
 
         if(state == GameState.PLAYING){
             Gdx.input.setInputProcessor(levelInput);

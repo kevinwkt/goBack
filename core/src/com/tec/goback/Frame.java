@@ -91,6 +91,8 @@ abstract class Frame implements Screen {
     protected Music bgMusic;
 
     protected StatsState stateStats;
+    Preferences soundPreferences = Gdx.app.getPreferences("My Preferences");
+
 
     public Frame(App app, float WIDTH_MAP, float HEIGHT_MAP) {
         this.app = app;
@@ -103,6 +105,27 @@ abstract class Frame implements Screen {
     public void show() {
         cameraInit();
         pauseInit();
+        musicInit();
+    }
+
+    private void musicInit() {
+        switch(pref.getInteger("level")){
+            case 5:
+            case 0:
+                bgMusic = aManager.get("MUSIC/GoBackMusicMainMenu.mp3");
+                break;
+            case 4:
+                bgMusic = aManager.get("MUSIC/GoBackMusicArcade.mp3");;
+                break;
+            default:
+                bgMusic = aManager.get("MUSIC/GoBackMusicLevel1.mp3");
+                break;
+        }
+        if(soundPreferences.getBoolean("soundOn")) {
+
+            bgMusic.setLooping(true);
+            bgMusic.play();
+        }
     }
 
     private void cameraInit() {

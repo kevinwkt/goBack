@@ -215,6 +215,7 @@ class Fade implements Screen {
                     manager.load("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTYellowOrb.png",Texture.class);
                     manager.load("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTBlueOrb.png",Texture.class);
                     manager.load("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTRedOrb.png",Texture.class);
+                    manager.load("MUSIC/GoBackMusicArcade.mp3", Music.class);
                     break;
                 case BOSS1:
 

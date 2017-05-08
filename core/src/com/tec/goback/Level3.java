@@ -205,6 +205,11 @@ class Level3 extends Frame {
         debugMatrix.scale(100, 100, 1f);
         cls();
 
+        if(soundPreferences.getBoolean("soundOn"))
+            bgMusic.play();
+        else
+            bgMusic.stop();
+
         batch.begin();
         batch.setProjectionMatrix(super.camera.combined);
 
@@ -503,6 +508,12 @@ class Level3 extends Frame {
         aManager.unload("Squirts/Sophie/SOPHIEWalk.png");
         outofBountThings.clear();
         deadThings.clear();
+
+        if(bgMusic != null){
+            if(bgMusic.isPlaying()){
+                bgMusic.pause();
+            }
+        }
     }
 
     public void updateCamera(){

@@ -208,7 +208,10 @@ class Level2 extends Frame {
         batch.begin();
         batch.setProjectionMatrix(super.camera.combined);
 
-
+        if(soundPreferences.getBoolean("soundOn"))
+            bgMusic.play();
+        else
+            bgMusic.stop();
 
         if(state == GameState.CLUE){
             batch.end();
@@ -499,6 +502,12 @@ class Level2 extends Frame {
         aManager.unload("BOSS/JAGUAR/BOSSJaguarFrontLeg.png");
         meteorsOutOfBounds.clear();
         deadMeteors.clear();
+
+        if(bgMusic != null){
+            if(bgMusic.isPlaying()){
+                bgMusic.pause();
+            }
+        }
     }
 
     public void updateCamera(){

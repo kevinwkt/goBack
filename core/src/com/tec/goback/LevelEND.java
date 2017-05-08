@@ -3,6 +3,7 @@ package com.tec.goback;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -41,10 +42,6 @@ class LevelEND extends Frame {
     private Image photo;
     private Image note;
 //    private Image bone;
-
-
-
-
 
 
 
@@ -121,6 +118,11 @@ class LevelEND extends Frame {
     public void render(float delta) {
         cls();
 
+        if(soundPreferences.getBoolean("soundOn"))
+            bgMusic.play();
+        else
+            bgMusic.stop();
+
         if(squaresFilled()) state = GameState.WON;
         if(state == GameState.PLAYING) {
             stage.draw();
@@ -164,6 +166,12 @@ class LevelEND extends Frame {
     public void hide() {}
 
     @Override
-    public void dispose() {}
+    public void dispose() {
+        if(bgMusic != null){
+            if(bgMusic.isPlaying()){
+                bgMusic.pause();
+            }
+        }
+    }
 
 }

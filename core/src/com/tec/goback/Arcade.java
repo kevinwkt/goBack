@@ -176,7 +176,7 @@ class Arcade extends Frame{
         dialogue = new Dialogue(aManager);
         Gdx.input.setInputProcessor(input);
         Gdx.input.setCatchBackKey(true);
-        musicInit();
+        //musicInit();
     }
 
     private void musicInit() {
@@ -468,7 +468,6 @@ class Arcade extends Frame{
 
     @Override//TODO GET DEBUG SHIT ORGANIZED
     public void render(float delta) {
-
         debugMatrix = new Matrix4(super.camera.combined);
         debugMatrix.scale(100, 100, 1f);
 
@@ -924,7 +923,11 @@ class Arcade extends Frame{
     public void hide() {}
     @Override
     public void dispose() {
-
+        if(bgMusic != null){
+            if(bgMusic.isPlaying()){
+                bgMusic.pause();
+            }
+        }
     }
     //WTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTF
     private class Input implements InputProcessor {

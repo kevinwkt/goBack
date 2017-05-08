@@ -192,6 +192,11 @@ class Level4 extends Frame {
 
         batch.setProjectionMatrix(super.camera.combined);
 
+        if(soundPreferences.getBoolean("soundOn"))
+            bgMusic.play();
+        else
+            bgMusic.stop();
+
         if(state == GameState.CLUE){
             clueStage.draw();
             Gdx.input.setInputProcessor(clueStage);
@@ -298,7 +303,14 @@ class Level4 extends Frame {
 
         if(deathScale<1){
             deathScale+=0.01;
+        }else{
+            finishLevel();
         }
+    }
+
+    private void finishLevel() {
+        app.setScreen(new Fade(app, LoaderState.LEVELEND));
+        this.dispose();
     }
 
     private void catchOrbs() {
@@ -743,6 +755,28 @@ class Level4 extends Frame {
 
     @Override
     public void dispose() {
+        aManager.unload("Squirts/Sophie/SOPHIEWalk.png");
+
+        aManager.unload("OLDMAN/CRACK/OLDMANCrackFULL.png");
+        aManager.unload("OLDMAN/CRACK/OLDMANCrackFinal.png");
+
+        aManager.unload("HARBOR/GoBackHARBORPanoramic.png");
+        aManager.unload("MOUNTAINS/GoBackMOUNTAINSPanoramic.png");
+        aManager.unload("WOODS/WOODSPanoramic1of2.png");
+
+        aManager.unload("WOODS/WOODSEnding.png");
+        aManager.unload("MINIONS/HAND/MINIONSHand00.png");
+        aManager.unload("BOSS/DEATH/BOSSDeathFull.png");
+        aManager.unload("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTYellowOrb.png");
+        aManager.unload("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTBlueOrb.png");
+        aManager.unload("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTRedOrb.png");
+
+        if(bgMusic != null){
+            if(bgMusic.isPlaying()){
+                bgMusic.pause();
+            }
+        }
+
     }
 
     private void cls() {

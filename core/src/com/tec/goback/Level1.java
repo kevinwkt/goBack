@@ -103,16 +103,6 @@ class Level1 extends Frame {
 
         Gdx.input.setCatchBackKey(true);
         Gdx.input.setInputProcessor(new Input());
-        musicInit();
-    }
-
-    private void musicInit() {
-        bgMusic = aManager.get("MUSIC/GoBackMusicLevel1.mp3");
-        if(soundPreferences.getBoolean("soundOn")) {
-
-            bgMusic.setLooping(true);
-            bgMusic.play();
-        }
     }
 
     private void textureInit() {
@@ -159,6 +149,10 @@ class Level1 extends Frame {
     public void render(float delta) {
         cls();
 
+        if(soundPreferences.getBoolean("soundOn"))
+            bgMusic.play();
+        else
+            bgMusic.stop();
 
         if(soundPreferences.getBoolean("soundOn")){
             if(bgMusic!= null){
@@ -392,6 +386,12 @@ class Level1 extends Frame {
         aManager.unload("BOSS/IGUANA/BOSSIguanaBody.png");
         aManager.unload("BOSS/IGUANA/BOSSIguanaBackLeg.png");
         aManager.unload("BOSS/IGUANA/BOSSIguanaFrontLeg.png");
+
+        if(bgMusic != null){
+            if(bgMusic.isPlaying()){
+                bgMusic.pause();
+            }
+        }
     }
 
     private void updateCamera() {

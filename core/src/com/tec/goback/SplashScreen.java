@@ -3,6 +3,7 @@ package com.tec.goback;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -81,6 +82,9 @@ class SplashScreen implements Screen
         aManager.load("Interfaces/SOUND/SOUNDSound.png", Texture.class);
         aManager.load("CONSTANT/CONSTDialogueBox.png", Texture.class);
         aManager.load("Interfaces/GAMEPLAY/ARCADE/ARCADESophie.png", Texture.class);
+        aManager.load("MUSIC/GoBackMusicMainMenu.mp3", Music.class);
+        aManager.load("MUSIC/GoBackMusicLevel1.mp3", Music.class);
+        aManager.load("MUSIC/GoBackMusicArcade.mp3", Music.class);
 
         //aManager.finishLoading();
     }
