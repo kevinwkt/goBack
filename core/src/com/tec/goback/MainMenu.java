@@ -81,9 +81,9 @@ class MainMenu implements Screen {
     public void show() {
         //     -----------------------  TO GET INTO LEVEL 0 TEMPORAL OMG
 
-        pref.putInteger("level",2);
-        pref.putBoolean("boss", false);
-        pref.flush();
+        //pref.putInteger("level",5);
+        //pref.putBoolean("boss", false);
+        //pref.flush();
 
 
         cameraInit();
