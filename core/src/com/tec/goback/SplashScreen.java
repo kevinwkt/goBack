@@ -36,19 +36,20 @@ class SplashScreen implements Screen
 
     SplashScreen(App app) {
         this.app = app;
+        aManager = app.getAssetManager();
     }
 
     @Override
     public void show() {
+
         cameraInit();
         textureInit();
         batch = new SpriteBatch();
         logoScale();
-        aManager = app.getAssetManager();
+        aManager.load("GobackCONSTPause.png", Texture.class);
         aManager.load("INTRO/INTROBackground.png",Texture.class);
         aManager.load("HARBOR/GoBackHARBOR0.png", Texture.class);
         aManager.load("WOODS/WOODSBeginning.png", Texture.class);
-        aManager.load("Interfaces/GAMEPLAY/GobackCONSTPause.png", Texture.class);
         aManager.load("Interfaces/PAUSE/PAUSEBottomDisplay.png", Texture.class);
         aManager.load("Interfaces/PAUSE/PAUSEMapList.png", Texture.class);
         aManager.load("Interfaces/PAUSE/PAUSEStats.png", Texture.class);

@@ -45,7 +45,7 @@ class Dialogue {
 
         namel.setText(font, leftName, Color.BLACK, 710F, 30, true);
         glyph.setText(font, msj, Color.BLACK, 710.0F, 30, true);
-        font.draw(batch ,namel, cameraCenter - sheetTexture.getWidth()/2 + 185, sheetTexture.getHeight()-115);
+        font.draw(batch ,namel, cameraCenter - sheetTexture.getWidth()/2 + 185, sheetTexture.getHeight()-30);
         font.draw(batch ,glyph, cameraCenter - sheetTexture.getWidth()/2 + 185, sheetTexture.getHeight()-115);
     }
 
@@ -73,9 +73,9 @@ class Dialogue {
         namer.setText(font, rightName, Color.BLACK, 710F, 30, true);
 
         if(rightTalks)
-            font.draw(batch ,namer, cameraCenter + 320, sheetTexture.getHeight()-95);
+            font.draw(batch ,namer, cameraCenter + 320, sheetTexture.getHeight()-30);
         else
-            font.draw(batch ,namel, cameraCenter - sheetTexture.getWidth()/2 + 185, sheetTexture.getHeight()-95);
+            font.draw(batch ,namel, cameraCenter - sheetTexture.getWidth()/2 + 185, sheetTexture.getHeight()-30);
 
         font.draw(batch ,glyph, cameraCenter - sheetTexture.getWidth()/2 + 185, sheetTexture.getHeight()-115);
     }

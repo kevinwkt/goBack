@@ -210,6 +210,12 @@ class Arcade extends Frame{
             case 3:
                 background = aManager.get("UNDERGROUND/UNDERGROUNDArcade.png");
                 break;
+            case 4:
+                background = aManager.get("WOODS/WOODSEnding.png");
+                break;
+            case 5:
+                background = aManager.get("HARBOR/GoBackHARBOR0.png");
+                break;
         }
 
 
@@ -513,7 +519,7 @@ class Arcade extends Frame{
         }
         batch.begin();
         batch.setProjectionMatrix(super.camera.combined);
-        debugRenderer.render(world, debugMatrix);//DEBUG
+        //debugRenderer.render(world, debugMatrix);//DEBUG
         batch.end();
         cooldown += delta;
     }
@@ -593,6 +599,10 @@ class Arcade extends Frame{
             batch.end();
         } else {
             batch.end();
+            stats.putInteger("Coins", stats.getInteger("Coins")+10);
+            stats.putInteger("Quartz", stats.getInteger("Quartz")+10);
+            stats.putInteger("Obsidian", stats.getInteger("Obsidian")+10);
+            stats.flush();
             LoaderState next;
             switch(d){
                 case 1:
@@ -626,7 +636,7 @@ class Arcade extends Frame{
         if(bossFight) {
             dialoguetime += delta;
             if (dialoguetime < 6f) {
-                dialogue.makeText(glyph, batch, "This dream overwhelmed you\n Your inexperienced soul was not ready.", camera.position.x);
+                dialogue.makeText(glyph, batch, "This dream overwhelmed you\n Your inexperienced soul was not ready.\n The endless dream will give you experience", camera.position.x);
                 bgMusic.stop();
                 batch.end();
             } else {
@@ -913,7 +923,9 @@ class Arcade extends Frame{
     @Override
     public void hide() {}
     @Override
-    public void dispose() {}
+    public void dispose() {
+
+    }
     //WTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTF
     private class Input implements InputProcessor {
         private Vector3 v = new Vector3();

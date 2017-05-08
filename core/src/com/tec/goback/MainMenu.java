@@ -81,9 +81,9 @@ class MainMenu implements Screen {
     public void show() {
         //     -----------------------  TO GET INTO LEVEL 0 TEMPORAL OMG
 
-//        pref.putInteger("level",2);
-//        pref.putBoolean("boss", false);
-//        pref.flush();
+        //pref.putInteger("level",5);
+        //pref.putBoolean("boss", false);
+        //pref.flush();
 
 
         cameraInit();
@@ -123,6 +123,9 @@ class MainMenu implements Screen {
                 break;
             case 4:
                 background = aManager.get("WOODS/WOODSEnding.png");
+                break;
+            case 5:
+                background = aManager.get("HARBOR/GoBackHARBOR0.png");
                 break;
         }
 
@@ -212,6 +215,9 @@ class MainMenu implements Screen {
                             break;
                         case 4:
                             next = LoaderState.LEVEL4;
+                            break;
+                        case 5:
+                            next = LoaderState.LEVELFINAL;
                             break;
                         default:
                             next = LoaderState.LEVEL0;
