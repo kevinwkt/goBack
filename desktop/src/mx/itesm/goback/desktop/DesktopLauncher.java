@@ -1,4 +1,4 @@
-package mx.tec.goback.desktop;
+package mx.itesm.goback.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
