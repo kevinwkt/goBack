@@ -18,7 +18,7 @@ android {
         exclude 'META-INF/robovm/ios/robovm.xml'
     }
     defaultConfig {
-        applicationId "com.tec.goback"
+        applicationId "mx.itesm.goback"
         minSdkVersion 8
         targetSdkVersion 25
     }
@@ -71,7 +71,7 @@ task run(type: Exec) {
     }
 
     def adb = path + "/platform-tools/adb"
-    commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.tec.goback/com.tec.goback.AndroidLauncher'
+    commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.tec.goback/AndroidLauncher'
 }
 
 // sets up the Android Eclipse project, using the old Ant based build.
