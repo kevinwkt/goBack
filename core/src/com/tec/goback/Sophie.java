@@ -109,6 +109,8 @@ class Sophie extends Squirt
                 timerchangeframedie +=Gdx.graphics.getDeltaTime();
                 region=dying.getKeyFrame(timerchangeframedie);
                 batch.draw(region,sprite.getX(),sprite.getY());
+                if(dying.isAnimationFinished(timerchangeframewake))
+                    currentstate=MovementState.SLEEPING;
                 break;
             case MOVE_RIGHT:
             case MOVE_LEFT:
