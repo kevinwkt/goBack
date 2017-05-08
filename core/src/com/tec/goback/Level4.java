@@ -121,7 +121,7 @@ class Level4 extends Frame {
         deathTexture = aManager.get("BOSS/DEATH/BOSSDeathFull.png");
 
         oldManTexture = new TextureRegion((Texture) aManager.get("OLDMAN/CRACK/OLDMANCrackFULL.png"));
-        oldManEndTexture = new TextureRegion((Texture) aManager.get("OLDMAN/CRACK/OLDMANCrackFinal.png"));
+        oldManEndTexture = new TextureRegion((Texture) aManager.get("OLDMAN/CRACK/OLDMANCrackFINAL.png"));
 
         deathSprite = new Sprite(deathTexture);
         deathSprite.setOrigin(200, 33);
@@ -310,6 +310,8 @@ class Level4 extends Frame {
 
     private void finishLevel() {
         app.setScreen(new Fade(app, LoaderState.LEVELEND));
+        pref.putInteger("level", 5);
+        pref.flush();
         this.dispose();
     }
 
@@ -758,7 +760,7 @@ class Level4 extends Frame {
         aManager.unload("Squirts/Sophie/SOPHIEWalk.png");
 
         aManager.unload("OLDMAN/CRACK/OLDMANCrackFULL.png");
-        aManager.unload("OLDMAN/CRACK/OLDMANCrackFinal.png");
+        aManager.unload("OLDMAN/CRACK/OLDMANCrackFINAL.png");
 
         aManager.unload("HARBOR/GoBackHARBORPanoramic.png");
         aManager.unload("MOUNTAINS/GoBackMOUNTAINSPanoramic.png");

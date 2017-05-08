@@ -203,7 +203,7 @@ class Fade implements Screen {
                     manager.load("Squirts/Sophie/SOPHIEWalk.png",Texture.class);
 
                     manager.load("OLDMAN/CRACK/OLDMANCrackFULL.png", Texture.class);
-                    manager.load("OLDMAN/CRACK/OLDMANCrackFinal.png", Texture.class);
+                    manager.load("OLDMAN/CRACK/OLDMANCrackFINAL.png", Texture.class);
 
                     manager.load("HARBOR/GoBackHARBORPanoramic.png",Texture.class);
                     manager.load("MOUNTAINS/GoBackMOUNTAINSPanoramic.png",Texture.class);
@@ -238,7 +238,7 @@ class Fade implements Screen {
                     manager.load("Interfaces/GAMEPLAY/CONSTANT/ARCADERedOrbBIRD.png",Texture.class);
                     manager.load("Interfaces/GAMEPLAY/CONSTANT/ARCADEYellowOrbDOG.png",Texture.class);
                     manager.load("SOPHIE/DIALOGUESophieNormal.png",Texture.class);
-                    manager.load("INTRO/INTROBoat.png", Texture.class);
+                    manager.load("INTRO/concha.png", Texture.class);
 
                     break;
                 case LEVELEND:
@@ -283,6 +283,11 @@ class Fade implements Screen {
                     manager.load("BOSS/BATS/BOSSBatBlueSymbol.png", Texture.class);
                     manager.load("BOSS/BATS/BOSSBatRedSymbol.png", Texture.class);
                     manager.load("BOSS/BATS/BOSSBatYellowSymbol.png", Texture.class);
+                    //lost screen
+                    manager.load("Interfaces/LOST/LOSTMenu.png", Texture.class);
+                    manager.load("Interfaces/LOST/LOSTDisplay.png", Texture.class);
+                    manager.load("Interfaces/LOST/LOSTContinue.png", Texture.class);
+                    manager.load("Interfaces/LOST/LOSTBorders.png", Texture.class);
 
                     break;
             }

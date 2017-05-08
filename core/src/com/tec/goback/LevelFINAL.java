@@ -108,7 +108,7 @@ class LevelFINAL extends Frame {
         ian = new Sprite(aManager.get("IAN/IanStill.png",Texture.class));
         ianDialogue = new Sprite(aManager.get("IAN/DIALOGUEIanConcern.png",Texture.class));
         // boat
-        boatSpr = new Sprite(aManager.get("INTRO/INTROBoat.png",Texture.class));
+        boatSpr = new Sprite(aManager.get("INTRO/concha.png",Texture.class));
 
 
         // blue orb
@@ -436,6 +436,11 @@ class LevelFINAL extends Frame {
 
     @Override
     public void dispose() {
+        if(bgMusic != null){
+            if(bgMusic.isPlaying()){
+                bgMusic.pause();
+            }
+        }
         aManager.unload("HARBOR/GoBackHARBORPanoramic.png");
         aManager.unload("Squirts/Sophie/SOPHIEComplete.png");
         aManager.unload("IAN/IanStill.png");
@@ -446,7 +451,7 @@ class LevelFINAL extends Frame {
         aManager.unload("Interfaces/GAMEPLAY/CONSTANT/ARCADEBlueOrbBUNNY.png");
         aManager.unload("Interfaces/GAMEPLAY/CONSTANT/ARCADERedOrbBIRD.png");
         aManager.unload("Interfaces/GAMEPLAY/CONSTANT/ARCADEYellowOrbDOG.png");
-        aManager.unload("INTRO/INTROBoat.png");
+        aManager.unload("INTRO/concha.png");
         aManager.unload("SOPHIE/DIALOGUESophieNormal.png");
         aManager.unload("IAN/DIALOGUEIanConcern.png");
     }

@@ -129,9 +129,7 @@ class LevelEND extends Frame {
         }else if(state == GameState.WON){
             dialoguetime += delta;
             if (dialoguetime < 6f) {
-                batch.begin();
-                dialogue.makeText(glyph, batch, "You can now go back. Congrats.", camera.position.x);
-                batch.end();
+                app.setScreen(new Fade(app, LoaderState.LEVELFINAL));
             } else {
                 app.setScreen(new Fade(app, LoaderState.MAINMENU));
             }

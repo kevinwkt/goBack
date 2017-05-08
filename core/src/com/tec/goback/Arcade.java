@@ -24,6 +24,10 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import java.util.ArrayList;
@@ -153,6 +157,9 @@ class Arcade extends Frame{
     private Box2DDebugRenderer debugRenderer;
     private Matrix4 debugMatrix;
 
+    private Stage lostScreen;
+    
+
 
     Arcade(App app) {
         super(app, WIDTH_MAP,HEIGHT_MAP);
@@ -188,6 +195,31 @@ class Arcade extends Frame{
     }
 
     private void textureInit() {
+        lostScreen = new Stage(view);
+
+        //LOST SCREEN
+        Texture LOSTBordersTx = aManager.get("Interfaces/LOST/LOSTBorders.png");
+
+        Texture LOSTContinueTx = aManager.get("Interfaces/LOST/LOSTContinue.png");
+        TextureRegionDrawable LOSTContinueTrd = new TextureRegionDrawable(new TextureRegion(LOSTContinueTx));
+
+        Texture LOSTMenuTx = aManager.get("Interfaces/LOST/LOSTMenu.png");
+        TextureRegionDrawable LOSTMenuTrd = new TextureRegionDrawable(new TextureRegion(LOSTMenuTx));
+
+        Image LOSTBordersImg = new Image(LOSTBordersTx);
+        LOSTBordersImg.setPosition(0,0);
+        lostScreen.addActor(LOSTBordersImg);
+
+        ImageButton LOSTContinueBtn = new ImageButton(LOSTContinueTrd);
+        LOSTContinueBtn.setPosition(500,500);
+        lostScreen.addActor(LOSTContinueBtn);
+
+        ImageButton LOSTMenuBtn = new ImageButton(LOSTMenuTrd);
+        LOSTContinueBtn.setPosition(500,500);
+        lostScreen.addActor(LOSTMenuBtn);
+
+
+
         shootSound = aManager.get("MUSIC/shoot.mp3", Sound.class);
         orbYellow = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png");
 
