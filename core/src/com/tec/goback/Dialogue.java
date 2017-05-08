@@ -18,6 +18,8 @@ class Dialogue {
 
 
     private Texture sheetTexture;
+    GlyphLayout namel = new GlyphLayout();
+    GlyphLayout namer = new GlyphLayout();
 
 
     Dialogue(AssetManager aManager) {
@@ -25,7 +27,7 @@ class Dialogue {
         sheetTexture = aManager.get("CONSTANT/CONSTDialogueBox.png");
     }
 
-    void makeText(GlyphLayout glyph, SpriteBatch batch, String msj, float cameraCenter){
+    void makeText(GlyphLayout glyph, SpriteBatch batch, String msj,float cameraCenter){
 
         batch.draw(sheetTexture, cameraCenter-sheetTexture.getWidth()/2, 0);
 
@@ -34,19 +36,21 @@ class Dialogue {
     }
 
 
-    void makeText(GlyphLayout glyph, SpriteBatch batch, String msj, Sprite left, float cameraCenter){
-
+    void makeText(GlyphLayout glyph, SpriteBatch batch, String msj, Sprite left, String leftName, float cameraCenter){
+        left.setOrigin(0,0);
         left.setPosition(cameraCenter-HALFW,0);
         left.draw(batch);
 
-        batch.draw(sheetTexture, HALFW-sheetTexture.getWidth()/2 + cameraCenter, 0);
+        batch.draw(sheetTexture, cameraCenter-sheetTexture.getWidth()/2, 0);
 
+        namel.setText(font, leftName, Color.BLACK, 710F, 30, true);
         glyph.setText(font, msj, Color.BLACK, 710.0F, 30, true);
-        font.draw(batch ,glyph,HALFW-sheetTexture.getWidth()/2+185 + cameraCenter, sheetTexture.getHeight()-115);
+        font.draw(batch ,namel, cameraCenter - sheetTexture.getWidth()/2 + 185, sheetTexture.getHeight()-115);
+        font.draw(batch ,glyph, cameraCenter - sheetTexture.getWidth()/2 + 185, sheetTexture.getHeight()-115);
     }
 
 
-    void makeText(GlyphLayout glyph, SpriteBatch batch, String msj, Sprite left, Sprite right, boolean rightTalks, float cameraCenter){
+    void makeText(GlyphLayout glyph, SpriteBatch batch, String msj, Sprite left, String leftName, Sprite right, String rightName, boolean rightTalks, float cameraCenter){
 
         left.setPosition(cameraCenter-HALFW ,0);
         right.setPosition(cameraCenter+HALFW-right.getWidth() , 0);
@@ -65,6 +69,14 @@ class Dialogue {
         batch.draw(sheetTexture, cameraCenter-sheetTexture.getWidth()/2, 0);
 
         glyph.setText(font, msj, Color.BLACK, 710.0F, 30, true);
+        namel.setText(font, leftName, Color.BLACK, 710F, 30, true);
+        namer.setText(font, rightName, Color.BLACK, 710F, 30, true);
+
+        if(rightTalks)
+            font.draw(batch ,namer, cameraCenter + 320, sheetTexture.getHeight()-95);
+        else
+            font.draw(batch ,namel, cameraCenter - sheetTexture.getWidth()/2 + 185, sheetTexture.getHeight()-95);
+
         font.draw(batch ,glyph, cameraCenter - sheetTexture.getWidth()/2 + 185, sheetTexture.getHeight()-115);
     }
 

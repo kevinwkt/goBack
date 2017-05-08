@@ -74,7 +74,6 @@ class Arcade extends Frame{
 
     // Music
     private Music bgMusic;
-    private Sound fx;
 
     //Textures
     private Texture background; //Background
