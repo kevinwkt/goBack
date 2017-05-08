@@ -323,6 +323,7 @@ class Arcade extends Frame{
                 orbs[1] = new ArcadeBlueOrb(world, orbBlue, 1, false, stats.getFloat("BlueLife"));
                 orbs[2] = null;
                 break;
+            default:
             case 3:
                 orbs[1] = new ArcadeBlueOrb(world, orbBlue, 1, false, stats.getFloat("BlueLife"));
                 orbs[2] = new ArcadeRedOrb(world, orbRed, 2, false, stats.getFloat("RedLife"));
@@ -626,8 +627,8 @@ class Arcade extends Frame{
                     next = LoaderState.ARCADE;
             }
             ArcadeValues.bossFightFlag = false;
-            bgMusic.stop();
             app.setScreen(new Fade(app, next));
+            this.dispose();
         }
     }
 
@@ -636,12 +637,10 @@ class Arcade extends Frame{
             dialoguetime += delta;
             if (dialoguetime < 6f) {
                 dialogue.makeText(glyph, batch, "This dream overwhelmed you\n Your inexperienced soul was not ready.\n The endless dream will give you experience", camera.position.x);
-                bgMusic.stop();
                 batch.end();
             } else {
                 batch.end();
                 ArcadeValues.bossFightFlag = true;
-                bgMusic.stop();
                 app.setScreen(new Fade(app, LoaderState.ARCADE));
             }
         }else{
@@ -654,14 +653,14 @@ class Arcade extends Frame{
             dialoguetime += delta;
             if (dialoguetime < 6f) {
                 dialogue.makeText(glyph, batch, "This dream overwhelmed you\n Your experience grew to " + stats.getInteger("XP"), camera.position.x);
-                bgMusic.stop();
                 batch.end();
             } else {
                 batch.end();
-                bgMusic.stop();
                 app.setScreen(new Fade(app, LoaderState.MAINMENU));
             }
         }
+
+        this.dispose();
     }
 
     private void cls() {
