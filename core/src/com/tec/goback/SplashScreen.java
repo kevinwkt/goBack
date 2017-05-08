@@ -48,7 +48,7 @@ class SplashScreen implements Screen
         aManager.load("INTRO/INTROBackground.png",Texture.class);
         aManager.load("HARBOR/GoBackHARBOR0.png", Texture.class);
         aManager.load("WOODS/WOODSBeginning.png", Texture.class);
-        aManager.load("Interfaces/GAMEPLAY/CONSTANT/GobackCONSTPause.png", Texture.class);
+        aManager.load("Interfaces/GAMEPLAY/GobackCONSTPause.png", Texture.class);
         aManager.load("Interfaces/PAUSE/PAUSEBottomDisplay.png", Texture.class);
         aManager.load("Interfaces/PAUSE/PAUSEMapList.png", Texture.class);
         aManager.load("Interfaces/PAUSE/PAUSEStats.png", Texture.class);
@@ -80,6 +80,8 @@ class SplashScreen implements Screen
         aManager.load("Interfaces/SOUND/SOUNDSound.png", Texture.class);
         aManager.load("CONSTANT/CONSTDialogueBox.png", Texture.class);
         aManager.load("Interfaces/GAMEPLAY/ARCADE/ARCADESophie.png", Texture.class);
+
+        //aManager.finishLoading();
     }
 
     private void cameraInit() {

@@ -98,6 +98,9 @@ class Arcade extends Frame{
     private Texture spike;
     private Texture meteor;
     private Texture jaguar;
+    private Texture arrowBlue;
+    private Texture arrowRed;
+    private Texture arrowYellow;
 
     private Animation<TextureRegion> lizardAnimation;
     private Animation<TextureRegion> yellowGooAnimation;
@@ -216,6 +219,10 @@ class Arcade extends Frame{
         skull=new Texture("SKULL/MINIONSkulls.png");
         spike=new Texture("MINIONS/SPIKE/MINIONYellowSpike00.png");
         jaguar= new Texture("MINIONS/JAGUAR/MINIONJaguarAnimation.png");
+        arrowBlue= new Texture("MINIONS/ARROW/MINIONBlueArrow00.png");
+        arrowRed= new Texture("MINIONS/ARROW/MINIONRedArrow00.png");
+        arrowYellow= new Texture("MINIONS/ARROW/MINIONYellowArrow00.png");
+
         //LIKE SO
         meteor = aManager.get("MINIONS/METEOR/MINIONMeteor00.png");
 
@@ -244,7 +251,7 @@ class Arcade extends Frame{
 
         texturaCompleta=new TextureRegion(jaguar);
         texturaPersonaje=texturaCompleta.split(175,65);
-        jaguarAnimation=new Animation(0.18f,texturaPersonaje[0][0],texturaPersonaje[0][1]);
+        jaguarAnimation=new Animation(0.4f,texturaPersonaje[0][0],texturaPersonaje[0][1]);
         jaguarAnimation.setPlayMode(Animation.PlayMode.LOOP);
 
         sophieTx = aManager.get("Interfaces/GAMEPLAY/ARCADE/ARCADESophie.png");
@@ -506,7 +513,7 @@ class Arcade extends Frame{
         }
         batch.begin();
         batch.setProjectionMatrix(super.camera.combined);
-        //debugRenderer.render(world, debugMatrix);
+        debugRenderer.render(world, debugMatrix);//DEBUG
         batch.end();
         cooldown += delta;
     }
@@ -720,7 +727,6 @@ class Arcade extends Frame{
 
         float p = MathUtils.random();
         float lr = MathUtils.random();
-        new ArcadeJaguar(world, 2, lr > 0.5 ? 0 : 1, jaguarAnimation);
 
         int c = calcColor();
         if(0 <= p && p < e0/2){ //skull
@@ -786,10 +792,9 @@ class Arcade extends Frame{
             new ArcadeMeteor(world, (100+1080*lr), meteor);
         }
         if(e1+((2*(1-e1))/3) <= p && p <= 1){//arrow
-            float a = lr * MathUtils.PI;
-            float x = ArcadeValues.pelletOriginX + ArcadeValues.highOnPot * MathUtils.cos(a);
-            float y = ArcadeValues.pelletOriginY + ArcadeValues.highOnPot * MathUtils.sin(a);
-            new ArcadeSpike(world, 1, a, x, y, spike);
+            new ArcadeArrow(world, 0, 0, lr > 0.5 ? 0 : 1, arrowBlue);
+            new ArcadeArrow(world, 1, 0, lr > 0.5 ? 0 : 1, arrowRed);
+            new ArcadeArrow(world, 2, 0, lr > 0.5 ? 0 : 1, arrowYellow);
         }
 
 
