@@ -99,8 +99,8 @@ class Level3 extends Frame {
     Preferences pref = Gdx.app.getPreferences("getLevel");
     Preferences soundPreferences = Gdx.app.getPreferences("My Preferences");
 
-//    private Box2DDebugRenderer debugRenderer;
-//    private Matrix4 debugMatrix;
+    private Box2DDebugRenderer debugRenderer;
+    private Matrix4 debugMatrix;
 
     private Random randomArrowPosition = new Random();
     private Array<Body> bodies = new Array<Body>();
@@ -124,7 +124,7 @@ class Level3 extends Frame {
         Gdx.input.setCatchBackKey(true);
         Gdx.input.setInputProcessor(level3Input);
 
-//        debugRenderer=new Box2DDebugRenderer();
+        debugRenderer=new Box2DDebugRenderer();
 
     }
 
@@ -201,8 +201,8 @@ class Level3 extends Frame {
 
     @Override
     public void render(float delta) {
-//        debugMatrix = new Matrix4(super.camera.combined);
-//        debugMatrix.scale(100, 100, 1f);
+        debugMatrix = new Matrix4(super.camera.combined);
+        debugMatrix.scale(100, 100, 1f);
         cls();
 
         batch.begin();
@@ -262,6 +262,7 @@ class Level3 extends Frame {
             if(blueOrbYPosition<-40){
                 pref.putBoolean("boss",true);
                 pref.flush();
+                ArcadeValues.bossFightFlag = true;
                 app.setScreen(new Fade(app, LoaderState.ARCADE));
                 this.dispose();
             }

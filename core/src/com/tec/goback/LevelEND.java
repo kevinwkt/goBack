@@ -122,19 +122,19 @@ class LevelEND extends Frame {
         cls();
 
         if(squaresFilled()) state = GameState.WON;
-
         if(state == GameState.PLAYING) {
             stage.draw();
         }else if(state == GameState.WON){
             dialoguetime += delta;
             if (dialoguetime < 6f) {
+                batch.begin();
                 dialogue.makeText(glyph, batch, "You can now go back. Congrats.", camera.position.x);
                 batch.end();
             } else {
-                batch.end();
                 app.setScreen(new Fade(app, LoaderState.MAINMENU));
             }
         }
+
     }
 
     private boolean squaresFilled(){

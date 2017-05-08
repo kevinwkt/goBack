@@ -103,13 +103,14 @@ class ArcadeSophie {    //TODO ADAPT FOR LEVELS
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.fixedRotation=true;
         bodyDef.position.set(
                 ArcadeValues.meterspelletOriginX-7,
                 ArcadeValues.meterspelletOriginY+(ArcadeValues.pxToMeters(tx.getHeight()/4))
         );
 
         body = world.createBody(bodyDef);
-        fixturer(100.0f, 0.0f);
+        fixturer(100f, 0.0f);
         body.setLinearVelocity(0f, 0f);
         body.setUserData(this);
     }

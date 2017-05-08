@@ -1,7 +1,6 @@
 package com.tec.goback;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
@@ -12,12 +11,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -55,6 +49,7 @@ class Level0 implements Screen {
 
     private SpriteBatch batch;
 
+    private float accumulator;
 
     //charon
     private Sprite charonSprite0;
@@ -144,6 +139,7 @@ class Level0 implements Screen {
 
     @Override
     public void render(float delta) {
+        accumulator += delta;
         cls();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
@@ -161,7 +157,7 @@ class Level0 implements Screen {
             changeScreen(boatSprite);
         }
         if(boatSprite.getX() > 300 && boatSprite.getX() < 1100){
-            dialogue.makeText(glyph, batch, "We only come to sleep.\nWe only come to dream.", charonSprite0, 0);
+            dialogue.makeText(glyph, batch, "We only come to sleep.\nWe only come to dream.", charonSprite0, "Abundio",  camera.position.x);
         }
 
         batch.end();
@@ -184,7 +180,8 @@ class Level0 implements Screen {
 
     private void moveObject(float delta, Sprite sprite, float xPosition, boolean rotateLeft, String type) {
 
-        xPosition += delta * 100;
+        if(!(accumulator > 8.5 && accumulator < 13)) xPosition += delta * 100;
+
         if (rotateLeft) {
             sprite.rotate((float) 0.25);
         } else {
@@ -195,14 +192,13 @@ class Level0 implements Screen {
         } else if (sprite.getRotation() < -20) {
             rotateLeft = true;
         }
-        if (type.equals("boat")) {
-            boatXPosition = xPosition;
-            boatRotateLeft = rotateLeft;
-        } else {
-            oarXPosition = xPosition;
-            oarRotateLeft = rotateLeft;
-        }
-
+            if (type.equals("boat")) {
+                boatXPosition = xPosition;
+                boatRotateLeft = rotateLeft;
+            } else {
+                oarXPosition = xPosition;
+                oarRotateLeft = rotateLeft;
+            }
 
     }
 

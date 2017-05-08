@@ -5,7 +5,7 @@ package com.tec.goback;
  */
 
 class ArcadeValues {
-    static boolean debug = true;
+    static boolean debug = false;
     static boolean bossFightFlag = false;
 
     static final float WIDTH = 1280;
@@ -33,7 +33,7 @@ class ArcadeValues {
     static final float bossX = 1000;
     static final float yellowBossLife = debug ? 300 : 5000;
     static final float blueBossLife = debug ? 300 : 7000;
-    static final float redBossLife = debug ? 300 : 9000;
+    static final float redBossLife = debug ? 20 : 9000;
 
     static final float pelletOriginX = 640;
     static final float pelletOriginY = 272;

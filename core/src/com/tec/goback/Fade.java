@@ -226,23 +226,45 @@ class Fade implements Screen {
                     manager.load("CLUES/CLUESBoneDisplay.png", Texture.class);
                     break;
                 case ARCADE:
-                    manager.load("MUSIC/shoot.mp3", Sound.class);
-                    manager.load("MUSIC/GoBackMusicArcade.mp3", Music.class);
-                    manager.load("HARBOR/GoBackHARBOR0.png", Texture.class);
-                    manager.load("MOUNTAINS/GoBackMOUNTAINS0.png", Texture.class); //Level2
-                    manager.load("WOODS/WOODSPanoramic2of2.png",Texture.class); //Level3
-                    manager.load("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png", Texture.class);
-                    manager.load("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrbEyes.png", Texture.class);
-                    manager.load("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrb.png", Texture.class);
-                    manager.load("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrbEyes.png", Texture.class);
-                    manager.load("Interfaces/GAMEPLAY/ARCADE/ARCADERedOrb.png", Texture.class);
-                    manager.load("Interfaces/GAMEPLAY/ARCADE/ARCADERedOrbEyes.png", Texture.class);
+                    //PELLETS
                     manager.load("PELLET/ATAQUEYellowPellet.png", Texture.class);
                     manager.load("PELLET/ATAQUERedPellet.png", Texture.class);
                     manager.load("PELLET/ATAQUEBluePellet.png", Texture.class);
+
+                    //MUSIC
+                    manager.load("MUSIC/shoot.mp3", Sound.class);
+                    manager.load("MUSIC/GoBackMusicArcade.mp3", Music.class);
+
+                    //BACKGROUND
+                    manager.load("HARBOR/GoBackHARBORPanoramic.png", Texture.class);//Level1
+                    manager.load("MOUNTAINS/GoBackMOUNTAINSPanoramic.png", Texture.class);//Level2
+                    manager.load("UNDERGROUND/UNDERGROUNDArcade.png", Texture.class);//Level3
+
+                    //ORBS
+                    manager.load("Interfaces/GAMEPLAY/ARCADE/ARCADEYellowOrb.png", Texture.class);
+                    manager.load("Interfaces/GAMEPLAY/ARCADE/ARCADEBlueOrb.png", Texture.class);
+                    manager.load("Interfaces/GAMEPLAY/ARCADE/ARCADERedOrb.png", Texture.class); 
+
+                    //BAD GUYS TODO KEVIN PUT UR ASS(ETS) HERE!
                     manager.load("MINIONS/METEOR/MINIONMeteor00.png", Texture.class);
+
+                    //IGUANA BOSS
                     manager.load("BOSS/IGUANA/BOSSIguanaBody.png", Texture.class);
+                    manager.load("BOSS/IGUANA/BOSSIguanaSymbol.png", Texture.class);
+                    manager.load("BOSS/IGUANA/BOSSIguanaName.png", Texture.class);
+                    //JAGUAR BOSS
                     manager.load("BOSS/JAGUAR/BOSSJaguarBody.png", Texture.class);
+                    manager.load("BOSS/JAGUAR/BOSSJaguarSymbol.png", Texture.class);
+                    manager.load("BOSS/JAGUAR/BOSSJaguarName.png", Texture.class);
+                    //EYES BOSS
+                    manager.load("BOSS/BATS/BOSSBatYellow.png", Texture.class);
+                    manager.load("BOSS/BATS/BOSSBatBlue.png", Texture.class);
+                    manager.load("BOSS/BATS/BOSSBatRed.png", Texture.class);
+                    manager.load("BOSS/BATS/BOSSBatName.png", Texture.class);
+                    manager.load("BOSS/BATS/BOSSBatBlueSymbol.png", Texture.class);
+                    manager.load("BOSS/BATS/BOSSBatRedSymbol.png", Texture.class);
+                    manager.load("BOSS/BATS/BOSSBatYellowSymbol.png", Texture.class);
+
                     break;
             }
     }
