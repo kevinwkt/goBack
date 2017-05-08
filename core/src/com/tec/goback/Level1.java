@@ -448,9 +448,7 @@ class Level1 extends Frame {
             v.set(screenX,screenY,0);
             camera.unproject(v);
 
-            if(camera.position.x - v.x < -522 && v.y < 135){
-                state = GameState.PAUSED;
-            }
+
 
             if(sophie.getMovementState()==Sophie.MovementState.STILL_LEFT||sophie.getMovementState()==Sophie.MovementState.STILL_RIGHT) {
                 if(!dialogueOn) {
@@ -466,10 +464,15 @@ class Level1 extends Frame {
 
         @Override
         public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+            v.set(screenX,screenY,0);
+            camera.unproject(v);
             if(sophie.getMovementState()==Sophie.MovementState.MOVE_LEFT)
                 sophie.setMovementState(Sophie.MovementState.STILL_LEFT);
             else if(sophie.getMovementState() == Sophie.MovementState.MOVE_RIGHT)
                 sophie.setMovementState(Sophie.MovementState.STILL_RIGHT);
+            if(camera.position.x - v.x < -522 && v.y < 135){
+                state = GameState.PAUSED;
+            }
             return true;
         }
 

@@ -304,7 +304,7 @@ class LevelFINAL extends Frame {
                     break;
             }
 
-            if(dialogueTime > 0.5){
+            if(dialogueTime > 6){
 
                 dialogueSprite += 1;
                 dialogueTime = 0;

@@ -187,6 +187,10 @@ class Sophie extends Squirt
                         if(newX<=Level4.RIGHT_LIMIT)
                             sprite.setX(newX);
                         break;
+                    case 5:
+                        if(newX<=LevelFINAL.RIGHT_LIMIT)
+                            sprite.setX(newX);
+                        break;
                 }
             }
         }
@@ -209,6 +213,10 @@ class Sophie extends Squirt
                         break;
                     case 4:
                         if(newX>=Level4.LEFT_LIMIT)
+                            sprite.setX(newX);
+                        break;
+                    case 5:
+                        if(newX>=LevelFINAL.LEFT_LIMIT)
                             sprite.setX(newX);
                         break;
                 }
