@@ -284,10 +284,10 @@ class Fade implements Screen {
                     manager.load("BOSS/BATS/BOSSBatRedSymbol.png", Texture.class);
                     manager.load("BOSS/BATS/BOSSBatYellowSymbol.png", Texture.class);
                     //lost screen
-                    manager.load("Interfaces/LOST/LOSTMenu.png", Texture.class);
-                    manager.load("Interfaces/LOST/LOSTDisplay.png", Texture.class);
-                    manager.load("Interfaces/LOST/LOSTContinue.png", Texture.class);
-                    manager.load("Interfaces/LOST/LOSTBorders.png", Texture.class);
+//                    manager.load("Interfaces/LOST/LOSTMenu.png", Texture.class);
+//                    manager.load("Interfaces/LOST/LOSTDisplay.png", Texture.class);
+//                    manager.load("Interfaces/LOST/LOSTContinue.png", Texture.class);
+//                    manager.load("Interfaces/LOST/LOSTBorders.png", Texture.class);
 
                     break;
             }

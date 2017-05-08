@@ -41,9 +41,10 @@ class Level1 extends Frame {
     private Sprite yellowOrb;
     private boolean foundOrb = false;
     private float orbXPosition = 1350;
-    private float orbYPosition = 150;
+    private float orbYPosition = 110;
     private OrbMovement currentOrbState = OrbMovement.GOING_DOWN;
     private int laMegaConcha = 0;
+    private final float DISTANCE_YELLOW_ORB_SOPHIE = -100;
 
     //BG
     Texture background;
@@ -332,7 +333,7 @@ class Level1 extends Frame {
     }
 
     private void moveOrb(float delta) {
-
+        /*
         if(orbYPosition >= 155){ // 155
             currentOrbState = OrbMovement.GOING_DOWN;
         }else if(orbYPosition <= 145){ //145
@@ -353,7 +354,34 @@ class Level1 extends Frame {
         }
 
         yellowOrb.setPosition(orbXPosition,orbYPosition);
+        */
 
+        if(orbYPosition >= 120){
+            currentOrbState = OrbMovement.GOING_DOWN;
+        }else if(orbYPosition <= 100){
+            currentOrbState = OrbMovement.GOING_UP;
+        }
+        orbYPosition = yellowOrb.getX();
+
+        if(currentOrbState == OrbMovement.GOING_UP){
+            orbYPosition += delta*30;
+        }else if(currentOrbState == OrbMovement.GOING_DOWN){
+            orbYPosition -= delta*30;
+        }
+
+        yellowOrb.setPosition(orbXPosition,orbYPosition);
+
+        if (yellowOrb.getX() < (sophie.sprite.getX() - yellowOrb.getWidth() - DISTANCE_YELLOW_ORB_SOPHIE)) {
+            yellowOrb.setPosition(sophie.sprite.getX() - yellowOrb.getWidth() - DISTANCE_YELLOW_ORB_SOPHIE + 1, yellowOrb.getY());
+        } else if ((sophie.sprite.getX() + sophie.sprite.getWidth() + DISTANCE_YELLOW_ORB_SOPHIE) < yellowOrb.getX()) {
+            yellowOrb.setPosition(sophie.sprite.getX() + sophie.sprite.getWidth() + DISTANCE_YELLOW_ORB_SOPHIE - 1, yellowOrb.getY());
+        }else if(yellowOrb.getX()+yellowOrb.getWidth()/2<sophie.sprite.getX()+sophie.sprite.getWidth()/2){
+            if (yellowOrb.isFlipX())
+                yellowOrb.flip(true, false);
+        }else if(yellowOrb.getX()+yellowOrb.getWidth()/2>sophie.sprite.getX()+sophie.sprite.getWidth()/2){
+            if (!yellowOrb.isFlipX())
+                yellowOrb.flip(true, false);
+        }
 
     }
 

@@ -194,28 +194,28 @@ class Arcade extends Frame{
     }
 
     private void textureInit() {
-        lostScreen = new Stage(view);
-
-        //LOST SCREEN
-        Texture LOSTBordersTx = aManager.get("Interfaces/LOST/LOSTBorders.png");
-
-        Texture LOSTContinueTx = aManager.get("Interfaces/LOST/LOSTContinue.png");
-        TextureRegionDrawable LOSTContinueTrd = new TextureRegionDrawable(new TextureRegion(LOSTContinueTx));
-
-        Texture LOSTMenuTx = aManager.get("Interfaces/LOST/LOSTMenu.png");
-        TextureRegionDrawable LOSTMenuTrd = new TextureRegionDrawable(new TextureRegion(LOSTMenuTx));
-
-        Image LOSTBordersImg = new Image(LOSTBordersTx);
-        LOSTBordersImg.setPosition(0,0);
-        lostScreen.addActor(LOSTBordersImg);
-
-        ImageButton LOSTContinueBtn = new ImageButton(LOSTContinueTrd);
-        LOSTContinueBtn.setPosition(500,500);
-        lostScreen.addActor(LOSTContinueBtn);
-
-        ImageButton LOSTMenuBtn = new ImageButton(LOSTMenuTrd);
-        LOSTContinueBtn.setPosition(500,500);
-        lostScreen.addActor(LOSTMenuBtn);
+//        lostScreen = new Stage(view);
+//
+//        //LOST SCREEN
+//        Texture LOSTBordersTx = aManager.get("Interfaces/LOST/LOSTBorders.png");
+//
+//        Texture LOSTContinueTx = aManager.get("Interfaces/LOST/LOSTContinue.png");
+//        TextureRegionDrawable LOSTContinueTrd = new TextureRegionDrawable(new TextureRegion(LOSTContinueTx));
+//
+//        Texture LOSTMenuTx = aManager.get("Interfaces/LOST/LOSTMenu.png");
+//        TextureRegionDrawable LOSTMenuTrd = new TextureRegionDrawable(new TextureRegion(LOSTMenuTx));
+//
+//        Image LOSTBordersImg = new Image(LOSTBordersTx);
+//        LOSTBordersImg.setPosition(0,0);
+//        lostScreen.addActor(LOSTBordersImg);
+//
+//        ImageButton LOSTContinueBtn = new ImageButton(LOSTContinueTrd);
+//        LOSTContinueBtn.setPosition(500,500);
+//        lostScreen.addActor(LOSTContinueBtn);
+//
+//        ImageButton LOSTMenuBtn = new ImageButton(LOSTMenuTrd);
+//        LOSTContinueBtn.setPosition(500,500);
+//        lostScreen.addActor(LOSTMenuBtn);
 
 
 
@@ -348,14 +348,19 @@ class Arcade extends Frame{
     }
 
     private void allyInit(){
-        orbs[0] = new ArcadeYellowOrb(world, orbYellow, 0, true, stats.getFloat("YellowLife"));
+
         switch(d){
+            case 1:
+                orbs[0] = new ArcadeYellowOrb(world, orbYellow, 0, true, stats.getFloat("YellowLife"));
+                break;
             case 2:
+                orbs[0] = new ArcadeYellowOrb(world, orbYellow, 0, true, stats.getFloat("YellowLife"));
                 orbs[1] = new ArcadeBlueOrb(world, orbBlue, 1, false, stats.getFloat("BlueLife"));
                 orbs[2] = null;
                 break;
             default:
             case 3:
+                orbs[0] = new ArcadeYellowOrb(world, orbYellow, 0, true, stats.getFloat("YellowLife"));
                 orbs[1] = new ArcadeBlueOrb(world, orbBlue, 1, false, stats.getFloat("BlueLife"));
                 orbs[2] = new ArcadeRedOrb(world, orbRed, 2, false, stats.getFloat("RedLife"));
         }
@@ -517,6 +522,12 @@ class Arcade extends Frame{
 
         if(bossFight)if(boss.getHurtDie(1, 0)) state = GameState.WON;
 
+        if(bgMusic != null) {
+            if (soundPreferences.getBoolean("soundOn"))
+                bgMusic.play();
+            else
+                bgMusic.stop();
+        }
 
         if(state == GameState.WON){
             win(delta);
@@ -869,13 +880,13 @@ class Arcade extends Frame{
                     if (r >= 0.4f && r < 0.8f) return 2;
                     if (r >= 0.8f && r <= 1f) return 3;
                     break;
+                default:
                 case (3):
                     if (r >= 0.0f && r < 0.33f) return 1;
                     if (r >= 0.33f && r < 0.66f) return 2;
                     if (r >= 0.66f && r <= 1f) return 3;
                     break;
-                default:
-                    return 1;
+
             }
         }
         return 1;
