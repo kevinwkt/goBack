@@ -137,7 +137,7 @@ abstract class Frame implements Screen {
         frameStage = new Stage(view, batch);
         pauseStage = new Pause(view, batch, app);
 
-        pauseButton = aManager.get("Interfaces/GAMEPLAY/GobackCONSTPause.png");
+        pauseButton = new Texture("GobackCONSTPause.png"); //aManager.get("Interfaces/GAMEPLAY/GobackCONSTPause.png");
 
         statsStage = new Stats(view, batch, app);
         statsInput = new SimpleDirectionGestureDetector(new SimpleDirectionGestureDetector.DirectionListener() {
