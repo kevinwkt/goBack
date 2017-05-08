@@ -210,6 +210,12 @@ class Arcade extends Frame{
             case 3:
                 background = aManager.get("UNDERGROUND/UNDERGROUNDArcade.png");
                 break;
+            case 4:
+                background = aManager.get("WOODS/WOODSEnding.png");
+                break;
+            case 5:
+                background = aManager.get("HARBOR/GoBackHARBOR0.png");
+                break;
         }
 
 
@@ -917,7 +923,9 @@ class Arcade extends Frame{
     @Override
     public void hide() {}
     @Override
-    public void dispose() {}
+    public void dispose() {
+
+    }
     //WTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTFWTF
     private class Input implements InputProcessor {
         private Vector3 v = new Vector3();
