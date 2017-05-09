@@ -533,6 +533,7 @@ class Level2 extends Frame {
 
             if (keycode == com.badlogic.gdx.Input.Keys.BACK){
                 app.setScreen(new Fade(app, LoaderState.MAINMENU));
+                dispose();
                 return true;
             }
             return false;

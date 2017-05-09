@@ -105,6 +105,7 @@ class About implements Screen {
             }
         };
 
+
         //Background
         Image bgImg = new Image(background);
         bgImg.setPosition(HALFW-bgImg.getWidth()/2, HALFH-bgImg.getHeight()/2);
@@ -123,13 +124,12 @@ class About implements Screen {
         backImgBtn.setPosition(HALFW+470, 0);
         aboutScreenStage.addActor(backImgBtn);
 
-        final About ab = this;
 
         backImgBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 app.setScreen(new Fade(app, LoaderState.MAINMENU, menu));
-                ab.dispose();
+                dispose();
             }
         });
 
@@ -137,7 +137,7 @@ class About implements Screen {
         Gdx.input.setInputProcessor(aboutScreenStage);
 
         //let go of android device back key
-        Gdx.input.setCatchBackKey(false);
+        Gdx.input.setCatchBackKey(true);
 
     }
 
