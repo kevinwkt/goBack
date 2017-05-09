@@ -75,9 +75,6 @@ class Arcade extends Frame{
     //MOTHER FUCKER
     private int d;
 
-    // Music
-    private Music bgMusic;
-
     //Textures
     private Texture background; //Background
 
@@ -149,7 +146,6 @@ class Arcade extends Frame{
     private Input input;
     private float ac;
 
-    private Preferences soundPreferences = Gdx.app.getPreferences("My Preferences");
     private Preferences stats = Gdx.app.getPreferences("STATS");
     boolean flag;
 
@@ -182,16 +178,8 @@ class Arcade extends Frame{
         dialogue = new Dialogue(aManager);
         Gdx.input.setInputProcessor(input);
         Gdx.input.setCatchBackKey(true);
-        //musicInit();
     }
 
-    private void musicInit() {
-        bgMusic = aManager.get("MUSIC/GoBackMusicArcade.mp3");
-        if(soundPreferences.getBoolean("soundOn")) {
-            bgMusic.setLooping(true);
-            bgMusic.play();
-        }
-    }
 
     private void textureInit() {
 //        lostScreen = new Stage(view);
@@ -522,11 +510,14 @@ class Arcade extends Frame{
 
         if(bossFight)if(boss.getHurtDie(1, 0)) state = GameState.WON;
 
-        if(bgMusic != null) {
-            if (soundPreferences.getBoolean("soundOn"))
+        if(soundPreferences.getBoolean("soundOn")){
+            if(bgMusic!= null){
                 bgMusic.play();
-            else
+            }
+        }else{
+            if(bgMusic!= null){
                 bgMusic.stop();
+            }
         }
 
         if(state == GameState.WON){

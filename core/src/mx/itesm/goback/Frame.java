@@ -113,9 +113,8 @@ abstract class Frame implements Screen {
                 bgMusic = aManager.get("MUSIC/GoBackMusicLevel1.mp3");
                 break;
         }
+        bgMusic.setLooping(true);
         if(soundPreferences.getBoolean("soundOn")) {
-
-            bgMusic.setLooping(true);
             bgMusic.play();
         }
     }
@@ -931,7 +930,6 @@ abstract class Frame implements Screen {
         private Texture bone; //Image
         private Texture boneDetail; //Image
 
-        Preferences prefes = Gdx.app.getPreferences("My Preferences");
 
         Pause pauseStg;
 
@@ -944,7 +942,7 @@ abstract class Frame implements Screen {
 
         public void changeSoundTexture(){
             musicImg.remove();
-            if(prefes.getBoolean("soundOn")){
+            if(soundPreferences.getBoolean("soundOn")){
                 musicBton = aManager.get("Interfaces/SOUND/SOUNDMusicON.png");
             }else{
                 musicBton = aManager.get("Interfaces/SOUND/SOUNDMusic.png");
@@ -958,12 +956,12 @@ abstract class Frame implements Screen {
 
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    if(prefes.getBoolean("soundOn")){
-                        prefes.putBoolean("soundOn",false);
+                    if(soundPreferences.getBoolean("soundOn")){
+                        soundPreferences.putBoolean("soundOn",false);
                     }else{
-                        prefes.putBoolean("soundOn",true);
+                        soundPreferences.putBoolean("soundOn",true);
                     }
-                    prefes.flush();
+                    soundPreferences.flush();
                     changeSoundTexture();
                 }
             });
@@ -971,7 +969,7 @@ abstract class Frame implements Screen {
 
         private void changeFxTexture() {
             fxImg.remove();
-            if(prefes.getBoolean("fxOn")){
+            if(soundPreferences.getBoolean("fxOn")){
                 fxBton = aManager.get("Interfaces/SOUND/SOUNDSoundON.png");
             }else{
                 fxBton = aManager.get("Interfaces/SOUND/SOUNDSound.png");
@@ -986,14 +984,14 @@ abstract class Frame implements Screen {
 
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    if(prefes.getBoolean("fxOn")){
-                        prefes.putBoolean("fxOn",false);
+                    if(soundPreferences.getBoolean("fxOn")){
+                        soundPreferences.putBoolean("fxOn",false);
 
                     }else{
-                        prefes.putBoolean("fxOn",true);
+                        soundPreferences.putBoolean("fxOn",true);
 
                     }
-                    prefes.flush();
+                    soundPreferences.flush();
                     changeFxTexture();
                 }
             });
@@ -1017,12 +1015,12 @@ abstract class Frame implements Screen {
             bone = aManager.get("CLUES/Bone/CLUESBone.png");
             boneDetail = aManager.get("CLUES/Bone/CLUESBoneDetail.png");
 
-            if(prefes.getBoolean("soundOn")){
+            if(soundPreferences.getBoolean("soundOn")){
                 musicBton = aManager.get("Interfaces/SOUND/SOUNDMusicON.png");
             }else{
                 musicBton = aManager.get("Interfaces/SOUND/SOUNDMusic.png");
             }
-            if(prefes.getBoolean("fxOn")){
+            if(soundPreferences.getBoolean("fxOn")){
                 fxBton = aManager.get("Interfaces/SOUND/SOUNDSoundON.png");
             }else{
                 fxBton = aManager.get("Interfaces/SOUND/SOUNDSound.png");
@@ -1191,13 +1189,13 @@ abstract class Frame implements Screen {
 
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    if(prefes.getBoolean("soundOn")){
-                        prefes.putBoolean("soundOn",false);
+                    if(soundPreferences.getBoolean("soundOn")){
+                        soundPreferences.putBoolean("soundOn",false);
                     }else{
-                        prefes.putBoolean("soundOn",true);
+                        soundPreferences.putBoolean("soundOn",true);
 
                     }
-                    prefes.flush();
+                    soundPreferences.flush();
                     changeSoundTexture();
                 }
             });
@@ -1212,12 +1210,12 @@ abstract class Frame implements Screen {
 
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    if(prefes.getBoolean("fxOn")){
-                        prefes.putBoolean("fxOn",false);
+                    if(soundPreferences.getBoolean("fxOn")){
+                        soundPreferences.putBoolean("fxOn",false);
                     }else{
-                        prefes.putBoolean("fxOn",true);
+                        soundPreferences.putBoolean("fxOn",true);
                     }
-                    prefes.flush();
+                    soundPreferences.flush();
                     changeFxTexture();
                 }
             });
@@ -1232,7 +1230,6 @@ abstract class Frame implements Screen {
             objectInit();
         }
     }
-
 
     public class ClueDetail extends Stage {
         private AssetManager aManager;

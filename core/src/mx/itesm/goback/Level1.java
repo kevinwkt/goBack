@@ -22,7 +22,6 @@ class Level1 extends Frame {
 
     private Boolean bossMode = false;
     Preferences pref = Gdx.app.getPreferences("getLevel");
-    Preferences soundPreferences = Gdx.app.getPreferences("My Preferences");
 
 
     // lizard
@@ -40,10 +39,9 @@ class Level1 extends Frame {
     // orb
     private Sprite yellowOrb;
     private boolean foundOrb = false;
-    private float orbXPosition = 1000;
+    private float orbXPosition = 1500;
     private float orbYPosition = 110;
     private OrbMovement currentOrbState = OrbMovement.GOING_DOWN;
-    private int laMegaConcha = 0;
     private final float DISTANCE_YELLOW_ORB_SOPHIE = -100;
 
     //BG
@@ -150,29 +148,14 @@ class Level1 extends Frame {
     public void render(float delta) {
         cls();
 
-        if(soundPreferences.getBoolean("soundOn"))
-            bgMusic.play();
-        else
-            bgMusic.stop();
-
         if(soundPreferences.getBoolean("soundOn")){
             if(bgMusic!= null){
                 bgMusic.play();
-            }else{
-
             }
-
-            laMegaConcha = 0;
         }else{
-            if(laMegaConcha == 0){
-                Gdx.app.log("",bgMusic+"");
-                if(bgMusic!= null){
-                    bgMusic.stop();
-                }
-
-
+            if(bgMusic!= null){
+                bgMusic.stop();
             }
-            laMegaConcha++;
         }
 
         batch.setProjectionMatrix(super.camera.combined);
@@ -316,15 +299,21 @@ class Level1 extends Frame {
     private void checkOrbCollision() {
 
         if(!foundOrb){
-            if(yellowOrb.getBoundingRectangle().contains(sophie.sprite.getX()+yellowOrb.getBoundingRectangle().getWidth()/2,sophie.sprite.getY())){
+            if(yellowOrb.getX()+yellowOrb.getWidth()/2>=sophie.sprite.getX()){
                 foundOrb = true;
                 sophie.setMovementState(Sophie.MovementState.WAKING_RIGHT);
             }
         }else{
-            if(yellowOrb.getX()<(sophie.sprite.getX()-yellowOrb.getWidth()-DISTANCE_ORB_SOPHIE)){
-                yellowOrb.setPosition(sophie.sprite.getX()-yellowOrb.getWidth()-DISTANCE_ORB_SOPHIE+1,yellowOrb.getY());
-            }else if((sophie.sprite.getX()+sophie.sprite.getWidth()+DISTANCE_ORB_SOPHIE)<yellowOrb.getX()){
-                yellowOrb.setPosition(sophie.sprite.getX()+sophie.sprite.getWidth()+DISTANCE_ORB_SOPHIE-1, yellowOrb.getY());
+            if(yellowOrb.getX()<(sophie.sprite.getX()-yellowOrb.getWidth()-DISTANCE_YELLOW_ORB_SOPHIE)){
+                yellowOrb.setPosition(sophie.sprite.getX()-yellowOrb.getWidth()-DISTANCE_YELLOW_ORB_SOPHIE+1,yellowOrb.getY());
+            }else if((sophie.sprite.getX()+sophie.sprite.getWidth()+DISTANCE_YELLOW_ORB_SOPHIE)<yellowOrb.getX()){
+                yellowOrb.setPosition(sophie.sprite.getX()+sophie.sprite.getWidth()+DISTANCE_YELLOW_ORB_SOPHIE-1, yellowOrb.getY());
+            }else if(yellowOrb.getX()+yellowOrb.getWidth()/2<sophie.sprite.getX()+sophie.sprite.getWidth()/2){
+                if (yellowOrb.isFlipX())
+                    yellowOrb.flip(true, false);
+            }else if(yellowOrb.getX()+yellowOrb.getWidth()/2>sophie.sprite.getX()+sophie.sprite.getWidth()/2){
+                if (!yellowOrb.isFlipX())
+                    yellowOrb.flip(true, false);
             }
 
             oldmanEyesOpenedSpr.draw(batch);
@@ -376,7 +365,7 @@ class Level1 extends Frame {
         }
 
         yellowOrb.setPosition(orbXPosition,orbYPosition);
-
+        /*
         if (yellowOrb.getX() < (sophie.sprite.getX() - yellowOrb.getWidth() - DISTANCE_YELLOW_ORB_SOPHIE)) {
             yellowOrb.setPosition(sophie.sprite.getX() - yellowOrb.getWidth() - DISTANCE_YELLOW_ORB_SOPHIE + 1, yellowOrb.getY());
         } else if ((sophie.sprite.getX() + sophie.sprite.getWidth() + DISTANCE_YELLOW_ORB_SOPHIE) < yellowOrb.getX()) {
@@ -388,6 +377,7 @@ class Level1 extends Frame {
             if (!yellowOrb.isFlipX())
                 yellowOrb.flip(true, false);
         }
+        */
 
     }
 
