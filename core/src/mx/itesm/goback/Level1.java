@@ -40,7 +40,7 @@ class Level1 extends Frame {
     // orb
     private Sprite yellowOrb;
     private boolean foundOrb = false;
-    private float orbXPosition = 1350;
+    private float orbXPosition = 1000;
     private float orbYPosition = 110;
     private OrbMovement currentOrbState = OrbMovement.GOING_DOWN;
     private int laMegaConcha = 0;
@@ -361,7 +361,13 @@ class Level1 extends Frame {
         }else if(orbYPosition <= 100){
             currentOrbState = OrbMovement.GOING_UP;
         }
-        orbYPosition = yellowOrb.getX();
+
+        if(!foundOrb){
+            orbXPosition += delta * 100; // 100
+
+        }else{
+            orbXPosition = yellowOrb.getX();
+        }
 
         if(currentOrbState == OrbMovement.GOING_UP){
             orbYPosition += delta*30;
