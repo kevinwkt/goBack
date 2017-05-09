@@ -7,6 +7,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
@@ -153,6 +154,10 @@ class Arcade extends Frame{
     private Matrix4 debugMatrix;
 
     private Stage lostScreen;
+
+    private GlyphLayout scoreDisplay;
+    private BitmapFont font;
+    private float kills;
     
 
 
@@ -178,6 +183,9 @@ class Arcade extends Frame{
         dialogue = new Dialogue(aManager);
         Gdx.input.setInputProcessor(input);
         Gdx.input.setCatchBackKey(true);
+
+        font = new BitmapFont(Gdx.files.internal("fira.fnt"));
+        scoreDisplay = new GlyphLayout();
     }
 
 
@@ -452,6 +460,7 @@ class Arcade extends Frame{
                         hit++;
                         if ( ((Enemy)ob1).getHurtDie( ((OrbAttack)ob2).getColor(), ((OrbAttack)ob2).getDamage()) ) {
                             if (((Enemy) ob1).getColor() == ((OrbAttack) ob2).getColor()) match++;
+                            kills++;
                             deadThings.add(contact.getFixtureA().getBody());
                         }
                     }
@@ -459,6 +468,7 @@ class Arcade extends Frame{
                         hit++;
                         if (((Enemy)ob2).getHurtDie(((OrbAttack)ob1).getColor(), ((OrbAttack)ob1).getDamage()) ) {
                             if (((OrbAttack) ob1).getColor() == ((Enemy) ob2).getColor()) match++;
+                            kills++;
                             deadThings.add(contact.getFixtureB().getBody());
                         }
                     }
@@ -565,25 +575,35 @@ class Arcade extends Frame{
                 , ArcadeValues.pelletOriginY-35);
         sophie.draw(batch);
         //TODO DRAW ICON
-        for(Sprite sprite: info){
-            switch(boss.getLife()){
-                case 10:case 9:
-                    sprite.setColor(1f, 1f, 1f, 1f);
-                    break;
-                case 8:case 7:  //low opacity
-                    sprite.setColor(1f, 1f, 1f, 0.8f);
-                    break;
-                case 6:case 5:  //lower opacity
-                    sprite.setColor(1f, 1f, 1f, 0.6f);
-                    break;
-                case 4:case 3:  //low freq blink
-                    sprite.setColor(1f, 1f, 1f, blink(0.5f));
-                    break;
-                case 2:case 1:  //hi freq blink
-                    sprite.setColor(1f, 1f, 1f, blink(0.18f));
-                    break;
+        if(bossFight){
+            for (Sprite sprite : info) {
+                switch (boss.getLife()) {
+                    case 10:
+                    case 9:
+                        sprite.setColor(1f, 1f, 1f, 1f);
+                        break;
+                    case 8:
+                    case 7:  //low opacity
+                        sprite.setColor(1f, 1f, 1f, 0.8f);
+                        break;
+                    case 6:
+                    case 5:  //lower opacity
+                        sprite.setColor(1f, 1f, 1f, 0.6f);
+                        break;
+                    case 4:
+                    case 3:  //low freq blink
+                        sprite.setColor(1f, 1f, 1f, blink(0.5f));
+                        break;
+                    case 2:
+                    case 1:  //hi freq blink
+                        sprite.setColor(1f, 1f, 1f, blink(0.18f));
+                        break;
+                }
+                sprite.draw(batch);
             }
-            sprite.draw(batch);
+        }else{
+            scoreDisplay.setText(font, "Spirits overcomed: "+((int)kills) );
+            font.draw(batch, scoreDisplay, 5, 25);
         }
         drawBodies();
     }
@@ -1020,7 +1040,7 @@ class Arcade extends Frame{
                             //Gdx.app.log("3", "");
                             break;
                     }
-                    if(soundPreferences.getBoolean("fxOn")){shootSound.play(0.5f);}
+                    if(soundPreferences.getBoolean("fxOn")){shootSound.play(0.3f);}
                     cooldown = 0.0f;
                 }
 
