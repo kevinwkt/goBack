@@ -456,7 +456,7 @@ abstract class Frame implements Screen {
             if (statsPrefs.getInteger("SophieLifeStg")>LIFE_COST_SOPHIE_ARR.length-1) {//No XP to buy or already full
                 sophieLife.setColor(1f, 1f, 1f, 0.5f);
             }else{
-                if(statsPrefs.getInteger("Coins")<LIFE_COST_SOPHIE_ARR[statsPrefs.getInteger("SophieLifeStg")+1])
+                if(statsPrefs.getInteger("Coins")<LIFE_COST_SOPHIE_ARR[ (statsPrefs.getInteger("SophieLifeStg")+1)%6])
                     sophieLife.setColor(1f, 1f, 1f, 0.5f);
             }
 

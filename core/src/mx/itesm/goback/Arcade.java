@@ -602,7 +602,7 @@ class Arcade extends Frame{
                 sprite.draw(batch);
             }
         }else{
-            scoreDisplay.setText(font, "Spirits overcomed: "+((int)kills) );
+            scoreDisplay.setText(font, "Spirits defeated: "+((int)kills) );
             font.draw(batch, scoreDisplay, 5, 25);
         }
         drawBodies();
